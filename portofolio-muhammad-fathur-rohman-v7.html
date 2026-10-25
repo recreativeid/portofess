@@ -1025,18 +1025,19 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Top Section Header -->
-        <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div class="inline-block bg-white border-2 border-stone-300 px-5 py-2 shadow-md -rotate-1">
-            <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">04 / Design Portfolio &amp; 3D Showcase</span>
+            <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">04 / Design Portfolio &amp; Mockup Showcase</span>
           </div>
 
           <!-- Quick Screen Presets & Discreet Admin Trigger -->
-          <div class="flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-stone-300 shadow-sm">
-            <span class="text-xs font-mono font-bold text-stone-500 hidden sm:inline">Pilih Layar 3D:</span>
+          <div class="flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-2xl border border-stone-300 shadow-sm">
+            <span class="text-xs font-mono font-bold text-stone-500 hidden sm:inline">Pilih Layar HP:</span>
             <div class="flex items-center gap-1.5 p-0.5 rounded-xl bg-stone-100 border border-stone-300">
-              <button onclick="set3DPhoneScreenIndex(0)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50" title="Creamy Tiramitsu">#1</button>
-              <button onclick="set3DPhoneScreenIndex(1)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Americano">#2</button>
-              <button onclick="set3DPhoneScreenIndex(2)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Promo Bundling">#3</button>
+              <button onclick="setPhoneScreenToInstagram()" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50" title="Profil Instagram Haltea">IG</button>
+              <button onclick="setPhoneScreenDesignIndex(0)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Creamy Tiramitsu">#1</button>
+              <button onclick="setPhoneScreenDesignIndex(1)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Americano">#2</button>
+              <button onclick="setPhoneScreenDesignIndex(2)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Promo Bundling">#3</button>
             </div>
             <button onclick="openSecretAdminModal()" class="w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-600 hover:text-ink flex items-center justify-center transition shadow-sm ml-1" title="Menu Admin Tersembunyi (Shortcut: Ctrl+Shift+A)">
               ⚙️
@@ -1044,119 +1045,113 @@
           </div>
         </div>
 
-        <!-- 2-COLUMN SPLIT GRID (SOLUSI 2: KONTEN KIRI, MOCKUP 3D TRANSPARAN KANAN) -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        <!-- Section Subheader Requested by User: Muhammad Fathur Rohman - Design Portofolio & Instagram Handle -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 px-2">
+          <h3 id="section04TitleDisplay" class="font-display font-extrabold text-xl sm:text-2xl text-ink tracking-tight">
+            Muhammad Fathur Rohman - Design Portofolio
+          </h3>
+          <a id="section04HandleLink" href="https://www.instagram.com/halteaindonesia" target="_blank" rel="noopener noreferrer" class="font-display font-bold text-sm sm:text-base text-ink hover:text-crimson transition flex items-center gap-1.5 self-start sm:self-auto">
+            <span id="section04HandleDisplay">Instagram: @halteaindonesia</span>
+            <span class="text-xs">↗</span>
+          </a>
+        </div>
 
-          <!-- LEFT COLUMN (col-span-7): Subheader + 6 Desain Grafis + 3 Video + Button -->
-          <div class="lg:col-span-7 space-y-8">
+        <!-- MAIN DESIGN & SMARTPHONE SHOWCASE CONTAINER (MATCHING REFERENCE IMAGE) -->
+        <div class="relative bg-white/95 rounded-3xl sm:rounded-[36px] border-2 border-stone-200/90 shadow-xl p-4 sm:p-7 lg:p-9 mb-12 overflow-visible">
 
-            <!-- Section Subheader Requested by User:
-                 Muhammad Fathur Rohman - Design Portofolio
-                 Instagram: @halteaindonesia -->
-            <div class="bg-white p-5 sm:p-6 rounded-2xl border-2 border-stone-200 shadow-sm container-tilt-3d">
-              <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-crimson text-white font-display font-extrabold text-xs flex items-center justify-center shadow-md border-4 border-white ring-2 ring-crimson shrink-0">
-                  HALTEA
-                </div>
-                <div>
-                  <h2 id="section04TitleDisplay" class="font-display font-extrabold text-xl sm:text-2xl text-ink leading-tight">
-                    Muhammad Fathur Rohman - Design Portofolio
-                  </h2>
-                  <div class="flex items-center gap-2 mt-1">
-                    <span class="text-sm font-mono font-bold text-crimson">Instagram:</span>
-                    <a id="section04HandleLink" href="https://www.instagram.com/halteaindonesia" target="_blank" rel="noopener noreferrer" class="text-sm font-mono font-bold text-[#155293] hover:underline flex items-center gap-1">
-                      <span id="section04HandleDisplay">@halteaindonesia</span>
-                      <span>↗</span>
-                    </a>
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold ml-1">Official Client</span>
+          <!-- Overlapping Circular Red Haltea Badge (Top-Left Edge) -->
+          <div class="absolute -top-7 -left-3 sm:-top-8 sm:-left-5 z-20 w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white shadow-xl bg-crimson overflow-hidden flex items-center justify-center group cursor-pointer hover:scale-105 transition-transform" title="Haltea Teh Halte Indonesia">
+            <img src="assets/haltea/haltea-badge.png" alt="Haltea Teh Halte Indonesia" class="w-full h-full object-cover" />
+          </div>
+
+          <!-- Inside Container: 2-Column Responsive Layout (6 Posters Left, Vertical Realistic Smartphone Right) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+
+            <!-- LEFT COLUMN (col-span-8): 3x2 Grid of 6 Graphic Design Posters -->
+            <div class="lg:col-span-8">
+              <div id="featuredDesignGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                <!-- Dynamically populated by renderMedsosSections() -->
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN (col-span-4): Static Photorealistic Vertical Smartphone Mockup -->
+            <div class="lg:col-span-4 flex flex-col items-center justify-center">
+              <div class="relative w-full max-w-[280px] sm:max-w-[310px] mx-auto">
+
+                <!-- Photorealistic Smartphone Hardware Frame -->
+                <div class="relative rounded-[44px] sm:rounded-[48px] bg-gradient-to-b from-stone-900 via-stone-950 to-black p-3 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12),inset_0_1px_2px_rgba(255,255,255,0.3)] border border-stone-800">
+                  
+                  <!-- Hardware Side Buttons (Volume Up/Down & Power) -->
+                  <div class="absolute -left-[3px] top-24 w-[3px] h-9 bg-stone-700 rounded-l-sm"></div>
+                  <div class="absolute -left-[3px] top-36 w-[3px] h-9 bg-stone-700 rounded-l-sm"></div>
+                  <div class="absolute -right-[3px] top-28 w-[3px] h-14 bg-stone-700 rounded-r-sm"></div>
+
+                  <!-- Top Dynamic Island & Speaker Slit -->
+                  <div class="w-20 h-4 bg-black rounded-full mx-auto mb-2 flex items-center justify-center relative z-20 border border-white/5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#0a1128] border border-white/10 mr-1.5"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-[#1e293b]"></div>
                   </div>
+
+                  <!-- Realistic Inner Display Screen (Editable from Admin!) -->
+                  <div id="phoneScreenContainer" class="relative w-full aspect-[9/18.5] bg-black rounded-[32px] sm:rounded-[36px] overflow-hidden shadow-inner flex flex-col justify-start">
+                    <!-- Screen Media: Default Instagram Feed or Selected Poster / Custom Uploaded Image -->
+                    <img id="phoneScreenImage" src="assets/haltea/phone-screen-clean.png" alt="Haltea Instagram Screen" class="w-full h-full object-cover object-top select-none transition-all duration-300" />
+
+                    <!-- Glossy Specular Glass Glare Overlay for Realistic Depth -->
+                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12]"></div>
+                  </div>
+
+                  <!-- Bottom Home Indicator Bar -->
+                  <div class="w-28 h-1 bg-white/40 rounded-full mx-auto mt-2"></div>
                 </div>
-              </div>
-            </div>
 
-            <!-- KONTEN DESAIN GRAFIS (CUKUP 6 CONTOH KONTEN) -->
-            <div>
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                  <span class="px-3.5 py-1 rounded-full bg-red-100 text-crimson font-display font-extrabold text-xs tracking-wide border border-red-200 shadow-sm">
-                    🎨 KONTEN DESAIN GRAFIS (6 KARYA PILIHAN)
-                  </span>
-                  <span class="text-xs font-mono text-stone-500">Feed &amp; Poster</span>
+                <!-- Screen Info & Quick Admin Customizer Button -->
+                <div class="mt-3 flex items-center justify-between px-2 text-xs">
+                  <div class="flex items-center gap-1.5 min-w-0">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                    <span id="phoneScreenLabel" class="font-mono text-[11px] font-bold text-stone-600 truncate">Layar: @halteaindonesia</span>
+                  </div>
+                  <button onclick="openSecretAdminModal()" class="text-[11px] font-mono font-bold text-crimson hover:underline shrink-0 ml-2" title="Ganti isi layar smartphone di admin">
+                    Ubah di Admin ⚙️
+                  </button>
                 </div>
-                <button onclick="switchPageView('allMedsosView')" class="text-xs font-bold text-crimson hover:underline flex items-center gap-1">
-                  <span>Buka Galeri Penuh</span>
-                  <span>↗</span>
-                </button>
+
               </div>
-
-              <!-- 6 Grid Items with 3D Cursor Response -->
-              <div id="featuredDesignGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3.5"></div>
-            </div>
-
-            <!-- KONTEN VIDEO PORTFOLIO (CUKUP 3 CONTOH KONTEN) -->
-            <div>
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                  <span class="px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 font-display font-extrabold text-xs tracking-wide border border-amber-300 shadow-sm">
-                    🎬 KONTEN VIDEO PORTFOLIO (3 KARYA PILIHAN)
-                  </span>
-                  <span class="text-xs font-mono text-stone-500">Reels 9:16</span>
-                </div>
-                <button onclick="switchPageView('allMedsosView')" class="text-xs font-bold text-amber-800 hover:underline flex items-center gap-1">
-                  <span>Buka Video Penuh</span>
-                  <span>↗</span>
-                </button>
-              </div>
-
-              <!-- 3 Video Grid Items with 3D Cursor Response -->
-              <div id="featuredVideoGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 items-start"></div>
-            </div>
-
-            <!-- Bottom Action Button for Section 04: Diarahkan ke Halaman Baru -->
-            <div class="pt-2">
-              <button onclick="switchPageView('allMedsosView')" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-ink text-white hover:bg-crimson text-xs sm:text-sm font-extrabold shadow-lg transition flex items-center justify-center gap-2.5">
-                <span>📱 Lihat Selengkapnya Seluruh Desain &amp; Video Portofolio</span>
-                <span id="medsosCountBadge" class="px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-mono">9 Karya</span>
-                <span>↗</span>
-              </button>
             </div>
 
           </div>
 
-          <!-- RIGHT COLUMN (col-span-5): 3D DUAL-PHONE ON STEPPED STONE PODIUM (TRANSPARENT BACKGROUND) -->
-          <div class="lg:col-span-5 lg:sticky lg:top-24">
-            <div class="relative w-full rounded-3xl p-3 sm:p-4 transition-all duration-300">
+        </div>
 
-              <!-- Top Status Pill & 360 Spin Trigger -->
-              <div class="flex items-center justify-between mb-2 px-1">
-                <span class="px-3 py-1 rounded-full bg-stone-900/85 backdrop-blur-md text-white font-mono text-[10px] font-bold flex items-center gap-1.5 shadow border border-white/10">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  3D DUAL-PHONE · STEPPED PODIUM
-                </span>
-                <button onclick="rotate3DPhone360()" class="px-2.5 py-1 rounded-xl bg-white/90 hover:bg-white text-ink text-[10px] font-mono font-bold shadow-sm border border-stone-200 transition flex items-center gap-1">
-                  <span>🔄</span> <span>Putar 360°</span>
-                </button>
+        <!-- =================================================================== -->
+        <!-- KONTEN VIDEO PORTFOLIO (3 KARYA PILIHAN DI BAWAH KONTEN DESAIN)     -->
+        <!-- =================================================================== -->
+        <div class="mt-10 pt-6 border-t border-stone-300/60">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 shadow-sm">
+                <span class="text-sm">🎬</span>
+                <span class="font-display font-extrabold text-xs uppercase tracking-wider">KONTEN VIDEO (3 KARYA PILIHAN)</span>
               </div>
-
-              <!-- Three.js 3D Viewport with 100% Transparent Background -->
-              <div id="phoneThreeJsContainer" class="w-full h-[520px] sm:h-[580px] lg:h-[640px] relative cursor-grab active:cursor-grabbing flex items-center justify-center select-none">
-                <canvas id="phoneThreeJsCanvas" class="w-full h-full block"></canvas>
-              </div>
-
-              <!-- Bottom Screen Info & Hint -->
-              <div class="mt-2 flex flex-col items-center gap-1.5 text-center">
-                <div class="flex items-center gap-2 text-xs">
-                  <span class="font-mono text-stone-500 text-[11px]">Layar Utama:</span>
-                  <span id="currentScreenLabel" class="font-bold text-amber-700 font-mono">Creamy Tiramitsu 10k</span>
-                </div>
-                <span class="text-[10px] font-mono text-stone-500 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-stone-200 shadow-sm">
-                  🖱️ Sentuh / gerakkan kursor untuk Perspective &amp; 3D Rotate
-                </span>
-              </div>
-
+              <p class="text-xs text-stone-600 mt-1.5">Cuplikan 3 karya video editing pilihan (Reels &amp; Commercial)</p>
             </div>
+            <button onclick="switchPageView('allMedsosView')" class="self-start sm:self-auto text-xs font-bold text-crimson hover:underline flex items-center gap-1">
+              <span>Buka Semua Video</span>
+              <span>↗</span>
+            </button>
           </div>
 
+          <!-- 3 Video Grid Items with 3D Cursor Tilt -->
+          <div id="featuredVideoGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-5 items-start"></div>
+
+          <!-- Prominent Bottom Button: Lihat Selengkapnya (Halaman Baru) -->
+          <div class="mt-8 flex justify-center sm:justify-end">
+            <button onclick="switchPageView('allMedsosView')" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-ink text-white hover:bg-crimson text-xs sm:text-sm font-extrabold shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2.5">
+              <span>📱 Lihat Selengkapnya Seluruh Desain &amp; Video Portofolio</span>
+              <span id="medsosCountBadge" class="px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-mono">9 Karya</span>
+              <span>↗</span>
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1872,17 +1867,17 @@
             </div>
           </div>
 
-          <!-- 3D Smartphone Display Controller -->
+          <!-- Realistic Smartphone Display Controller -->
           <div class="p-5 rounded-2xl bg-stone-50 border border-stone-200 space-y-4">
             <div class="flex items-center justify-between">
               <div>
                 <h4 class="font-display font-extrabold text-sm text-ink flex items-center gap-2">
-                  <span>📱</span> <span>Kontrol Layar 3D Smartphone (Stone Podium)</span>
+                  <span>📱</span> <span>Kontrol Layar Smartphone Realistis</span>
                 </h4>
-                <p class="text-xs text-stone-600 mt-0.5">Layar smartphone di Three.js akan otomatis update tekstur dan berputar 360°!</p>
+                <p class="text-xs text-stone-600 mt-0.5">Layar smartphone di Section 04 dapat diisi profil Instagram, poster desain, atau gambar kustom sendiri.</p>
               </div>
-              <button onclick="rotate3DPhone360()" class="px-3 py-1.5 rounded-lg bg-stone-200 hover:bg-stone-300 text-ink text-xs font-mono font-bold transition">
-                🔄 Tes Putar 360°
+              <button onclick="setPhoneScreenToInstagram(); alert('Layar smartphone berhasil disetel ke Profil Instagram Haltea!');" class="px-3.5 py-1.5 rounded-xl bg-crimson text-white hover:bg-red-800 text-xs font-bold transition shadow-sm">
+                📷 Set Layar Instagram
               </button>
             </div>
 
@@ -1891,27 +1886,24 @@
               <label class="text-xs font-bold text-stone-700 block">Opsi A: Pilih dari Karya Desain Grafis</label>
               <div class="flex flex-wrap items-center gap-3">
                 <select id="adminSelectDesignForScreen" class="flex-1 min-w-[200px] px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold"></select>
-                <button onclick="applyDesignToScreenFromSelect()" class="px-4 py-2 rounded-xl bg-crimson text-white hover:bg-red-800 text-xs font-bold transition shadow-sm">
-                  Terapkan &amp; Putar 3D
+                <button onclick="applyDesignToScreenFromSelect()" class="px-4 py-2 rounded-xl bg-[#155293] text-white hover:bg-blue-900 text-xs font-bold transition shadow-sm">
+                  Terapkan ke Layar HP
                 </button>
               </div>
             </div>
 
-            <!-- Option B: Custom Screen Input -->
+            <!-- Option B: Custom Screen Upload / Input -->
             <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3">
-              <label class="text-xs font-bold text-stone-700 block">Opsi B: Desain Layar Kustom Sendiri</label>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input id="adminScreenCustomTitle" type="text" placeholder="Judul Teks di Layar (mis. Promo Spesial 15k)" class="px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold sm:col-span-2" />
-                <input id="adminScreenCustomBg" type="color" value="#1D4ED8" title="Pilih Warna Latar" class="w-full h-9 rounded-xl border border-stone-300 cursor-pointer p-0.5" />
-              </div>
-              <input id="adminScreenCustomSubtitle" type="text" placeholder="Subjudul Teks Layar (mis. Poster Produk Haltea)" class="w-full px-3 py-2 rounded-xl border border-stone-300 text-xs" />
-              <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <label class="text-xs font-bold text-stone-700 block">Opsi B: Upload Gambar / Screenshot Layar Kustom Sendiri</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input id="adminScreenCustomTitle" type="text" placeholder="Label Layar (mis. Screenshot Aplikasi / Feed Haltea)" class="px-3 py-2 rounded-xl border border-stone-300 text-xs font-semibold" />
                 <div class="flex items-center gap-2">
-                  <span class="text-xs font-mono text-stone-500">Upload Gambar Layar:</span>
-                  <input id="adminScreenCustomFile" type="file" accept="image/*" class="text-xs" />
+                  <input id="adminScreenCustomFile" type="file" accept="image/*" class="text-xs w-full" />
                 </div>
-                <button onclick="applyCustomScreenTo3D()" class="px-4 py-2 rounded-xl bg-[#155293] text-white hover:bg-blue-900 text-xs font-bold transition shadow-sm">
-                  Terapkan Layar Kustom &amp; Putar 3D
+              </div>
+              <div class="flex justify-end pt-1">
+                <button onclick="applyCustomScreenToPhone()" class="px-5 py-2 rounded-xl bg-ink text-white hover:bg-crimson text-xs font-extrabold transition shadow-sm">
+                  💾 Pasang Gambar Kustom ke Layar HP
                 </button>
               </div>
             </div>
@@ -2172,24 +2164,20 @@
       instagramHandle: 'halteaindonesia',
       instagramUrl: 'https://www.instagram.com/halteaindonesia',
       currentScreenIndex: 0,
-      activeScreen: {
-        title: 'Creamy Tiramitsu 10k',
-        subtitle: 'Feed & Poster Produk Haltea',
-        bg: '#1D4ED8',
-        img: null
-      },
+      activeScreenTitle: '@halteaindonesia',
+      activePhoneScreenImg: 'assets/haltea/phone-screen-clean.png',
       designs: [
-        { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk', bg: '#1D4ED8', img: null },
-        { id: 'd2', title: 'Americano Haltea Cafe Series 8K', subtitle: 'Feed & Poster Produk', bg: '#991B1B', img: null },
-        { id: 'd3', title: 'Promo Bundling 20K', subtitle: 'Desain Kampanye Promo', bg: '#7F1D1D', img: null },
-        { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding', bg: '#B91C1C', img: null },
-        { id: 'd5', title: 'Orange Squash 10K', subtitle: 'Poster Menu Baru', bg: '#D97706', img: null },
-        { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu', bg: '#451A03', img: null }
+        { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
+        { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
+        { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
+        { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
+        { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
+        { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
       ],
       videos: [
         { id: 'v1', title: 'Haltea Telah Hadir di Magelang', ratio: '9/16', duration: '0:42', videoUrl: '' },
         { id: 'v2', title: 'Testimoni Pelanggan Haltea', ratio: '9/16', duration: '0:35', videoUrl: '' },
-        { id: 'v3', title: 'Apa Kata Mereka Tentang Haltea', ratio: '16/9', duration: '1:10', videoUrl: '' }
+        { id: 'v3', title: 'Apa Kata Pelanggan Haltea', ratio: '16/9', duration: '1:10', videoUrl: '' }
       ]
     };
 
@@ -2200,6 +2188,16 @@
         const raw = localStorage.getItem('fathur_portfolio_cms_data');
         if (raw) {
           const parsed = JSON.parse(raw);
+          if (parsed.designs) {
+            parsed.designs.forEach((d, i) => {
+              if ((!d.img || d.img.startsWith('data:image/svg')) && defaultCmsPortfolioData.designs[i]) {
+                d.img = defaultCmsPortfolioData.designs[i].img;
+              }
+            });
+          }
+          if (!parsed.activePhoneScreenImg || parsed.activePhoneScreenImg.startsWith('data:image/svg')) {
+            parsed.activePhoneScreenImg = defaultCmsPortfolioData.activePhoneScreenImg;
+          }
           return { ...defaultCmsPortfolioData, ...parsed };
         }
       } catch (e) {
@@ -2217,452 +2215,65 @@
     }
 
     /* =================================================================== */
+    /* REALISTIC STATIC SMARTPHONE SCREEN CONTROLLER (SECTION 04)          */
+    /* Statis, photorealistic & layarnya bisa diisi di Admin/Interaktif    */
     /* =================================================================== */
-    /* THREE.JS 3D DUAL-SMARTPHONE ON STEPPED GEOMETRIC STONE PODIUM       */
-    /* Solusi 2: 2 Phones standing on stepped blocks, 100% transparent bg   */
-    /* =================================================================== */
-    let phone3DInstance = null;
+    function setPhoneScreen(imgUrl, title) {
+      if (!imgUrl) return;
+      cmsData.activePhoneScreenImg = imgUrl;
+      cmsData.activeScreenTitle = title || '@' + (cmsData.instagramHandle || 'halteaindonesia');
+      saveCmsData();
 
-    class Phone3DShowcaseRuntime {
-      constructor(config) {
-        this.container = document.getElementById(config.containerId);
-        this.canvas = document.getElementById(config.canvasId);
-        if (!this.container || !this.canvas) return;
+      const phoneImg = document.getElementById('phoneScreenImage');
+      const label = document.getElementById('phoneScreenLabel');
 
-        this.clock = new THREE.Clock();
-        this.targetRotationX = 0;
-        this.targetRotationY = 0;
-        this.currentRotationX = 0;
-        this.currentRotationY = 0;
-        this.isAutoRotating = false;
-        this.autoRotateAngle = 0;
-        this.animationFrameId = null;
-
-        // 1. Scene & Transparent Camera Setup
-        this.scene = new THREE.Scene();
-        this.scene.background = null; // 100% Transparent
-        this.scene.fog = null;
-
-        const width = this.container.clientWidth || 600;
-        const height = this.container.clientHeight || 580;
-
-        this.camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 100);
-        this.camera.position.set(0, 0.45, 4.6);
-        this.camera.lookAt(0, 0.1, 0);
-
-        this.renderer = new THREE.WebGLRenderer({
-          canvas: this.canvas,
-          antialias: true,
-          alpha: true,
-          powerPreference: 'high-performance'
-        });
-        this.renderer.setSize(width, height);
-        this.renderer.setClearColor(0x000000, 0); // Transparent canvas background
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-        // Main Interactive Group that tilts with cursor
-        this.mainGroup = new THREE.Group();
-        this.scene.add(this.mainGroup);
-
-        // 2. Studio Lighting Setup
-        this.setupLighting();
-
-        // 3. Stepped Geometric Stone Podium Blocks & Transparent Floor Shadow
-        this.buildSteppedPodium();
-
-        // 4. Dual Smartphone Canvases & Meshes
-        this.buildScreenCanvases(config);
-        this.buildDualSmartphones();
-
-        // 5. Cursor Mousemove 3D Perspective Tilt Listeners
-        this.initEventListeners();
-
-        // 6. Start Animation Render Loop
-        this.render();
+      if (phoneImg) {
+        phoneImg.style.opacity = '0.35';
+        phoneImg.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          phoneImg.src = imgUrl;
+          phoneImg.style.opacity = '1';
+          phoneImg.style.transform = 'scale(1)';
+        }, 120);
       }
-
-      setupLighting() {
-        // Soft Ambient Studio Fill
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
-        this.scene.add(ambientLight);
-
-        // Directional Architectural Key Light (Soft Cast Shadows)
-        const keyLight = new THREE.DirectionalLight(0xfff6ec, 2.2);
-        keyLight.position.set(4.2, 5.5, 3.8);
-        keyLight.castShadow = true;
-        keyLight.shadow.mapSize.width = 1024;
-        keyLight.shadow.mapSize.height = 1024;
-        keyLight.shadow.camera.near = 0.5;
-        keyLight.shadow.camera.far = 16;
-        keyLight.shadow.bias = -0.001;
-        this.scene.add(keyLight);
-
-        // Cool Architectural Rim Light from Opposite Side
-        const rimLight = new THREE.DirectionalLight(0x7ba4df, 1.3);
-        rimLight.position.set(-4.5, 3.2, -2.5);
-        this.scene.add(rimLight);
-
-        // Front Center Fill Highlight
-        const frontFill = new THREE.PointLight(0xffffff, 0.55, 12);
-        frontFill.position.set(0, 1.4, 4.0);
-        this.scene.add(frontFill);
+      if (label) {
+        label.textContent = `Layar: ${cmsData.activeScreenTitle}`;
       }
+    }
 
-      buildSteppedPodium() {
-        // Lower Geometric Stone Block (Left / Front)
-        const block1Geo = new THREE.BoxGeometry(1.28, 0.40, 1.15);
-        const block1Mat = new THREE.MeshStandardMaterial({
-          color: 0x242831,
-          roughness: 0.88,
-          metalness: 0.12
-        });
-        this.podium1 = new THREE.Mesh(block1Geo, block1Mat);
-        this.podium1.position.set(-0.64, -0.74, 0.22);
-        this.podium1.receiveShadow = true;
-        this.podium1.castShadow = true;
-        this.mainGroup.add(this.podium1);
+    function setPhoneScreenToInstagram() {
+      setPhoneScreen('assets/haltea/phone-screen-clean.png', '@' + (cmsData.instagramHandle || 'halteaindonesia'));
+    }
 
-        // Higher Geometric Stone Block (Right / Back)
-        const block2Geo = new THREE.BoxGeometry(1.28, 0.82, 1.15);
-        const block2Mat = new THREE.MeshStandardMaterial({
-          color: 0x1b1e25,
-          roughness: 0.88,
-          metalness: 0.12
-        });
-        this.podium2 = new THREE.Mesh(block2Geo, block2Mat);
-        this.podium2.position.set(0.64, -0.53, -0.22);
-        this.podium2.receiveShadow = true;
-        this.podium2.castShadow = true;
-        this.mainGroup.add(this.podium2);
+    function setPhoneScreenDesignIndex(index) {
+      if (!cmsData.designs || !cmsData.designs[index]) return;
+      cmsData.currentScreenIndex = index;
+      const d = cmsData.designs[index];
+      const src = d.img || makeSvgBanner(d.title, d.subtitle, d.bg || '#C62828');
+      setPhoneScreen(src, d.title);
+    }
 
-        // Floor Contact Shadow Plane (Transparent shadow only)
-        const shadowGeo = new THREE.PlaneGeometry(7, 7);
-        const shadowMat = new THREE.ShadowMaterial({ opacity: 0.28 });
-        this.shadowPlane = new THREE.Mesh(shadowGeo, shadowMat);
-        this.shadowPlane.rotation.x = -Math.PI / 2;
-        this.shadowPlane.position.y = -0.94;
-        this.shadowPlane.receiveShadow = true;
-        this.mainGroup.add(this.shadowPlane);
-      }
+    // Backward-compatibility stubs
+    function set3DPhoneScreenIndex(index) {
+      setPhoneScreenDesignIndex(index);
+    }
 
-      buildScreenCanvases(config) {
-        // Screen Canvas 1 (Active Design on Phone 1)
-        this.screenCanvas1 = document.createElement('canvas');
-        this.screenCanvas1.width = 720;
-        this.screenCanvas1.height = 1560;
-        this.screenCtx1 = this.screenCanvas1.getContext('2d');
-
-        // Screen Canvas 2 (Secondary Design on Phone 2)
-        this.screenCanvas2 = document.createElement('canvas');
-        this.screenCanvas2.width = 720;
-        this.screenCanvas2.height = 1560;
-        this.screenCtx2 = this.screenCanvas2.getContext('2d');
-
-        const active1 = config.initialScreenTitle || 'Creamy Tiramitsu 10k';
-        const active2 = (cmsData.designs && cmsData.designs[1]) ? cmsData.designs[1].title : 'Americano Segar';
-        const img2 = (cmsData.designs && cmsData.designs[1]) ? cmsData.designs[1].img : null;
-
-        this.renderToScreenCanvas(this.screenCtx1, this.screenCanvas1, active1, config.initialScreenSubtitle || 'Poster Promosi Haltea', config.initialScreenBg || '#1D4ED8', config.initialScreenImage);
-        this.renderToScreenCanvas(this.screenCtx2, this.screenCanvas2, active2, 'Menu Andalan Haltea', '#B45309', img2);
-
-        this.screenTexture1 = new THREE.CanvasTexture(this.screenCanvas1);
-        this.screenTexture1.generateMipmaps = true;
-        this.screenTexture1.minFilter = THREE.LinearMipmapLinearFilter;
-
-        this.screenTexture2 = new THREE.CanvasTexture(this.screenCanvas2);
-        this.screenTexture2.generateMipmaps = true;
-        this.screenTexture2.minFilter = THREE.LinearMipmapLinearFilter;
-      }
-
-      renderToScreenCanvas(ctx, canvas, title, subtitle, bg, imgUrl) {
-        const w = canvas.width;
-        const h = canvas.height;
-
-        const drawUI = () => {
-          // Top Status Bar
-          ctx.fillStyle = '#FFFFFF';
-          ctx.font = 'bold 36px Inter, sans-serif';
-          ctx.fillText('10:09', 60, 85);
-          ctx.fillText('5G ●●● 100%', w - 240, 85);
-
-          // Header Bar
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
-          ctx.fillRect(0, 120, w, 110);
-
-          ctx.fillStyle = '#FFFFFF';
-          ctx.font = 'bold 38px Inter, sans-serif';
-          ctx.fillText('@' + (cmsData.instagramHandle || 'halteaindonesia'), 60, 190);
-
-          ctx.fillStyle = '#38BDF8';
-          ctx.font = 'bold 28px Inter, sans-serif';
-          ctx.fillText('✓ Verified', 470, 190);
-
-          // Center Card Info Box
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.74)';
-          if (ctx.roundRect) {
-            ctx.beginPath();
-            ctx.roundRect(50, h - 420, w - 100, 260, 32);
-            ctx.fill();
-          } else {
-            ctx.fillRect(50, h - 420, w - 100, 260);
-          }
-
-          ctx.fillStyle = '#F59E0B';
-          ctx.font = 'bold 26px "JetBrains Mono", monospace';
-          ctx.fillText('PORTFOLIO KARYA DIGITAL', 90, h - 350);
-
-          ctx.fillStyle = '#FFFFFF';
-          ctx.font = 'extrabold 44px Outfit, sans-serif';
-          const displayTitle = title.length > 22 ? title.slice(0, 20) + '...' : title;
-          ctx.fillText(displayTitle, 90, h - 280);
-
-          ctx.fillStyle = '#D1D5DB';
-          ctx.font = '30px Inter, sans-serif';
-          ctx.fillText(subtitle, 90, h - 220);
-
-          // Home Indicator Bar
-          ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          if (ctx.roundRect) {
-            ctx.roundRect(w / 2 - 130, h - 45, 260, 12, 6);
-          } else {
-            ctx.fillRect(w / 2 - 130, h - 45, 260, 12);
-          }
-          ctx.fill();
-        };
-
-        if (imgUrl) {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          img.onload = () => {
-            ctx.drawImage(img, 0, 0, w, h);
-            drawUI();
-            if (this.screenTexture1) this.screenTexture1.needsUpdate = true;
-            if (this.screenTexture2) this.screenTexture2.needsUpdate = true;
-          };
-          img.src = imgUrl;
-        } else {
-          // Dynamic gradient
-          const grad = ctx.createLinearGradient(0, 0, w, h);
-          grad.addColorStop(0, bg || '#1D4ED8');
-          grad.addColorStop(1, '#090B0E');
-          ctx.fillStyle = grad;
-          ctx.fillRect(0, 0, w, h);
-
-          // Graphic accents
-          ctx.save();
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.16)';
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.arc(w / 2, h / 2, 220, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-          ctx.beginPath();
-          ctx.arc(w / 2, h / 2, 340, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-
-          drawUI();
-        }
-      }
-
-      createPhoneObject(screenTexture) {
-        const group = new THREE.Group();
-        const phoneW = 0.98;
-        const phoneH = 2.08;
-        const phoneD = 0.09;
-
-        // Dark Titanium Metallic Outer Chassis
-        const chassisGeo = new THREE.BoxGeometry(phoneW, phoneH, phoneD);
-        const chassisMat = new THREE.MeshStandardMaterial({
-          color: 0x1f232b,
-          metalness: 0.85,
-          roughness: 0.25
-        });
-        const chassisMesh = new THREE.Mesh(chassisGeo, chassisMat);
-        chassisMesh.castShadow = true;
-        group.add(chassisMesh);
-
-        // Bezel
-        const bezelGeo = new THREE.PlaneGeometry(phoneW - 0.04, phoneH - 0.04);
-        const bezelMat = new THREE.MeshBasicMaterial({ color: 0x050608 });
-        const bezelMesh = new THREE.Mesh(bezelGeo, bezelMat);
-        bezelMesh.position.set(0, 0, phoneD / 2 + 0.001);
-        group.add(bezelMesh);
-
-        // Screen Plane
-        const screenGeo = new THREE.PlaneGeometry(phoneW - 0.08, phoneH - 0.08);
-        const screenMat = new THREE.MeshBasicMaterial({ map: screenTexture });
-        const screenMesh = new THREE.Mesh(screenGeo, screenMat);
-        screenMesh.position.set(0, 0, phoneD / 2 + 0.002);
-        group.add(screenMesh);
-
-        // Punch-hole / Dynamic Island
-        const islandGeo = new THREE.PlaneGeometry(0.18, 0.04);
-        const islandMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        const islandMesh = new THREE.Mesh(islandGeo, islandMat);
-        islandMesh.position.set(0, (phoneH / 2) - 0.11, phoneD / 2 + 0.004);
-        group.add(islandMesh);
-
-        return group;
-      }
-
-      buildDualSmartphones() {
-        // Phone 1 (Front/Left on lower podium)
-        this.phone1 = this.createPhoneObject(this.screenTexture1);
-        this.phone1.position.set(-0.64, 0.44, 0.22);
-        this.phone1.rotation.set(0.04, 0.22, -0.01);
-        this.mainGroup.add(this.phone1);
-
-        // Phone 2 (Back/Right on higher podium)
-        this.phone2 = this.createPhoneObject(this.screenTexture2);
-        this.phone2.position.set(0.64, 0.82, -0.22);
-        this.phone2.rotation.set(0.04, -0.20, 0.01);
-        this.mainGroup.add(this.phone2);
-      }
-
-      updateScreenTexture(title, subtitle, bg, imgUrl) {
-        this.renderToScreenCanvas(this.screenCtx1, this.screenCanvas1, title, subtitle, bg, imgUrl);
-        if (this.screenTexture1) this.screenTexture1.needsUpdate = true;
-
-        // Also update Phone 2 with the next or previous design
-        const nextIdx = (cmsData.currentScreenIndex + 1) % (cmsData.designs.length || 1);
-        const nextD = cmsData.designs[nextIdx] || { title: 'Haltea Americano', subtitle: 'Menu Segar', bg: '#B45309', img: null };
-        this.renderToScreenCanvas(this.screenCtx2, this.screenCanvas2, nextD.title, nextD.subtitle, nextD.bg, nextD.img);
-        if (this.screenTexture2) this.screenTexture2.needsUpdate = true;
-      }
-
-      initEventListeners() {
-        this.container.addEventListener('mousemove', (e) => {
-          const rect = this.container.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width;
-          const y = (e.clientY - rect.top) / rect.height;
-
-          this.targetRotationY = (x - 0.5) * 0.75;
-          this.targetRotationX = (y - 0.5) * 0.45;
-        });
-
-        this.container.addEventListener('mouseleave', () => {
-          this.targetRotationX = 0;
-          this.targetRotationY = 0;
-        });
-
-        this.container.addEventListener('touchmove', (e) => {
-          if (e.touches.length > 0) {
-            const rect = this.container.getBoundingClientRect();
-            const x = (e.touches[0].clientX - rect.left) / rect.width;
-            const y = (e.touches[0].clientY - rect.top) / rect.height;
-
-            this.targetRotationY = (x - 0.5) * 0.75;
-            this.targetRotationX = (y - 0.5) * 0.45;
-          }
-        }, { passive: true });
-
-        window.addEventListener('resize', () => {
-          const w = this.container.clientWidth;
-          const h = this.container.clientHeight;
-          if (w > 0 && h > 0) {
-            this.camera.aspect = w / h;
-            this.camera.updateProjectionMatrix();
-            this.renderer.setSize(w, h);
-          }
-        });
-      }
-
-      trigger360Rotate() {
-        this.isAutoRotating = true;
-        this.autoRotateAngle = 0;
-      }
-
-      render = () => {
-        this.animationFrameId = requestAnimationFrame(this.render);
-
-        const delta = this.clock.getDelta();
-        const elapsedTime = this.clock.getElapsedTime();
-
-        if (this.mainGroup) {
-          if (this.isAutoRotating) {
-            this.autoRotateAngle += delta * 4.2;
-            this.mainGroup.rotation.y = this.autoRotateAngle;
-            if (this.autoRotateAngle >= Math.PI * 2) {
-              this.isAutoRotating = false;
-              this.mainGroup.rotation.y = 0;
-            }
-          } else {
-            // Damped Smooth Interpolation
-            this.currentRotationX += (this.targetRotationX - this.currentRotationX) * 0.08;
-            this.currentRotationY += (this.targetRotationY - this.currentRotationY) * 0.08;
-
-            this.mainGroup.rotation.x = this.currentRotationX;
-            this.mainGroup.rotation.y = this.currentRotationY;
-          }
-
-          // Subtle living floating levitation
-          if (this.phone1) this.phone1.position.y = 0.44 + Math.sin(elapsedTime * 1.8) * 0.02;
-          if (this.phone2) this.phone2.position.y = 0.82 + Math.cos(elapsedTime * 1.8) * 0.02;
-        }
-
-        this.renderer.render(this.scene, this.camera);
-      };
-
-      destroy() {
-        if (this.animationFrameId !== null) {
-          cancelAnimationFrame(this.animationFrameId);
-        }
-        if (this.renderer) {
-          this.renderer.dispose();
-        }
+    function rotate3DPhone360() {
+      const container = document.getElementById('phoneScreenContainer');
+      if (container && container.parentElement) {
+        container.parentElement.classList.add('scale-[1.03]');
+        setTimeout(() => container.parentElement.classList.remove('scale-[1.03]'), 350);
       }
     }
 
     function initPhone3DShowcase() {
-      const container = document.getElementById('phoneThreeJsContainer');
-      const canvas = document.getElementById('phoneThreeJsCanvas');
-      if (!container || !canvas || typeof THREE === 'undefined') return;
-
-      if (phone3DInstance) {
-        phone3DInstance.destroy();
-        phone3DInstance = null;
+      const phoneImg = document.getElementById('phoneScreenImage');
+      const label = document.getElementById('phoneScreenLabel');
+      if (phoneImg && cmsData.activePhoneScreenImg) {
+        phoneImg.src = cmsData.activePhoneScreenImg;
       }
-
-      const active = cmsData.activeScreen || cmsData.designs[0];
-      phone3DInstance = new Phone3DShowcaseRuntime({
-        containerId: 'phoneThreeJsContainer',
-        canvasId: 'phoneThreeJsCanvas',
-        initialScreenTitle: active.title,
-        initialScreenSubtitle: active.subtitle,
-        initialScreenBg: active.bg,
-        initialScreenImage: active.img
-      });
-    }
-
-    function set3DPhoneScreenIndex(index) {
-      if (!cmsData.designs[index]) return;
-      cmsData.currentScreenIndex = index;
-      const d = cmsData.designs[index];
-      cmsData.activeScreen = {
-        title: d.title,
-        subtitle: d.subtitle,
-        bg: d.bg,
-        img: d.img
-      };
-      saveCmsData();
-
-      const label = document.getElementById('currentScreenLabel');
-      if (label) label.textContent = d.title;
-
-      if (phone3DInstance) {
-        phone3DInstance.updateScreenTexture(d.title, d.subtitle, d.bg, d.img);
-        phone3DInstance.trigger360Rotate();
-      }
-    }
-
-    function rotate3DPhone360() {
-      if (phone3DInstance) {
-        phone3DInstance.trigger360Rotate();
+      if (label && cmsData.activeScreenTitle) {
+        label.textContent = `Layar: ${cmsData.activeScreenTitle}`;
       }
     }
 
@@ -2689,7 +2300,7 @@
     /* CONTENT RENDERING: 6 DESAIN GRAFIS & 3 VIDEO KARYA PILIHAN          */
     /* =================================================================== */
     function renderMedsosSections() {
-      // 1. Update Section 04 Subheader
+      // 1. Update Section 04 Subheader & Phone Screen
       const titleEl = document.getElementById('section04TitleDisplay');
       if (titleEl) titleEl.textContent = cmsData.sectionTitle;
 
@@ -2699,9 +2310,14 @@
       const handleLink = document.getElementById('section04HandleLink');
       if (handleLink) handleLink.href = cmsData.instagramUrl || `https://www.instagram.com/${cmsData.instagramHandle}`;
 
-      const screenLabel = document.getElementById('currentScreenLabel');
-      if (screenLabel && cmsData.activeScreen) {
-        screenLabel.textContent = cmsData.activeScreen.title;
+      const phoneImg = document.getElementById('phoneScreenImage');
+      if (phoneImg && cmsData.activePhoneScreenImg) {
+        phoneImg.src = cmsData.activePhoneScreenImg;
+      }
+
+      const screenLabel = document.getElementById('phoneScreenLabel');
+      if (screenLabel) {
+        screenLabel.textContent = `Layar: ${cmsData.activeScreenTitle || '@' + (cmsData.instagramHandle || 'halteaindonesia')}`;
       }
 
       // 2. Render Exactly 6 Desain Grafis Cards into #featuredDesignGrid
@@ -2721,8 +2337,8 @@
                 <h4 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${d.title}">${d.title}</h4>
                 <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
                 <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
-                  <button onclick="event.stopPropagation(); set3DPhoneScreenIndex(${idx})" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1" title="Tampilkan pada Layar 3D Smartphone">
-                    <span>📲 Pasang di 3D</span>
+                  <button onclick="event.stopPropagation(); setPhoneScreenDesignIndex(${idx})" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1" title="Tampilkan pada Layar Smartphone">
+                    <span>📲 Ke Layar HP</span>
                   </button>
                   <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
                 </div>
@@ -3291,9 +2907,6 @@
 
       saveCmsData();
       renderMedsosSections();
-      if (phone3DInstance && cmsData.activeScreen) {
-        phone3DInstance.updateScreenTexture(cmsData.activeScreen.title, cmsData.activeScreen.subtitle, cmsData.activeScreen.bg, cmsData.activeScreen.img);
-      }
       alert('Teks subheader berhasil disimpan dan diperbarui!');
     }
 
@@ -3301,28 +2914,17 @@
       const sel = document.getElementById('adminSelectDesignForScreen');
       if (!sel) return;
       const idx = parseInt(sel.value, 10);
-      set3DPhoneScreenIndex(idx);
-      alert(`Layar 3D berhasil dipasang ke: ${cmsData.designs[idx].title}`);
+      setPhoneScreenDesignIndex(idx);
+      alert(`Layar smartphone berhasil dipasang ke: ${cmsData.designs[idx].title}`);
     }
 
-    function applyCustomScreenTo3D() {
-      const title = document.getElementById('adminScreenCustomTitle').value.trim() || 'Desain Kustom';
-      const subtitle = document.getElementById('adminScreenCustomSubtitle').value.trim() || 'Layar 3D Kustom';
-      const bg = document.getElementById('adminScreenCustomBg').value || '#1D4ED8';
+    function applyCustomScreenToPhone() {
+      const title = document.getElementById('adminScreenCustomTitle').value.trim() || 'Layar Kustom Sendiri';
       const fileInp = document.getElementById('adminScreenCustomFile');
 
       const apply = (imgUrl) => {
-        cmsData.activeScreen = { title, subtitle, bg, img: imgUrl };
-        saveCmsData();
-
-        const label = document.getElementById('currentScreenLabel');
-        if (label) label.textContent = title;
-
-        if (phone3DInstance) {
-          phone3DInstance.updateScreenTexture(title, subtitle, bg, imgUrl);
-          phone3DInstance.trigger360Rotate();
-        }
-        alert('Layar 3D kustom berhasil diterapkan ke smartphone!');
+        setPhoneScreen(imgUrl, title);
+        alert('Layar smartphone kustom berhasil diterapkan!');
       };
 
       if (fileInp && fileInp.files && fileInp.files[0]) {
@@ -3330,8 +2932,12 @@
         reader.onload = (e) => apply(e.target.result);
         reader.readAsDataURL(fileInp.files[0]);
       } else {
-        apply(null);
+        alert('Silakan pilih file screenshot/gambar layar terlebih dahulu!');
       }
+    }
+
+    function applyCustomScreenTo3D() {
+      applyCustomScreenToPhone();
     }
 
     /* DESAIN GRAFIS CRUD */
@@ -3360,8 +2966,8 @@
               </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-              <button onclick="set3DPhoneScreenIndex(${idx})" class="px-2.5 py-1 rounded-lg bg-blue-50 text-[#155293] hover:bg-blue-100 text-[11px] font-bold transition" title="Jadikan Layar 3D Smartphone">
-                📲 Layar 3D
+              <button onclick="setPhoneScreenDesignIndex(${idx})" class="px-2.5 py-1 rounded-lg bg-blue-50 text-[#155293] hover:bg-blue-100 text-[11px] font-bold transition" title="Jadikan Layar Smartphone">
+                📲 Ke Layar HP
               </button>
               <button onclick="editDesignItem('${d.id}')" class="px-2.5 py-1 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200 text-[11px] font-bold transition">
                 ✏️ Edit
@@ -3579,15 +3185,7 @@
       cmsData = JSON.parse(JSON.stringify(defaultCmsPortfolioData));
       saveCmsData();
       renderMedsosSections();
-      if (phone3DInstance) {
-        phone3DInstance.updateScreenTexture(
-          cmsData.activeScreen.title,
-          cmsData.activeScreen.subtitle,
-          cmsData.activeScreen.bg,
-          cmsData.activeScreen.img
-        );
-        phone3DInstance.trigger360Rotate();
-      }
+      setPhoneScreen(cmsData.activePhoneScreenImg, cmsData.activeScreenTitle);
       alert('Data portofolio berhasil direset ke konfigurasi bawaan!');
     }
 
