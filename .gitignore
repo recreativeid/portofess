@@ -3,5 +3,12 @@
 .DS_Store
 Thumbs.db
 
+# Backup files
+*.bak
+*.v8bak
+
+# Scratch scripts and temporary test files
+scratch/
+
 # Node dependencies (if any)
 node_modules/
