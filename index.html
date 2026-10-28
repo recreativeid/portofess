@@ -3922,11 +3922,13 @@
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed && Array.isArray(parsed.accounts) && parsed.accounts.length > 0) {
-            // Auto upgrade: Ensure every account has 3 reels (9:16) and 3 landscape (16:9)
+            // Safe initialization: Only fill default videos if account has no videos at all
             parsed.accounts.forEach(acc => {
-              const def = defaultMedsosAccounts.find(d => d.id === acc.id);
-              if (def && (!acc.videos || acc.videos.length < 6)) {
-                acc.videos = JSON.parse(JSON.stringify(def.videos));
+              if (!acc.videos || acc.videos.length === 0) {
+                const def = defaultMedsosAccounts.find(d => d.id === acc.id);
+                if (def && def.videos) {
+                  acc.videos = JSON.parse(JSON.stringify(def.videos));
+                }
               }
             });
             return parsed;

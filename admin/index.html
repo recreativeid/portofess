@@ -1736,6 +1736,22 @@
       activeAdminAccountId = currentMedsosData.activeAccountId || 'haltea';
       activeVideoAccountId = activeAdminAccountId;
 
+      // Auto-compress any legacy huge thumbnails from past sessions to permanently safeguard localStorage
+      if (currentMedsosData && Array.isArray(currentMedsosData.accounts)) {
+        currentMedsosData.accounts.forEach(function(acc) {
+          if (Array.isArray(acc.videos)) {
+            acc.videos.forEach(function(v) {
+              if (v.thumbnail && v.thumbnail.startsWith('data:image') && v.thumbnail.length > 200000) {
+                downscaleImage(v.thumbnail, 640, 0.80, function(compressed) {
+                  v.thumbnail = compressed;
+                  persistMedsosData();
+                });
+              }
+            });
+          }
+        });
+      }
+
       // 3. Certificates (Complete 22 Items Catalog)
       try {
         const storedCerts = localStorage.getItem('fathur_portfolio_certificates');
@@ -1944,13 +1960,44 @@
       box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
+    /* Utility: Downscale and compress image to avoid localStorage QuotaExceededError */
+    function downscaleImage(src, maxDim, quality, callback) {
+      if (!src) { callback(''); return; }
+      if (!src.startsWith('data:image')) { callback(src); return; }
+      const img = new Image();
+      img.onload = function() {
+        let w = img.width;
+        let h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) {
+            h = Math.round((h * maxDim) / w);
+            w = maxDim;
+          } else {
+            w = Math.round((w * maxDim) / h);
+            h = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL('image/jpeg', quality || 0.80));
+      };
+      img.onerror = function() { callback(src); };
+      img.src = src;
+    }
+
     function previewFeedImageFile(input) {
       if (input && input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          tempFeedImageData = e.target.result;
-          document.getElementById('inpFeedUrl').value = '';
-          updateFeedPreview();
+          downscaleImage(e.target.result, 640, 0.80, function(compressed) {
+            tempFeedImageData = compressed;
+            document.getElementById('inpFeedUrl').value = '';
+            updateFeedPreview();
+            notifyDataSaved('Gambar feed berhasil dimuat & dioptimasi!');
+          });
         };
         reader.readAsDataURL(input.files[0]);
       }
@@ -1991,18 +2038,23 @@
       const img = tempFeedImageData || document.getElementById('inpFeedUrl').value.trim();
 
       if (!title) {
-        alert('Judul postingan desain wajib diisi!');
+        notifyDataSaved('Judul postingan desain wajib diisi!', 'error');
         return;
       }
 
       const idxStr = document.getElementById('editFeedIndex').value;
+      let isEdit = false;
+      let targetIdx = 0;
+
       if (idxStr !== '') {
-        const idx = parseInt(idxStr, 10);
-        acc.designs[idx].title = title;
-        acc.designs[idx].subtitle = subtitle;
-        acc.designs[idx].bg = bg;
-        acc.designs[idx].img = img;
-        notifyDataSaved('Postingan feed desain #' + (idx + 1) + ' berhasil diperbarui!');
+        isEdit = true;
+        targetIdx = parseInt(idxStr, 10);
+        if (acc.designs[targetIdx]) {
+          acc.designs[targetIdx].title = title;
+          acc.designs[targetIdx].subtitle = subtitle;
+          acc.designs[targetIdx].bg = bg;
+          acc.designs[targetIdx].img = img;
+        }
       } else {
         const newFeed = {
           id: 'feed_' + Date.now(),
@@ -2012,12 +2064,25 @@
           img: img
         };
         acc.designs.push(newFeed);
-        notifyDataSaved('Postingan feed baru berhasil ditambahkan!');
+        targetIdx = acc.designs.length - 1;
       }
 
+      // 1. Simpan data terlebih dahulu
       persistMedsosData();
+
+      // 2. Render ulang UI langsung
       renderActiveFeedsGrid();
+      renderOverviewStats();
+
+      // 3. Tutup form edit
       toggleFeedForm(false);
+
+      // 4. Notifikasi sukses non-blocking
+      if (isEdit) {
+        notifyDataSaved('✓ Postingan feed desain #' + (targetIdx + 1) + ' berhasil diperbarui!');
+      } else {
+        notifyDataSaved('✓ Postingan feed baru berhasil ditambahkan!');
+      }
     }
 
     function deleteFeedItem(idx) {
@@ -2084,7 +2149,32 @@
     }
 
     function persistMedsosData() {
-      localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
+      try {
+        localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
+        return true;
+      } catch (err) {
+        console.warn('Storage quota warning on persistMedsosData:', err);
+        try {
+          // Safeguard: Prune legacy oversized raw base64 thumbnails if quota is hit
+          if (currentMedsosData && Array.isArray(currentMedsosData.accounts)) {
+            currentMedsosData.accounts.forEach(function(acc) {
+              if (Array.isArray(acc.videos)) {
+                acc.videos.forEach(function(v) {
+                  if (v.thumbnail && v.thumbnail.startsWith('data:image') && v.thumbnail.length > 150000) {
+                    v.thumbnail = ''; // Reset only oversized corrupted ones to restore health
+                  }
+                });
+              }
+            });
+            localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
+            return true;
+          }
+        } catch (e2) {
+          console.error('Fatal storage quota exceeded:', e2);
+          notifyDataSaved('Memori browser lokal penuh. Gunakan URL gambar untuk file besar.', 'error');
+          return false;
+        }
+      }
     }
 
     /* ============================================================== */
@@ -2299,23 +2389,36 @@
     function captureFrameFromVideo() {
       const player = document.getElementById('videoCapturePlayer');
       if (!player || !player.videoWidth || player.videoWidth === 0) {
-        alert('Harap muat video terlebih dahulu (masukkan URL atau file video) agar frame dapat diambil.');
+        notifyDataSaved('Harap muat video terlebih dahulu (masukkan URL atau file video) agar frame dapat diambil.', 'error');
         return;
       }
 
       try {
+        let targetW = player.videoWidth;
+        let targetH = player.videoHeight;
+        const maxDim = 640;
+        if (targetW > maxDim || targetH > maxDim) {
+          if (targetW > targetH) {
+            targetH = Math.round((targetH * maxDim) / targetW);
+            targetW = maxDim;
+          } else {
+            targetW = Math.round((targetW * maxDim) / targetH);
+            targetH = maxDim;
+          }
+        }
+
         const canvas = document.createElement('canvas');
-        canvas.width = player.videoWidth;
-        canvas.height = player.videoHeight;
+        canvas.width = targetW;
+        canvas.height = targetH;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(player, 0, 0, canvas.width, canvas.height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+        ctx.drawImage(player, 0, 0, targetW, targetH);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.80);
         tempVideoThumbnailData = dataUrl;
         updateVideoThumbnailPreview();
         notifyDataSaved('Frame pada detik ' + player.currentTime.toFixed(1) + 's berhasil diambil sebagai sampul video!');
       } catch (err) {
         console.warn('CORS restrict on canvas snapshot:', err);
-        alert('Pengambilan frame langsung memerlukan berkas video lokal / uploaded file.');
+        notifyDataSaved('Pengambilan frame langsung memerlukan berkas video lokal / uploaded file.', 'error');
       }
     }
 
@@ -2323,9 +2426,12 @@
       if (input && input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          tempVideoThumbnailData = e.target.result;
-          document.getElementById('inpVideoThumbUrl').value = '';
-          updateVideoThumbnailPreview();
+          downscaleImage(e.target.result, 640, 0.80, function(compressed) {
+            tempVideoThumbnailData = compressed;
+            document.getElementById('inpVideoThumbUrl').value = '';
+            updateVideoThumbnailPreview();
+            notifyDataSaved('Gambar sampul berhasil diunggah & dioptimasi!');
+          });
         };
         reader.readAsDataURL(input.files[0]);
       }
@@ -2379,19 +2485,24 @@
       const thumbnail = tempVideoThumbnailData || document.getElementById('inpVideoThumbUrl').value.trim();
 
       if (!title) {
-        alert('Judul video wajib diisi!');
+        notifyDataSaved('Judul video wajib diisi!', 'error');
         return;
       }
 
       const idxStr = document.getElementById('editVideoIndex').value;
+      let isEdit = false;
+      let targetIdx = 0;
+
       if (idxStr !== '') {
-        const idx = parseInt(idxStr, 10);
-        acc.videos[idx].title = title;
-        acc.videos[idx].ratio = ratio;
-        acc.videos[idx].duration = duration;
-        acc.videos[idx].videoUrl = videoUrl;
-        acc.videos[idx].thumbnail = thumbnail;
-        notifyDataSaved('Video #' + (idx + 1) + ' berhasil diperbarui!');
+        isEdit = true;
+        targetIdx = parseInt(idxStr, 10);
+        if (acc.videos[targetIdx]) {
+          acc.videos[targetIdx].title = title;
+          acc.videos[targetIdx].ratio = ratio;
+          acc.videos[targetIdx].duration = duration;
+          acc.videos[targetIdx].videoUrl = videoUrl;
+          acc.videos[targetIdx].thumbnail = thumbnail;
+        }
       } else {
         const newVid = {
           id: 'v_' + Date.now(),
@@ -2402,13 +2513,25 @@
           thumbnail: thumbnail
         };
         acc.videos.push(newVid);
-        notifyDataSaved('Video baru berhasil ditambahkan ke akun @' + acc.handle + '!');
+        targetIdx = acc.videos.length - 1;
       }
 
+      // 1. Simpan data ke persistent storage terlebih dahulu
       persistMedsosData();
+
+      // 2. Render ulang kartu video seketika (DOM langsung terupdate!)
       renderVideosCards();
       renderOverviewStats();
+
+      // 3. Tutup form edit
       toggleVideoForm(false);
+
+      // 4. Notifikasi sukses non-blocking (UI langsung terlihat terupdate)
+      if (isEdit) {
+        notifyDataSaved('✓ Video #' + (targetIdx + 1) + ' berhasil diperbarui dan tersimpan!');
+      } else {
+        notifyDataSaved('✓ Video baru berhasil ditambahkan ke akun @' + acc.handle + '!');
+      }
     }
 
     function deleteVideoRecord(idx) {
@@ -2558,9 +2681,12 @@
       if (input && input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          tempCertImageData = e.target.result;
-          document.getElementById('inpCertImgUrl').value = '';
-          updateCertPreview();
+          downscaleImage(e.target.result, 720, 0.80, function(compressed) {
+            tempCertImageData = compressed;
+            document.getElementById('inpCertImgUrl').value = '';
+            updateCertPreview();
+            notifyDataSaved('Berkas sertifikat berhasil dimuat & dioptimasi!');
+          });
         };
         reader.readAsDataURL(input.files[0]);
       }
@@ -2600,14 +2726,17 @@
       const img = tempCertImageData || document.getElementById('inpCertImgUrl').value.trim();
 
       if (!title) {
-        alert('Judul sertifikat wajib diisi!');
+        notifyDataSaved('Judul sertifikat wajib diisi!', 'error');
         return;
       }
 
       const editId = document.getElementById('certEditId').value;
+      let isEdit = false;
+
       if (editId) {
         const idx = currentCerts.findIndex(function(c) { return c.id === editId; });
         if (idx !== -1) {
+          isEdit = true;
           currentCerts[idx] = {
             id: editId,
             title: title,
@@ -2618,7 +2747,6 @@
             color: color,
             img: img
           };
-          notifyDataSaved('Sertifikat "' + title + '" berhasil diperbarui!');
         }
       } else {
         const newCert = {
@@ -2632,13 +2760,27 @@
           img: img
         };
         currentCerts.unshift(newCert);
-        notifyDataSaved('Sertifikat baru berhasil ditambahkan!');
       }
 
-      localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
+      try {
+        localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
+      } catch (e) {
+        console.warn('Storage quota for certificates:', e);
+      }
+
+      // 1. Render ulang UI langsung
       renderCertsCards();
       renderOverviewStats();
+
+      // 2. Tutup form edit
       toggleCertForm(false);
+
+      // 3. Notifikasi sukses non-blocking
+      if (isEdit) {
+        notifyDataSaved('✓ Sertifikat "' + title + '" berhasil diperbarui!');
+      } else {
+        notifyDataSaved('✓ Sertifikat baru berhasil ditambahkan!');
+      }
     }
 
     function deleteCertRecord(id) {
@@ -3250,8 +3392,30 @@
       notifyDataSaved('Semua modul telah disinkronkan secara langsung.');
     }
 
-    function notifyDataSaved(msg) {
-      alert(msg);
+    function notifyDataSaved(msg, type) {
+      let toast = document.getElementById('adminToastNotification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'adminToastNotification';
+        document.body.appendChild(toast);
+      }
+      
+      const isError = type === 'error';
+      toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[99999] pointer-events-none transition-all duration-300 transform translate-y-0 opacity-100 flex items-center gap-2.5 px-4 py-2.5 rounded-xl shadow-2xl border text-xs font-semibold backdrop-blur-md ' +
+        (isError ? 'bg-rose-950/95 text-rose-200 border-rose-800 shadow-rose-950/30' : 'bg-slate-900/95 text-white border-slate-700/80 shadow-slate-950/30');
+      
+      const icon = isError
+        ? '<svg class="w-4 h-4 text-rose-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>'
+        : '<svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+
+      toast.innerHTML = icon + '<span>' + msg + '</span>';
+
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function() {
+        if (toast) {
+          toast.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[99999] pointer-events-none transition-all duration-300 transform -translate-y-4 opacity-0 flex items-center gap-2.5 px-4 py-2.5 rounded-xl shadow-2xl border text-xs font-semibold';
+        }
+      }, 3000);
     }
   </script>
 
