@@ -705,14 +705,21 @@
                 <div>
                   <label class="text-[11px] font-bold text-slate-700 block mb-1">Durasi Video</label>
                   <input id="inpVideoDuration" type="text" placeholder="mis. 0:42 atau 1:15" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold bg-white outline-none" />
+                  <p class="text-[10px] text-slate-400 mt-1">Tampil sebagai badge durasi di kartu.</p>
                 </div>
                 <div>
-                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Unggah File Video (MP4/WebM)</label>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Pilih Berkas Video PC (Untuk Snapshot Frame)</label>
                   <input id="inpVideoFile" type="file" accept="video/mp4,video/webm" onchange="handleVideoFileSelect(this)" class="w-full text-xs text-slate-500 pt-1" />
+                  <p class="text-[10px] text-slate-500 mt-1">Diputar di studio ini untuk ambil detik frame sampul.</p>
                 </div>
                 <div>
-                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Atau URL / Path Video</label>
-                  <input id="inpVideoUrl" type="text" placeholder="mis. assets/videos/reel1.mp4 atau https://..." onchange="handleVideoUrlChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none" />
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">URL Publik Video (Supabase / YouTube / Reels)</label>
+                  <input id="inpVideoUrl" type="text" placeholder="mis. https://xyz.supabase.co/.../video.mp4 atau https://youtu.be/..." oninput="handleVideoUrlChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none" />
+                  <div class="flex items-center gap-1 flex-wrap mt-1 text-[9px]">
+                    <span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold">Supabase .mp4</span>
+                    <span class="px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 font-bold">YouTube Shorts</span>
+                    <span class="px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 font-bold">IG Reels</span>
+                  </div>
                 </div>
               </div>
 
@@ -2354,14 +2361,21 @@
       if (input && input.files && input.files[0]) {
         const file = input.files[0];
         const blobUrl = URL.createObjectURL(file);
-        document.getElementById('inpVideoUrl').value = file.name;
+        const urlInp = document.getElementById('inpVideoUrl');
+        if (!urlInp.value || urlInp.value.trim() === '') {
+          urlInp.value = file.name;
+        }
         initCaptureVideoPlayer(blobUrl);
+        notifyDataSaved('Video lokal "' + file.name + '" dimuat ke studio! Anda bisa memilih detik dan mengambil frame sampul.');
       }
     }
 
     function handleVideoUrlChange(url) {
-      if (url.trim()) {
-        initCaptureVideoPlayer(url.trim());
+      url = (url || '').trim();
+      if (!url) return;
+      // Direct MP4 / WebM video (Supabase Storage, CDN, Blob)
+      if (url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('supabase.co/storage') || url.includes('cloudinary.com') || url.startsWith('blob:') || url.startsWith('data:')) {
+        initCaptureVideoPlayer(url);
       }
     }
 
