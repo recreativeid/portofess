@@ -551,17 +551,10 @@
     /* =================================================================== */
     @keyframes cinematicBlurIn {
       0% {
-        filter: blur(32px) brightness(0.4);
         opacity: 0;
-        transform: scale(1.08);
-      }
-      50% {
-        filter: blur(10px) brightness(0.85);
-        opacity: 0.8;
-        transform: scale(1.03);
+        transform: scale(1.04);
       }
       100% {
-        filter: blur(0px) brightness(1);
         opacity: 1;
         transform: scale(1);
       }
@@ -569,7 +562,7 @@
 
     @keyframes cinematicSlowZoom {
       0% {
-        transform: scale(1.08);
+        transform: scale(1.04);
       }
       100% {
         transform: scale(1);
@@ -582,7 +575,7 @@
         opacity: 0;
       }
       50% {
-        opacity: 0.6;
+        opacity: 0.4;
       }
       100% {
         transform: translateX(250%) skewX(-25deg);
@@ -591,19 +584,19 @@
     }
 
     .cinematic-bg-motion {
-      animation: cinematicSlowZoom 8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation: cinematicSlowZoom 6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
       will-change: transform;
     }
 
     .cinematic-center-focus {
-      animation: cinematicBlurIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      will-change: filter, opacity, transform;
+      animation: cinematicBlurIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: opacity, transform;
     }
 
     .cinematic-shimmer {
       position: absolute;
       inset: -50%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
       animation: cinematicShimmer 3.2s infinite ease-in-out;
       pointer-events: none;
     }
@@ -851,8 +844,6 @@
     }
 
   </style>
-  <!-- Three.js 3D Library for Photorealistic Smartphone on Stone Podium -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- High-Precision World & Detailed Indonesia Landmass Polygons for Dotted Map -->
   <script src="assets/world-land.js"></script>
   <script>
@@ -861,15 +852,30 @@
       var intro = document.getElementById('cinematicOpeningScreen');
       if (!intro) return;
       intro.style.pointerEvents = 'none';
-      intro.style.transition = 'transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.7s ease, filter 0.7s ease';
+      intro.style.transition = 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
       intro.style.transform = 'translateY(-100%)';
       intro.style.opacity = '0';
-      intro.style.filter = 'blur(16px)';
+      try {
+        sessionStorage.setItem('fathur_intro_dismissed', 'true');
+      } catch (e) {}
       setTimeout(function() {
         intro.style.display = 'none';
         document.body.style.overflow = '';
-      }, 850);
+      }, 420);
     };
+
+    // If user already dismissed intro in this session, skip curtain immediately
+    try {
+      if (sessionStorage.getItem('fathur_intro_dismissed') === 'true') {
+        document.addEventListener('DOMContentLoaded', function() {
+          var intro = document.getElementById('cinematicOpeningScreen');
+          if (intro) {
+            intro.style.display = 'none';
+            intro.style.pointerEvents = 'none';
+          }
+        });
+      }
+    } catch (e) {}
   </script>
 </head>
 <body class="antialiased selection:bg-crimson selection:text-white">
@@ -904,7 +910,7 @@
   <!-- =================================================================== -->
   <!-- CINEMATIC FILM OPENING SCREEN (HD GAMBAR 2 MATCH)                  -->
   <!-- =================================================================== -->
-  <div id="cinematicOpeningScreen" class="fixed inset-0 z-[9999] bg-[#0A0D14] flex flex-col justify-between overflow-hidden select-none transition-all duration-1000 ease-out cursor-pointer" onclick="dismissCinematicIntro()">
+  <div id="cinematicOpeningScreen" class="fixed inset-0 z-[9999] bg-[#0A0D14] flex flex-col justify-between overflow-hidden select-none transition-all duration-500 ease-out cursor-pointer" onclick="dismissCinematicIntro()">
     
     <!-- Cinematic Fullscreen HD Backdrop Matching Gambar 2 Exactly (Zero Double Text) -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none flex items-center justify-center">
@@ -915,15 +921,15 @@
 
     <!-- Top Bar: Skip Button -->
     <div class="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-12 pt-6 sm:pt-8 flex items-center justify-end text-white/80">
-      <button onclick="event.stopPropagation(); dismissCinematicIntro();" class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 backdrop-blur-md text-xs font-mono font-medium text-stone-200 hover:text-white transition flex items-center gap-2 shadow-2xl group cursor-pointer">
+      <button onclick="event.stopPropagation(); dismissCinematicIntro();" class="px-5 py-2 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 border border-white/25 backdrop-blur-md text-xs font-mono font-medium text-white hover:text-white transition flex items-center gap-2 shadow-2xl group cursor-pointer">
         <span>Lewati Intro</span>
         <span class="group-hover:translate-x-1 transition duration-300">↘</span>
       </button>
     </div>
 
     <!-- Bottom Bar: Prompt to Enter -->
-    <div class="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-12 pb-6 sm:pb-8 flex items-center justify-center text-white/70">
-      <div class="px-4 py-1.5 rounded-full bg-black/50 border border-white/15 backdrop-blur-md text-[11px] sm:text-xs font-mono text-stone-300 tracking-widest uppercase flex items-center gap-2 shadow-xl">
+    <div class="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-12 pb-6 sm:pb-8 flex items-center justify-center text-white/80">
+      <div class="px-6 py-2.5 rounded-full bg-crimson hover:bg-red-700 active:scale-95 border border-white/20 text-xs sm:text-sm font-bold text-white tracking-wider uppercase flex items-center gap-2 shadow-2xl transition duration-200 cursor-pointer">
         <span>Klik di mana saja untuk masuk</span>
         <span class="animate-bounce">↓</span>
       </div>
@@ -4875,9 +4881,9 @@
       }
     }
 
-    // Lanyard Physics & Interactive Swing
-    const canvas = document.getElementById('lanyardCanvas');
-    const ctx = canvas.getContext('2d');
+    // Lanyard Physics & Interactive Swing (High-Performance Auto-Sleep Engine)
+    const lanyardCanvas = document.getElementById('lanyardCanvas');
+    const lanyardCtx = lanyardCanvas ? lanyardCanvas.getContext('2d') : null;
     const cardWrapper = document.getElementById('idCardWrapper');
     const cardInner = document.getElementById('idCardInner');
 
@@ -4886,6 +4892,77 @@
     let velX = 0, velY = 0;
     let isDraggingCard = false;
     let dragStartX = 0, dragStartY = 0;
+    let lanyardAnimFrame = null;
+    let isLanyardSleeping = false;
+
+    function renderLanyardFrame() {
+      if (!lanyardCanvas || !lanyardCtx || !cardWrapper) return;
+      const tiltDeg = Math.max(-18, Math.min(18, (cardX - anchorX) * 0.14));
+      cardWrapper.style.left = `${cardX - 140}px`;
+      cardWrapper.style.top = `${cardY}px`;
+      cardWrapper.style.transform = `rotate(${tiltDeg.toFixed(2)}deg)`;
+
+      // Clear Canvas
+      lanyardCtx.clearRect(0, 0, lanyardCanvas.width, lanyardCanvas.height);
+
+      // 1. Strap Shadow for Depth
+      lanyardCtx.lineWidth = 11;
+      lanyardCtx.lineCap = 'round';
+      lanyardCtx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+      lanyardCtx.beginPath();
+      lanyardCtx.moveTo(anchorX - 16, anchorY + 4);
+      lanyardCtx.quadraticCurveTo((anchorX + cardX) / 2 - 14, (anchorY + cardY) / 2 + 18, cardX, cardY + 10);
+      lanyardCtx.stroke();
+
+      lanyardCtx.beginPath();
+      lanyardCtx.moveTo(anchorX + 16, anchorY + 4);
+      lanyardCtx.quadraticCurveTo((anchorX + cardX) / 2 + 14, (anchorY + cardY) / 2 + 18, cardX, cardY + 10);
+      lanyardCtx.stroke();
+
+      // 2. Main Red Lanyard Ribbon Straps
+      lanyardCtx.lineWidth = 9;
+      lanyardCtx.lineCap = 'round';
+      lanyardCtx.strokeStyle = '#C62828';
+
+      // Left strap
+      lanyardCtx.beginPath();
+      lanyardCtx.moveTo(anchorX - 16, anchorY);
+      lanyardCtx.quadraticCurveTo((anchorX + cardX) / 2 - 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
+      lanyardCtx.stroke();
+
+      // Right strap
+      lanyardCtx.beginPath();
+      lanyardCtx.moveTo(anchorX + 16, anchorY);
+      lanyardCtx.quadraticCurveTo((anchorX + cardX) / 2 + 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
+      lanyardCtx.stroke();
+
+      // 3. Highlight Stitch Lines
+      lanyardCtx.lineWidth = 2;
+      lanyardCtx.strokeStyle = '#EF4444';
+      lanyardCtx.beginPath();
+      lanyardCtx.moveTo(anchorX - 16, anchorY);
+      lanyardCtx.quadraticCurveTo((anchorX + cardX) / 2 - 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
+      lanyardCtx.stroke();
+
+      lanyardCtx.beginPath();
+      lanyardCtx.moveTo(anchorX + 16, anchorY);
+      lanyardCtx.quadraticCurveTo((anchorX + cardX) / 2 + 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
+      lanyardCtx.stroke();
+
+      // 4. Chrome Swivel Ring & Clasp
+      lanyardCtx.fillStyle = '#E5E7EB';
+      lanyardCtx.strokeStyle = '#374151';
+      lanyardCtx.lineWidth = 2.5;
+      lanyardCtx.beginPath();
+      lanyardCtx.arc(cardX, cardY + 6, 8, 0, Math.PI * 2);
+      lanyardCtx.fill();
+      lanyardCtx.stroke();
+
+      // Metal Clip Tongue
+      lanyardCtx.fillStyle = '#9CA3AF';
+      lanyardCtx.fillRect(cardX - 4, cardY + 12, 8, 9);
+      lanyardCtx.strokeRect(cardX - 4, cardY + 12, 8, 9);
+    }
 
     function updateLanyardPhysics() {
       const restX = 210, restY = 98;
@@ -4896,80 +4973,36 @@
         velY = (velY + forceY) * 0.85;
         cardX += velX;
         cardY += velY;
+
+        // Auto-sleep when card settles to rest position to eliminate CPU usage
+        if (Math.abs(velX) < 0.005 && Math.abs(velY) < 0.005 && Math.abs(cardX - restX) < 0.05 && Math.abs(cardY - restY) < 0.05) {
+          cardX = restX;
+          cardY = restY;
+          velX = 0;
+          velY = 0;
+          renderLanyardFrame();
+          isLanyardSleeping = true;
+          lanyardAnimFrame = null;
+          return;
+        }
       }
 
-      const tiltDeg = Math.max(-18, Math.min(18, (cardX - anchorX) * 0.14));
-      cardWrapper.style.left = `${cardX - 140}px`;
-      cardWrapper.style.top = `${cardY}px`;
-      cardWrapper.style.transform = `rotate(${tiltDeg.toFixed(2)}deg)`;
+      renderLanyardFrame();
+      lanyardAnimFrame = requestAnimationFrame(updateLanyardPhysics);
+    }
 
-      // Clear Canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // 1. Strap Shadow for Depth
-      ctx.lineWidth = 11;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
-      ctx.beginPath();
-      ctx.moveTo(anchorX - 16, anchorY + 4);
-      ctx.quadraticCurveTo((anchorX + cardX) / 2 - 14, (anchorY + cardY) / 2 + 18, cardX, cardY + 10);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(anchorX + 16, anchorY + 4);
-      ctx.quadraticCurveTo((anchorX + cardX) / 2 + 14, (anchorY + cardY) / 2 + 18, cardX, cardY + 10);
-      ctx.stroke();
-
-      // 2. Main Red Lanyard Ribbon Straps
-      ctx.lineWidth = 9;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#C62828';
-
-      // Left strap
-      ctx.beginPath();
-      ctx.moveTo(anchorX - 16, anchorY);
-      ctx.quadraticCurveTo((anchorX + cardX) / 2 - 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
-      ctx.stroke();
-
-      // Right strap
-      ctx.beginPath();
-      ctx.moveTo(anchorX + 16, anchorY);
-      ctx.quadraticCurveTo((anchorX + cardX) / 2 + 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
-      ctx.stroke();
-
-      // 3. Highlight Stitch Lines
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#EF4444';
-      ctx.beginPath();
-      ctx.moveTo(anchorX - 16, anchorY);
-      ctx.quadraticCurveTo((anchorX + cardX) / 2 - 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(anchorX + 16, anchorY);
-      ctx.quadraticCurveTo((anchorX + cardX) / 2 + 12, (anchorY + cardY) / 2 + 16, cardX, cardY + 6);
-      ctx.stroke();
-
-      // 4. Chrome Swivel Ring & Clasp
-      ctx.fillStyle = '#E5E7EB';
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(cardX, cardY + 6, 8, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      // Metal Clip Tongue
-      ctx.fillStyle = '#9CA3AF';
-      ctx.fillRect(cardX - 4, cardY + 12, 8, 9);
-      ctx.strokeRect(cardX - 4, cardY + 12, 8, 9);
-
-      requestAnimationFrame(updateLanyardPhysics);
+    function wakeLanyardPhysics() {
+      if (isLanyardSleeping || !lanyardAnimFrame) {
+        isLanyardSleeping = false;
+        if (lanyardAnimFrame) cancelAnimationFrame(lanyardAnimFrame);
+        lanyardAnimFrame = requestAnimationFrame(updateLanyardPhysics);
+      }
     }
 
     cardWrapper.addEventListener('pointerdown', (e) => {
       if (e.target.closest('button')) return;
       isDraggingCard = true;
+      wakeLanyardPhysics();
       const stage = document.getElementById('lanyardStage');
       if (stage) {
         const stageRect = stage.getBoundingClientRect();
@@ -4993,11 +5026,13 @@
       const rawY = (e.clientY - stageRect.top) - dragStartY;
       cardX = Math.max(60, Math.min(360, rawX));
       cardY = Math.max(45, Math.min(240, rawY));
+      wakeLanyardPhysics();
     });
 
     const stopDraggingCard = (e) => {
       if (!isDraggingCard) return;
       isDraggingCard = false;
+      wakeLanyardPhysics();
       if (e && e.pointerId) {
         try {
           cardWrapper.releasePointerCapture(e.pointerId);
@@ -6376,7 +6411,36 @@
       }
     }
 
-    /* Dynamic Canvas Dot-Matrix Rendering */
+    let mapDotPatternLight = null;
+    let mapDotPatternDark = null;
+
+    function getMapDotPattern(ctx, isDark) {
+      if (isDark && mapDotPatternDark) return mapDotPatternDark;
+      if (!isDark && mapDotPatternLight) return mapDotPatternLight;
+
+      const step = 3.6; // High-density grid step for crisp island definition
+      const dotR = 1.05;
+      const pCanvas = document.createElement('canvas');
+      pCanvas.width = step * 2;
+      pCanvas.height = step * 2;
+      const pCtx = pCanvas.getContext('2d');
+      pCtx.fillStyle = isDark ? '#64748B' : '#94A3B8';
+
+      // Staggered dense dot matrix
+      pCtx.beginPath();
+      pCtx.arc(step, 0, dotR, 0, Math.PI * 2);
+      pCtx.arc(step, step * 2, dotR, 0, Math.PI * 2);
+      pCtx.arc(0, step, dotR, 0, Math.PI * 2);
+      pCtx.arc(step * 2, step, dotR, 0, Math.PI * 2);
+      pCtx.fill();
+
+      const pattern = ctx.createPattern(pCanvas, 'repeat');
+      if (isDark) mapDotPatternDark = pattern;
+      else mapDotPatternLight = pattern;
+      return pattern;
+    }
+
+    /* Dynamic Canvas Dot-Matrix Rendering (Hardware-Accelerated Single-Pass) */
     function drawWorldMapCanvas() {
       const canvas = document.getElementById('worldMapCanvas');
       if (!canvas) return;
@@ -6411,20 +6475,10 @@
         }
         ctx.clip(); // Subdividing dots appear only inside land
 
-        // Dense dot matrix for crisp island definitions (Java, Sumatra, Kalimantan, etc.)
-        const gridStep = 2.8;
-        const dotRadius = 1.05;
-        ctx.fillStyle = isDark ? '#64748B' : '#94A3B8';
-
-        let row = 0;
-        for (let y = 0; y <= H + gridStep; y += gridStep) {
-          const xOffset = (row % 2 === 0) ? 0 : (gridStep / 2);
-          for (let x = -gridStep; x <= W + gridStep; x += gridStep) {
-            ctx.beginPath();
-            ctx.arc(x + xOffset, y, dotRadius, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          row++;
+        const pattern = getMapDotPattern(ctx, isDark);
+        if (pattern) {
+          ctx.fillStyle = pattern;
+          ctx.fillRect(0, 0, W, H);
         }
       }
 
@@ -6605,12 +6659,6 @@
         initWorldMapEngine();
         return;
       }
-      resizeMapCanvas();
-      drawWorldMapCanvas();
-      renderWorldMapSvgOverlay();
-    }
-
-    function renderWorldMap() {
       resizeMapCanvas();
       drawWorldMapCanvas();
       renderWorldMapSvgOverlay();
@@ -7109,7 +7157,17 @@
       saveWorldMapRoutes();
     }
 
-    /* Event Listeners Initialization for Pan, Zoom, and Drag */
+    /* Event Listeners Initialization for Pan, Zoom, and Drag (rAF Throttled) */
+    let mapRenderPending = false;
+    function scheduleMapRender() {
+      if (mapRenderPending) return;
+      mapRenderPending = true;
+      requestAnimationFrame(() => {
+        mapRenderPending = false;
+        renderWorldMap();
+      });
+    }
+
     function initWorldMapEngine() {
       if (mapEngineInitialized) return;
       const stage = document.getElementById('worldMapStageContainer');
@@ -7146,7 +7204,7 @@
         // Clamp latitude to avoid Mercator singularity
         mapCenter.lat = Math.max(-80, Math.min(80, mapCenter.lat));
 
-        renderWorldMap();
+        scheduleMapRender();
       });
 
       window.addEventListener('mouseup', () => {
@@ -7182,7 +7240,7 @@
           mapCenter = mercatorToLatLng(newCx, newCy);
           mapCenter.lat = Math.max(-80, Math.min(80, mapCenter.lat));
 
-          renderWorldMap();
+          scheduleMapRender();
         }
       }, { passive: false });
 
@@ -7191,7 +7249,7 @@
 
       // Window resize
       window.addEventListener('resize', () => {
-        renderWorldMap();
+        scheduleMapRender();
       });
 
       // Close dropdown if clicked outside
@@ -7549,7 +7607,7 @@
     }
 
     /* =================================================================== */
-    /* CINEMATIC FILM INTRO CONTROLLER                                     */
+    /* CINEMATIC FILM INTRO CONTROLLER (ZERO LAG & INSTANT RESPONSE)       */
     /* =================================================================== */
     let cinematicIntroTimer = null;
 
@@ -7562,47 +7620,51 @@
       if (!intro) return;
 
       intro.style.pointerEvents = 'none';
-      intro.style.transition = 'transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.7s ease, filter 0.7s ease';
+      intro.style.transition = 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
       intro.style.transform = 'translateY(-100%)';
       intro.style.opacity = '0';
-      intro.style.filter = 'blur(16px)';
+
+      try {
+        sessionStorage.setItem('fathur_intro_dismissed', 'true');
+      } catch (e) {}
 
       setTimeout(() => {
         intro.style.display = 'none';
         document.body.style.overflow = '';
-      }, 850);
+      }, 420);
     }
     window.dismissCinematicIntro = dismissCinematicIntro;
 
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
-        const intro = document.getElementById('cinematicOpeningScreen');
-        if (intro && intro.style.display !== 'none' && intro.style.opacity !== '0' && intro.style.pointerEvents !== 'none') {
-          dismissCinematicIntro();
-        }
+      const intro = document.getElementById('cinematicOpeningScreen');
+      if (intro && intro.style.display !== 'none' && intro.style.pointerEvents !== 'none') {
+        dismissCinematicIntro();
       }
     });
+
+    window.addEventListener('wheel', (e) => {
+      const intro = document.getElementById('cinematicOpeningScreen');
+      if (intro && intro.style.display !== 'none' && intro.style.pointerEvents !== 'none') {
+        dismissCinematicIntro();
+      }
+    }, { passive: true });
 
     function playCinematicIntro() {
       const intro = document.getElementById('cinematicOpeningScreen');
       if (!intro) return;
+
+      try {
+        sessionStorage.removeItem('fathur_intro_dismissed');
+      } catch (e) {}
 
       intro.style.display = 'flex';
       intro.style.pointerEvents = 'auto';
       intro.style.transition = 'none';
       intro.style.transform = 'translateY(0)';
       intro.style.opacity = '1';
-      intro.style.filter = 'blur(0px)';
       window.scrollTo({ top: 0, behavior: 'instant' });
 
-      const centerEl = intro.querySelector('.cinematic-center-focus');
-      if (centerEl) {
-        centerEl.style.animation = 'none';
-        void centerEl.offsetWidth; // trigger reflow
-        centerEl.style.animation = 'cinematicBlurIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards';
-      }
-
-      cinematicIntroTimer = setTimeout(dismissCinematicIntro, 4200);
+      cinematicIntroTimer = setTimeout(dismissCinematicIntro, 3500);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -7641,11 +7703,18 @@
       initCanvaCard3DTilt();
       setTimeout(drawAllCorkboards, 220);
 
-      // Auto dismiss intro curtain after 3.8s if not clicked
-      cinematicIntroTimer = setTimeout(dismissCinematicIntro, 3800);
+      // Auto dismiss intro curtain after 2.8s if not clicked
+      const intro = document.getElementById('cinematicOpeningScreen');
+      if (intro && intro.style.display !== 'none') {
+        cinematicIntroTimer = setTimeout(dismissCinematicIntro, 2800);
+      }
     });
 
-    window.addEventListener('resize', drawAllCorkboards);
+    let resizeCorkboardTimer = null;
+    window.addEventListener('resize', () => {
+      if (resizeCorkboardTimer) clearTimeout(resizeCorkboardTimer);
+      resizeCorkboardTimer = setTimeout(drawAllCorkboards, 150);
+    });
   </script>
 </body>
 </html>
