@@ -948,7 +948,7 @@
       <div class="flex items-center gap-2.5 shrink-0">
         <button onclick="handleSecretDotClick()" class="w-3.5 h-3.5 rounded-full bg-crimson inline-block cursor-pointer focus:outline-none transition-transform hover:scale-125 shadow-sm" title="Fathur Rohman (Klik 3x untuk Akses Admin Tersembunyi)"></button>
         <a href="#tentang-saya" onclick="switchPageView('mainLandingView')" class="font-display font-black tracking-tight text-sm sm:text-base text-ink brand-title hover:text-crimson transition-colors">
-          FATHUR ROHMAN
+          <span id="navbarBrandName">FATHUR ROHMAN</span>
         </a>
       </div>
 
@@ -1012,27 +1012,27 @@
                     <div class="w-16 h-3 bg-stone-200 rounded-full mx-auto border border-stone-300 shadow-inner mb-2"></div>
                     <div class="flex items-center justify-between border-b border-stone-200 pb-2.5">
                       <div>
-                        <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson block">TENTANG SAYA</span>
-                        <span class="font-display font-extrabold text-sm text-ink">PORTFOLIO ID · 2026</span>
+                        <span id="idCardBadgeFront" class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson block">TENTANG SAYA</span>
+                        <span id="idCardTitleFront" class="font-display font-extrabold text-sm text-ink">PORTFOLIO ID · 2026</span>
                       </div>
-                      <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 rounded">CUM LAUDE</span>
+                      <span id="idCardStatusBadge" class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 rounded">CUM LAUDE</span>
                     </div>
 
                     <div class="relative my-2.5 mx-auto w-36 h-40 rounded-xl overflow-hidden border-2 border-ink bg-[#1B4F8C] shadow-md group">
-                      <img id="idCardProfileImg" src="assets/fathur-executive-profile-hd.jpg" alt="Muhammad Fathur Rohman" class="w-full h-full object-cover object-[82%_38%]" />
+                      <img id="idCardProfileImg" src="assets/fathur-executive-profile-hd.jpg" alt="Muhammad Fathur Rohman" class="w-full h-full object-cover object-[82%_38%]" onerror="this.src='assets/fathur-executive-profile-hd.jpg'" />
                       <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-2 text-white">
-                        <span class="text-[10px] font-mono uppercase tracking-wider block text-amber-300">S.Kom · UNIMMA</span>
+                        <span id="idCardPhotoSublabel" class="text-[10px] font-mono uppercase tracking-wider block text-amber-300">S.Kom · UNIMMA</span>
                       </div>
                     </div>
 
                     <div class="text-center">
-                      <h2 class="font-display font-extrabold text-base text-ink leading-tight">Muhammad Fathur Rohman</h2>
-                      <p class="text-[11px] font-semibold text-crimson mt-0.5">Web Developer · Graphic Designer · Video Editor</p>
+                      <h2 id="idCardNameFront" class="font-display font-extrabold text-base text-ink leading-tight">Muhammad Fathur Rohman</h2>
+                      <p id="idCardRoleFront" class="text-[11px] font-semibold text-crimson mt-0.5">Web Developer · Graphic Designer · Video Editor</p>
                     </div>
 
                     <div class="pt-2.5 border-t border-stone-200 flex items-center justify-between text-[10px] font-mono text-stone-500">
-                      <span>MAGELANG · ID</span>
-                      <span class="tracking-widest font-bold text-ink">||| |||| || |||</span>
+                      <span id="idCardLocationFront">MAGELANG · ID</span>
+                      <span id="idCardBarcodeFront" class="tracking-widest font-bold text-ink">||| |||| || |||</span>
                     </div>
                   </div>
 
@@ -1041,17 +1041,17 @@
                     <div class="w-16 h-3 bg-stone-800 rounded-full mx-auto border border-stone-600 mb-1"></div>
                     <div>
                       <div class="flex items-center justify-between border-b border-stone-700 pb-2">
-                        <span class="text-[10px] font-mono uppercase tracking-widest text-amber-400">TENTANG SAYA</span>
-                        <span class="text-[10px] font-mono text-stone-400">2026</span>
+                        <span id="idCardBadgeBack" class="text-[10px] font-mono uppercase tracking-widest text-amber-400">TENTANG SAYA</span>
+                        <span id="idCardYearBack" class="text-[10px] font-mono text-stone-400">2026</span>
                       </div>
-                      <h3 class="font-display font-bold text-sm mt-3 text-white">Digital Craft, Visual Stories</h3>
-                      <p class="text-[11px] text-stone-300 mt-1.5 leading-relaxed">
+                      <h3 id="idCardTaglineBack" class="font-display font-bold text-sm mt-3 text-white">Digital Craft, Visual Stories</h3>
+                      <p id="idCardBioBack" class="text-[11px] text-stone-300 mt-1.5 leading-relaxed">
                         Kreatif dalam berkarya, logis dalam memecahkan masalah. Mengintegrasikan pengembangan aplikasi & web, desain komunikasi visual, serta produksi video & <em>live streaming</em>.
                       </p>
                     </div>
                     <div class="pt-2.5 border-t border-stone-700 flex items-center justify-between text-[10px] font-mono text-stone-400">
-                      <span>VERIFIED PASS</span>
-                      <span class="text-amber-300">CUM LAUDE</span>
+                      <span id="idCardFooterLeft">VERIFIED PASS</span>
+                      <span id="idCardFooterRight" class="text-amber-300">CUM LAUDE</span>
                     </div>
                   </div>
 
@@ -1095,17 +1095,17 @@
                 </h1>
 
                 <p class="text-base sm:text-lg text-stone-700 font-medium">Perkenalkan, Saya</p>
-                <h2 class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl text-ink tracking-tight mt-0.5">
+                <h2 id="clipboardFullName" class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl text-ink tracking-tight mt-0.5 profile-name-sync">
                   Muhammad Fathur Rohman
                 </h2>
 
                 <!-- Role with Animated Hand-Drawn Red Marker Circle Sketch (Editorial Italic & Seamless Fit) -->
                 <div class="mt-2.5 mb-5 flex items-center">
                   <div class="relative inline-flex flex-col items-center justify-center px-5 sm:px-7 py-2 sm:py-2.5 group select-none text-center">
-                    <span class="font-serif italic font-bold text-[16px] sm:text-[18px] md:text-[19px] text-[#155293] relative z-10 whitespace-nowrap leading-[1.12] tracking-tight">
+                    <span id="clipboardRoleLine1" class="font-serif italic font-bold text-[16px] sm:text-[18px] md:text-[19px] text-[#155293] relative z-10 whitespace-nowrap leading-[1.12] tracking-tight">
                       Web Developer Graphic Designer
                     </span>
-                    <span class="font-serif italic font-bold text-[16px] sm:text-[18px] md:text-[19px] text-[#155293] relative z-10 whitespace-nowrap leading-[1.12] mt-0.5 sm:mt-1 tracking-tight">
+                    <span id="clipboardRoleLine2" class="font-serif italic font-bold text-[16px] sm:text-[18px] md:text-[19px] text-[#155293] relative z-10 whitespace-nowrap leading-[1.12] mt-0.5 sm:mt-1 tracking-tight">
                       &amp; Video Editor
                     </span>
                     <svg class="absolute -inset-1 sm:-inset-1.5 w-[calc(100%+8px)] sm:w-[calc(100%+12px)] h-[calc(100%+6px)] sm:h-[calc(100%+8px)] -rotate-1 pointer-events-none overflow-visible" viewBox="0 0 330 58" fill="none" preserveAspectRatio="none">
@@ -1116,10 +1116,10 @@
 
                 <!-- Focused Personal Story Narrative inside Clipboard -->
                 <div class="bg-stone-50/90 border-l-4 border-[#155293] pl-4 py-3.5 pr-4 rounded-r-lg clear-both">
-                  <p class="text-sm sm:text-[15px] text-stone-700 leading-relaxed">
+                  <p id="clipboardBioP1" class="text-sm sm:text-[15px] text-stone-700 leading-relaxed">
                     Saya telah mengerjakan <strong>ratusan proyek digital</strong> yang menggabungkan teknologi dan kreativitas, mulai dari membangun berbagai sistem berbasis website, desain grafis, hingga penyuntingan video profesional.
                   </p>
-                  <p class="text-xs sm:text-sm text-stone-600 mt-2.5 leading-relaxed">
+                  <p id="clipboardBioP2" class="text-xs sm:text-sm text-stone-600 mt-2.5 leading-relaxed">
                     Di luar itu, saya memiliki kemampuan tambahan di antaranya: <strong>live streamer OBS</strong>, <strong>videography &amp; photography</strong>, <strong>fundamental multimedia</strong>, <strong>kecerdasan buatan (AI)</strong>, <strong>analisis data</strong>, dan <strong>UI/UX Design</strong>.
                   </p>
                 </div>
@@ -1127,20 +1127,20 @@
                 <!-- 4 Key Statistics inside Clipboard Card -->
                 <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50/90 p-4 rounded-xl border border-stone-200/90 shadow-sm">
                   <div class="border-r border-stone-200 pr-2 sm:pr-3">
-                    <span class="font-display font-extrabold text-2xl sm:text-3xl text-ink block">3,5+</span>
-                    <span class="text-[11px] sm:text-xs font-semibold text-stone-600">Tahun Pengalaman</span>
+                    <span id="clipboardStatYearsVal" class="font-display font-extrabold text-2xl sm:text-3xl text-ink block">3,5+</span>
+                    <span id="clipboardStatYearsLbl" class="text-[11px] sm:text-xs font-semibold text-stone-600">Tahun Pengalaman</span>
                   </div>
                   <div class="sm:border-r border-stone-200 pr-2 sm:pr-3">
-                    <span class="font-display font-extrabold text-2xl sm:text-3xl text-crimson block">20+</span>
-                    <span class="text-[11px] sm:text-xs font-semibold text-stone-600">Sertifikat &amp; Prestasi</span>
+                    <span id="clipboardStatCertsVal" class="font-display font-extrabold text-2xl sm:text-3xl text-crimson block">20+</span>
+                    <span id="clipboardStatCertsLbl" class="text-[11px] sm:text-xs font-semibold text-stone-600">Sertifikat &amp; Prestasi</span>
                   </div>
                   <div class="border-r border-stone-200 pr-2 sm:pr-3">
-                    <span class="font-display font-extrabold text-2xl sm:text-3xl text-ink block">100+</span>
-                    <span class="text-[11px] sm:text-xs font-semibold text-stone-600">Proyek Digital</span>
+                    <span id="clipboardStatProjectsVal" class="font-display font-extrabold text-2xl sm:text-3xl text-ink block">100+</span>
+                    <span id="clipboardStatProjectsLbl" class="text-[11px] sm:text-xs font-semibold text-stone-600">Proyek Digital</span>
                   </div>
                   <div>
-                    <span class="font-display font-extrabold text-xl sm:text-2xl text-[#155293] block">Cum Laude</span>
-                    <span class="text-[11px] sm:text-xs font-semibold text-stone-600">Predikat Lulusan</span>
+                    <span id="clipboardStatPredicateVal" class="font-display font-extrabold text-xl sm:text-2xl text-[#155293] block">Cum Laude</span>
+                    <span id="clipboardStatPredicateLbl" class="text-[11px] sm:text-xs font-semibold text-stone-600">Predikat Lulusan</span>
                   </div>
                 </div>
 
@@ -1174,15 +1174,15 @@
                     <ul class="space-y-2 text-xs text-stone-700 font-medium">
                       <li class="flex items-center gap-2.5">
                         <span class="shrink-0">📞</span>
-                        <a href="https://wa.me/62895393181822" target="_blank" class="hover:text-crimson font-bold">+62 895-3931-81822</a>
+                        <a id="clipboardWaLink" href="https://wa.me/62895393181822" target="_blank" class="hover:text-crimson font-bold">+62 895-3931-81822</a>
                       </li>
                       <li class="flex items-center gap-2.5">
                         <span class="shrink-0">📷</span>
-                        <a href="https://www.instagram.com/portofess.id" target="_blank" class="text-crimson font-bold hover:underline">@portofess.id (instagram.com/portofess.id)</a>
+                        <a id="clipboardIgLink" href="https://www.instagram.com/portofess.id" target="_blank" class="text-crimson font-bold hover:underline">@portofess.id (instagram.com/portofess.id)</a>
                       </li>
                       <li class="flex items-center gap-2.5">
                         <span class="shrink-0">✉️</span>
-                        <a href="mailto:hyungkun.co@gmail.com" class="hover:text-crimson truncate font-semibold">hyungkun.co@gmail.com</a>
+                        <a id="clipboardEmailLink" href="mailto:hyungkun.co@gmail.com" class="hover:text-crimson truncate font-semibold">hyungkun.co@gmail.com</a>
                       </li>
                       <li class="flex items-center gap-2.5">
                         <span class="shrink-0">🏠</span>
@@ -4058,7 +4058,17 @@
         };
       }
 
-      // 4. Cloud / Direct Web Video (.mp4, .webm, Supabase Storage, Cloudinary, Firebase, S3, CDN)
+      // 4. Google Drive Video (drive.google.com/file/d/ID/view, open?id=ID, uc?id=ID)
+      const gdMatch = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)|docs\.google\.com\/file\/d\/)([a-zA-Z0-9_-]+)/i);
+      if (gdMatch && gdMatch[1]) {
+        return {
+          type: 'gdrive',
+          id: gdMatch[1],
+          embedUrl: `https://drive.google.com/file/d/${gdMatch[1]}/preview`
+        };
+      }
+
+      // 5. Cloud / Direct Web Video (.mp4, .webm, Supabase Storage, Cloudinary, Firebase, S3, CDN)
       if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:')) {
         return {
           type: 'html5',
@@ -4066,7 +4076,7 @@
         };
       }
 
-      // 5. Local filename without hosting (e.g. video.mp4 uploaded from PC but not on GitHub)
+      // 6. Local filename without hosting (e.g. video.mp4 uploaded from PC but not on GitHub)
       return {
         type: 'local_missing',
         filename: url
@@ -4160,6 +4170,12 @@
             <iframe src="${parsed.embedUrl}" allowfullscreen class="w-full h-full border-none"></iframe>
           </div>
         `;
+      } else if (parsed.type === 'gdrive') {
+        container.innerHTML = `
+          <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800">
+            <iframe src="${parsed.embedUrl}" allow="autoplay; encrypted-media" allowfullscreen class="w-full h-full border-none"></iframe>
+          </div>
+        `;
       } else if (parsed.type === 'html5' && (parsed.src.startsWith('http') || parsed.src.startsWith('blob:') || parsed.src.startsWith('data:'))) {
         container.innerHTML = `
           <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800 flex items-center justify-center">
@@ -4180,8 +4196,8 @@
               <h5 class="text-sm font-bold text-white mt-2">${title || 'Video Portofolio'}</h5>
               <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
                 ${isLocalFile 
-                  ? 'Berkas video <code>' + parsed.filename + '</code> berada di komputer Anda dan belum di-hosting di cloud publik. Supaya bisa diputar langsung dengan audio lengkap oleh publik di web, gunakan URL video dari <strong>Supabase Storage (.mp4)</strong>, <strong>YouTube Shorts</strong>, atau <strong>Instagram Reels</strong>.' 
-                  : 'Video ini belum ditautkan ke link streaming online. Anda dapat memasukkan link video dari <strong>Supabase Storage (.mp4)</strong>, <strong>YouTube Shorts</strong>, atau <strong>Instagram Reels</strong> melalui Admin Studio.'}
+                  ? 'Berkas video <code>' + parsed.filename + '</code> berada di komputer Anda dan belum di-hosting di cloud publik. Supaya bisa diputar langsung dengan audio lengkap oleh publik di web, gunakan URL video dari <strong>Supabase Storage (.mp4)</strong>, <strong>Google Drive</strong>, <strong>YouTube Shorts</strong>, atau <strong>Instagram Reels</strong>.' 
+                  : 'Video ini belum ditautkan ke link streaming online. Anda dapat memasukkan link video dari <strong>Supabase Storage (.mp4)</strong>, <strong>Google Drive</strong>, <strong>YouTube Shorts</strong>, atau <strong>Instagram Reels</strong> melalui Admin Studio.'}
               </p>
             </div>
             <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
@@ -5516,16 +5532,166 @@
 
     function applySection01DataToDom(data) {
       if (!data) return;
-      if (data.name) {
-        document.querySelectorAll('.profile-name-sync').forEach(el => el.textContent = data.name);
+
+      // Brand Name & Slogan
+      if (data.brandName) {
+        const b = document.getElementById('navbarBrandName');
+        if (b) b.textContent = data.brandName;
+        document.querySelectorAll('.brand-title').forEach(el => el.textContent = data.brandName.toUpperCase());
       }
-      if (data.photoUrl) {
-        const idImg = document.getElementById('idCardPhotoImg');
-        if (idImg) idImg.src = data.photoUrl;
+
+      // ID Card Front Face
+      if (data.idCardBadgeFront) {
+        const el = document.getElementById('idCardBadgeFront');
+        if (el) el.textContent = data.idCardBadgeFront;
       }
-      if (data.fullBio) {
-        const bioEl = document.getElementById('clipboardBioNarrative');
+      if (data.idCardTitleFront) {
+        const el = document.getElementById('idCardTitleFront');
+        if (el) el.textContent = data.idCardTitleFront;
+      }
+      if (data.idCardStatusBadge) {
+        const el = document.getElementById('idCardStatusBadge');
+        if (el) el.textContent = data.idCardStatusBadge;
+      }
+      if (data.idCardPhotoUrl || data.photoUrl) {
+        const pUrl = data.idCardPhotoUrl || data.photoUrl;
+        const idImg = document.getElementById('idCardProfileImg') || document.getElementById('idCardPhotoImg');
+        if (idImg) idImg.src = pUrl;
+        const polImg = document.getElementById('clipboardPolaroidImg');
+        if (polImg) polImg.src = pUrl;
+      }
+      if (data.idCardPhotoSublabel) {
+        const el = document.getElementById('idCardPhotoSublabel');
+        if (el) el.textContent = data.idCardPhotoSublabel;
+      }
+      if (data.idCardNameFront) {
+        const el = document.getElementById('idCardNameFront');
+        if (el) el.textContent = data.idCardNameFront;
+      }
+      if (data.idCardRoleFront) {
+        const el = document.getElementById('idCardRoleFront');
+        if (el) el.textContent = data.idCardRoleFront;
+      }
+      if (data.idCardLocationFront) {
+        const el = document.getElementById('idCardLocationFront');
+        if (el) el.textContent = data.idCardLocationFront;
+      }
+      if (data.idCardBarcodeFront) {
+        const el = document.getElementById('idCardBarcodeFront');
+        if (el) el.textContent = data.idCardBarcodeFront;
+      }
+
+      // ID Card Back Face
+      if (data.idCardBadgeBack) {
+        const el = document.getElementById('idCardBadgeBack');
+        if (el) el.textContent = data.idCardBadgeBack;
+      }
+      if (data.idCardYearBack) {
+        const el = document.getElementById('idCardYearBack');
+        if (el) el.textContent = data.idCardYearBack;
+      }
+      if (data.idCardTaglineBack) {
+        const el = document.getElementById('idCardTaglineBack');
+        if (el) el.textContent = data.idCardTaglineBack;
+      }
+      if (data.idCardBioBack) {
+        const el = document.getElementById('idCardBioBack');
+        if (el) el.textContent = data.idCardBioBack;
+      }
+      if (data.idCardFooterLeft) {
+        const el = document.getElementById('idCardFooterLeft');
+        if (el) el.textContent = data.idCardFooterLeft;
+      }
+      if (data.idCardFooterRight) {
+        const el = document.getElementById('idCardFooterRight');
+        if (el) el.textContent = data.idCardFooterRight;
+      }
+
+      // Clipboard Bio & Narasi
+      const displayFullName = data.fullName || data.name;
+      if (displayFullName) {
+        const el = document.getElementById('clipboardFullName');
+        if (el) el.textContent = displayFullName;
+        document.querySelectorAll('.profile-name-sync').forEach(el => el.textContent = displayFullName);
+      }
+      if (data.roleLine1) {
+        const el = document.getElementById('clipboardRoleLine1');
+        if (el) el.textContent = data.roleLine1;
+      }
+      if (data.roleLine2) {
+        const el = document.getElementById('clipboardRoleLine2');
+        if (el) el.textContent = data.roleLine2;
+      }
+      if (data.bioP1) {
+        const el = document.getElementById('clipboardBioP1');
+        if (el) el.textContent = data.bioP1;
+      }
+      if (data.bioP2) {
+        const el = document.getElementById('clipboardBioP2');
+        if (el) el.textContent = data.bioP2;
+      }
+      if (data.fullBio && !data.bioP1) {
+        const bioEl = document.getElementById('clipboardBioNarrative') || document.getElementById('clipboardBioP1');
         if (bioEl) bioEl.textContent = data.fullBio;
+      }
+
+      // Statistics
+      if (data.statYears) {
+        const el = document.getElementById('clipboardStatYearsVal');
+        if (el) el.textContent = data.statYears;
+      }
+      if (data.statYearsLabel) {
+        const el = document.getElementById('clipboardStatYearsLbl');
+        if (el) el.textContent = data.statYearsLabel;
+      }
+      if (data.statCerts) {
+        const el = document.getElementById('clipboardStatCertsVal');
+        if (el) el.textContent = data.statCerts;
+      }
+      if (data.statCertsLabel) {
+        const el = document.getElementById('clipboardStatCertsLbl');
+        if (el) el.textContent = data.statCertsLabel;
+      }
+      if (data.statProjects) {
+        const el = document.getElementById('clipboardStatProjectsVal');
+        if (el) el.textContent = data.statProjects;
+      }
+      if (data.statProjectsLabel) {
+        const el = document.getElementById('clipboardStatProjectsLbl');
+        if (el) el.textContent = data.statProjectsLabel;
+      }
+      if (data.statPredicate) {
+        const el = document.getElementById('clipboardStatPredicateVal');
+        if (el) el.textContent = data.statPredicate;
+      }
+      if (data.statPredicateLabel) {
+        const el = document.getElementById('clipboardStatPredicateLbl');
+        if (el) el.textContent = data.statPredicateLabel;
+      }
+
+      // Official Contact
+      if (data.whatsapp) {
+        const cleanWa = data.whatsapp.replace(/[^0-9]/g, '');
+        const waEl = document.getElementById('clipboardWaLink');
+        if (waEl) {
+          waEl.textContent = data.whatsapp;
+          waEl.href = 'https://wa.me/' + cleanWa;
+        }
+      }
+      if (data.instagram) {
+        const igHandle = data.instagram.replace('@', '');
+        const igEl = document.getElementById('clipboardIgLink');
+        if (igEl) {
+          igEl.textContent = '@' + igHandle;
+          igEl.href = 'https://www.instagram.com/' + igHandle;
+        }
+      }
+      if (data.email) {
+        const mailEl = document.getElementById('clipboardEmailLink');
+        if (mailEl) {
+          mailEl.textContent = data.email;
+          mailEl.href = 'mailto:' + data.email;
+        }
       }
     }
 

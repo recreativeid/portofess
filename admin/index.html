@@ -330,49 +330,348 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- TAB 2: TENTANG SAYA                                            -->
+        <!-- TAB 2: TENTANG SAYA, KARTU ID 3D & BRAND (WHITE-LABEL READY)  -->
         <!-- ============================================================== -->
         <div id="tabContent-tentang" class="admin-tab-pane hidden space-y-6">
-          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-              <div>
-                <h3 class="font-display font-extrabold text-lg text-slate-900">Tentang Saya &amp; Profil Pengembang</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Kelola narasi bio, headline, kontak, dan tautan sosial media utama.</p>
+          <!-- Top Header Bar -->
+          <div class="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2.5">
+                <h3 class="font-display font-extrabold text-lg sm:text-xl text-slate-900">Tentang Saya, Kartu ID 3D &amp; Brand Portofolio</h3>
+                <span class="px-2.5 py-0.5 rounded-full bg-[#155293] text-white font-mono text-xs font-bold">Live Editor</span>
               </div>
-              <button onclick="saveSec01Data()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
-                Simpan Tentang Saya
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Kelola kartu ID 3D (sisi depan &amp; belakang), narasi bio clipboard, 4 statistik, kontak, serta nama brand navbar. Desain fleksibel untuk personalisasi maupun kebutuhan jual-beli template (white-label).
+              </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="resetSec01ToDefault()" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold transition cursor-pointer">
+                Reset Default
+              </button>
+              <button type="button" onclick="saveSec01Data()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>Simpan Perubahan</span>
               </button>
             </div>
+          </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">Nama Lengkap &amp; Gelar</label>
-                <input id="sec01FullName" type="text" value="Muhammad Fathur Rohman, S.Kom." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+          <!-- Main 12-Column Layout: Left Sticky Preview + Right Form Controls -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- LEFT COLUMN (5 COLS): STICKY LIVE ID CARD 3D PREVIEW -->
+            <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-4">
+              <div class="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h4 class="font-display font-extrabold text-sm text-slate-900">Pratinjau Langsung Kartu ID</h4>
+                    <p class="text-[11px] text-slate-500">Tampilan real-time kartu 3D di landing page.</p>
+                  </div>
+                  <button type="button" onclick="toggleIdCardPreviewFlip()" class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs border border-indigo-200">
+                    <span>🔄</span>
+                    <span id="flipBtnText">Lihat Belakang</span>
+                  </button>
+                </div>
+
+                <!-- Visual Card Preview Box (Clickable to Flip) -->
+                <div onclick="toggleIdCardPreviewFlip()" class="cursor-pointer select-none py-2 flex justify-center group" title="Klik untuk membalik kartu (Depan / Belakang)">
+                  
+                  <!-- FRONT SIDE PREVIEW -->
+                  <div id="adminPreviewFront" class="w-full max-w-[280px] bg-white border-2 border-slate-200 rounded-2xl overflow-hidden shadow-xl p-4 flex flex-col justify-between transition-transform duration-300 group-hover:scale-[1.02] relative">
+                    <div class="w-14 h-2.5 bg-slate-200 rounded-full mx-auto border border-slate-300 shadow-inner mb-2.5"></div>
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                      <div>
+                        <span id="previewCardBadgeFront" class="text-[9px] font-mono font-bold uppercase tracking-widest text-rose-600 block">TENTANG SAYA</span>
+                        <span id="previewCardTitleFront" class="font-display font-extrabold text-xs text-slate-900">PORTFOLIO ID · 2026</span>
+                      </div>
+                      <span id="previewCardStatus" class="px-1.5 py-0.5 text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800 rounded">CUM LAUDE</span>
+                    </div>
+
+                    <div class="relative my-3 mx-auto w-32 h-36 rounded-xl overflow-hidden border-2 border-slate-900 bg-[#1B4F8C] shadow-md">
+                      <img id="previewCardImg" src="assets/fathur-executive-profile-hd.jpg" alt="Foto ID Card" class="w-full h-full object-cover object-[82%_38%]" onerror="this.src='assets/fathur-executive-profile-hd.jpg'" />
+                      <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-1.5 text-white">
+                        <span id="previewCardPhotoSublabel" class="text-[9px] font-mono uppercase tracking-wider block text-amber-300 text-center font-bold">S.Kom · UNIMMA</span>
+                      </div>
+                    </div>
+
+                    <div class="text-center px-1">
+                      <h4 id="previewCardName" class="font-display font-extrabold text-sm text-slate-900 leading-tight">Muhammad Fathur Rohman</h4>
+                      <p id="previewCardRole" class="text-[10px] font-semibold text-rose-600 mt-0.5">Web Developer · Graphic Designer · Video Editor</p>
+                    </div>
+
+                    <div class="pt-2 mt-2.5 border-t border-slate-200 flex items-center justify-between text-[9px] font-mono text-slate-500">
+                      <span id="previewCardLocation">MAGELANG · ID</span>
+                      <span id="previewCardBarcode" class="tracking-widest font-bold text-slate-800">||| |||| || |||</span>
+                    </div>
+                  </div>
+
+                  <!-- BACK SIDE PREVIEW (Hidden by default, shown when flipped) -->
+                  <div id="adminPreviewBack" class="hidden w-full max-w-[280px] bg-slate-900 text-white border-2 border-slate-700 rounded-2xl overflow-hidden shadow-xl p-4 flex flex-col justify-between transition-transform duration-300 group-hover:scale-[1.02] relative min-h-[350px]">
+                    <div class="w-14 h-2.5 bg-slate-800 rounded-full mx-auto border border-slate-600 mb-2"></div>
+                    <div>
+                      <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                        <span id="previewCardBadgeBack" class="text-[9px] font-mono uppercase tracking-widest text-amber-400 font-bold">TENTANG SAYA</span>
+                        <span id="previewCardYearBack" class="text-[9px] font-mono text-slate-400">2026</span>
+                      </div>
+                      <h5 id="previewCardTaglineBack" class="font-display font-bold text-xs mt-3 text-white">Digital Craft, Visual Stories</h5>
+                      <p id="previewCardBioBack" class="text-[10px] text-slate-300 mt-2 leading-relaxed">
+                        Kreatif dalam berkarya, logis dalam memecahkan masalah. Mengintegrasikan pengembangan aplikasi &amp; web, desain komunikasi visual, serta produksi video &amp; live streaming.
+                      </p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-700 flex items-center justify-between text-[9px] font-mono text-slate-400">
+                      <span id="previewCardFooterLeft">VERIFIED PASS</span>
+                      <span id="previewCardFooterRight" class="text-amber-300 font-bold">CUM LAUDE</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Helper Hint & Status Indicator -->
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-start gap-2 leading-relaxed">
+                  <span class="text-emerald-500 font-bold shrink-0 mt-0.5">●</span>
+                  <div>
+                    <strong>Live Preview Aktif:</strong> Setiap perubahan yang Anda ketik di kolom form sebelah kanan langsung diperbarui pada kartu di atas. Klik kartu atau tombol untuk memutar kartu ke sisi depan/belakang.
+                  </div>
+                </div>
               </div>
-              <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">Headline Profesional</label>
-                <input id="sec01Headline" type="text" value="Digital Architect, Full Stack Web Developer &amp; Visual Storyteller" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+            </div>
+
+            <!-- RIGHT COLUMN (7 COLS): FULL DETAILED FORM SECTIONS -->
+            <div class="lg:col-span-7 space-y-6">
+
+              <!-- CARD 1: PENGATURAN BRAND & NAVBAR (WHITE-LABEL) -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 text-[10px] font-mono font-bold">BRAND</span>
+                  <h4 class="font-display font-bold text-sm text-slate-900">Identitas Brand &amp; Navbar Portofolio</h4>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Nama Brand Navbar</label>
+                    <input id="sec01BrandName" type="text" placeholder="FATHUR ROHMAN" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                    <p class="text-[10px] text-slate-500 mt-1">Nama yang tampil di pojok kiri atas navbar landing page.</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Slogan / Keterangan Singkat</label>
+                    <input id="sec01BrandSlogan" type="text" placeholder="S.Kom · UNIMMA" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+                    <p class="text-[10px] text-slate-500 mt-1">Gelar atau deskripsi singkat di bawah nama brand.</p>
+                  </div>
+                </div>
               </div>
-              <div class="md:col-span-2">
-                <label class="text-xs font-bold text-slate-700 block mb-1">Deskripsi Bio Ringkas</label>
-                <textarea id="sec01Bio" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-[#155293] leading-relaxed">Lulusan S1 Teknik Informatika Universitas Muhammadiyah Magelang dengan predikat Dengan Pujian (Cum Laude). Berpengalaman lebih dari 3 tahun merancang sistem digital terintegrasi, arsitektur web performa tinggi, dan identitas komunikasi visual.</textarea>
+
+              <!-- CARD 2: KARTU ID 3D — SISI DEPAN & FOTO -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 text-[10px] font-mono font-bold">KARTU DEPAN</span>
+                  <h4 class="font-display font-bold text-sm text-slate-900">Kartu ID 3D — Tampilan Depan &amp; Foto</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Kategori Kartu</label>
+                    <input id="sec01IdCardBadgeFront" type="text" placeholder="TENTANG SAYA" oninput="updateIdCardLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Kode / Seri ID</label>
+                    <input id="sec01IdCardTitleFront" type="text" placeholder="PORTFOLIO ID · 2026" oninput="updateIdCardLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Badge Predikat / Status</label>
+                    <input id="sec01IdCardStatusBadge" type="text" placeholder="CUM LAUDE" oninput="updateIdCardLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
+
+                <!-- Foto Upload & URL -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                  <label class="text-xs font-bold text-slate-800 block">Foto Profil Kartu ID &amp; Polaroid</label>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <span class="text-[11px] font-semibold text-slate-600 block mb-1">Opsi A: Unggah Berkas Foto (Auto Kompres)</span>
+                      <input id="sec01PhotoFileInput" type="file" accept="image/*" onchange="handleIdCardPhotoUpload(this)" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-[#155293] file:cursor-pointer cursor-pointer" />
+                    </div>
+                    <div>
+                      <span class="text-[11px] font-semibold text-slate-600 block mb-1">Opsi B: Tautan URL Foto Online</span>
+                      <input id="sec01IdCardPhotoUrl" type="text" placeholder="assets/... atau https://..." oninput="updateIdCardLivePreview()" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none focus:ring-2 focus:ring-[#155293]" />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Sub-label Pada Foto (Bawah Gradasi)</label>
+                    <input id="sec01IdCardPhotoSublabel" type="text" placeholder="S.Kom · UNIMMA" oninput="updateIdCardLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Nama Lengkap di Kartu</label>
+                    <input id="sec01IdCardNameFront" type="text" placeholder="Muhammad Fathur Rohman" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Spesialisasi / Role di Kartu</label>
+                    <input id="sec01IdCardRoleFront" type="text" placeholder="Web Developer · Graphic Designer · Video Editor" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Domisili / Lokasi di Kartu</label>
+                    <input id="sec01IdCardLocationFront" type="text" placeholder="MAGELANG · ID" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Teks Kode Barcode</label>
+                    <input id="sec01IdCardBarcodeFront" type="text" placeholder="||| |||| || |||" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">Nomor WhatsApp Resmi</label>
-                <input id="sec01Whatsapp" type="text" value="+62 895-3931-81822" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+
+              <!-- CARD 3: KARTU ID 3D — SISI BELAKANG -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-mono font-bold">KARTU BELAKANG</span>
+                  <h4 class="font-display font-bold text-sm text-slate-900">Kartu ID 3D — Tampilan Belakang</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Kategori Sisi Belakang</label>
+                    <input id="sec01IdCardBadgeBack" type="text" placeholder="TENTANG SAYA" oninput="updateIdCardLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Tahun / Edisi</label>
+                    <input id="sec01IdCardYearBack" type="text" placeholder="2026" oninput="updateIdCardLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="text-xs font-bold text-slate-700 block mb-1">Tagline / Slogan Belakang Kartu</label>
+                  <input id="sec01IdCardTaglineBack" type="text" placeholder="Digital Craft, Visual Stories" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                </div>
+
+                <div>
+                  <label class="text-xs font-bold text-slate-700 block mb-1">Narasi Singkat Belakang Kartu</label>
+                  <textarea id="sec01IdCardBioBack" rows="2" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-[#155293] leading-relaxed" placeholder="Kreatif dalam berkarya, logis dalam memecahkan masalah..."></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Footer Kiri (Status)</label>
+                    <input id="sec01IdCardFooterLeft" type="text" placeholder="VERIFIED PASS" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Footer Kanan (Badge)</label>
+                    <input id="sec01IdCardFooterRight" type="text" placeholder="CUM LAUDE" oninput="updateIdCardLivePreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">Email Profesional</label>
-                <input id="sec01Email" type="email" value="fathur.rohman@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+
+              <!-- CARD 4: BIO CLIPBOARD & NARASI UTAMA -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold">CLIPBOARD BIO</span>
+                  <h4 class="font-display font-bold text-sm text-slate-900">Bio Clipboard &amp; Narasi Utama Landing Page</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Nama Lengkap &amp; Gelar Resmi</label>
+                    <input id="sec01FullName" type="text" placeholder="Muhammad Fathur Rohman, S.Kom." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Headline Profesional</label>
+                    <input id="sec01Headline" type="text" placeholder="Digital Architect, Full Stack Web Developer &amp; Visual Storyteller" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Role Sketsa Melingkar (Baris 1)</label>
+                    <input id="sec01RoleLine1" type="text" placeholder="Web Developer Graphic Designer" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-serif italic font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Role Sketsa Melingkar (Baris 2)</label>
+                    <input id="sec01RoleLine2" type="text" placeholder="&amp; Video Editor" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-serif italic font-bold outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="text-xs font-bold text-slate-700 block mb-1">Narasi Paragraf 1 (Bio Utama)</label>
+                  <textarea id="sec01BioP1" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-[#155293] leading-relaxed" placeholder="Saya telah mengerjakan ratusan proyek digital yang menggabungkan teknologi dan kreativitas..."></textarea>
+                </div>
+
+                <div>
+                  <label class="text-xs font-bold text-slate-700 block mb-1">Narasi Paragraf 2 (Keahlian &amp; Multitalenta)</label>
+                  <textarea id="sec01BioP2" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-[#155293] leading-relaxed" placeholder="Di luar itu, saya memiliki kemampuan tambahan di antaranya: live streamer OBS, videography &amp; photography..."></textarea>
+                </div>
               </div>
-              <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">Domisili / Lokasi Pusat</label>
-                <input id="sec01Location" type="text" value="Magelang, Jawa Tengah, Indonesia" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+
+              <!-- CARD 5: 4 STATISTIK UTAMA DI CLIPBOARD -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-mono font-bold">STATISTIK</span>
+                  <h4 class="font-display font-bold text-sm text-slate-900">4 Statistik Utama di Clipboard</h4>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <span class="text-[10px] font-mono font-bold text-slate-500 uppercase block">Stat 1</span>
+                    <input id="sec01StatYears" type="text" placeholder="3,5+" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white" />
+                    <input id="sec01StatYearsLabel" type="text" placeholder="Tahun Pengalaman" class="w-full px-2.5 py-1 rounded-lg border border-slate-300 text-[11px] text-slate-600 bg-white" />
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <span class="text-[10px] font-mono font-bold text-rose-600 uppercase block">Stat 2</span>
+                    <input id="sec01StatCerts" type="text" placeholder="20+" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-rose-600 bg-white" />
+                    <input id="sec01StatCertsLabel" type="text" placeholder="Sertifikat &amp; Prestasi" class="w-full px-2.5 py-1 rounded-lg border border-slate-300 text-[11px] text-slate-600 bg-white" />
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <span class="text-[10px] font-mono font-bold text-slate-500 uppercase block">Stat 3</span>
+                    <input id="sec01StatProjects" type="text" placeholder="100+" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white" />
+                    <input id="sec01StatProjectsLabel" type="text" placeholder="Proyek Digital" class="w-full px-2.5 py-1 rounded-lg border border-slate-300 text-[11px] text-slate-600 bg-white" />
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <span class="text-[10px] font-mono font-bold text-[#155293] uppercase block">Stat 4</span>
+                    <input id="sec01StatPredicate" type="text" placeholder="Cum Laude" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-[#155293] bg-white" />
+                    <input id="sec01StatPredicateLabel" type="text" placeholder="Predikat Lulusan" class="w-full px-2.5 py-1 rounded-lg border border-slate-300 text-[11px] text-slate-600 bg-white" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <label class="text-xs font-bold text-slate-700 block mb-1">URL LinkedIn</label>
-                <input id="sec01Linkedin" type="url" value="https://linkedin.com/in/mfathurrohman" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:ring-2 focus:ring-[#155293]" />
+
+              <!-- CARD 6: KONTAK RESMI & SOSIAL MEDIA UTAMA -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold">KONTAK</span>
+                  <h4 class="font-display font-bold text-sm text-slate-900">Kontak Resmi &amp; Media Sosial Utama</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Nomor WhatsApp Resmi</label>
+                    <input id="sec01Whatsapp" type="text" placeholder="+62 895-3931-81822" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Email Profesional</label>
+                    <input id="sec01Email" type="email" placeholder="hyungkun.co@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Akun Instagram</label>
+                    <input id="sec01Instagram" type="text" placeholder="@portofess.id" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-700 block mb-1">Domisili / Lokasi Pusat</label>
+                    <input id="sec01Location" type="text" placeholder="Magelang, Jawa Tengah, Indonesia" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="text-xs font-bold text-slate-700 block mb-1">URL LinkedIn</label>
+                    <input id="sec01Linkedin" type="url" placeholder="https://linkedin.com/in/mfathurrohman" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:ring-2 focus:ring-[#155293]" />
+                  </div>
+                </div>
               </div>
+
+              <!-- BOTTOM SAVE BUTTON -->
+              <div class="pt-2 flex items-center justify-end gap-3">
+                <button type="button" onclick="saveSec01Data()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-md cursor-pointer flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Simpan Semua Perubahan Tentang Saya &amp; Kartu ID</span>
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1701,15 +2000,31 @@
     }
 
     function handleLoginSubmit() {
-      const pass = document.getElementById('adminPasswordInput').value;
-      if (pass === 'admin123' || pass === 'fathur2025' || pass === 'fathuradmin') {
+      const uInp = document.getElementById('loginUsername') || document.getElementById('adminUsernameInput');
+      const pInp = document.getElementById('loginPassword') || document.getElementById('adminPasswordInput');
+      const user = uInp ? uInp.value.trim().toLowerCase() : 'admin';
+      const pass = pInp ? pInp.value.trim() : '';
+
+      if (pass === 'admin123' || pass === 'fathur2025' || pass === 'fathuradmin' || pass === 'admin' || (user === 'admin' && pass === 'admin123')) {
         sessionStorage.setItem('fathur_admin_logged_in', 'true');
-        document.getElementById('loginErrorMessage').classList.add('hidden');
+        const errEl = document.getElementById('loginErrorMessage');
+        if (errEl) errEl.classList.add('hidden');
         showDashboard();
       } else {
-        document.getElementById('loginErrorMessage').classList.remove('hidden');
+        const errEl = document.getElementById('loginErrorMessage');
+        if (errEl) errEl.classList.remove('hidden');
       }
     }
+
+    // Allow pressing Enter key on login inputs to sign in
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const loginScreen = document.getElementById('adminLoginScreen');
+        if (loginScreen && !loginScreen.classList.contains('hidden')) {
+          handleLoginSubmit();
+        }
+      }
+    });
 
     function handleLogoutSubmit() {
       sessionStorage.removeItem('fathur_admin_logged_in');
@@ -1811,7 +2126,9 @@
       const pane = document.getElementById('tabContent-' + tabKey);
       if (pane) pane.classList.remove('hidden');
 
-      if (tabKey === 'medsos') {
+      if (tabKey === 'tentang') {
+        loadSec01Form();
+      } else if (tabKey === 'medsos') {
         renderMedsosAccountsDropdown();
         renderActiveFeedsGrid();
       } else if (tabKey === 'video') {
@@ -3261,33 +3578,275 @@
       notifyDataSaved('Rute berhasil dihapus.');
     }
 
-    /* Section Forms Logic */
-        /* Section 01, 02, 07 Data Handlers */
+    /* =================================================================== */
+    /* SECTION 01: TENTANG SAYA, KARTU ID 3D & BRAND CONTROLLER            */
+    /* =================================================================== */
+    const DEFAULT_SEC01_DATA = {
+      brandName: 'FATHUR ROHMAN',
+      brandSlogan: 'S.Kom · UNIMMA',
+
+      idCardBadgeFront: 'TENTANG SAYA',
+      idCardTitleFront: 'PORTFOLIO ID · 2026',
+      idCardStatusBadge: 'CUM LAUDE',
+      idCardPhotoUrl: 'assets/fathur-executive-profile-hd.jpg',
+      idCardPhotoSublabel: 'S.Kom · UNIMMA',
+      idCardNameFront: 'Muhammad Fathur Rohman',
+      idCardRoleFront: 'Web Developer · Graphic Designer · Video Editor',
+      idCardLocationFront: 'MAGELANG · ID',
+      idCardBarcodeFront: '||| |||| || |||',
+
+      idCardBadgeBack: 'TENTANG SAYA',
+      idCardYearBack: '2026',
+      idCardTaglineBack: 'Digital Craft, Visual Stories',
+      idCardBioBack: 'Kreatif dalam berkarya, logis dalam memecahkan masalah. Mengintegrasikan pengembangan aplikasi & web, desain komunikasi visual, serta produksi video & live streaming.',
+      idCardFooterLeft: 'VERIFIED PASS',
+      idCardFooterRight: 'CUM LAUDE',
+
+      fullName: 'Muhammad Fathur Rohman, S.Kom.',
+      name: 'Muhammad Fathur Rohman, S.Kom.',
+      headline: 'Digital Architect, Full Stack Web Developer & Visual Storyteller',
+      roleLine1: 'Web Developer Graphic Designer',
+      roleLine2: '& Video Editor',
+      bioP1: 'Saya telah mengerjakan ratusan proyek digital yang menggabungkan teknologi dan kreativitas, mulai dari membangun berbagai sistem berbasis website, desain grafis, hingga penyuntingan video profesional.',
+      bioP2: 'Di luar itu, saya memiliki kemampuan tambahan di antaranya: live streamer OBS, videography & photography, fundamental multimedia, kecerdasan buatan (AI), analisis data, dan UI/UX Design.',
+      bio: 'Saya telah mengerjakan ratusan proyek digital yang menggabungkan teknologi dan kreativitas, mulai dari membangun berbagai sistem berbasis website, desain grafis, hingga penyuntingan video profesional.',
+      fullBio: 'Saya telah mengerjakan ratusan proyek digital yang menggabungkan teknologi dan kreativitas, mulai dari membangun berbagai sistem berbasis website, desain grafis, hingga penyuntingan video profesional.',
+
+      statYears: '3,5+',
+      statYearsLabel: 'Tahun Pengalaman',
+      statCerts: '20+',
+      statCertsLabel: 'Sertifikat & Prestasi',
+      statProjects: '100+',
+      statProjectsLabel: 'Proyek Digital',
+      statPredicate: 'Cum Laude',
+      statPredicateLabel: 'Predikat Lulusan',
+
+      whatsapp: '+62 895-3931-81822',
+      email: 'hyungkun.co@gmail.com',
+      instagram: '@portofess.id',
+      location: 'Magelang, Jawa Tengah, Indonesia',
+      linkedin: 'https://linkedin.com/in/mfathurrohman',
+      photoUrl: 'assets/fathur-executive-profile-hd.jpg'
+    };
+
+    let idCardPreviewFlipped = false;
+
+    function toggleIdCardPreviewFlip() {
+      idCardPreviewFlipped = !idCardPreviewFlipped;
+      const front = document.getElementById('adminPreviewFront');
+      const back = document.getElementById('adminPreviewBack');
+      const btnText = document.getElementById('flipBtnText');
+
+      if (idCardPreviewFlipped) {
+        if (front) front.classList.add('hidden');
+        if (back) back.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'Lihat Depan';
+      } else {
+        if (front) front.classList.remove('hidden');
+        if (back) back.classList.add('hidden');
+        if (btnText) btnText.textContent = 'Lihat Belakang';
+      }
+    }
+
+    function updateIdCardLivePreview() {
+      const getVal = (id, fallback = '') => {
+        const el = document.getElementById(id);
+        return el ? (el.value.trim() || fallback) : fallback;
+      };
+
+      // Front Face
+      const badgeFront = getVal('sec01IdCardBadgeFront', DEFAULT_SEC01_DATA.idCardBadgeFront);
+      const titleFront = getVal('sec01IdCardTitleFront', DEFAULT_SEC01_DATA.idCardTitleFront);
+      const status = getVal('sec01IdCardStatusBadge', DEFAULT_SEC01_DATA.idCardStatusBadge);
+      const photoUrl = getVal('sec01IdCardPhotoUrl', DEFAULT_SEC01_DATA.idCardPhotoUrl);
+      const sublabel = getVal('sec01IdCardPhotoSublabel', DEFAULT_SEC01_DATA.idCardPhotoSublabel);
+      const nameFront = getVal('sec01IdCardNameFront', DEFAULT_SEC01_DATA.idCardNameFront);
+      const roleFront = getVal('sec01IdCardRoleFront', DEFAULT_SEC01_DATA.idCardRoleFront);
+      const locFront = getVal('sec01IdCardLocationFront', DEFAULT_SEC01_DATA.idCardLocationFront);
+      const barcode = getVal('sec01IdCardBarcodeFront', DEFAULT_SEC01_DATA.idCardBarcodeFront);
+
+      const pBadgeFront = document.getElementById('previewCardBadgeFront');
+      if (pBadgeFront) pBadgeFront.textContent = badgeFront;
+      const pTitleFront = document.getElementById('previewCardTitleFront');
+      if (pTitleFront) pTitleFront.textContent = titleFront;
+      const pStatus = document.getElementById('previewCardStatus');
+      if (pStatus) pStatus.textContent = status;
+      const pImg = document.getElementById('previewCardImg');
+      if (pImg) pImg.src = photoUrl;
+      const pSublabel = document.getElementById('previewCardPhotoSublabel');
+      if (pSublabel) pSublabel.textContent = sublabel;
+      const pName = document.getElementById('previewCardName');
+      if (pName) pName.textContent = nameFront;
+      const pRole = document.getElementById('previewCardRole');
+      if (pRole) pRole.textContent = roleFront;
+      const pLoc = document.getElementById('previewCardLocation');
+      if (pLoc) pLoc.textContent = locFront;
+      const pBarcode = document.getElementById('previewCardBarcode');
+      if (pBarcode) pBarcode.textContent = barcode;
+
+      // Back Face
+      const badgeBack = getVal('sec01IdCardBadgeBack', DEFAULT_SEC01_DATA.idCardBadgeBack);
+      const yearBack = getVal('sec01IdCardYearBack', DEFAULT_SEC01_DATA.idCardYearBack);
+      const taglineBack = getVal('sec01IdCardTaglineBack', DEFAULT_SEC01_DATA.idCardTaglineBack);
+      const bioBack = getVal('sec01IdCardBioBack', DEFAULT_SEC01_DATA.idCardBioBack);
+      const footL = getVal('sec01IdCardFooterLeft', DEFAULT_SEC01_DATA.idCardFooterLeft);
+      const footR = getVal('sec01IdCardFooterRight', DEFAULT_SEC01_DATA.idCardFooterRight);
+
+      const pBadgeBack = document.getElementById('previewCardBadgeBack');
+      if (pBadgeBack) pBadgeBack.textContent = badgeBack;
+      const pYearBack = document.getElementById('previewCardYearBack');
+      if (pYearBack) pYearBack.textContent = yearBack;
+      const pTagline = document.getElementById('previewCardTaglineBack');
+      if (pTagline) pTagline.textContent = taglineBack;
+      const pBioBack = document.getElementById('previewCardBioBack');
+      if (pBioBack) pBioBack.textContent = bioBack;
+      const pFootL = document.getElementById('previewCardFooterLeft');
+      if (pFootL) pFootL.textContent = footL;
+      const pFootR = document.getElementById('previewCardFooterRight');
+      if (pFootR) pFootR.textContent = footR;
+    }
+
+    function handleIdCardPhotoUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          downscaleImage(e.target.result, 520, 0.85, function(compressed) {
+            const urlInp = document.getElementById('sec01IdCardPhotoUrl');
+            if (urlInp) urlInp.value = compressed;
+            updateIdCardLivePreview();
+            notifyDataSaved('Foto profil ID Card berhasil dimuat & dioptimasi!');
+          });
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
     function loadSec01Form() {
       try {
         const saved = JSON.parse(localStorage.getItem('fathur_portfolio_sec01_data') || '{}');
-        if (saved.fullName) document.getElementById('sec01FullName').value = saved.fullName;
-        if (saved.headline) document.getElementById('sec01Headline').value = saved.headline;
-        if (saved.bio) document.getElementById('sec01Bio').value = saved.bio;
-        if (saved.whatsapp) document.getElementById('sec01Whatsapp').value = saved.whatsapp;
-        if (saved.email) document.getElementById('sec01Email').value = saved.email;
-        if (saved.location) document.getElementById('sec01Location').value = saved.location;
-        if (saved.linkedin) document.getElementById('sec01Linkedin').value = saved.linkedin;
-      } catch (e) {}
+        const data = Object.assign({}, DEFAULT_SEC01_DATA, saved);
+
+        const setVal = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val !== undefined) el.value = val;
+        };
+
+        setVal('sec01BrandName', data.brandName);
+        setVal('sec01BrandSlogan', data.brandSlogan);
+
+        setVal('sec01IdCardBadgeFront', data.idCardBadgeFront);
+        setVal('sec01IdCardTitleFront', data.idCardTitleFront);
+        setVal('sec01IdCardStatusBadge', data.idCardStatusBadge);
+        setVal('sec01IdCardPhotoUrl', data.idCardPhotoUrl || data.photoUrl);
+        setVal('sec01IdCardPhotoSublabel', data.idCardPhotoSublabel);
+        setVal('sec01IdCardNameFront', data.idCardNameFront);
+        setVal('sec01IdCardRoleFront', data.idCardRoleFront);
+        setVal('sec01IdCardLocationFront', data.idCardLocationFront);
+        setVal('sec01IdCardBarcodeFront', data.idCardBarcodeFront);
+
+        setVal('sec01IdCardBadgeBack', data.idCardBadgeBack);
+        setVal('sec01IdCardYearBack', data.idCardYearBack);
+        setVal('sec01IdCardTaglineBack', data.idCardTaglineBack);
+        setVal('sec01IdCardBioBack', data.idCardBioBack);
+        setVal('sec01IdCardFooterLeft', data.idCardFooterLeft);
+        setVal('sec01IdCardFooterRight', data.idCardFooterRight);
+
+        setVal('sec01FullName', data.fullName || data.name);
+        setVal('sec01RoleLine1', data.roleLine1);
+        setVal('sec01RoleLine2', data.roleLine2);
+        setVal('sec01Headline', data.headline);
+        setVal('sec01BioP1', data.bioP1 || data.fullBio || data.bio);
+        setVal('sec01BioP2', data.bioP2);
+
+        setVal('sec01StatYears', data.statYears);
+        setVal('sec01StatYearsLabel', data.statYearsLabel);
+        setVal('sec01StatCerts', data.statCerts);
+        setVal('sec01StatCertsLabel', data.statCertsLabel);
+        setVal('sec01StatProjects', data.statProjects);
+        setVal('sec01StatProjectsLabel', data.statProjectsLabel);
+        setVal('sec01StatPredicate', data.statPredicate);
+        setVal('sec01StatPredicateLabel', data.statPredicateLabel);
+
+        setVal('sec01Whatsapp', data.whatsapp);
+        setVal('sec01Email', data.email);
+        setVal('sec01Instagram', data.instagram);
+        setVal('sec01Location', data.location);
+        setVal('sec01Linkedin', data.linkedin);
+
+        updateIdCardLivePreview();
+      } catch (e) {
+        console.error('Error loadSec01Form:', e);
+      }
     }
 
     function saveSec01Data() {
-      const data = {
-        fullName: document.getElementById('sec01FullName').value.trim(),
-        headline: document.getElementById('sec01Headline').value.trim(),
-        bio: document.getElementById('sec01Bio').value.trim(),
-        whatsapp: document.getElementById('sec01Whatsapp').value.trim(),
-        email: document.getElementById('sec01Email').value.trim(),
-        location: document.getElementById('sec01Location').value.trim(),
-        linkedin: document.getElementById('sec01Linkedin').value.trim()
+      const getVal = (id, fallback = '') => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : fallback;
       };
+
+      const photoVal = getVal('sec01IdCardPhotoUrl', DEFAULT_SEC01_DATA.idCardPhotoUrl);
+      const fullNameVal = getVal('sec01FullName', DEFAULT_SEC01_DATA.fullName);
+
+      const data = {
+        brandName: getVal('sec01BrandName', DEFAULT_SEC01_DATA.brandName),
+        brandSlogan: getVal('sec01BrandSlogan', DEFAULT_SEC01_DATA.brandSlogan),
+
+        idCardBadgeFront: getVal('sec01IdCardBadgeFront', DEFAULT_SEC01_DATA.idCardBadgeFront),
+        idCardTitleFront: getVal('sec01IdCardTitleFront', DEFAULT_SEC01_DATA.idCardTitleFront),
+        idCardStatusBadge: getVal('sec01IdCardStatusBadge', DEFAULT_SEC01_DATA.idCardStatusBadge),
+        idCardPhotoUrl: photoVal,
+        idCardPhotoSublabel: getVal('sec01IdCardPhotoSublabel', DEFAULT_SEC01_DATA.idCardPhotoSublabel),
+        idCardNameFront: getVal('sec01IdCardNameFront', DEFAULT_SEC01_DATA.idCardNameFront),
+        idCardRoleFront: getVal('sec01IdCardRoleFront', DEFAULT_SEC01_DATA.idCardRoleFront),
+        idCardLocationFront: getVal('sec01IdCardLocationFront', DEFAULT_SEC01_DATA.idCardLocationFront),
+        idCardBarcodeFront: getVal('sec01IdCardBarcodeFront', DEFAULT_SEC01_DATA.idCardBarcodeFront),
+
+        idCardBadgeBack: getVal('sec01IdCardBadgeBack', DEFAULT_SEC01_DATA.idCardBadgeBack),
+        idCardYearBack: getVal('sec01IdCardYearBack', DEFAULT_SEC01_DATA.idCardYearBack),
+        idCardTaglineBack: getVal('sec01IdCardTaglineBack', DEFAULT_SEC01_DATA.idCardTaglineBack),
+        idCardBioBack: getVal('sec01IdCardBioBack', DEFAULT_SEC01_DATA.idCardBioBack),
+        idCardFooterLeft: getVal('sec01IdCardFooterLeft', DEFAULT_SEC01_DATA.idCardFooterLeft),
+        idCardFooterRight: getVal('sec01IdCardFooterRight', DEFAULT_SEC01_DATA.idCardFooterRight),
+
+        fullName: fullNameVal,
+        name: fullNameVal,
+        headline: getVal('sec01Headline', DEFAULT_SEC01_DATA.headline),
+        roleLine1: getVal('sec01RoleLine1', DEFAULT_SEC01_DATA.roleLine1),
+        roleLine2: getVal('sec01RoleLine2', DEFAULT_SEC01_DATA.roleLine2),
+        bioP1: getVal('sec01BioP1', DEFAULT_SEC01_DATA.bioP1),
+        bioP2: getVal('sec01BioP2', DEFAULT_SEC01_DATA.bioP2),
+        bio: getVal('sec01BioP1', DEFAULT_SEC01_DATA.bio),
+        fullBio: getVal('sec01BioP1', DEFAULT_SEC01_DATA.fullBio),
+
+        statYears: getVal('sec01StatYears', DEFAULT_SEC01_DATA.statYears),
+        statYearsLabel: getVal('sec01StatYearsLabel', DEFAULT_SEC01_DATA.statYearsLabel),
+        statCerts: getVal('sec01StatCerts', DEFAULT_SEC01_DATA.statCerts),
+        statCertsLabel: getVal('sec01StatCertsLabel', DEFAULT_SEC01_DATA.statCertsLabel),
+        statProjects: getVal('sec01StatProjects', DEFAULT_SEC01_DATA.statProjects),
+        statProjectsLabel: getVal('sec01StatProjectsLabel', DEFAULT_SEC01_DATA.statProjectsLabel),
+        statPredicate: getVal('sec01StatPredicate', DEFAULT_SEC01_DATA.statPredicate),
+        statPredicateLabel: getVal('sec01StatPredicateLabel', DEFAULT_SEC01_DATA.statPredicateLabel),
+
+        whatsapp: getVal('sec01Whatsapp', DEFAULT_SEC01_DATA.whatsapp),
+        email: getVal('sec01Email', DEFAULT_SEC01_DATA.email),
+        instagram: getVal('sec01Instagram', DEFAULT_SEC01_DATA.instagram),
+        location: getVal('sec01Location', DEFAULT_SEC01_DATA.location),
+        linkedin: getVal('sec01Linkedin', DEFAULT_SEC01_DATA.linkedin),
+        photoUrl: photoVal
+      };
+
       localStorage.setItem('fathur_portfolio_sec01_data', JSON.stringify(data));
-      notifyDataSaved('Data Tentang Saya berhasil disimpan!');
+      updateIdCardLivePreview();
+      notifyDataSaved('Data Tentang Saya & Kartu ID berhasil disimpan!');
+    }
+
+    function resetSec01ToDefault() {
+      if (confirm('Kembalikan data Tentang Saya & Kartu ID ke pengaturan awal?')) {
+        localStorage.removeItem('fathur_portfolio_sec01_data');
+        loadSec01Form();
+        notifyDataSaved('Data Tentang Saya dikembalikan ke default!');
+      }
     }
 
     function loadSec02Form() {
