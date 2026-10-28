@@ -959,7 +959,7 @@
         <a href="#my-project" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">03 My Project</a>
         <a href="#kelola-medsos" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">04 Medsos</a>
         <a href="#papan-jejak" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">05 Papan Jejak</a>
-        <a href="#prestasi-nasional" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">06 Prestasi</a>
+        <a href="#prestasi-nasional" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">06 Sertifikat</a>
         <a href="#executive-closing" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">07 Profil Eksekutif</a>
       </nav>
 
@@ -1975,7 +1975,7 @@
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <div class="inline-block bg-white border-2 border-stone-300 px-5 py-2 shadow-md -rotate-1 mb-2">
-              <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">06 / Prestasi, Sertifikasi &amp; Penghargaan</span>
+              <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">06 / Sertifikat penghargaan, pelatihan, karir &amp; profesional</span>
             </div>
             <p class="text-xs sm:text-sm text-stone-600 dark:text-stone-400 max-w-2xl mt-1">
               Koleksi terverifikasi 22 sertifikat pencapaian: Kejuaraan Kompetisi Nasional &amp; Internasional, Program Pelatihan, Magang Industri, dan Pemateri / Narasumber.
@@ -2497,7 +2497,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-stone-300 bg-white dark:bg-stone-900 p-5 rounded-2xl shadow-sm">
         <div>
-          <span class="text-xs font-mono uppercase tracking-widest text-[#155293] dark:text-sky-400 font-bold">HALAMAN PENUH · 06 / PRESTASI &amp; SERTIFIKASI</span>
+          <span class="text-xs font-mono uppercase tracking-widest text-[#155293] dark:text-sky-400 font-bold">HALAMAN PENUH · 06 / SERTIFIKAT PENGHARGAAN, PELATIHAN, KARIR &amp; PROFESIONAL</span>
           <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-ink mt-1">Katalog Lengkap 22 Sertifikat &amp; Penghargaan</h1>
           <p class="text-xs text-stone-500 mt-1">Seluruh arsip sertifikat kejuaraan kompetisi, program pelatihan, magang, dan narasumber.</p>
         </div>
@@ -4056,7 +4056,14 @@
       return `
         <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm hover:shadow-md hover:border-stone-400 overflow-hidden flex flex-col justify-between group transition-all duration-300">
           <div class="${aspectClass} w-full bg-stone-900 relative overflow-hidden flex items-center justify-center cursor-pointer" onclick="openVideoModal('${safeTitle}', '${ratioLabel}', '${v.duration || '0:45'}', '${safeUrl}')">
-            ${(parsed.type === 'html5' && parsed.src && !parsed.src.startsWith('http'))
+            ${v.thumbnail ? `
+              <img src="${v.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${v.title}" />
+              <div class="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition flex items-center justify-center">
+                <div class="w-12 h-12 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.6)] transition duration-300 ring-4 ring-white/20">
+                  <span class="text-sm ml-0.5">▶</span>
+                </div>
+              </div>
+            ` : (parsed.type === 'html5' && parsed.src && !parsed.src.startsWith('http'))
               ? `<video src="${parsed.src}" controls playsinline preload="metadata" class="w-full h-full object-cover" onclick="event.stopPropagation()"></video>`
               : `<div class="w-full h-full bg-gradient-to-br from-stone-900 via-stone-850 to-black p-4 flex flex-col items-center justify-center text-center relative group-hover:scale-105 transition duration-500">
                    <div class="w-12 h-12 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-lg mb-2.5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.6)] transition duration-300 ring-4 ring-white/10">

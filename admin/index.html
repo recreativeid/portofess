@@ -201,7 +201,7 @@
           <button onclick="switchAdminTab('prestasi')" id="navBtn-prestasi" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
             <div class="flex items-center gap-2.5">
               <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
-              <span>Prestasi &amp; Lisensi</span>
+              <span>Sertifikat &amp; Karir</span>
             </div>
             <span id="navBadgeCerts" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">22</span>
           </button>
@@ -571,72 +571,255 @@
               </div>
             </div>
 
-            <!-- Visual 6 Canva-Style Slots -->
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
+            <!-- Section: Postingan Feeds & Desain Grafis (Full CRUD) -->
+            <div class="space-y-4 pt-2">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
                 <div>
-                  <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-800">6 Slot Kotak Postingan Feed &amp; Desain</h4>
-                  <p class="text-[11px] text-slate-500">Klik slot di bawah untuk mengunggah materi gambar atau memperbarui judul.</p>
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-display font-bold text-sm uppercase tracking-wider text-slate-900">Koleksi Postingan Feed &amp; Desain Grafis</h4>
+                    <span id="medsosFeedsCountBadge" class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[11px] font-mono font-bold">6 Feed</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">Kelola gambar postingan feed, poster promosi, dan desain grafis yang tampil pada showcase media sosial.</p>
                 </div>
-                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-mono font-bold">6 Slot Canva</span>
+                <button onclick="toggleFeedForm(true)" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Tambah Postingan Feed Desain</span>
+                </button>
               </div>
 
-              <div id="canvaSlotsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+              <!-- Form Tambah / Edit Feed Post -->
+              <div id="feedFormBox" class="hidden p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <h4 id="feedFormTitle" class="font-display font-bold text-xs uppercase tracking-wider text-slate-800">Tambah Postingan Feed Desain</h4>
+                  <button onclick="toggleFeedForm(false)" class="text-xs font-semibold text-slate-400 hover:text-slate-700 cursor-pointer">Batal</button>
+                </div>
+                <input type="hidden" id="editFeedIndex" value="" />
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div class="sm:col-span-2">
+                    <label class="text-[11px] font-bold text-slate-700 block mb-1">Judul Postingan Desain</label>
+                    <input id="inpFeedTitle" type="text" placeholder="mis. Creamy Tiramitsu 10k" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none" />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-bold text-slate-700 block mb-1">Kategori / Subjudul</label>
+                    <input id="inpFeedSubtitle" type="text" placeholder="mis. Feed &amp; Poster Produk Haltea" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="text-[11px] font-bold text-slate-700 block mb-1">Unggah Berkas Gambar</label>
+                    <input id="inpFeedFile" type="file" accept="image/*" onchange="previewFeedImageFile(this)" class="w-full text-xs text-slate-500 pt-1" />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-bold text-slate-700 block mb-1">Atau Path / URL Gambar</label>
+                    <input id="inpFeedUrl" type="text" placeholder="assets/haltea/poster-creamy-tiramitsu.png" oninput="previewFeedImageUrl(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none" />
+                  </div>
+                  <div>
+                    <label class="text-[11px] font-bold text-slate-700 block mb-1">Warna Aksen Banner</label>
+                    <div class="flex items-center gap-2">
+                      <input id="inpFeedBgColor" type="color" value="#1D4ED8" class="w-10 h-8 rounded-lg border border-slate-300 cursor-pointer p-0.5" />
+                      <span class="text-xs text-slate-500">Warna fallback</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Live Feed Preview Box -->
+                <div id="feedPreviewContainer" class="p-3 bg-white rounded-xl border border-slate-200 flex items-center gap-4">
+                  <div class="w-16 h-16 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200">
+                    <img id="feedPreviewImg" src="" class="w-full h-full object-cover hidden" />
+                    <span id="feedPreviewFallback" class="text-[10px] font-mono text-slate-400">Preview</span>
+                  </div>
+                  <div>
+                    <div id="feedPreviewTitle" class="text-xs font-bold text-slate-900">Judul Postingan Desain</div>
+                    <div id="feedPreviewSubtitle" class="text-[11px] text-slate-500">Kategori / Subjudul</div>
+                  </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-1">
+                  <button type="button" onclick="toggleFeedForm(false)" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Batal</button>
+                  <button type="button" onclick="saveFeedRecord()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
+                    Simpan Postingan Desain
+                  </button>
+                </div>
+              </div>
+
+              <!-- Feeds Cards Grid -->
+              <div id="medsosFeedsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3.5">
                 <!-- Dynamically rendered -->
               </div>
             </div>
 
-            <!-- Detail Editor Form for Slot -->
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-              <input type="hidden" id="editSlotIndex" value="" />
-              <div class="flex items-center justify-between">
-                <span id="slotFormLabel" class="text-xs font-bold text-slate-800">Edit Detail Slot Desain:</span>
-                <span class="text-[11px] font-mono text-slate-400">Pilih slot di atas untuk diedit</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input id="slotTitleInp" type="text" placeholder="Judul Postingan Desain" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold sm:col-span-2 bg-white" />
-                <input id="slotSubtitleInp" type="text" placeholder="Kategori / Subjudul" class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white" />
-              </div>
-              <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-                <div class="flex items-center gap-3">
-                  <label class="text-xs font-medium text-slate-600">Aksen:</label>
-                  <input id="slotBgColor" type="color" value="#C62828" class="w-8 h-7 rounded border border-slate-300 cursor-pointer p-0.5" />
-                  <label class="text-xs font-medium text-slate-600 ml-2">File Gambar:</label>
-                  <input id="slotImgFile" type="file" accept="image/*" class="text-xs text-slate-500" />
+          </div>
+        </div>
+        <div id="tabContent-video" class="admin-tab-pane hidden space-y-6">
+          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
+            
+            <!-- Top Account Selector for Video -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div>
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold block">ENTITAS AKUN MEDSOS TERDAFTAR (VIDEO &amp; REELS)</span>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <h4 id="activeVideoAccountHeader" class="font-display font-extrabold text-base text-slate-900">Haltea Teh Halte Indonesia</h4>
+                  <span id="videoAccountBadge" class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800">6 Video</span>
                 </div>
-                <button onclick="saveSlotData()" class="px-5 py-2 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
-                  Simpan Perubahan Slot
+              </div>
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <select id="selectVideoAccountDropdown" onchange="changeVideoActiveAccount(this.value)" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white text-slate-900 shadow-xs outline-none">
+                  <!-- Populated dynamically from currentMedsosData.accounts -->
+                </select>
+                <button onclick="toggleVideoForm(true)" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Tambah Video Baru</span>
                 </button>
               </div>
             </div>
 
-          </div>
-        </div>
-
-        <!-- ============================================================== -->
-        <!-- TAB 6: VIDEO & REELS                                           -->
-        <!-- ============================================================== -->
-        <div id="tabContent-video" class="admin-tab-pane hidden space-y-6">
-          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-              <div>
-                <h3 class="font-display font-extrabold text-lg text-slate-900">Kelola Video Portofolio &amp; Reels</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Kelola video vertikal (9:16) dan lanskap (16:9) pada showcase video.</p>
+            <!-- Form Tambah / Edit Video -->
+            <div id="videoFormBox" class="hidden p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-5">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                  <h4 id="videoFormTitle" class="font-display font-bold text-sm uppercase tracking-wider text-slate-900">Tambah Video Baru</h4>
+                  <p class="text-xs text-slate-500">Video akan otomatis terhubung ke akun medsos yang dipilih di atas.</p>
+                </div>
+                <button onclick="toggleVideoForm(false)" class="text-xs font-semibold text-slate-400 hover:text-slate-700 cursor-pointer">Batal</button>
               </div>
-              <button onclick="saveVideoRecords()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
-                Simpan Koleksi Video
-              </button>
+              <input type="hidden" id="editVideoIndex" value="" />
+              <input type="hidden" id="inpVideoThumbnailData" value="" />
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="sm:col-span-2">
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Judul Video / Konten</label>
+                  <input id="inpVideoTitle" type="text" placeholder="mis. Grand Opening Haltea Magelang - Promo 10k" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Format Rasio Tampilan</label>
+                  <select id="inpVideoRatio" onchange="updateVideoRatioPreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none">
+                    <option value="9/16">9:16 (Reels / Vertikal TikTok / IG)</option>
+                    <option value="16/9">16:9 (Lanskap / YouTube Video)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Durasi Video</label>
+                  <input id="inpVideoDuration" type="text" placeholder="mis. 0:42 atau 1:15" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold bg-white outline-none" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Unggah File Video (MP4/WebM)</label>
+                  <input id="inpVideoFile" type="file" accept="video/mp4,video/webm" onchange="handleVideoFileSelect(this)" class="w-full text-xs text-slate-500 pt-1" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Atau URL / Path Video</label>
+                  <input id="inpVideoUrl" type="text" placeholder="mis. assets/videos/reel1.mp4 atau https://..." onchange="handleVideoUrlChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none" />
+                </div>
+              </div>
+
+              <!-- Video Cover & Scrub Frame Capture Studio -->
+              <div class="p-4 sm:p-5 rounded-xl bg-white border border-slate-200 space-y-4">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-mono uppercase tracking-wider text-sky-700 font-bold">STUDIO SAMPUL VIDEO (THUMBNAIL COVER)</span>
+                    <span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 text-[10px] font-bold font-mono">Fitur Unggulan</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">Unggah gambar custom sampul ATAU ambil frame detik mana pun dari dalam video sebagai gambar sampul kartu portofolio.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                  
+                  <!-- Left: Video Frame Player & Scrubber -->
+                  <div class="lg:col-span-7 space-y-3 p-3.5 rounded-xl bg-slate-900 text-white">
+                    <div class="flex items-center justify-between text-[11px]">
+                      <span class="font-bold text-slate-300 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                        Pemutar Video &amp; Detik Frame
+                      </span>
+                      <span id="videoCurrentTimeDisplay" class="font-mono text-sky-400 font-bold">00:00 / 00:00</span>
+                    </div>
+
+                    <!-- Video Player Element -->
+                    <div class="relative bg-black rounded-lg overflow-hidden flex items-center justify-center min-h-[160px] max-h-[240px]">
+                      <video id="videoCapturePlayer" preload="metadata" playsinline class="w-full h-full max-h-[240px] object-contain"></video>
+                      <div id="videoNoSourceNotice" class="text-center p-4 text-slate-400 text-xs">
+                        Masukkan URL video atau pilih file video di atas untuk mulai memutar &amp; mengambil frame.
+                      </div>
+                    </div>
+
+                    <!-- Scrubber Slider -->
+                    <div class="space-y-1">
+                      <input id="videoScrubRange" type="range" min="0" max="100" step="0.1" value="0" oninput="onVideoScrub(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-400" />
+                      <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                        <span>00:00</span>
+                        <span>Geser untuk memilih detik snapshot</span>
+                        <span id="videoDurationLabel">00:00</span>
+                      </div>
+                    </div>
+
+                    <!-- Action Buttons for Video Frame -->
+                    <div class="flex items-center gap-2 pt-1 flex-wrap">
+                      <button type="button" onclick="captureFrameFromVideo()" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        <span>📸 Ambil Frame Detik Ini Sebagai Sampul</span>
+                      </button>
+                      <button type="button" onclick="togglePlayCaptureVideo()" id="btnPlayCaptureVideo" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold cursor-pointer">
+                        ▶ Putar Video
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Right: Custom Upload Option & Live Thumbnail Preview -->
+                  <div class="lg:col-span-5 space-y-3">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                      <label class="text-[11px] font-bold text-slate-700 block">Atau Unggah Berkas Sampul Manual</label>
+                      <input id="inpVideoThumbFile" type="file" accept="image/*" onchange="handleThumbnailFileSelect(this)" class="w-full text-xs text-slate-500" />
+                      <input id="inpVideoThumbUrl" type="text" placeholder="Atau URL gambar thumbnail..." oninput="handleThumbnailUrlInput(this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono bg-white outline-none mt-1" />
+                    </div>
+
+                    <!-- Preview Card -->
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                      <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-800">Pratinjau Sampul Kartu:</span>
+                        <button type="button" onclick="clearVideoThumbnail()" class="text-[11px] font-semibold text-rose-600 hover:underline cursor-pointer">Reset Sampul</button>
+                      </div>
+
+                      <div id="videoThumbPreviewContainer" class="w-full aspect-[16/9] max-w-[200px] mx-auto rounded-xl bg-slate-900 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-xs">
+                        <img id="videoThumbPreviewImg" src="" class="w-full h-full object-cover hidden" />
+                        <div id="videoThumbFallbackText" class="text-center p-2 text-[10px] font-mono text-slate-400">
+                          Belum ada sampul terpilih
+                        </div>
+                        <div id="videoThumbPlayIcon" class="w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-md absolute pointer-events-none hidden">
+                          <span class="text-xs ml-0.5">▶</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2 pt-2 border-t border-slate-200">
+                <button type="button" onclick="toggleVideoForm(false)" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Batal</button>
+                <button type="button" onclick="saveVideoRecord()" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
+                  Simpan Video ke Akun Ini
+                </button>
+              </div>
             </div>
 
-            <div id="videoItemsContainer" class="space-y-3">
-              <!-- Dynamically rendered -->
+            <!-- Video Cards List -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-800">Daftar Video Portofolio Akun</h4>
+                <span class="text-[11px] text-slate-500">Menampilkan seluruh video yang terdaftar pada akun aktif.</span>
+              </div>
+
+              <div id="videoCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <!-- Dynamically rendered -->
+              </div>
             </div>
+
           </div>
         </div>
-
-        <!-- ============================================================== -->
-        <!-- TAB 7: PAPAN JEJAK (3 WIDE COLUMNS: KARIER, PENDIDIKAN, ORG)   -->
-        <!-- ============================================================== -->
         <div id="tabContent-jejak" class="admin-tab-pane hidden space-y-6">
           <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -756,29 +939,74 @@
         <!-- TAB 8: PRESTASI & LISENSI (22 SERTIFIKAT CRUD)                 -->
         <!-- ============================================================== -->
         <div id="tabContent-prestasi" class="admin-tab-pane hidden space-y-6">
-          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
               <div>
-                <h3 class="font-display font-extrabold text-lg text-slate-900">Kelola Prestasi, Penghargaan &amp; Lisensi</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Daftar lengkap 22 sertifikat resmi nasional dan internasional.</p>
+                <div class="flex items-center gap-2.5">
+                  <h3 class="font-display font-extrabold text-lg sm:text-xl text-slate-900">Koleksi 22 Sertifikat &amp; Penghargaan Resmi</h3>
+                  <span id="certTotalCountBadge" class="px-2.5 py-0.5 rounded-full bg-slate-900 text-white font-mono text-xs font-bold">22 Sertifikat</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">Sertifikat penghargaan, pelatihan, karir &amp; profesional yang tampil pada Section 06 landing page.</p>
               </div>
-              <button onclick="toggleCertForm(true)" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+              <button onclick="toggleCertForm(true)" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer self-start sm:self-auto">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 <span>Tambah Sertifikat Baru</span>
               </button>
             </div>
 
+            <!-- Filter & Search Bar -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <button onclick="filterAdminCertCategory('all')" data-cat="all" class="admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition shadow-xs">
+                  Semua (<span id="filterCountAll">22</span>)
+                </button>
+                <button onclick="filterAdminCertCategory('Kejuaraan & Kompetisi')" data-cat="Kejuaraan & Kompetisi" class="admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition">
+                  Kompetisi (14)
+                </button>
+                <button onclick="filterAdminCertCategory('Program Pelatihan & Sertifikasi')" data-cat="Program Pelatihan & Sertifikasi" class="admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition">
+                  Pelatihan &amp; CCNA (3)
+                </button>
+                <button onclick="filterAdminCertCategory('Job Career & Internship (Magang)')" data-cat="Job Career & Internship (Magang)" class="admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition">
+                  Karir &amp; Magang (3)
+                </button>
+                <button onclick="filterAdminCertCategory('Professional Speaker (Narasumber)')" data-cat="Professional Speaker (Narasumber)" class="admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition">
+                  Narasumber (2)
+                </button>
+              </div>
+
+              <div class="w-full md:w-72">
+                <input id="certSearchInp" type="text" placeholder="🔍 Cari judul, lembaga, kategori..." oninput="onCertSearchInput(this.value)" class="w-full px-3.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white outline-none focus:ring-2 focus:ring-[#155293]" />
+              </div>
+            </div>
+
             <!-- Form Tambah / Edit Sertifikat -->
-            <div id="certFormBox" class="hidden p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
+            <div id="certFormBox" class="hidden p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
               <div class="flex items-center justify-between border-b border-slate-200 pb-2">
                 <h4 id="certFormTitle" class="font-display font-bold text-xs uppercase tracking-wider text-slate-800">Formulir Sertifikat</h4>
                 <button onclick="toggleCertForm(false)" class="text-xs font-semibold text-slate-400 hover:text-slate-700 cursor-pointer">Batal</button>
               </div>
               <input type="hidden" id="certEditId" value="" />
+
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div class="sm:col-span-2">
-                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Judul Sertifikat</label>
-                  <input id="inpCertTitle" type="text" placeholder="mis. Juara 1 Lomba Poster Nasional" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none" />
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Judul Sertifikat / Penghargaan</label>
+                  <input id="inpCertTitle" type="text" placeholder="mis. Juara 1 Lomba Poster Nasional HW UNIMMA" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Kategori Sertifikat</label>
+                  <select id="inpCertCategory" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white outline-none">
+                    <option value="Kejuaraan & Kompetisi">Kejuaraan &amp; Kompetisi</option>
+                    <option value="Program Pelatihan & Sertifikasi">Program Pelatihan &amp; Sertifikasi</option>
+                    <option value="Job Career & Internship (Magang)">Job Career &amp; Internship (Magang)</option>
+                    <option value="Professional Speaker (Narasumber)">Professional Speaker (Narasumber)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Lembaga Penerbit &amp; Tahun</label>
+                  <input id="inpCertOrg" type="text" placeholder="mis. Semarak Pandu HW UNIMMA · Jan 2025" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none" />
                 </div>
                 <div>
                   <label class="text-[11px] font-bold text-slate-700 block mb-1">Tingkat / Level</label>
@@ -789,34 +1017,57 @@
                     <option value="Universitas">Universitas</option>
                   </select>
                 </div>
+                <div>
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Warna Aksen</label>
+                  <div class="flex items-center gap-2">
+                    <input id="inpCertColor" type="color" value="#155293" class="w-10 h-8 rounded-lg border border-slate-300 cursor-pointer p-0.5" />
+                    <span class="text-xs text-slate-500">Warna kartu</span>
+                  </div>
+                </div>
               </div>
+
+              <div>
+                <label class="text-[11px] font-bold text-slate-700 block mb-1">Deskripsi Singkat Sertifikat</label>
+                <textarea id="inpCertDesc" rows="2" placeholder="Prestasi kompetisi tingkat nasional dalam desain poster visual..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none"></textarea>
+              </div>
+
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Lembaga Penerbit &amp; Tahun</label>
-                  <input id="inpCertOrg" type="text" placeholder="mis. UNIMMA · 2025" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none" />
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Unggah Berkas Gambar Sertifikat</label>
+                  <input id="inpCertFile" type="file" accept="image/*" onchange="handleCertFileSelect(this)" class="w-full text-xs text-slate-500 pt-1" />
                 </div>
                 <div>
-                  <label class="text-[11px] font-bold text-slate-700 block mb-1">File Gambar Sertifikat</label>
-                  <input id="inpCertFile" type="file" accept="image/*" class="w-full text-xs text-slate-500 pt-1" />
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Atau Path / URL Berkas Gambar</label>
+                  <input id="inpCertImgUrl" type="text" placeholder="assets/certificates/..." oninput="handleCertUrlInput(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none" />
                 </div>
               </div>
-              <div class="flex justify-end pt-1">
-                <button onclick="saveCertRecord()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
+
+              <!-- Live Preview -->
+              <div id="certPreviewContainer" class="p-3 bg-white rounded-xl border border-slate-200 flex items-center gap-4">
+                <div class="w-20 h-14 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200">
+                  <img id="certPreviewImg" src="" class="w-full h-full object-cover hidden" />
+                  <span id="certPreviewFallback" class="text-[10px] font-mono text-slate-400">Preview</span>
+                </div>
+                <div>
+                  <div id="certPreviewTitle" class="text-xs font-bold text-slate-900">Judul Sertifikat</div>
+                  <div id="certPreviewOrg" class="text-[11px] text-slate-500">Lembaga Penerbit</div>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2 pt-1">
+                <button type="button" onclick="toggleCertForm(false)" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Batal</button>
+                <button type="button" onclick="saveCertRecord()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
                   Simpan Sertifikat
                 </button>
               </div>
             </div>
 
-            <!-- List Certificates Cards -->
+            <!-- List All 22 Certificates Cards -->
             <div id="certsCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <!-- Dynamically rendered -->
             </div>
           </div>
         </div>
-
-        <!-- ============================================================== -->
-        <!-- TAB 9: PROFIL EKSEKUTIF                                        -->
-        <!-- ============================================================== -->
         <div id="tabContent-eksekutif" class="admin-tab-pane hidden space-y-6">
           <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -882,6 +1133,23 @@
                 <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-800">Tambah Rute Klien Baru</h4>
                 <button onclick="toggleRouteForm(false)" class="text-xs font-semibold text-slate-400 hover:text-slate-700 cursor-pointer">Batal</button>
               </div>
+              <!-- Quick Map Picker Action Banner -->
+              <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 16 12 8"></polygon></svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-sky-950">Tentukan Titik di Peta Secara Interaktif</div>
+                    <div class="text-[11px] text-sky-700">Klik langsung lokasi tujuan di peta dunia untuk mengisi koordinat secara otomatis.</div>
+                  </div>
+                </div>
+                <button type="button" onclick="openMapPointPickerModal()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer shrink-0">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                  <span>🎯 Buka Peta &amp; Klik Titik Tujuan</span>
+                </button>
+              </div>
+
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div>
                   <label class="text-[11px] font-bold text-slate-700 block mb-1">Nama Kota / Label</label>
@@ -981,14 +1249,78 @@
         </div>
 
       </main>
+
+  <!-- Interactive World Map Point Picker Modal -->
+  <div id="modalMapPicker" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[95vh]">
+      
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+            <h3 class="font-display font-extrabold text-sm sm:text-base text-slate-900">Tentukan Titik Tujuan Rute Global di Peta</h3>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Klik di mana saja pada peta dunia di bawah ini untuk menentukan koordinat tujuan rute klien secara presisi.</p>
+        </div>
+        <button onclick="closeMapPickerModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm cursor-pointer transition">✕</button>
+      </div>
+
+      <!-- Quick Presets Toolbar -->
+      <div class="px-4 sm:px-5 py-2.5 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 flex-wrap text-xs">
+        <span class="text-[11px] font-mono uppercase text-slate-500 font-bold mr-1">Rekomendasi Kota:</span>
+        <button type="button" onclick="setMapPickerPreset(-7.2575, 112.7521, 'Surabaya')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇮🇩 Surabaya</button>
+        <button type="button" onclick="setMapPickerPreset(-6.2088, 106.8456, 'Jakarta')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇮🇩 Jakarta</button>
+        <button type="button" onclick="setMapPickerPreset(1.3521, 103.8198, 'Singapore')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇸🇬 Singapore</button>
+        <button type="button" onclick="setMapPickerPreset(35.6762, 139.6503, 'Tokyo')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇯🇵 Tokyo</button>
+        <button type="button" onclick="setMapPickerPreset(25.2048, 55.2708, 'Dubai')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇦🇪 Dubai</button>
+        <button type="button" onclick="setMapPickerPreset(51.5074, -0.1278, 'London')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇬🇧 London</button>
+        <button type="button" onclick="setMapPickerPreset(-33.8688, 151.2093, 'Sydney')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇦🇺 Sydney</button>
+        <button type="button" onclick="setMapPickerPreset(34.0522, -118.2437, 'Los Angeles')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-sky-50 text-slate-700 hover:text-sky-700 font-semibold border border-slate-200 transition">🇺🇸 Los Angeles</button>
+      </div>
+
+      <!-- Interactive Canvas Map -->
+      <div class="p-4 sm:p-5 flex-1 overflow-hidden flex flex-col justify-center items-center bg-slate-950 relative">
+        <canvas id="pickerMapCanvas" class="w-full h-80 sm:h-96 rounded-xl border border-slate-800 bg-slate-950 cursor-crosshair shadow-inner"></canvas>
+        <div class="absolute bottom-6 left-7 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-sm border border-slate-700 text-white text-[11px] font-mono pointer-events-none">
+          💡 Klik di mana saja pada peta untuk meletakkan titik tujuan
+        </div>
+      </div>
+
+      <!-- Modal Footer & Readout -->
+      <div class="p-4 sm:p-5 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4 flex-wrap">
+          <div>
+            <span class="text-[10px] font-mono uppercase text-slate-400 font-bold block">TITIK TERPILIH</span>
+            <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              <span id="pickerReadoutCity" class="text-sky-700 font-extrabold text-sm">Surabaya</span>
+              <span class="text-slate-400 font-normal">·</span>
+              <span class="font-mono text-slate-600">Lat: <span id="pickerReadoutLat" class="font-bold text-slate-900">-7.2575</span></span>
+              <span class="text-slate-400 font-normal">,</span>
+              <span class="font-mono text-slate-600">Lng: <span id="pickerReadoutLng" class="font-bold text-slate-900">112.7521</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button type="button" onclick="closeMapPickerModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-200 cursor-pointer transition">
+            Batal
+          </button>
+          <button type="button" onclick="applyMapPickerPoint()" class="px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold shadow-sm transition cursor-pointer flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Gunakan Titik Ini &amp; Isi Formulir</span>
+          </button>
+        </div>
+      </div>
+
     </div>
-
   </div>
-
-  <!-- =================================================================== -->
-  <!-- 3. JAVASCRIPT CONTROLLER (STANDALONE LOGIC WITH STORAGE SYNC)        -->
-  <!-- =================================================================== -->
+      </main>
+    </div>
+  </div>
+  <!-- 3. JAVASCRIPT CONTROLLER (STANDALONE LOGIC WITH STORAGE SYNC) -->
   <script>
+
     /* Default Datasets */
     const DEFAULT_PROJECTS = [
       { id: 1, title: 'SOLVETA', category: 'Website Bisnis', url: 'https://solveta.asia', desc: 'Website agensi teknologi digital.', rot: '-rotate-1', color: '#155293' },
@@ -1006,7 +1338,6 @@
       { id: 13, title: 'tidurnyenyak.com', category: 'Website Bisnis', url: 'https://tidurnyenyak.com', desc: 'Pengembangan website Herbal Indo Utama.', rot: '-rotate-1', color: '#0F172A' },
       { id: 14, title: 'squabumin.id', category: 'Website Bisnis', url: 'https://squabumin.id', desc: 'Pengembangan website Herbal Indo Utama.', rot: 'rotate-1', color: '#14532D' }
     ];
-
     const DEFAULT_MEDSOS_ACCOUNTS = [
       {
         id: 'haltea',
@@ -1027,7 +1358,10 @@
         videos: [
           { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
           { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' }
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
+          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
+          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
+          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
         ]
       },
       {
@@ -1047,7 +1381,12 @@
           { id: 'mbm_d6', title: 'Layanan Sosial & Posko Umat', subtitle: 'Infografis Program Masjid', bg: '#4338CA', img: '' }
         ],
         videos: [
-          { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '' }
+          { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '' },
+          { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '' },
+          { id: 'mbm_v3', title: 'Reels Ajakan Sholat Berjamaah & Bersih Masjid', ratio: '9/16', duration: '0:30', videoUrl: '' },
+          { id: 'mbm_v4', title: 'Dokumentasi Kegiatan Sosial & Buka Bersama Akbar', ratio: '16/9', duration: '1:30', videoUrl: '' },
+          { id: 'mbm_v5', title: 'Kajian Tematik Ramadhan Bersama Ustadz Tamu', ratio: '16/9', duration: '2:45', videoUrl: '' },
+          { id: 'mbm_v6', title: 'Profil Masjid MBM UNIMMA & Layanan Umat Digital', ratio: '16/9', duration: '1:50', videoUrl: '' }
         ]
       },
       {
@@ -1067,8 +1406,236 @@
           { id: 'mbp_d6', title: 'Quote Inspiratif Literasi & Penulis', subtitle: 'Micro-Content Visual Instagram', bg: '#1F2937', img: '' }
         ],
         videos: [
-          { id: 'mbp_v1', title: 'Reels Suasana Piknik Baca Bareng di Taman Kota', ratio: '9/16', duration: '0:38', videoUrl: '' }
+          { id: 'mbp_v1', title: 'Reels Suasana Piknik Baca Bareng di Taman Kota', ratio: '9/16', duration: '0:38', videoUrl: '' },
+          { id: 'mbp_v2', title: 'Review Singkat Buku Favorit Member Komunitas', ratio: '9/16', duration: '0:50', videoUrl: '' },
+          { id: 'mbp_v3', title: 'Vlog Seru Meetup Komunitas & Tukar Buku Literasi', ratio: '9/16', duration: '0:45', videoUrl: '' },
+          { id: 'mbp_v4', title: 'Aftermovie 1st Anniversary Magelang Book Party', ratio: '16/9', duration: '1:15', videoUrl: '' },
+          { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '' },
+          { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '' }
         ]
+      }
+    ];
+
+    const DEFAULT_CERTIFICATES = [
+      {
+        id: 'cert_1',
+        title: 'Juara 1 Lomba Poster Nasional HW UNIMMA',
+        org: 'Semarak Pandu Hizbul Wathan UNIMMA · Jan 2025',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914115319-2026-09-14prestasi_akd115305.jpg',
+        desc: 'Juara 1 Kompetisi Desain Poster Nasional tingkat perguruan tinggi se-Indonesia.',
+        color: '#991B1B'
+      },
+      {
+        id: 'cert_2',
+        title: 'Juara 1 Lomba Poster Nasional Mercomfest',
+        org: 'Universitas Mercu Buana Yogyakarta · Jan 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914115507-2026-09-14prestasi_akd115352.jpg',
+        desc: 'Juara 1 Lomba Desain Poster Komunikasi Visual Mercomfest 2024.',
+        color: '#155293'
+      },
+      {
+        id: 'cert_3',
+        title: 'Gold Award & 1st Champion ASEAN AI & Innovation Challenge',
+        org: '3rd ASEAN International Student Competition (AISC) · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914115727-2026-09-14prestasi_akd115649.png',
+        desc: 'Penghargaan Emas tingkat internasional delegasi mahasiswa se-ASEAN dalam inovasi digital.',
+        color: '#D97706'
+      },
+      {
+        id: 'cert_4',
+        title: 'Juara 1 Lomba Poster Nasional BIFEST',
+        org: 'Universitas Diponegoro (UNDIP) Semarang · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914115928-2026-09-14prestasi_akd115757.jpg',
+        desc: 'Juara 1 Lomba Poster Nasional Bidang Inovasi Teknologi & Lingkungan.',
+        color: '#0F766E'
+      },
+      {
+        id: 'cert_5',
+        title: 'Best Service Innovation Award ASEAN Competition',
+        org: 'Consortium Universiti Kuala Lumpur (UniKL) & AISC · 2023',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914120316-2026-09-14prestasi_akd120306.jpeg',
+        desc: 'Penghargaan kategori Profit-Oriented Inovasi Layanan Digital Terpuji se-ASEAN.',
+        color: '#7C3AED'
+      },
+      {
+        id: 'cert_6',
+        title: 'Inspirational Captain & Leadership Award',
+        org: '3rd ASEAN International Student Competition · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914120801-2026-09-14prestasi_akd120539.jpeg',
+        desc: 'Penghargaan apresiasi Kapten Tim Inovasi Terinspiratif dalam ajang kompetisi regional.',
+        color: '#2563EB'
+      },
+      {
+        id: 'cert_7',
+        title: 'Juara 1 Desain Komunikasi Visual PORSENI PTMA',
+        org: 'Universitas Ahmad Dahlan (UAD) Yogyakarta · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914121155-2026-09-14prestasi_akd121139.jpeg',
+        desc: 'Juara 1 Cabang Lomba Desain Grafis & Media Informasi Pekan Olahraga & Seni Nasional.',
+        color: '#059669'
+      },
+      {
+        id: 'cert_8',
+        title: 'Special Creative Presentation Award AISC',
+        org: 'ASEAN Consortium for Higher Education & Technology · 2023',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914122710-2026-09-14prestasi_akd121503.jpg',
+        desc: 'Penghargaan khusus presentasi karya kreatif dan UI/UX Pitching tingkat regional.',
+        color: '#DC2626'
+      },
+      {
+        id: 'cert_9',
+        title: 'Juara 2 Lomba Poster Nasional Sriwijaya Festival',
+        org: 'Universitas Sriwijaya (UNSRI) Palembang · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914123001-2026-09-14prestasi_akd122827.jpeg',
+        desc: 'Juara 2 Lomba Desain Poster Nasional Festival Kebudayaan & Teknologi.',
+        color: '#EA580C'
+      },
+      {
+        id: 'cert_10',
+        title: 'Juara 1 Lomba Desain Grafis Milad UNIMMA',
+        org: 'Panitia Milad Universitas Muhammadiyah Magelang · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914123254-2026-09-14prestasi_akd123127.jpeg',
+        desc: 'Juara 1 Sayembara Karya Desain Kreatif & Publikasi Kampus.',
+        color: '#155293'
+      },
+      {
+        id: 'cert_11',
+        title: 'Grand Finalist ASEAN AI Innovation & Creativity Challenge',
+        org: 'AISC International Student Committee · 2023',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914123522-2026-09-14prestasi_akd123316.jpeg',
+        desc: 'Finalis Terpilih Kategori Business Technology Inovasi se-Asia Tenggara.',
+        color: '#4F46E5'
+      },
+      {
+        id: 'cert_12',
+        title: 'Medali Perak Desain Visual BAPOMI Jawa Tengah',
+        org: 'Badan Pembina Olahraga & Seni Mahasiswa Indonesia · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914123644-2026-09-14prestasi_akd123545.jpeg',
+        desc: 'Peringkat 2 Medali Perak Lomba Desain Media Komunikasi Visual Mahasiswa.',
+        color: '#475569'
+      },
+      {
+        id: 'cert_13',
+        title: 'Juara 1 Karya Media Visual Dies Natalis Fakultas Teknik',
+        org: 'Fakultas Teknik Informatika UNIMMA · 2024',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914123751-2026-09-14prestasi_akd123747.jpeg',
+        desc: 'Juara 1 Lomba Media Visual & Desain Interaktif Dies Natalis Fakultas.',
+        color: '#0891B2'
+      },
+      {
+        id: 'cert_14',
+        title: 'Honorable Mention Award ASEAN Student Research & Innovation',
+        org: 'AISC Research & Innovation Consortium · 2023',
+        category: 'Kejuaraan & Kompetisi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914124246-2026-09-14prestasi_akd124115.jpeg',
+        desc: 'Apresiasi karya riset visual digital dan portofolio interaktif tingkat internasional.',
+        color: '#9333EA'
+      },
+      {
+        id: 'cert_15',
+        title: 'Cisco Networking Academy: Introduction to Networks (CCNA)',
+        org: 'Cisco Networking Academy · 2024',
+        category: 'Program Pelatihan & Sertifikasi',
+        level: 'Internasional',
+        img: 'assets/certificates/20260914130042-2026-09-14prestasi_akd125840.jpeg',
+        desc: 'Sertifikasi kompetensi internasional jaringan komputer, routing, switching, dan IP addressing.',
+        color: '#0284C7'
+      },
+      {
+        id: 'cert_16',
+        title: 'Sertifikasi Kompetensi Aplikasi Perkantoran & Komputer',
+        org: 'UPT Komputer Universitas Muhammadiyah Magelang · 2024',
+        category: 'Program Pelatihan & Sertifikasi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914130240-2026-09-14prestasi_akd130209.jpeg',
+        desc: 'Predikat Kelulusan Nilai A dalam uji kompetensi pemrosesan data dan teknologi komputer.',
+        color: '#0D9488'
+      },
+      {
+        id: 'cert_17',
+        title: 'English Proficiency Certification (General English Course)',
+        org: 'Language Center UNIMMA · 2024',
+        category: 'Program Pelatihan & Sertifikasi',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914130553-2026-09-14prestasi_akd130545.jpeg',
+        desc: 'Sertifikasi kelulusan kemampuan komunikasi bahasa Inggris akademik dan profesional.',
+        color: '#6366F1'
+      },
+      {
+        id: 'cert_18',
+        title: 'Surat Keterangan Magang Industri Herbal Indo Utama',
+        org: 'PT Herbal Indo Utama (HIU Group) · 2024',
+        category: 'Job Career & Internship (Magang)',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914131125-2026-09-14prestasi_akd131027.jpeg',
+        desc: 'Praktik kerja industri dan pengembangan web & media digital di industri manufaktur herbal.',
+        color: '#166534'
+      },
+      {
+        id: 'cert_19',
+        title: 'Certificate of Internship: Video Advertising & UI/UX Specialist',
+        org: 'PT Nusantara Ekso Teknologi (vlint.app) · 2024',
+        category: 'Job Career & Internship (Magang)',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914141756-2026-09-14prestasi_akd141704.jpeg',
+        desc: 'Magang profesional pengembangan video promosi kreatif dan desain UI/UX aplikasi digital.',
+        color: '#1E293B'
+      },
+      {
+        id: 'cert_20',
+        title: 'Sertifikat Magang & Multimedia Specialist Yayasan ICMA',
+        org: 'Yayasan ICMA Indonesia · 2024',
+        category: 'Job Career & Internship (Magang)',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914142022-2026-09-14prestasi_akd141941.jpeg',
+        desc: 'Dedikasi pengelolaan konten media komunikasi visual dan edukasi publik terpadu.',
+        color: '#B45309'
+      },
+      {
+        id: 'cert_21',
+        title: 'Piagam Narasumber: Pelatihan Pembuatan Video Pembelajaran Interaktif',
+        org: 'Fakultas Keguruan dan Ilmu Pendidikan (FKIP) UNIMMA · 2025',
+        category: 'Professional Speaker (Narasumber)',
+        level: 'Nasional',
+        img: 'assets/certificates/20260914145701-2026-09-14prestasi_akd145603.jpg',
+        desc: 'Pemateri utama workshop teknologi pembuatan video edukasi dan editing multimedia untuk akademisi.',
+        color: '#BE123C'
+      },
+      {
+        id: 'cert_22',
+        title: 'Piagam Narasumber: Workshop Digital Marketing & Komunikasi Visual',
+        org: 'Prodi Bimbingan dan Konseling (BK) FKIP UNIMMA · Aug 2025',
+        category: 'Professional Speaker (Narasumber)',
+        level: 'Nasional',
+        img: 'assets/certificates/20260916093833-2026-09-16prestasi_akd093816.jpeg',
+        desc: 'Pemateri kehormatan strategi branding media sosial, content visual design, dan personal branding.',
+        color: '#047857'
       }
     ];
 
@@ -1091,16 +1658,34 @@
     let currentCerts = [];
     let currentRoutes = [];
     let activeAdminAccountId = 'haltea';
+    let activeVideoAccountId = 'haltea';
 
-    /* Init on page load */
-    window.addEventListener('DOMContentLoaded', () => {
+    // Filters state
+    let activeAdminCertCat = 'all';
+    let adminCertSearchQuery = '';
+
+    // Temp media data for forms
+    let tempFeedImageData = '';
+    let tempVideoThumbnailData = '';
+    let tempCertImageData = '';
+
+    // World Map Picker State
+    let pickerLat = -7.2575;
+    let pickerLng = 112.7521;
+    let pickerCity = 'Surabaya';
+    let pickerCanvas = null;
+    let pickerCtx = null;
+    let pickerAnimationId = null;
+
+    /* Lifecycle & Auth */
+    window.addEventListener('DOMContentLoaded', function() {
       checkLoginSession();
       loadAllDatasets();
     });
 
     function checkLoginSession() {
-      const isAuth = sessionStorage.getItem('fathur_admin_logged_in') === 'true';
-      if (isAuth) {
+      const isLogged = sessionStorage.getItem('fathur_admin_logged_in');
+      if (isLogged === 'true') {
         showDashboard();
       } else {
         document.getElementById('adminLoginScreen').classList.remove('hidden');
@@ -1109,10 +1694,10 @@
     }
 
     function handleLoginSubmit() {
-      const u = document.getElementById('loginUsername').value.trim();
-      const p = document.getElementById('loginPassword').value.trim();
-      if ((u === 'admin' && p === 'admin123') || (u === '' && p === '')) {
+      const pass = document.getElementById('adminPasswordInput').value;
+      if (pass === 'admin123' || pass === 'fathur2025' || pass === 'fathuradmin') {
         sessionStorage.setItem('fathur_admin_logged_in', 'true');
+        document.getElementById('loginErrorMessage').classList.add('hidden');
         showDashboard();
       } else {
         document.getElementById('loginErrorMessage').classList.remove('hidden');
@@ -1138,19 +1723,28 @@
         currentProjects = storedProj ? JSON.parse(storedProj) : JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
       } catch (e) { currentProjects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS)); }
 
-      // 2. Medsos
+      // 2. Medsos & Video Multi-Account
       try {
         const storedMedsos = localStorage.getItem('fathur_portfolio_cms_data_multi');
         currentMedsosData = storedMedsos ? JSON.parse(storedMedsos) : { activeAccountId: 'haltea', accounts: JSON.parse(JSON.stringify(DEFAULT_MEDSOS_ACCOUNTS)) };
       } catch (e) {
         currentMedsosData = { activeAccountId: 'haltea', accounts: JSON.parse(JSON.stringify(DEFAULT_MEDSOS_ACCOUNTS)) };
       }
+      if (!currentMedsosData.accounts || currentMedsosData.accounts.length === 0) {
+        currentMedsosData = { activeAccountId: 'haltea', accounts: JSON.parse(JSON.stringify(DEFAULT_MEDSOS_ACCOUNTS)) };
+      }
+      activeAdminAccountId = currentMedsosData.activeAccountId || 'haltea';
+      activeVideoAccountId = activeAdminAccountId;
 
-      // 3. Certs
+      // 3. Certificates (Complete 22 Items Catalog)
       try {
         const storedCerts = localStorage.getItem('fathur_portfolio_certificates');
-        currentCerts = storedCerts ? JSON.parse(storedCerts) : [];
-      } catch (e) { currentCerts = []; }
+        currentCerts = storedCerts ? JSON.parse(storedCerts) : JSON.parse(JSON.stringify(DEFAULT_CERTIFICATES));
+      } catch (e) { currentCerts = JSON.parse(JSON.stringify(DEFAULT_CERTIFICATES)); }
+      if (!currentCerts || currentCerts.length === 0) {
+        currentCerts = JSON.parse(JSON.stringify(DEFAULT_CERTIFICATES));
+        localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
+      }
 
       // 4. Routes
       try {
@@ -1169,58 +1763,1138 @@
       renderOverviewStats();
       renderProjectsCards();
       renderMedsosAccountsDropdown();
-      renderActiveCanvaSlots();
+      renderActiveFeedsGrid();
+      renderVideoAccountsDropdown();
+      renderVideosCards();
       renderPapanJejakView();
       renderCertsCards();
       renderRoutesTable();
     }
 
-    /* Tab Switching (Direct Names, No Numbers) */
     function switchAdminTab(tabKey) {
-      document.querySelectorAll('.admin-tab-pane').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.admin-nav-item').forEach(btn => {
+      document.querySelectorAll('.admin-nav-item').forEach(function(btn) {
         btn.classList.remove('bg-slate-900', 'text-white', 'shadow-xs');
-        btn.classList.add('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
-        const icon = btn.querySelector('svg');
-        if (icon) {
-          icon.classList.remove('text-slate-300');
-          icon.classList.add('text-slate-400');
-        }
+        btn.classList.add('text-slate-600', 'hover:bg-slate-100');
       });
+      const activeBtn = document.getElementById('navBtn-' + tabKey);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+        activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-xs');
+      }
 
+      document.querySelectorAll('.admin-tab-pane').forEach(function(pane) {
+        pane.classList.add('hidden');
+      });
       const pane = document.getElementById('tabContent-' + tabKey);
       if (pane) pane.classList.remove('hidden');
 
-      const activeBtn = document.getElementById('navBtn-' + tabKey);
-      if (activeBtn) {
-        activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100');
-        activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-xs');
-        const icon = activeBtn.querySelector('svg');
-        if (icon) {
-          icon.classList.remove('text-slate-400');
-          icon.classList.add('text-slate-300');
+      if (tabKey === 'medsos') {
+        renderMedsosAccountsDropdown();
+        renderActiveFeedsGrid();
+      } else if (tabKey === 'video') {
+        renderVideoAccountsDropdown();
+        renderVideosCards();
+      } else if (tabKey === 'prestasi') {
+        renderCertsCards();
+      }
+    }
+
+    /* Stats Counter */
+    function renderOverviewStats() {
+      const elProj = document.getElementById('statTotalProjects');
+      if (elProj) elProj.textContent = currentProjects.length;
+
+      const elBadgeProj = document.getElementById('navBadgeProjects');
+      if (elBadgeProj) elBadgeProj.textContent = currentProjects.length;
+
+      const elCerts = document.getElementById('statTotalCerts');
+      if (elCerts) elCerts.textContent = currentCerts.length;
+
+      const elBadgeCerts = document.getElementById('navBadgeCerts');
+      if (elBadgeCerts) elBadgeCerts.textContent = currentCerts.length;
+
+      const elTotalCertBadge = document.getElementById('certTotalCountBadge');
+      if (elTotalCertBadge) elTotalCertBadge.textContent = currentCerts.length + ' Sertifikat';
+
+      const elRoutes = document.getElementById('statTotalRoutes');
+      if (elRoutes) elRoutes.textContent = currentRoutes.length;
+
+      const elBadgeRoutes = document.getElementById('navBadgeRoutes');
+      if (elBadgeRoutes) elBadgeRoutes.textContent = currentRoutes.length + ' Rute';
+
+      let totalVideosCount = 0;
+      (currentMedsosData.accounts || []).forEach(function(a) {
+        totalVideosCount += (a.videos || []).length;
+      });
+      const elVids = document.getElementById('statTotalVideos');
+      if (elVids) elVids.textContent = totalVideosCount;
+    }
+
+    /* ============================================================== */
+    /* 1. MEDSOS ACCOUNTS & FEEDS CRUD                                */
+    /* ============================================================== */
+    function renderMedsosAccountsDropdown() {
+      const sel = document.getElementById('selectMedsosAccountDropdown');
+      if (!sel) return;
+      sel.innerHTML = (currentMedsosData.accounts || []).map(function(a) {
+        return '<option value="' + a.id + '" ' + (a.id === activeAdminAccountId ? 'selected' : '') + '>' + a.name + ' (@' + a.handle + ')</option>';
+      }).join('');
+      updateActiveAccountDisplay();
+    }
+
+    function changeActiveAdminAccount(accId) {
+      activeAdminAccountId = accId;
+      currentMedsosData.activeAccountId = accId;
+      persistMedsosData();
+      updateActiveAccountDisplay();
+      renderActiveFeedsGrid();
+    }
+
+    function updateActiveAccountDisplay() {
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+      document.getElementById('activeAccountNameHeader').textContent = acc.name + ' (@' + acc.handle + ')';
+      document.getElementById('activeAccTitleInp').value = acc.sectionTitle || (acc.name + ' — Portofolio');
+      document.getElementById('activeAccHandleInp').value = acc.handle || '';
+    }
+
+    function getActiveAdminAccount() {
+      return (currentMedsosData.accounts || []).find(function(a) { return a.id === activeAdminAccountId; }) || currentMedsosData.accounts[0];
+    }
+
+    function renderActiveFeedsGrid() {
+      const container = document.getElementById('medsosFeedsGrid');
+      const badge = document.getElementById('medsosFeedsCountBadge');
+      const acc = getActiveAdminAccount();
+      if (!container || !acc) return;
+
+      const designs = acc.designs || [];
+      if (badge) badge.textContent = designs.length + ' Feed';
+
+      if (designs.length === 0) {
+        container.innerHTML = '<div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-slate-500 text-xs">' +
+          'Belum ada postingan feed pada akun @' + acc.handle + '. Klik tombol "+ Tambah Postingan Feed Desain" di atas untuk menambahkan materi visual baru.</div>';
+        return;
+      }
+
+      container.innerHTML = designs.map(function(d, i) {
+        const bg = d.bg || '#1D4ED8';
+        const imgDisplay = d.img
+          ? '<img src="' + d.img + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + d.title + '" />'
+          : '<div class="w-full h-full flex flex-col items-center justify-center p-3 text-center text-white font-bold text-xs" style="background-color: ' + bg + ';">' +
+              '<span class="text-[10px] font-mono opacity-80 uppercase">Desain #' + (i+1) + '</span>' +
+              '<span class="line-clamp-2 mt-1">' + d.title + '</span>' +
+            '</div>';
+
+        return '<div class="group rounded-2xl border border-slate-200 bg-white p-3 hover:border-slate-400 hover:shadow-sm transition flex flex-col justify-between space-y-2.5">' +
+          '<div>' +
+            '<div class="aspect-square rounded-xl bg-slate-100 overflow-hidden relative shadow-inner">' +
+              imgDisplay +
+              '<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-sm text-white font-mono text-[9px] font-bold">#' + (i+1) + '</span>' +
+            '</div>' +
+            '<div class="pt-2">' +
+              '<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider block truncate">' + (d.subtitle || 'Feed Instagram') + '</span>' +
+              '<h5 class="text-xs font-bold text-slate-900 line-clamp-1 mt-0.5" title="' + d.title + '">' + d.title + '</h5>' +
+            '</div>' +
+          '</div>' +
+          '<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs font-semibold">' +
+            '<button type="button" onclick="editFeedItem(' + i + ')" class="text-[#155293] hover:underline cursor-pointer">✏ Edit</button>' +
+            '<button type="button" onclick="deleteFeedItem(' + i + ')" class="text-rose-600 hover:underline cursor-pointer">🗑 Hapus</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function toggleFeedForm(show) {
+      const box = document.getElementById('feedFormBox');
+      if (!box) return;
+      if (show) {
+        box.classList.remove('hidden');
+        document.getElementById('editFeedIndex').value = '';
+        document.getElementById('feedFormTitle').textContent = 'Tambah Postingan Feed Desain';
+        document.getElementById('inpFeedTitle').value = '';
+        document.getElementById('inpFeedSubtitle').value = '';
+        document.getElementById('inpFeedUrl').value = '';
+        document.getElementById('inpFeedFile').value = '';
+        document.getElementById('inpFeedBgColor').value = '#1D4ED8';
+        tempFeedImageData = '';
+        updateFeedPreview();
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    function editFeedItem(idx) {
+      const acc = getActiveAdminAccount();
+      if (!acc || !acc.designs || !acc.designs[idx]) return;
+      const d = acc.designs[idx];
+
+      const box = document.getElementById('feedFormBox');
+      box.classList.remove('hidden');
+      document.getElementById('editFeedIndex').value = idx;
+      document.getElementById('feedFormTitle').textContent = 'Edit Postingan Feed #' + (idx + 1) + ': ' + d.title;
+      document.getElementById('inpFeedTitle').value = d.title || '';
+      document.getElementById('inpFeedSubtitle').value = d.subtitle || '';
+      document.getElementById('inpFeedUrl').value = d.img && !d.img.startsWith('data:') ? d.img : '';
+      document.getElementById('inpFeedBgColor').value = d.bg || '#1D4ED8';
+      tempFeedImageData = d.img || '';
+
+      updateFeedPreview();
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function previewFeedImageFile(input) {
+      if (input && input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempFeedImageData = e.target.result;
+          document.getElementById('inpFeedUrl').value = '';
+          updateFeedPreview();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function previewFeedImageUrl(url) {
+      tempFeedImageData = url.trim();
+      updateFeedPreview();
+    }
+
+    function updateFeedPreview() {
+      const title = document.getElementById('inpFeedTitle').value.trim() || 'Judul Postingan Desain';
+      const sub = document.getElementById('inpFeedSubtitle').value.trim() || 'Kategori / Subjudul';
+      const imgEl = document.getElementById('feedPreviewImg');
+      const fallback = document.getElementById('feedPreviewFallback');
+
+      document.getElementById('feedPreviewTitle').textContent = title;
+      document.getElementById('feedPreviewSubtitle').textContent = sub;
+
+      if (tempFeedImageData) {
+        imgEl.src = tempFeedImageData;
+        imgEl.classList.remove('hidden');
+        fallback.classList.add('hidden');
+      } else {
+        imgEl.classList.add('hidden');
+        fallback.classList.remove('hidden');
+      }
+    }
+
+    function saveFeedRecord() {
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+      if (!acc.designs) acc.designs = [];
+
+      const title = document.getElementById('inpFeedTitle').value.trim();
+      const subtitle = document.getElementById('inpFeedSubtitle').value.trim() || 'Desain Grafis';
+      const bg = document.getElementById('inpFeedBgColor').value || '#1D4ED8';
+      const img = tempFeedImageData || document.getElementById('inpFeedUrl').value.trim();
+
+      if (!title) {
+        alert('Judul postingan desain wajib diisi!');
+        return;
+      }
+
+      const idxStr = document.getElementById('editFeedIndex').value;
+      if (idxStr !== '') {
+        const idx = parseInt(idxStr, 10);
+        acc.designs[idx].title = title;
+        acc.designs[idx].subtitle = subtitle;
+        acc.designs[idx].bg = bg;
+        acc.designs[idx].img = img;
+        notifyDataSaved('Postingan feed desain #' + (idx + 1) + ' berhasil diperbarui!');
+      } else {
+        const newFeed = {
+          id: 'feed_' + Date.now(),
+          title: title,
+          subtitle: subtitle,
+          bg: bg,
+          img: img
+        };
+        acc.designs.push(newFeed);
+        notifyDataSaved('Postingan feed baru berhasil ditambahkan!');
+      }
+
+      persistMedsosData();
+      renderActiveFeedsGrid();
+      toggleFeedForm(false);
+    }
+
+    function deleteFeedItem(idx) {
+      const acc = getActiveAdminAccount();
+      if (!acc || !acc.designs || !acc.designs[idx]) return;
+      if (!confirm('Apakah Anda yakin ingin menghapus postingan feed "' + acc.designs[idx].title + '"?')) return;
+
+      acc.designs.splice(idx, 1);
+      persistMedsosData();
+      renderActiveFeedsGrid();
+      notifyDataSaved('Postingan feed berhasil dihapus.');
+    }
+
+    function saveActiveAccountHeader() {
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+      acc.sectionTitle = document.getElementById('activeAccTitleInp').value.trim();
+      acc.handle = document.getElementById('activeAccHandleInp').value.trim().replace(/^@/, '');
+      persistMedsosData();
+      renderMedsosAccountsDropdown();
+      renderVideoAccountsDropdown();
+      notifyDataSaved('Informasi akun media sosial berhasil disimpan!');
+    }
+
+    function toggleNewAccountBox(show) {
+      const box = document.getElementById('newAccountFormBox');
+      if (box) {
+        if (show) box.classList.remove('hidden');
+        else box.classList.add('hidden');
+      }
+    }
+
+    function saveNewAccountRecord() {
+      const name = document.getElementById('newAccNameInp').value.trim();
+      const handle = document.getElementById('newAccHandleInp').value.trim().replace(/^@/, '');
+      const role = document.getElementById('newAccRoleInp').value.trim();
+
+      if (!name || !handle) { alert('Nama dan handle akun wajib diisi!'); return; }
+      const id = handle.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+      const newAcc = {
+        id: id,
+        name: name,
+        handle: handle,
+        role: role || 'Media Sosial',
+        badgeColor: '#155293',
+        sectionTitle: name + ' — Portofolio',
+        designs: [],
+        videos: []
+      };
+
+      currentMedsosData.accounts.push(newAcc);
+      activeAdminAccountId = id;
+      activeVideoAccountId = id;
+      currentMedsosData.activeAccountId = id;
+      persistMedsosData();
+      toggleNewAccountBox(false);
+      renderMedsosAccountsDropdown();
+      renderVideoAccountsDropdown();
+      renderActiveFeedsGrid();
+      renderVideosCards();
+      renderOverviewStats();
+      notifyDataSaved('Akun medsos baru @"' + handle + '" berhasil dibuat!');
+    }
+
+    function persistMedsosData() {
+      localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
+    }
+
+    /* ============================================================== */
+    /* 2. VIDEO & REELS CRUD WITH TIMELINE FRAME CAPTURE STUDIO       */
+    /* ============================================================== */
+    function renderVideoAccountsDropdown() {
+      const sel = document.getElementById('selectVideoAccountDropdown');
+      if (!sel) return;
+      sel.innerHTML = (currentMedsosData.accounts || []).map(function(a) {
+        return '<option value="' + a.id + '" ' + (a.id === activeVideoAccountId ? 'selected' : '') + '>' + a.name + ' (@' + a.handle + ')</option>';
+      }).join('');
+      updateActiveVideoAccountDisplay();
+    }
+
+    function changeVideoActiveAccount(accId) {
+      activeVideoAccountId = accId;
+      updateActiveVideoAccountDisplay();
+      renderVideosCards();
+    }
+
+    function updateActiveVideoAccountDisplay() {
+      const acc = getActiveVideoAccount();
+      if (!acc) return;
+      const vids = acc.videos || [];
+      document.getElementById('activeVideoAccountHeader').textContent = acc.name + ' (@' + acc.handle + ')';
+      const badge = document.getElementById('videoAccountBadge');
+      if (badge) badge.textContent = vids.length + ' Video';
+    }
+
+    function getActiveVideoAccount() {
+      return (currentMedsosData.accounts || []).find(function(a) { return a.id === activeVideoAccountId; }) || currentMedsosData.accounts[0];
+    }
+
+    function renderVideosCards() {
+      const container = document.getElementById('videoCardsGrid');
+      const acc = getActiveVideoAccount();
+      if (!container || !acc) return;
+
+      const videos = acc.videos || [];
+      updateActiveVideoAccountDisplay();
+
+      if (videos.length === 0) {
+        container.innerHTML = '<div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-slate-500 text-xs">' +
+          'Belum ada video pada akun @' + acc.handle + '. Klik tombol "+ Tambah Video Baru" di atas untuk menambahkan reels (9:16) atau lanskap (16:9).</div>';
+        return;
+      }
+
+      container.innerHTML = videos.map(function(v, idx) {
+        const isReel = (v.ratio === '9/16' || v.ratio === '9:16');
+        const ratioBadge = isReel
+          ? '<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono text-[10px] font-bold">9:16 Reels</span>'
+          : '<span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-mono text-[10px] font-bold">16:9 Lanskap</span>';
+
+        const thumbDisplay = v.thumbnail
+          ? '<img src="' + v.thumbnail + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + v.title + '" />'
+          : '<div class="w-full h-full bg-slate-900 flex flex-col items-center justify-center p-3 text-center text-white">' +
+              '<div class="w-10 h-10 rounded-full bg-sky-500/80 flex items-center justify-center mb-1"><span class="ml-0.5">▶</span></div>' +
+              '<span class="text-[10px] font-mono text-slate-400">Pratinjau Default</span>' +
+            '</div>';
+
+        return '<div class="group rounded-2xl border border-slate-200 bg-white p-3.5 hover:border-slate-400 hover:shadow-sm transition flex flex-col justify-between space-y-3">' +
+          '<div>' +
+            '<div class="' + (isReel ? 'aspect-[9/16] max-h-64' : 'aspect-[16/9]') + ' rounded-xl overflow-hidden relative shadow-inner bg-slate-900">' +
+              thumbDisplay +
+              '<span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-sm text-white font-mono text-[9px] font-bold">#' + (idx + 1) + '</span>' +
+              '<span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-[#155293]/90 backdrop-blur-sm text-white font-mono text-[9px] font-bold">⏱ ' + (v.duration || '0:45') + '</span>' +
+            '</div>' +
+            '<div class="pt-2.5">' +
+              '<div class="flex items-center justify-between gap-1 mb-1">' + ratioBadge + '</div>' +
+              '<h5 class="text-xs font-bold text-slate-900 line-clamp-2" title="' + v.title + '">' + v.title + '</h5>' +
+              '<p class="text-[11px] font-mono text-slate-400 mt-1 truncate">' + (v.videoUrl || 'Video Lokal') + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="flex items-center justify-between pt-2.5 border-t border-slate-100 text-xs font-semibold">' +
+            '<button type="button" onclick="editVideoRecord(' + idx + ')" class="text-[#155293] hover:underline cursor-pointer">✏ Edit Video</button>' +
+            '<button type="button" onclick="deleteVideoRecord(' + idx + ')" class="text-rose-600 hover:underline cursor-pointer">🗑 Hapus</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function toggleVideoForm(show) {
+      const box = document.getElementById('videoFormBox');
+      if (!box) return;
+      if (show) {
+        box.classList.remove('hidden');
+        document.getElementById('editVideoIndex').value = '';
+        document.getElementById('videoFormTitle').textContent = 'Tambah Video Baru';
+        document.getElementById('inpVideoTitle').value = '';
+        document.getElementById('inpVideoRatio').value = '9/16';
+        document.getElementById('inpVideoDuration').value = '0:45';
+        document.getElementById('inpVideoUrl').value = '';
+        document.getElementById('inpVideoFile').value = '';
+        document.getElementById('inpVideoThumbFile').value = '';
+        document.getElementById('inpVideoThumbUrl').value = '';
+        tempVideoThumbnailData = '';
+        updateVideoThumbnailPreview();
+        initCaptureVideoPlayer('');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        box.classList.add('hidden');
+        const player = document.getElementById('videoCapturePlayer');
+        if (player) { player.pause(); player.src = ''; }
+      }
+    }
+
+    function editVideoRecord(idx) {
+      const acc = getActiveVideoAccount();
+      if (!acc || !acc.videos || !acc.videos[idx]) return;
+      const v = acc.videos[idx];
+
+      const box = document.getElementById('videoFormBox');
+      box.classList.remove('hidden');
+      document.getElementById('editVideoIndex').value = idx;
+      document.getElementById('videoFormTitle').textContent = 'Edit Video #' + (idx + 1) + ': ' + v.title;
+      document.getElementById('inpVideoTitle').value = v.title || '';
+      document.getElementById('inpVideoRatio').value = (v.ratio === '16/9' || v.ratio === '16:9') ? '16/9' : '9/16';
+      document.getElementById('inpVideoDuration').value = v.duration || '0:45';
+      document.getElementById('inpVideoUrl').value = v.videoUrl || '';
+      document.getElementById('inpVideoThumbUrl').value = v.thumbnail && !v.thumbnail.startsWith('data:') ? v.thumbnail : '';
+      tempVideoThumbnailData = v.thumbnail || '';
+
+      updateVideoThumbnailPreview();
+      updateVideoRatioPreview();
+      initCaptureVideoPlayer(v.videoUrl || '');
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function updateVideoRatioPreview() {
+      const ratio = document.getElementById('inpVideoRatio').value;
+      const previewContainer = document.getElementById('videoThumbPreviewContainer');
+      if (previewContainer) {
+        if (ratio === '9/16') {
+          previewContainer.className = 'w-full aspect-[9/16] max-w-[140px] mx-auto rounded-xl bg-slate-900 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-xs';
+        } else {
+          previewContainer.className = 'w-full aspect-[16/9] max-w-[200px] mx-auto rounded-xl bg-slate-900 border border-slate-300 relative overflow-hidden flex items-center justify-center shadow-xs';
         }
       }
     }
 
-    /* Stats & Overview */
-    function renderOverviewStats() {
-      const projCount = currentProjects.length;
-      const accCount = (currentMedsosData.accounts || []).length;
-      const certCount = currentCerts.length || 22;
-      const routeCount = currentRoutes.length;
+    /* Video Frame Scrubber & Capture */
+    function initCaptureVideoPlayer(src) {
+      const player = document.getElementById('videoCapturePlayer');
+      const notice = document.getElementById('videoNoSourceNotice');
+      const range = document.getElementById('videoScrubRange');
+      if (!player) return;
 
-      document.getElementById('metricStatProjects').textContent = projCount;
-      document.getElementById('metricStatAccounts').textContent = accCount;
-      document.getElementById('metricStatCerts').textContent = certCount;
-      document.getElementById('metricStatRoutes').textContent = routeCount;
+      if (!src) {
+        player.classList.add('hidden');
+        if (notice) notice.classList.remove('hidden');
+        return;
+      }
 
-      document.getElementById('navBadgeProjects').textContent = projCount;
-      document.getElementById('navBadgeCerts').textContent = certCount;
-      document.getElementById('navBadgeRoutes').textContent = routeCount + ' Rute';
+      player.crossOrigin = 'anonymous';
+      player.src = src;
+      player.classList.remove('hidden');
+      if (notice) notice.classList.add('hidden');
+
+      player.onloadedmetadata = function() {
+        if (range) {
+          range.max = player.duration || 100;
+          range.value = 0;
+        }
+        document.getElementById('videoDurationLabel').textContent = formatSeconds(player.duration);
+        document.getElementById('videoCurrentTimeDisplay').textContent = '00:00 / ' + formatSeconds(player.duration);
+      };
+
+      player.ontimeupdate = function() {
+        if (range && !range.matches(':active')) {
+          range.value = player.currentTime;
+        }
+        document.getElementById('videoCurrentTimeDisplay').textContent = formatSeconds(player.currentTime) + ' / ' + formatSeconds(player.duration);
+      };
     }
 
-    /* Papan Jejak Logic (Wide 3 Columns) */
+    function handleVideoFileSelect(input) {
+      if (input && input.files && input.files[0]) {
+        const file = input.files[0];
+        const blobUrl = URL.createObjectURL(file);
+        document.getElementById('inpVideoUrl').value = file.name;
+        initCaptureVideoPlayer(blobUrl);
+      }
+    }
+
+    function handleVideoUrlChange(url) {
+      if (url.trim()) {
+        initCaptureVideoPlayer(url.trim());
+      }
+    }
+
+    function onVideoScrub(val) {
+      const player = document.getElementById('videoCapturePlayer');
+      if (player && player.duration) {
+        player.currentTime = parseFloat(val);
+        document.getElementById('videoCurrentTimeDisplay').textContent = formatSeconds(player.currentTime) + ' / ' + formatSeconds(player.duration);
+      }
+    }
+
+    function togglePlayCaptureVideo() {
+      const player = document.getElementById('videoCapturePlayer');
+      const btn = document.getElementById('btnPlayCaptureVideo');
+      if (!player || !player.src) return;
+      if (player.paused) {
+        player.play();
+        if (btn) btn.textContent = '⏸ Jeda Video';
+      } else {
+        player.pause();
+        if (btn) btn.textContent = '▶ Putar Video';
+      }
+    }
+
+    function captureFrameFromVideo() {
+      const player = document.getElementById('videoCapturePlayer');
+      if (!player || !player.videoWidth || player.videoWidth === 0) {
+        alert('Harap muat video terlebih dahulu (masukkan URL atau file video) agar frame dapat diambil.');
+        return;
+      }
+
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = player.videoWidth;
+        canvas.height = player.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(player, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+        tempVideoThumbnailData = dataUrl;
+        updateVideoThumbnailPreview();
+        notifyDataSaved('Frame pada detik ' + player.currentTime.toFixed(1) + 's berhasil diambil sebagai sampul video!');
+      } catch (err) {
+        console.warn('CORS restrict on canvas snapshot:', err);
+        alert('Pengambilan frame langsung memerlukan berkas video lokal / uploaded file.');
+      }
+    }
+
+    function handleThumbnailFileSelect(input) {
+      if (input && input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempVideoThumbnailData = e.target.result;
+          document.getElementById('inpVideoThumbUrl').value = '';
+          updateVideoThumbnailPreview();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function handleThumbnailUrlInput(url) {
+      tempVideoThumbnailData = url.trim();
+      updateVideoThumbnailPreview();
+    }
+
+    function clearVideoThumbnail() {
+      tempVideoThumbnailData = '';
+      document.getElementById('inpVideoThumbUrl').value = '';
+      document.getElementById('inpVideoThumbFile').value = '';
+      updateVideoThumbnailPreview();
+    }
+
+    function updateVideoThumbnailPreview() {
+      const img = document.getElementById('videoThumbPreviewImg');
+      const fallback = document.getElementById('videoThumbFallbackText');
+      const playIcon = document.getElementById('videoThumbPlayIcon');
+
+      if (tempVideoThumbnailData) {
+        img.src = tempVideoThumbnailData;
+        img.classList.remove('hidden');
+        fallback.classList.add('hidden');
+        playIcon.classList.remove('hidden');
+      } else {
+        img.classList.add('hidden');
+        fallback.classList.remove('hidden');
+        playIcon.classList.add('hidden');
+      }
+    }
+
+    function formatSeconds(sec) {
+      if (!sec || isNaN(sec)) return '00:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function saveVideoRecord() {
+      const acc = getActiveVideoAccount();
+      if (!acc) return;
+      if (!acc.videos) acc.videos = [];
+
+      const title = document.getElementById('inpVideoTitle').value.trim();
+      const ratio = document.getElementById('inpVideoRatio').value;
+      const duration = document.getElementById('inpVideoDuration').value.trim() || '0:45';
+      const videoUrl = document.getElementById('inpVideoUrl').value.trim();
+      const thumbnail = tempVideoThumbnailData || document.getElementById('inpVideoThumbUrl').value.trim();
+
+      if (!title) {
+        alert('Judul video wajib diisi!');
+        return;
+      }
+
+      const idxStr = document.getElementById('editVideoIndex').value;
+      if (idxStr !== '') {
+        const idx = parseInt(idxStr, 10);
+        acc.videos[idx].title = title;
+        acc.videos[idx].ratio = ratio;
+        acc.videos[idx].duration = duration;
+        acc.videos[idx].videoUrl = videoUrl;
+        acc.videos[idx].thumbnail = thumbnail;
+        notifyDataSaved('Video #' + (idx + 1) + ' berhasil diperbarui!');
+      } else {
+        const newVid = {
+          id: 'v_' + Date.now(),
+          title: title,
+          ratio: ratio,
+          duration: duration,
+          videoUrl: videoUrl,
+          thumbnail: thumbnail
+        };
+        acc.videos.push(newVid);
+        notifyDataSaved('Video baru berhasil ditambahkan ke akun @' + acc.handle + '!');
+      }
+
+      persistMedsosData();
+      renderVideosCards();
+      renderOverviewStats();
+      toggleVideoForm(false);
+    }
+
+    function deleteVideoRecord(idx) {
+      const acc = getActiveVideoAccount();
+      if (!acc || !acc.videos || !acc.videos[idx]) return;
+      if (!confirm('Apakah Anda yakin ingin menghapus video "' + acc.videos[idx].title + '"?')) return;
+
+      acc.videos.splice(idx, 1);
+      persistMedsosData();
+      renderVideosCards();
+      renderOverviewStats();
+      notifyDataSaved('Video berhasil dihapus.');
+    }
+
+    /* ============================================================== */
+    /* 3. 22 CERTIFICATES CRUD & ADVANCED FILTER                      */
+    /* ============================================================== */
+    function renderCertsCards() {
+      const container = document.getElementById('certsCardsContainer');
+      if (!container) return;
+
+      let list = currentCerts;
+
+      // Filter by Category
+      if (activeAdminCertCat !== 'all') {
+        list = list.filter(function(c) {
+          return (c.category || '').toLowerCase() === activeAdminCertCat.toLowerCase();
+        });
+      }
+
+      // Filter by Search Query
+      if (adminCertSearchQuery) {
+        list = list.filter(function(c) {
+          const t = (c.title || '').toLowerCase();
+          const o = (c.org || '').toLowerCase();
+          const cat = (c.category || '').toLowerCase();
+          return t.includes(adminCertSearchQuery) || o.includes(adminCertSearchQuery) || cat.includes(adminCertSearchQuery);
+        });
+      }
+
+      // Update count badge
+      const totalBadge = document.getElementById('certTotalCountBadge');
+      if (totalBadge) totalBadge.textContent = currentCerts.length + ' Sertifikat';
+      const allFilterCount = document.getElementById('filterCountAll');
+      if (allFilterCount) allFilterCount.textContent = currentCerts.length;
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-slate-500 text-xs">' +
+          'Tidak ditemukan sertifikat yang cocok dengan pencarian / filter ini.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(function(c, i) {
+        const isInter = (c.level || '').toLowerCase() === 'internasional';
+        const levelBadge = isInter
+          ? '<span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-mono font-bold">Internasional</span>'
+          : '<span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold">Nasional</span>';
+
+        const imgDisplay = c.img
+          ? '<img src="' + c.img + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + c.title + '" />'
+          : '<div class="w-full h-full flex flex-col items-center justify-center p-3 text-center text-slate-400 text-xs font-mono bg-slate-100">Pratinjau Berkas</div>';
+
+        return '<div class="group rounded-2xl border border-slate-200 bg-white p-3.5 hover:border-slate-400 hover:shadow-sm transition flex flex-col justify-between space-y-3">' +
+          '<div>' +
+            '<div class="aspect-[16/10] rounded-xl bg-slate-100 overflow-hidden relative shadow-inner">' +
+              imgDisplay +
+              '<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-sm text-white font-mono text-[9px] font-bold">#' + (i+1) + '</span>' +
+              '<div class="absolute top-2 right-2">' + levelBadge + '</div>' +
+            '</div>' +
+            '<div class="pt-2.5">' +
+              '<span class="text-[10px] font-mono uppercase text-slate-400 font-bold block truncate">' + (c.category || 'Prestasi & Lisensi') + '</span>' +
+              '<h5 class="text-xs font-bold text-slate-900 line-clamp-2 mt-0.5 group-hover:text-[#155293] transition" title="' + c.title + '">' + c.title + '</h5>' +
+              '<p class="text-[11px] font-mono text-slate-500 mt-1 truncate">' + (c.org || '-') + '</p>' +
+              (c.desc ? '<p class="text-[11px] text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">' + c.desc + '</p>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="flex items-center justify-between pt-2.5 border-t border-slate-100 text-xs font-semibold">' +
+            '<button type="button" onclick="editCertRecord(\'' + c.id + '\')" class="text-[#155293] hover:underline cursor-pointer">✏ Edit</button>' +
+            '<button type="button" onclick="deleteCertRecord(\'' + c.id + '\')" class="text-rose-600 hover:underline cursor-pointer">🗑 Hapus</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function filterAdminCertCategory(cat) {
+      activeAdminCertCat = cat;
+      document.querySelectorAll('.admin-cert-filter-btn').forEach(function(btn) {
+        if (btn.dataset.cat === cat) {
+          btn.className = 'admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-white transition shadow-xs';
+        } else {
+          btn.className = 'admin-cert-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition';
+        }
+      });
+      renderCertsCards();
+    }
+
+    function onCertSearchInput(val) {
+      adminCertSearchQuery = val.trim().toLowerCase();
+      renderCertsCards();
+    }
+
+    function toggleCertForm(show) {
+      const box = document.getElementById('certFormBox');
+      if (!box) return;
+      if (show) {
+        box.classList.remove('hidden');
+        document.getElementById('certEditId').value = '';
+        document.getElementById('certFormTitle').textContent = 'Tambah Sertifikat Baru';
+        document.getElementById('inpCertTitle').value = '';
+        document.getElementById('inpCertOrg').value = '';
+        document.getElementById('inpCertCategory').value = 'Kejuaraan & Kompetisi';
+        document.getElementById('inpCertLevel').value = 'Nasional';
+        document.getElementById('inpCertDesc').value = '';
+        document.getElementById('inpCertColor').value = '#155293';
+        document.getElementById('inpCertFile').value = '';
+        document.getElementById('inpCertImgUrl').value = '';
+        tempCertImageData = '';
+        updateCertPreview();
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    function editCertRecord(id) {
+      const c = currentCerts.find(function(item) { return item.id === id; });
+      if (!c) return;
+
+      const box = document.getElementById('certFormBox');
+      box.classList.remove('hidden');
+      document.getElementById('certEditId').value = id;
+      document.getElementById('certFormTitle').textContent = 'Edit Sertifikat: ' + c.title;
+      document.getElementById('inpCertTitle').value = c.title || '';
+      document.getElementById('inpCertOrg').value = c.org || '';
+      document.getElementById('inpCertCategory').value = c.category || 'Kejuaraan & Kompetisi';
+      document.getElementById('inpCertLevel').value = c.level || 'Nasional';
+      document.getElementById('inpCertDesc').value = c.desc || '';
+      document.getElementById('inpCertColor').value = c.color || '#155293';
+      document.getElementById('inpCertImgUrl').value = c.img && !c.img.startsWith('data:') ? c.img : '';
+      tempCertImageData = c.img || '';
+
+      updateCertPreview();
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function handleCertFileSelect(input) {
+      if (input && input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempCertImageData = e.target.result;
+          document.getElementById('inpCertImgUrl').value = '';
+          updateCertPreview();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function handleCertUrlInput(url) {
+      tempCertImageData = url.trim();
+      updateCertPreview();
+    }
+
+    function updateCertPreview() {
+      const title = document.getElementById('inpCertTitle').value.trim() || 'Judul Sertifikat';
+      const org = document.getElementById('inpCertOrg').value.trim() || 'Lembaga Penerbit';
+      const imgEl = document.getElementById('certPreviewImg');
+      const fallback = document.getElementById('certPreviewFallback');
+
+      document.getElementById('certPreviewTitle').textContent = title;
+      document.getElementById('certPreviewOrg').textContent = org;
+
+      if (tempCertImageData) {
+        imgEl.src = tempCertImageData;
+        imgEl.classList.remove('hidden');
+        fallback.classList.add('hidden');
+      } else {
+        imgEl.classList.add('hidden');
+        fallback.classList.remove('hidden');
+      }
+    }
+
+    function saveCertRecord() {
+      const title = document.getElementById('inpCertTitle').value.trim();
+      const org = document.getElementById('inpCertOrg').value.trim();
+      const category = document.getElementById('inpCertCategory').value;
+      const level = document.getElementById('inpCertLevel').value;
+      const desc = document.getElementById('inpCertDesc').value.trim();
+      const color = document.getElementById('inpCertColor').value;
+      const img = tempCertImageData || document.getElementById('inpCertImgUrl').value.trim();
+
+      if (!title) {
+        alert('Judul sertifikat wajib diisi!');
+        return;
+      }
+
+      const editId = document.getElementById('certEditId').value;
+      if (editId) {
+        const idx = currentCerts.findIndex(function(c) { return c.id === editId; });
+        if (idx !== -1) {
+          currentCerts[idx] = {
+            id: editId,
+            title: title,
+            org: org,
+            category: category,
+            level: level,
+            desc: desc,
+            color: color,
+            img: img
+          };
+          notifyDataSaved('Sertifikat "' + title + '" berhasil diperbarui!');
+        }
+      } else {
+        const newCert = {
+          id: 'cert_' + Date.now(),
+          title: title,
+          org: org,
+          category: category,
+          level: level,
+          desc: desc,
+          color: color,
+          img: img
+        };
+        currentCerts.unshift(newCert);
+        notifyDataSaved('Sertifikat baru berhasil ditambahkan!');
+      }
+
+      localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
+      renderCertsCards();
+      renderOverviewStats();
+      toggleCertForm(false);
+    }
+
+    function deleteCertRecord(id) {
+      const idx = currentCerts.findIndex(function(c) { return c.id === id; });
+      if (idx === -1) return;
+      if (!confirm('Apakah Anda yakin ingin menghapus sertifikat "' + currentCerts[idx].title + '"?')) return;
+
+      currentCerts.splice(idx, 1);
+      localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
+      renderCertsCards();
+      renderOverviewStats();
+      notifyDataSaved('Sertifikat berhasil dihapus.');
+    }
+
+    /* ============================================================== */
+    /* 4. INTERACTIVE WORLD MAP POINT PICKER MODAL                    */
+    /* ============================================================== */
+    const WORLD_CITIES_REF = [
+      { name: 'Surabaya', lat: -7.2575, lng: 112.7521 },
+      { name: 'Jakarta', lat: -6.2088, lng: 106.8456 },
+      { name: 'Magelang HQ', lat: -7.4706, lng: 110.2178 },
+      { name: 'Bandung', lat: -6.9175, lng: 107.6191 },
+      { name: 'Semarang', lat: -6.9667, lng: 110.4167 },
+      { name: 'Yogyakarta', lat: -7.7956, lng: 110.3695 },
+      { name: 'Denpasar / Bali', lat: -8.6705, lng: 115.2126 },
+      { name: 'Medan', lat: 3.5952, lng: 98.6722 },
+      { name: 'Makassar', lat: -5.1477, lng: 119.4327 },
+      { name: 'Singapore', lat: 1.3521, lng: 103.8198 },
+      { name: 'Kuala Lumpur', lat: 3.1390, lng: 101.6869 },
+      { name: 'Bangkok', lat: 13.7563, lng: 100.5018 },
+      { name: 'Tokyo', lat: 35.6762, lng: 139.6503 },
+      { name: 'Seoul', lat: 37.5665, lng: 126.9780 },
+      { name: 'Beijing', lat: 39.9042, lng: 116.4074 },
+      { name: 'Sydney', lat: -33.8688, lng: 151.2093 },
+      { name: 'Melbourne', lat: -37.8136, lng: 144.9631 },
+      { name: 'New Delhi', lat: 28.6139, lng: 77.2090 },
+      { name: 'Dubai', lat: 25.2048, lng: 55.2708 },
+      { name: 'Riyadh', lat: 24.7136, lng: 46.6753 },
+      { name: 'Cairo', lat: 30.0444, lng: 31.2357 },
+      { name: 'London', lat: 51.5074, lng: -0.1278 },
+      { name: 'Paris', lat: 48.8566, lng: 2.3522 },
+      { name: 'Berlin', lat: 52.5200, lng: 13.4050 },
+      { name: 'Amsterdam', lat: 52.3676, lng: 4.9041 },
+      { name: 'New York', lat: 40.7128, lng: -74.0060 },
+      { name: 'Los Angeles', lat: 34.0522, lng: -118.2437 },
+      { name: 'San Francisco', lat: 37.7749, lng: -122.4194 },
+      { name: 'São Paulo', lat: -23.5505, lng: -46.6333 },
+      { name: 'Toronto', lat: 43.6532, lng: -79.3832 }
+    ];
+
+    function openMapPointPickerModal() {
+      const modal = document.getElementById('modalMapPicker');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+
+      // Preload current lat/lng from form if valid
+      const curLat = parseFloat(document.getElementById('inpRouteLat').value);
+      const curLng = parseFloat(document.getElementById('inpRouteLng').value);
+      const curCity = document.getElementById('inpRouteCity').value.trim();
+
+      if (!isNaN(curLat) && !isNaN(curLng)) {
+        pickerLat = curLat;
+        pickerLng = curLng;
+        pickerCity = curCity || findNearestCityName(pickerLat, pickerLng);
+      }
+
+      updatePickerReadout();
+      setTimeout(initMapPickerCanvas, 50);
+    }
+
+    function closeMapPickerModal() {
+      const modal = document.getElementById('modalMapPicker');
+      if (modal) modal.classList.add('hidden');
+      if (pickerAnimationId) cancelAnimationFrame(pickerAnimationId);
+    }
+
+    function setMapPickerPreset(lat, lng, city) {
+      pickerLat = lat;
+      pickerLng = lng;
+      pickerCity = city;
+      updatePickerReadout();
+      drawMapPicker();
+    }
+
+    function updatePickerReadout() {
+      document.getElementById('pickerReadoutLat').textContent = pickerLat.toFixed(4);
+      document.getElementById('pickerReadoutLng').textContent = pickerLng.toFixed(4);
+      document.getElementById('pickerReadoutCity').textContent = pickerCity;
+    }
+
+    function findNearestCityName(lat, lng) {
+      let closest = 'Titik Koordinat Bebas';
+      let minDist = Infinity;
+      WORLD_CITIES_REF.forEach(function(c) {
+        const dLat = c.lat - lat;
+        const dLng = c.lng - lng;
+        const dist = Math.sqrt(dLat * dLat + dLng * dLng);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = c.name;
+        }
+      });
+      return closest;
+    }
+
+    function initMapPickerCanvas() {
+      pickerCanvas = document.getElementById('pickerMapCanvas');
+      if (!pickerCanvas) return;
+      pickerCtx = pickerCanvas.getContext('2d');
+
+      const rect = pickerCanvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      pickerCanvas.width = rect.width * dpr;
+      pickerCanvas.height = rect.height * dpr;
+      pickerCtx.scale(dpr, dpr);
+
+      pickerCanvas.onclick = function(e) {
+        const b = pickerCanvas.getBoundingClientRect();
+        const clickX = e.clientX - b.left;
+        const clickY = e.clientY - b.top;
+
+        // Equirectangular inverse:
+        pickerLng = (clickX / b.width) * 360 - 180;
+        pickerLat = 90 - (clickY / b.height) * 180;
+
+        pickerCity = findNearestCityName(pickerLat, pickerLng);
+        updatePickerReadout();
+        drawMapPicker();
+      };
+
+      drawMapPicker();
+    }
+
+    function drawMapPicker() {
+      if (!pickerCanvas || !pickerCtx) return;
+      const rect = pickerCanvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      // Dark space background
+      pickerCtx.fillStyle = '#090D16';
+      pickerCtx.fillRect(0, 0, w, h);
+
+      // Draw subtle grid lines
+      pickerCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+      pickerCtx.lineWidth = 1;
+      for (let x = 0; x <= w; x += w / 12) {
+        pickerCtx.beginPath();
+        pickerCtx.moveTo(x, 0);
+        pickerCtx.lineTo(x, h);
+        pickerCtx.stroke();
+      }
+      for (let y = 0; y <= h; y += h / 6) {
+        pickerCtx.beginPath();
+        pickerCtx.moveTo(0, y);
+        pickerCtx.lineTo(w, y);
+        pickerCtx.stroke();
+      }
+
+      // Draw equator & prime meridian accent
+      pickerCtx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+      pickerCtx.beginPath();
+      pickerCtx.moveTo(0, h / 2);
+      pickerCtx.lineTo(w, h / 2);
+      pickerCtx.stroke();
+
+      pickerCtx.beginPath();
+      pickerCtx.moveTo(w / 2, 0);
+      pickerCtx.lineTo(w / 2, h);
+      pickerCtx.stroke();
+
+      // Draw reference major cities
+      WORLD_CITIES_REF.forEach(function(c) {
+        const cx = ((c.lng + 180) / 360) * w;
+        const cy = ((90 - c.lat) / 180) * h;
+
+        pickerCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        pickerCtx.beginPath();
+        pickerCtx.arc(cx, cy, 2, 0, Math.PI * 2);
+        pickerCtx.fill();
+      });
+
+      // Magelang HQ Home
+      const hqLat = -7.4706;
+      const hqLng = 110.2178;
+      const hqX = ((hqLng + 180) / 360) * w;
+      const hqY = ((90 - hqLat) / 180) * h;
+
+      // Draw connection flight arc from Magelang to Target
+      const targetX = ((pickerLng + 180) / 360) * w;
+      const targetY = ((90 - pickerLat) / 180) * h;
+
+      const midX = (hqX + targetX) / 2;
+      const midY = (hqY + targetY) / 2 - Math.min(Math.abs(targetX - hqX) * 0.25, 60);
+
+      pickerCtx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+      pickerCtx.lineWidth = 2;
+      pickerCtx.setLineDash([4, 4]);
+      pickerCtx.beginPath();
+      pickerCtx.moveTo(hqX, hqY);
+      pickerCtx.quadraticCurveTo(midX, midY, targetX, targetY);
+      pickerCtx.stroke();
+      pickerCtx.setLineDash([]);
+
+      // Magelang HQ pin (Emerald)
+      pickerCtx.fillStyle = '#10B981';
+      pickerCtx.beginPath();
+      pickerCtx.arc(hqX, hqY, 5, 0, Math.PI * 2);
+      pickerCtx.fill();
+      pickerCtx.strokeStyle = '#FFFFFF';
+      pickerCtx.lineWidth = 1.5;
+      pickerCtx.stroke();
+
+      pickerCtx.fillStyle = '#34D399';
+      pickerCtx.font = 'bold 9px monospace';
+      pickerCtx.fillText('Magelang HQ', hqX + 8, hqY - 5);
+
+      // Target pin (Sky/Yellow target)
+      pickerCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      pickerCtx.lineWidth = 2;
+      pickerCtx.beginPath();
+      pickerCtx.arc(targetX, targetY, 14, 0, Math.PI * 2);
+      pickerCtx.stroke();
+
+      pickerCtx.strokeStyle = '#38BDF8';
+      pickerCtx.beginPath();
+      pickerCtx.arc(targetX, targetY, 7, 0, Math.PI * 2);
+      pickerCtx.stroke();
+
+      pickerCtx.fillStyle = '#F59E0B';
+      pickerCtx.beginPath();
+      pickerCtx.arc(targetX, targetY, 3, 0, Math.PI * 2);
+      pickerCtx.fill();
+
+      // Label at target
+      pickerCtx.fillStyle = '#FFFFFF';
+      pickerCtx.font = 'bold 11px sans-serif';
+      pickerCtx.fillText(pickerCity, targetX + 12, targetY - 6);
+      pickerCtx.fillStyle = '#94A3B8';
+      pickerCtx.font = '9px monospace';
+      pickerCtx.fillText(pickerLat.toFixed(2) + ', ' + pickerLng.toFixed(2), targetX + 12, targetY + 8);
+    }
+
+    function applyMapPickerPoint() {
+      document.getElementById('inpRouteLat').value = pickerLat.toFixed(4);
+      document.getElementById('inpRouteLng').value = pickerLng.toFixed(4);
+      const cityInp = document.getElementById('inpRouteCity');
+      if (!cityInp.value || cityInp.value.trim() === '') {
+        cityInp.value = pickerCity;
+      }
+      closeMapPickerModal();
+      notifyDataSaved('Titik peta "' + pickerCity + '" (' + pickerLat.toFixed(4) + ', ' + pickerLng.toFixed(4) + ') berhasil diterapkan ke formulir!');
+    }
+
+    /* Papan Jejak Logic */
+        /* Papan Jejak Logic (Wide 3 Columns) */
     function loadPapanJejakForm() {
       try {
         const saved = JSON.parse(localStorage.getItem('fathur_portfolio_sec05_data') || '{}');
@@ -1265,6 +2939,7 @@
     }
 
     /* Projects Logic */
+        /* Projects Logic */
     function renderProjectsCards() {
       const container = document.getElementById('projectsCardsContainer');
       if (!container) return;
@@ -1353,234 +3028,8 @@
       notifyDataSaved('Proyek website berhasil disimpan!');
     }
 
-    /* Medsos Multi-Account Logic */
-    function renderMedsosAccountsDropdown() {
-      const sel = document.getElementById('selectMedsosAccountDropdown');
-      if (!sel) return;
-      sel.innerHTML = (currentMedsosData.accounts || []).map(function(a) {
-        return '<option value="' + a.id + '" ' + (a.id === activeAdminAccountId ? 'selected' : '') + '>' + a.name + ' (@' + a.handle + ')</option>';
-      }).join('');
-      updateActiveAccountDisplay();
-    }
-
-    function changeActiveAdminAccount(accId) {
-      activeAdminAccountId = accId;
-      currentMedsosData.activeAccountId = accId;
-      localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
-      updateActiveAccountDisplay();
-      renderActiveCanvaSlots();
-    }
-
-    function updateActiveAccountDisplay() {
-      const acc = getActiveAdminAccount();
-      if (!acc) return;
-      document.getElementById('activeAccountNameHeader').textContent = acc.name;
-      document.getElementById('activeAccTitleInp').value = acc.sectionTitle || (acc.name + ' — Portofolio');
-      document.getElementById('activeAccHandleInp').value = acc.handle || '';
-    }
-
-    function getActiveAdminAccount() {
-      return (currentMedsosData.accounts || []).find(function(a) { return a.id === activeAdminAccountId; }) || currentMedsosData.accounts[0];
-    }
-
-    function renderActiveCanvaSlots() {
-      const container = document.getElementById('canvaSlotsContainer');
-      const acc = getActiveAdminAccount();
-      if (!container || !acc) return;
-
-      const designs = acc.designs || [];
-      container.innerHTML = designs.map(function(d, i) {
-        return '<div onclick="selectSlotToEdit(' + i + ')" class="group cursor-pointer rounded-xl border border-slate-200 bg-slate-50 p-2.5 hover:border-slate-400 hover:shadow-xs transition space-y-2">' +
-          '<div class="aspect-square rounded-lg bg-slate-200 overflow-hidden flex items-center justify-center relative">' +
-            (d.img ? '<img src="' + d.img + '" class="w-full h-full object-cover" />' : '<div class="text-[10px] font-mono text-slate-400">Slot ' + (i+1) + '</div>') +
-            '<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-[10px] font-bold">Edit</div>' +
-          '</div>' +
-          '<div class="text-[11px] font-bold text-slate-800 truncate">' + (d.title || 'Slot ' + (i+1)) + '</div>' +
-          '<div class="text-[10px] text-slate-500 truncate">' + (d.subtitle || 'Kategori') + '</div>' +
-        '</div>';
-      }).join('');
-    }
-
-    function selectSlotToEdit(idx) {
-      const acc = getActiveAdminAccount();
-      if (!acc || !acc.designs || !acc.designs[idx]) return;
-      const d = acc.designs[idx];
-      document.getElementById('editSlotIndex').value = idx;
-      document.getElementById('slotTitleInp').value = d.title || '';
-      document.getElementById('slotSubtitleInp').value = d.subtitle || '';
-      document.getElementById('slotBgColor').value = d.bg || '#1D4ED8';
-      document.getElementById('slotFormLabel').textContent = 'Edit Slot #' + (idx + 1) + ': ' + d.title;
-    }
-
-    function saveSlotData() {
-      const idx = document.getElementById('editSlotIndex').value;
-      if (idx === '') { alert('Pilih slot terlebih dahulu!'); return; }
-      const acc = getActiveAdminAccount();
-      if (!acc || !acc.designs[idx]) return;
-
-      acc.designs[idx].title = document.getElementById('slotTitleInp').value.trim() || ('Slot ' + (parseInt(idx)+1));
-      acc.designs[idx].subtitle = document.getElementById('slotSubtitleInp').value.trim() || 'Desain Grafis';
-      acc.designs[idx].bg = document.getElementById('slotBgColor').value;
-
-      const fileInp = document.getElementById('slotImgFile');
-      if (fileInp && fileInp.files && fileInp.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          acc.designs[idx].img = e.target.result;
-          persistMedsosData();
-          renderActiveCanvaSlots();
-          notifyDataSaved('Slot desain dan gambar berhasil diperbarui!');
-        };
-        reader.readAsDataURL(fileInp.files[0]);
-      } else {
-        persistMedsosData();
-        renderActiveCanvaSlots();
-        notifyDataSaved('Slot desain berhasil diperbarui!');
-      }
-    }
-
-    function saveActiveAccountHeader() {
-      const acc = getActiveAdminAccount();
-      if (!acc) return;
-      acc.sectionTitle = document.getElementById('activeAccTitleInp').value.trim();
-      acc.handle = document.getElementById('activeAccHandleInp').value.trim().replace(/^@/, '');
-      persistMedsosData();
-      renderMedsosAccountsDropdown();
-      notifyDataSaved('Informasi akun media sosial berhasil disimpan!');
-    }
-
-    function toggleNewAccountBox(show) {
-      const box = document.getElementById('newAccountFormBox');
-      if (box) {
-        if (show) box.classList.remove('hidden');
-        else box.classList.add('hidden');
-      }
-    }
-
-    function saveNewAccountRecord() {
-      const name = document.getElementById('newAccNameInp').value.trim();
-      const handle = document.getElementById('newAccHandleInp').value.trim().replace(/^@/, '');
-      const role = document.getElementById('newAccRoleInp').value.trim();
-
-      if (!name || !handle) { alert('Nama dan handle akun wajib diisi!'); return; }
-      const id = handle.toLowerCase().replace(/[^a-z0-9]/g, '_');
-
-      const newAcc = {
-        id: id,
-        name: name,
-        handle: handle,
-        role: role || 'Media Sosial',
-        badgeColor: '#155293',
-        sectionTitle: name + ' — Portofolio',
-        designs: [
-          { id: id + '_d1', title: 'Postingan 1', subtitle: 'Feed Instagram', bg: '#155293', img: '' },
-          { id: id + '_d2', title: 'Postingan 2', subtitle: 'Feed Instagram', bg: '#1E3A8A', img: '' },
-          { id: id + '_d3', title: 'Postingan 3', subtitle: 'Feed Instagram', bg: '#0F766E', img: '' },
-          { id: id + '_d4', title: 'Postingan 4', subtitle: 'Feed Instagram', bg: '#B45309', img: '' },
-          { id: id + '_d5', title: 'Postingan 5', subtitle: 'Feed Instagram', bg: '#4338CA', img: '' },
-          { id: id + '_d6', title: 'Postingan 6', subtitle: 'Feed Instagram', bg: '#C62828', img: '' }
-        ],
-        videos: []
-      };
-
-      currentMedsosData.accounts.push(newAcc);
-      activeAdminAccountId = id;
-      currentMedsosData.activeAccountId = id;
-      persistMedsosData();
-      toggleNewAccountBox(false);
-      renderMedsosAccountsDropdown();
-      renderOverviewStats();
-      notifyDataSaved('Akun baru berhasil dibuat!');
-    }
-
-    function persistMedsosData() {
-      localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
-    }
-
-    /* Video Records */
-    function saveVideoRecords() {
-      notifyDataSaved('Koleksi video berhasil disimpan!');
-    }
-
-    /* Certs Logic */
-    function renderCertsCards() {
-      const container = document.getElementById('certsCardsContainer');
-      if (!container) return;
-      container.innerHTML = currentCerts.map(function(c) {
-        return '<div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition space-y-2.5 flex flex-col justify-between shadow-xs">' +
-          '<div>' +
-            '<div class="aspect-[4/3] rounded-lg bg-slate-100 overflow-hidden mb-2">' +
-              (c.img ? '<img src="' + c.img + '" class="w-full h-full object-cover" />' : '<div class="w-full h-full flex items-center justify-center text-xs font-mono text-slate-400">Preview</div>') +
-            '</div>' +
-            '<div class="flex items-center justify-between gap-1 mb-1">' +
-              '<span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700">' + (c.level || 'Nasional') + '</span>' +
-            '</div>' +
-            '<h4 class="font-display font-bold text-xs text-slate-900 line-clamp-2">' + c.title + '</h4>' +
-            '<p class="text-[11px] text-slate-500 mt-1 truncate">' + (c.org || '-') + '</p>' +
-          '</div>' +
-          '<div class="flex items-center justify-end pt-2 border-t border-slate-100">' +
-            '<button onclick="deleteCertRecord(\'' + c.id + '\')" class="text-xs font-bold text-rose-600 hover:text-rose-700 cursor-pointer">Hapus</button>' +
-          '</div>' +
-        '</div>';
-      }).join('');
-    }
-
-    function toggleCertForm(show) {
-      const box = document.getElementById('certFormBox');
-      if (box) {
-        if (show) box.classList.remove('hidden');
-        else box.classList.add('hidden');
-      }
-    }
-
-    function deleteCertRecord(id) {
-      if (!confirm('Hapus sertifikat ini?')) return;
-      currentCerts = currentCerts.filter(function(c) { return c.id !== id; });
-      localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
-      renderCertsCards();
-      renderOverviewStats();
-      notifyDataSaved('Sertifikat berhasil dihapus.');
-    }
-
-    function saveCertRecord() {
-      const title = document.getElementById('inpCertTitle').value.trim();
-      const level = document.getElementById('inpCertLevel').value;
-      const org = document.getElementById('inpCertOrg').value.trim();
-      if (!title) { alert('Judul sertifikat wajib diisi!'); return; }
-
-      const newCert = {
-        id: 'cert_' + Date.now(),
-        title: title,
-        level: level,
-        org: org,
-        category: 'Penghargaan',
-        img: ''
-      };
-
-      const fileInp = document.getElementById('inpCertFile');
-      if (fileInp && fileInp.files && fileInp.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          newCert.img = e.target.result;
-          currentCerts.unshift(newCert);
-          localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
-          renderCertsCards();
-          renderOverviewStats();
-          toggleCertForm(false);
-          notifyDataSaved('Sertifikat berhasil ditambahkan!');
-        };
-        reader.readAsDataURL(fileInp.files[0]);
-      } else {
-        currentCerts.unshift(newCert);
-        localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
-        renderCertsCards();
-        renderOverviewStats();
-        toggleCertForm(false);
-        notifyDataSaved('Sertifikat berhasil ditambahkan!');
-      }
-    }
-
     /* Routes Logic */
+        /* Routes Logic */
     function renderRoutesTable() {
       const tbody = document.getElementById('routesTableBody');
       if (!tbody) return;
@@ -1656,7 +3105,8 @@
       notifyDataSaved('Rute berhasil dihapus.');
     }
 
-    /* Section 01, 02, 07 Data Handlers */
+    /* Section Forms Logic */
+        /* Section 01, 02, 07 Data Handlers */
     function loadSec01Form() {
       try {
         const saved = JSON.parse(localStorage.getItem('fathur_portfolio_sec01_data') || '{}');
@@ -1728,7 +3178,8 @@
       notifyDataSaved('Profil Eksekutif berhasil disimpan!');
     }
 
-    /* Backup & Reset Handlers */
+    /* Backup & Reset Logic */
+        /* Backup & Reset Handlers */
     function downloadBackupJson() {
       const fullBackup = {
         timestamp: new Date().toISOString(),
@@ -1803,5 +3254,5 @@
       alert(msg);
     }
   </script>
-</body>
+
 </html>
