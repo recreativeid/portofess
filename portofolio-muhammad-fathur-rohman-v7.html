@@ -3675,20 +3675,26 @@
 
   <!-- VIDEO PLAYER MODAL -->
   <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6" onclick="closeVideoModal()">
-    <div class="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border-2 border-stone-200" onclick="event.stopPropagation()">
-      <div class="p-4 bg-stone-50 border-b border-stone-200 flex items-center justify-between">
+    <div id="videoModalDialog" class="bg-stone-900 text-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-stone-800 transition-all duration-300 flex flex-col" onclick="event.stopPropagation()">
+      <div class="p-3.5 sm:p-4 bg-stone-950/80 border-b border-stone-800 flex items-center justify-between">
         <div class="flex items-center gap-2.5 min-w-0 pr-2">
-          <span id="videoModalRatioBadge" class="px-2.5 py-1 rounded-lg bg-crimson text-white font-mono text-xs font-bold shrink-0">9:16</span>
-          <h4 id="videoModalTitle" class="font-display font-bold text-sm sm:text-base text-ink truncate">Pratinjau Video</h4>
+          <span id="videoModalRatioBadge" class="px-2.5 py-0.5 rounded-lg bg-crimson text-white font-mono text-xs font-bold shrink-0">9:16</span>
+          <h4 id="videoModalTitle" class="font-display font-bold text-sm sm:text-base text-white truncate">Pratinjau Video</h4>
         </div>
-        <button onclick="closeVideoModal()" class="w-8 h-8 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold transition flex items-center justify-center shrink-0">✕</button>
+        <button onclick="closeVideoModal()" class="w-8 h-8 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white font-bold transition flex items-center justify-center shrink-0 cursor-pointer">✕</button>
       </div>
-      <div id="videoModalPlayerContainer" class="w-full bg-stone-950 flex items-center justify-center min-h-[340px] max-h-[72vh] p-4">
+      <div id="videoModalPlayerContainer" class="w-full bg-black flex items-center justify-center relative overflow-hidden">
         <!-- Dynamic video player inserted here -->
       </div>
-      <div class="p-4 bg-white border-t border-stone-200 flex items-center justify-between gap-4">
-        <span id="videoModalDuration" class="text-xs font-mono text-stone-500 font-bold">Durasi: 0:45</span>
-        <button onclick="closeVideoModal()" class="px-5 py-2 rounded-xl bg-ink text-white hover:bg-crimson text-xs font-bold transition">Tutup Pratinjau</button>
+      <div class="p-3.5 sm:p-4 bg-stone-950/80 border-t border-stone-800 flex items-center justify-between gap-4">
+        <span id="videoModalDuration" class="text-xs font-mono text-stone-400 font-bold">Durasi: 0:45</span>
+        <div class="flex items-center gap-2">
+          <button id="videoModalSoundBtn" onclick="toggleVideoModalSound()" class="hidden px-3.5 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-stone-700">
+            <span id="videoModalSoundIcon">🔊</span>
+            <span id="videoModalSoundLabel">Hidupkan Suara</span>
+          </button>
+          <button onclick="closeVideoModal()" class="px-5 py-2 rounded-xl bg-stone-800 hover:bg-crimson text-white text-xs font-bold transition cursor-pointer">Tutup Pratinjau</button>
+        </div>
       </div>
     </div>
   </div>
@@ -4044,7 +4050,7 @@
         return {
           type: 'instagram',
           id: igMatch[1],
-          embedUrl: `https://www.instagram.com/reel/${igMatch[1]}/embed/captioned/`
+          embedUrl: `https://www.instagram.com/reel/${igMatch[1]}/embed/`
         };
       }
 
@@ -4147,45 +4153,65 @@
       document.getElementById('videoModalRatioBadge').textContent = ratio || '9:16';
       document.getElementById('videoModalDuration').textContent = `Durasi: ${duration || '0:45'}`;
       
+      const soundBtn = document.getElementById('videoModalSoundBtn');
+      if (soundBtn) soundBtn.classList.add('hidden');
+
       const container = document.getElementById('videoModalPlayerContainer');
+      const dialog = document.getElementById('videoModalDialog');
       const parsed = parseVideoSource(videoUrl);
       const isReel = (ratio || '').includes('9/16') || ratio === '9:16';
-      const aspectStyle = isReel ? 'aspect-[9/16] max-h-[75vh] w-auto' : 'aspect-[16/9] w-full max-w-2xl';
+
+      // Dynamically adapt modal size to video aspect ratio (Slender vertical for 9:16, Widescreen for 16:9)
+      if (dialog) {
+        if (isReel) {
+          dialog.className = 'bg-stone-900 text-white rounded-3xl max-w-[400px] sm:max-w-[420px] w-full overflow-hidden shadow-2xl border border-stone-800 transition-all duration-300 flex flex-col max-h-[96vh]';
+        } else {
+          dialog.className = 'bg-stone-900 text-white rounded-3xl max-w-3xl sm:max-w-4xl w-full overflow-hidden shadow-2xl border border-stone-800 transition-all duration-300 flex flex-col max-h-[92vh]';
+        }
+      }
+
+      const aspectStyle = isReel ? 'aspect-[9/16] w-full max-h-[76vh]' : 'aspect-[16/9] w-full';
 
       if (parsed.type === 'youtube') {
         container.innerHTML = `
-          <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800">
-            <iframe src="${parsed.embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full border-none"></iframe>
+          <div class="${aspectStyle} mx-auto relative bg-black overflow-hidden flex items-center justify-center">
+            <iframe src="https://www.youtube.com/embed/${parsed.id}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="w-full h-full border-none"></iframe>
           </div>
         `;
       } else if (parsed.type === 'instagram') {
+        // Embed Instagram without captioned header and footer by clipping wrapper
         container.innerHTML = `
-          <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800 flex items-center justify-center min-h-[480px]">
-            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="w-full h-full min-h-[480px]"></iframe>
+          <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
+            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="absolute w-full border-none" style="top: -50px; height: calc(100% + 125px); left: 0;"></iframe>
           </div>
         `;
       } else if (parsed.type === 'tiktok') {
         container.innerHTML = `
-          <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800">
+          <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
             <iframe src="${parsed.embedUrl}" allowfullscreen class="w-full h-full border-none"></iframe>
           </div>
         `;
       } else if (parsed.type === 'gdrive') {
         container.innerHTML = `
-          <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800">
+          <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
             <iframe src="${parsed.embedUrl}" allow="autoplay; encrypted-media" allowfullscreen class="w-full h-full border-none"></iframe>
           </div>
         `;
       } else if (parsed.type === 'html5' && (parsed.src.startsWith('http') || parsed.src.startsWith('blob:') || parsed.src.startsWith('data:'))) {
+        if (soundBtn) soundBtn.classList.remove('hidden');
         container.innerHTML = `
-          <div class="${aspectStyle} mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800 flex items-center justify-center">
-            <video src="${parsed.src}" controls autoplay playsinline class="w-full h-full object-contain"></video>
+          <div class="${aspectStyle} mx-auto relative bg-black flex items-center justify-center overflow-hidden group">
+            <video id="modalHtml5Video" src="${parsed.src}" autoplay muted playsinline controls class="w-full h-full object-cover sm:object-contain"></video>
+            <button id="modalUnmuteOverlayBtn" onclick="unmuteModalHtml5Video()" class="absolute bottom-14 sm:bottom-18 z-20 px-4 py-2 rounded-full bg-white/95 hover:bg-white text-stone-900 text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-md cursor-pointer transition transform hover:scale-105 active:scale-95 border border-stone-200">
+              <span class="text-sm">🔊</span>
+              <span>Ketuk untuk Hidupkan Suara</span>
+            </button>
           </div>
         `;
       } else {
         const isLocalFile = parsed.type === 'local_missing';
         container.innerHTML = `
-          <div class="text-center p-6 sm:p-8 max-w-md mx-auto bg-stone-900 rounded-2xl border border-stone-800 shadow-2xl text-white space-y-4">
+          <div class="text-center p-6 sm:p-8 max-w-md mx-auto bg-stone-900 rounded-2xl border border-stone-800 shadow-2xl text-white space-y-4 m-4">
             <div class="w-16 h-16 rounded-full bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center justify-center mx-auto text-2xl shadow-[0_0_20px_rgba(14,165,233,0.3)]">
               <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M10 11l5 3-5 3v-6z"></path></svg>
             </div>
@@ -4209,6 +4235,42 @@
           </div>
         `;
       }
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function unmuteModalHtml5Video() {
+      const vid = document.getElementById('modalHtml5Video');
+      if (vid) {
+        vid.muted = false;
+        vid.play();
+      }
+      const btn = document.getElementById('modalUnmuteOverlayBtn');
+      if (btn) btn.classList.add('hidden');
+      const soundIcon = document.getElementById('videoModalSoundIcon');
+      const soundLabel = document.getElementById('videoModalSoundLabel');
+      if (soundIcon) soundIcon.textContent = '🔊';
+      if (soundLabel) soundLabel.textContent = 'Suara Nyala';
+    }
+
+    function toggleVideoModalSound() {
+      const vid = document.getElementById('modalHtml5Video');
+      const soundIcon = document.getElementById('videoModalSoundIcon');
+      const soundLabel = document.getElementById('videoModalSoundLabel');
+      const overlayBtn = document.getElementById('modalUnmuteOverlayBtn');
+      if (vid) {
+        vid.muted = !vid.muted;
+        if (vid.muted) {
+          if (soundIcon) soundIcon.textContent = '🔇';
+          if (soundLabel) soundLabel.textContent = 'Suara Mati';
+          if (overlayBtn) overlayBtn.classList.remove('hidden');
+        } else {
+          if (soundIcon) soundIcon.textContent = '🔊';
+          if (soundLabel) soundLabel.textContent = 'Suara Nyala';
+          if (overlayBtn) overlayBtn.classList.add('hidden');
+        }
+      }
+    }
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
