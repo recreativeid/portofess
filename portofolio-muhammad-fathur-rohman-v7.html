@@ -4179,10 +4179,12 @@
           </div>
         `;
       } else if (parsed.type === 'instagram') {
-        // Embed Instagram without captioned header and footer by clipping wrapper
+        // Embed Instagram without captioned header and footer by deep edge clipping wrapper
         container.innerHTML = `
           <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
-            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="absolute w-full border-none" style="top: -50px; height: calc(100% + 125px); left: 0;"></iframe>
+            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="absolute border-none" style="top: -60px; height: calc(100% + 260px); width: calc(100% + 6px); left: -3px;"></iframe>
+            <div class="absolute top-0 inset-x-0 h-1.5 bg-black pointer-events-none z-10"></div>
+            <div class="absolute bottom-0 inset-x-0 h-2.5 bg-black pointer-events-none z-10"></div>
           </div>
         `;
       } else if (parsed.type === 'tiktok') {

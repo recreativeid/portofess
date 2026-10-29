@@ -1056,7 +1056,7 @@
                 </div>
                 <div>
                   <label class="text-[11px] font-bold text-slate-700 block mb-1">Format Rasio Tampilan</label>
-                  <select id="inpVideoRatio" onchange="updateVideoRatioPreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none">
+                  <select id="inpVideoRatio" onchange="updateVideoRatioPreview(); if (document.getElementById('inpVideoUrl').value) handleVideoUrlChange(document.getElementById('inpVideoUrl').value);" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none">
                     <option value="9/16">9:16 (Reels / Vertikal TikTok / IG)</option>
                     <option value="16/9">16:9 (Lanskap / YouTube Video)</option>
                   </select>
@@ -2942,13 +2942,11 @@
         return;
       }
 
-      // 3. Instagram Reels
+      // 3. Instagram Reels & Posts
       const igMatch = url.match(/(?:instagram\.com\/(?:reel|p)\/)([\w-]+)/i);
       if (igMatch && igMatch[1]) {
         const igId = igMatch[1];
-        if (ratioSelect) {
-          ratioSelect.value = '9/16';
-        }
+        const igEmbedSrc = url.includes('/p/') ? `https://www.instagram.com/p/${igId}/embed/` : `https://www.instagram.com/reel/${igId}/embed/`;
         updateVideoRatioPreview();
         if (player) { player.pause(); player.classList.add('hidden'); }
         if (notice) notice.classList.add('hidden');
@@ -2957,7 +2955,9 @@
           embedBox.classList.remove('hidden');
           embedBox.innerHTML = `
             <div class="w-full h-full relative overflow-hidden bg-black flex items-center justify-center">
-              <iframe src="https://www.instagram.com/reel/${igId}/embed/" class="absolute w-full border-none" style="top: -50px; height: calc(100% + 125px); left: 0;" scrolling="no"></iframe>
+              <iframe src="${igEmbedSrc}" class="absolute border-none" style="top: -60px; height: calc(100% + 260px); width: calc(100% + 6px); left: -3px;" scrolling="no"></iframe>
+              <div class="absolute top-0 inset-x-0 h-1.5 bg-black pointer-events-none z-10"></div>
+              <div class="absolute bottom-0 inset-x-0 h-2.5 bg-black pointer-events-none z-10"></div>
             </div>
           `;
         }
