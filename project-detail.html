@@ -516,8 +516,15 @@
     }
 
     // Mockup Cover Image
-    const coverSrc = currentProject.img || makeSvgBanner(currentProject.title, currentProject.category, currentProject.color);
-    document.getElementById('mockupCoverImg').src = coverSrc;
+    const coverSrc = (currentProject.img && currentProject.img.trim()) ? currentProject.img.trim() : makeSvgBanner(currentProject.title, currentProject.category, currentProject.color);
+    const coverEl = document.getElementById('mockupCoverImg');
+    if (coverEl) {
+      coverEl.src = coverSrc;
+      coverEl.onerror = function() {
+        this.onerror = null;
+        this.src = makeSvgBanner(currentProject.title, currentProject.category, currentProject.color);
+      };
+    }
 
     // Render Tech Stack Chips
     const techBox = document.getElementById('techStackContainer');

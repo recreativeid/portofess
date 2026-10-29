@@ -879,6 +879,41 @@
                 <input id="inpProjectDesc" type="text" placeholder="Deskripsi 1-2 kalimat untuk kartu portofolio" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none focus:border-[#155293]" />
               </div>
 
+              <!-- Row 3.5: Unggah Sampul / Thumbnail Proyek (Mockup / Screenshot) -->
+              <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label class="text-[11px] font-bold text-slate-800 uppercase tracking-wider block">🖼️ Gambar Sampul / Thumbnail Proyek</label>
+                    <span class="text-[10px] text-slate-500">Unggah tangkapan layar website (Rasio 16:10 / 16:9) atau masukkan URL gambar. Jika kosong, sistem otomatis membuat banner warna.</span>
+                  </div>
+                  <button type="button" onclick="clearProjectThumbnail()" class="text-xs text-rose-600 hover:underline font-semibold cursor-pointer">Hapus Sampul</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                  <div class="sm:col-span-8 space-y-2.5">
+                    <div>
+                      <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Unggah dari Galeri HP / PC:</label>
+                      <input id="inpProjectThumbFile" type="file" accept="image/*" onchange="handleProjectThumbFile(this)" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-[#155293] file:cursor-pointer" />
+                    </div>
+                    <div>
+                      <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Atau Tempel Tautan Gambar Cloud / URL:</label>
+                      <input id="inpProjectImg" type="text" placeholder="https://domain.com/screenshot.jpg atau assets/..." oninput="updateProjectThumbPreview(this.value)" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono bg-white outline-none focus:border-[#155293]" />
+                    </div>
+                  </div>
+
+                  <!-- Live Thumbnail Preview Box -->
+                  <div class="sm:col-span-4 flex flex-col items-center">
+                    <span class="text-[10px] font-mono text-slate-400 mb-1">Pratinjau Kartu:</span>
+                    <div id="projectThumbPreviewWrapper" class="w-full aspect-[16/10] rounded-xl bg-slate-900 border border-slate-300 overflow-hidden relative shadow-sm flex items-center justify-center">
+                      <img id="projectThumbPreviewImg" src="" alt="Pratinjau Sampul" class="w-full h-full object-cover hidden" />
+                      <div id="projectThumbPlaceholder" class="text-center p-3 text-slate-400 text-[10px] font-mono">
+                        Banner SVG Otomatis
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- Row 4: KATALOG STACK TEKNOLOGI (MULTI-SELECT DENGAN TOMBOL '✕') -->
               <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
@@ -1638,13 +1673,57 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
                 <h3 class="font-display font-extrabold text-lg text-slate-900">Profil Eksekutif &amp; Penutup Portofolio</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Kelola ringkasan eksekutif penutup, status ketersediaan kerja, dan kutipan visi.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Kelola kartu profil eksekutif, status on/off di landing page, desain kartu Canva, dan tautan sosial.</p>
               </div>
               <button onclick="saveSec07Data()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer">
                 Simpan Profil Eksekutif
               </button>
             </div>
 
+            <!-- Toggle ON/OFF Section 07 di Landing Page -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+              <div>
+                <label for="sec07Enabled" class="text-xs font-bold text-slate-800 block cursor-pointer">Tampilkan Bagian Kartu Profil Eksekutif di Landing Page (Opsional)</label>
+                <p class="text-[11px] text-slate-500">Jika dinonaktifkan (OFF), Bagian 07 Profil Eksekutif akan disembunyikan dari landing page.</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
+                <input type="checkbox" id="sec07Enabled" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+              </label>
+            </div>
+
+            <!-- Upload Desain Gambar Kartu Eksekutif (Canva Mockup) -->
+            <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="text-[11px] font-bold text-slate-800 uppercase tracking-wider block">🎨 Desain Gambar Kartu Eksekutif (Canva Mockup)</label>
+                  <p class="text-[10px] text-slate-500 font-mono">📐 Rekomendasi Ukuran: 1200 × 675 px (Rasio 16:9 Landscape) atau 1000 × 625 px (Rasio 16:10). Format PNG / JPG / WebP.</p>
+                </div>
+                <button type="button" onclick="clearSec07CardImg()" class="text-xs text-rose-600 hover:underline font-semibold cursor-pointer">Reset Default</button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                <div class="sm:col-span-8 space-y-2.5">
+                  <div>
+                    <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Unggah dari Galeri HP / PC:</label>
+                    <input id="sec07CardFileInput" type="file" accept="image/*" onchange="handleSec07CardFileUpload(this)" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-[#155293] file:cursor-pointer" />
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Atau Tempel Tautan Gambar Cloud / Path:</label>
+                    <input id="sec07CardImgUrl" type="text" placeholder="assets/canva-card-white.jpg atau https://..." oninput="updateSec07CardPreview(this.value)" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-mono bg-white outline-none focus:border-[#155293]" />
+                  </div>
+                </div>
+
+                <div class="sm:col-span-4 flex flex-col items-center">
+                  <span class="text-[10px] font-mono text-slate-400 mb-1">Pratinjau Kartu:</span>
+                  <div class="w-full aspect-[16/9] rounded-xl bg-slate-900 border border-slate-300 overflow-hidden relative shadow-sm flex items-center justify-center">
+                    <img id="sec07CardPreviewImg" src="assets/canva-card-white.jpg" alt="Pratinjau Kartu Eksekutif" class="w-full h-full object-cover" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Teks & Informasi Eksekutif -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="text-xs font-bold text-slate-700 block mb-1">Judul Penutup Eksekutif</label>
@@ -1659,6 +1738,34 @@
                 <textarea id="sec07Quote" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs outline-none focus:ring-2 focus:ring-[#155293] leading-relaxed">Menggabungkan logika rekayasa perangkat lunak yang presisi dengan kepekaan desain grafis yang bercerita. Setiap baris kode dan setiap elemen visual dirancang untuk memberi dampak nyata bagi bisnis dan komunitas.</textarea>
               </div>
             </div>
+
+            <!-- Kontak & Social Media Sync -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+              <label class="text-[11px] font-bold text-slate-800 uppercase tracking-wider block">🔗 Tautan Kontak &amp; Media Sosial (Tersinkron ke ID Card &amp; Penutup)</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div>
+                  <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">GitHub URL:</label>
+                  <input id="sec07Github" type="url" placeholder="https://github.com/recreativeid" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                </div>
+                <div>
+                  <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Instagram URL:</label>
+                  <input id="sec07Instagram" type="url" placeholder="https://www.instagram.com/portofess.id" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                </div>
+                <div>
+                  <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">LinkedIn URL:</label>
+                  <input id="sec07Linkedin" type="url" placeholder="https://linkedin.com/in/..." class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                </div>
+                <div>
+                  <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">WhatsApp (Format: https://wa.me/...):</label>
+                  <input id="sec07Whatsapp" type="text" placeholder="https://wa.me/62895393181822" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Email Resmi:</label>
+                  <input id="sec07Email" type="email" placeholder="hyungkun.co@gmail.com" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -4425,6 +4532,59 @@
       }
     }
 
+    function handleProjectThumbFile(input) {
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const rawUrl = e.target.result;
+        // Optimize & compress image using canvas to ensure localStorage stays healthy
+        const img = new Image();
+        img.onload = function() {
+          const maxW = 1200;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxW) {
+            h = Math.round((h * maxW) / w);
+            w = maxW;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', 0.85);
+          document.getElementById('inpProjectImg').value = compressed;
+          updateProjectThumbPreview(compressed);
+        };
+        img.src = rawUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateProjectThumbPreview(url) {
+      const imgEl = document.getElementById('projectThumbPreviewImg');
+      const phEl = document.getElementById('projectThumbPlaceholder');
+      if (!imgEl || !phEl) return;
+      if (url && url.trim()) {
+        imgEl.src = url.trim();
+        imgEl.classList.remove('hidden');
+        phEl.classList.add('hidden');
+      } else {
+        imgEl.src = '';
+        imgEl.classList.add('hidden');
+        phEl.classList.remove('hidden');
+      }
+    }
+
+    function clearProjectThumbnail() {
+      const fileInp = document.getElementById('inpProjectThumbFile');
+      const urlInp = document.getElementById('inpProjectImg');
+      if (fileInp) fileInp.value = '';
+      if (urlInp) urlInp.value = '';
+      updateProjectThumbPreview('');
+    }
+
     function renderProjectsCards() {
       const container = document.getElementById('projectsCardsContainer');
       if (!container) return;
@@ -4435,12 +4595,22 @@
       container.innerHTML = currentProjects.map(function(p) {
         const techs = (p.techStack && p.techStack.length) ? p.techStack.slice(0, 3).join(', ') : 'HTML5, CSS3';
         const dbs = (p.database && p.database.length) ? p.database.join(', ') : 'MySQL';
+        const hasImg = p.img && p.img.trim().length > 0;
         return '<div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition space-y-3 flex flex-col justify-between shadow-xs">' +
           '<div>' +
-            '<div class="flex items-center justify-between gap-2 mb-1.5">' +
+            '<div class="flex items-center justify-between gap-2 mb-2">' +
               '<span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">' + (p.category || 'Website') + '</span>' +
               '<span class="text-[10px] font-mono font-bold text-slate-400">#' + p.id + '</span>' +
             '</div>' +
+            (hasImg ? 
+              '<div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-slate-900 border border-slate-200 mb-2.5 relative">' +
+                '<img src="' + p.img + '" alt="' + p.title + '" class="w-full h-full object-cover" onerror="this.style.display=\'none\'" />' +
+                '<span class="absolute bottom-1.5 right-1.5 px-2 py-0.5 rounded bg-black/70 text-white text-[9px] font-mono font-bold">🖼️ Custom Sampul</span>' +
+              '</div>' :
+              '<div class="aspect-[16/10] w-full rounded-lg overflow-hidden mb-2.5 flex items-center justify-center text-white text-xs font-bold font-display" style="background-color:' + (p.color || '#155293') + '">' +
+                '<span>' + p.title + '</span>' +
+              '</div>'
+            ) +
             '<h4 class="font-display font-bold text-sm text-slate-900">' + p.title + '</h4>' +
             '<p class="text-xs text-slate-500 mt-1 line-clamp-2">' + (p.desc || '-') + '</p>' +
             '<div class="mt-2.5 pt-2 border-t border-slate-100 space-y-1">' +
@@ -4474,6 +4644,7 @@
           document.getElementById('inpProjectGithub').value = '';
           document.getElementById('inpProjectDesc').value = '';
           document.getElementById('inpProjectFeatures').value = '';
+          clearProjectThumbnail();
           projectActiveTechStack = [];
           projectActiveDatabases = [];
           renderActiveTechChips();
@@ -4493,6 +4664,10 @@
       document.getElementById('inpProjectDesc').value = p.desc || '';
       document.getElementById('inpProjectFeatures').value = p.features || (p.desc ? '• ' + p.desc : '');
       document.getElementById('inpProjectColor').value = p.color || '#155293';
+      
+      const imgVal = p.img || '';
+      document.getElementById('inpProjectImg').value = imgVal;
+      updateProjectThumbPreview(imgVal);
       
       projectActiveTechStack = Array.isArray(p.techStack) ? p.techStack.slice() : ['HTML5', 'CSS3', 'JavaScript'];
       projectActiveDatabases = Array.isArray(p.database) ? p.database.slice() : ['MySQL'];
@@ -4521,6 +4696,7 @@
       const desc = document.getElementById('inpProjectDesc').value.trim();
       const features = document.getElementById('inpProjectFeatures').value.trim();
       const color = document.getElementById('inpProjectColor').value;
+      const img = document.getElementById('inpProjectImg').value.trim();
 
       if (!title) { alert('Nama proyek wajib diisi!'); return; }
 
@@ -4540,6 +4716,7 @@
           currentProjects[idx].techStack = techStackToSave;
           currentProjects[idx].database = dbToSave;
           currentProjects[idx].color = color;
+          currentProjects[idx].img = img;
         }
       } else {
         const nextId = currentProjects.length > 0 ? Math.max.apply(Math, currentProjects.map(function(x) { return x.id || 0; })) + 1 : 1;
@@ -4554,6 +4731,7 @@
           techStack: techStackToSave,
           database: dbToSave,
           color: color,
+          img: img,
           rot: 'rotate-1'
         });
       }
@@ -4938,23 +5116,111 @@
       notifyDataSaved('Data Skill & Kompetensi berhasil disimpan!');
     }
 
+    function handleSec07CardFileUpload(input) {
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const rawUrl = e.target.result;
+        const img = new Image();
+        img.onload = function() {
+          const maxW = 1400;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxW) {
+            h = Math.round((h * maxW) / w);
+            w = maxW;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', 0.86);
+          document.getElementById('sec07CardImgUrl').value = compressed;
+          updateSec07CardPreview(compressed);
+        };
+        img.src = rawUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateSec07CardPreview(url) {
+      const img = document.getElementById('sec07CardPreviewImg');
+      if (img) {
+        img.src = (url && url.trim()) ? url.trim() : 'assets/canva-card-white.jpg';
+      }
+    }
+
+    function resetSec07CardImg() {
+      const fileInp = document.getElementById('sec07CardFileInput');
+      const urlInp = document.getElementById('sec07CardImgUrl');
+      if (fileInp) fileInp.value = '';
+      if (urlInp) urlInp.value = 'assets/canva-card-white.jpg';
+      updateSec07CardPreview('assets/canva-card-white.jpg');
+    }
+
     function loadSec07Form() {
       try {
         const saved = JSON.parse(localStorage.getItem('fathur_portfolio_sec07_data') || '{}');
-        if (saved.title) document.getElementById('sec07Title').value = saved.title;
-        if (saved.status) document.getElementById('sec07Status').value = saved.status;
-        if (saved.quote) document.getElementById('sec07Quote').value = saved.quote;
+        const chk = document.getElementById('sec07Enabled');
+        if (chk) chk.checked = (saved.enabled !== false);
+        
+        const cardUrl = saved.cardImgUrl || 'assets/canva-card-white.jpg';
+        if (document.getElementById('sec07CardImgUrl')) document.getElementById('sec07CardImgUrl').value = cardUrl;
+        updateSec07CardPreview(cardUrl);
+
+        if (saved.title && document.getElementById('sec07Title')) document.getElementById('sec07Title').value = saved.title;
+        if (saved.status && document.getElementById('sec07Status')) document.getElementById('sec07Status').value = saved.status;
+        if (saved.quote && document.getElementById('sec07Quote')) document.getElementById('sec07Quote').value = saved.quote;
+        
+        if (document.getElementById('sec07Github')) document.getElementById('sec07Github').value = saved.github || 'https://github.com/recreativeid';
+        if (document.getElementById('sec07Instagram')) document.getElementById('sec07Instagram').value = saved.instagram || 'https://www.instagram.com/portofess.id';
+        if (document.getElementById('sec07Linkedin')) document.getElementById('sec07Linkedin').value = saved.linkedin || 'https://linkedin.com';
+        if (document.getElementById('sec07Whatsapp')) document.getElementById('sec07Whatsapp').value = saved.whatsapp || 'https://wa.me/62895393181822';
+        if (document.getElementById('sec07Email')) document.getElementById('sec07Email').value = saved.email || 'hyungkun.co@gmail.com';
       } catch (e) {}
     }
 
     function saveSec07Data() {
+      const chk = document.getElementById('sec07Enabled');
+      const enabled = chk ? chk.checked : true;
+      const cardImgUrl = document.getElementById('sec07CardImgUrl') ? document.getElementById('sec07CardImgUrl').value.trim() : 'assets/canva-card-white.jpg';
+      const title = document.getElementById('sec07Title') ? document.getElementById('sec07Title').value.trim() : '';
+      const status = document.getElementById('sec07Status') ? document.getElementById('sec07Status').value.trim() : '';
+      const quote = document.getElementById('sec07Quote') ? document.getElementById('sec07Quote').value.trim() : '';
+      const github = document.getElementById('sec07Github') ? document.getElementById('sec07Github').value.trim() : '';
+      const instagram = document.getElementById('sec07Instagram') ? document.getElementById('sec07Instagram').value.trim() : '';
+      const linkedin = document.getElementById('sec07Linkedin') ? document.getElementById('sec07Linkedin').value.trim() : '';
+      const whatsapp = document.getElementById('sec07Whatsapp') ? document.getElementById('sec07Whatsapp').value.trim() : '';
+      const email = document.getElementById('sec07Email') ? document.getElementById('sec07Email').value.trim() : '';
+
       const data = {
-        title: document.getElementById('sec07Title').value.trim(),
-        status: document.getElementById('sec07Status').value.trim(),
-        quote: document.getElementById('sec07Quote').value.trim()
+        enabled: enabled,
+        cardImgUrl: cardImgUrl,
+        title: title,
+        status: status,
+        quote: quote,
+        github: github,
+        instagram: instagram,
+        linkedin: linkedin,
+        whatsapp: whatsapp,
+        email: email
       };
       localStorage.setItem('fathur_portfolio_sec07_data', JSON.stringify(data));
-      notifyDataSaved('Profil Eksekutif berhasil disimpan!');
+
+      // Also sync to Section 01 data for unified contact references
+      try {
+        const s1 = JSON.parse(localStorage.getItem('fathur_portfolio_sec01_data') || '{}');
+        s1.whatsapp = whatsapp;
+        s1.email = email;
+        s1.instagram = instagram;
+        s1.linkedin = linkedin;
+        s1.github = github;
+        localStorage.setItem('fathur_portfolio_sec01_data', JSON.stringify(s1));
+      } catch (e) {}
+
+      notifyDataSaved('Profil Eksekutif & Kontak berhasil disimpan!');
     }
 
     /* Backup & Reset Logic */
