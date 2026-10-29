@@ -4336,12 +4336,12 @@
           </div>
         `;
       } else if (parsed.type === 'instagram') {
-        // Embed Instagram without captioned header and footer by deep edge clipping wrapper
+        // Embed Instagram pure video: scale 1.48 centered with top & bottom edge shields to completely eliminate header, likes, comments & footer
         container.innerHTML = `
           <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
-            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="absolute border-none" style="top: -60px; height: calc(100% + 260px); width: calc(100% + 6px); left: -3px;"></iframe>
-            <div class="absolute top-0 inset-x-0 h-1.5 bg-black pointer-events-none z-10"></div>
-            <div class="absolute bottom-0 inset-x-0 h-2.5 bg-black pointer-events-none z-10"></div>
+            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="border-none w-full h-full" style="width: 100%; height: 100%; transform: scale(1.48); transform-origin: center 46%; pointer-events: auto;"></iframe>
+            <div class="absolute top-0 inset-x-0 h-4 bg-black pointer-events-none z-20"></div>
+            <div class="absolute bottom-0 inset-x-0 h-8 bg-black pointer-events-none z-20"></div>
           </div>
         `;
       } else if (parsed.type === 'tiktok') {
@@ -5918,13 +5918,86 @@
 
     function applyAllSavedSectionDataToDom() {
       try {
+        // 1. Profil & ID Card (Sec 01)
         const s1 = JSON.parse(localStorage.getItem('fathur_portfolio_sec01_data') || '{}');
         applySection01DataToDom(s1);
 
+        // 2. Papan Jejak (Sec 05)
+        const s5 = JSON.parse(localStorage.getItem('fathur_portfolio_sec05_data') || '{}');
+        if (s5.w1Company) {
+          const w1 = document.querySelector('[data-node="w1"]');
+          if (w1) {
+            const h = w1.querySelector('h3');
+            if (h) h.textContent = s5.w1Company;
+            const p1 = w1.querySelector('p');
+            if (p1 && s5.w1Role) p1.textContent = s5.w1Role;
+            const p2 = w1.querySelectorAll('p')[1];
+            if (p2 && s5.w1Desc) p2.textContent = s5.w1Desc;
+          }
+        }
+        if (s5.w2Company) {
+          const w2 = document.querySelector('[data-node="w2"]');
+          if (w2) {
+            const h = w2.querySelector('h3');
+            if (h) h.textContent = s5.w2Company;
+            const p1 = w2.querySelector('p');
+            if (p1 && s5.w2Role) p1.textContent = s5.w2Role;
+          }
+        }
+        if (s5.eduCollege) {
+          const e1 = document.querySelector('[data-node="e1"]');
+          if (e1) {
+            const h = e1.querySelector('h3');
+            if (h) h.textContent = s5.eduCollege;
+            const p1 = e1.querySelector('p');
+            if (p1 && s5.eduMajor) p1.textContent = s5.eduMajor;
+            if (s5.eduGpa) {
+              const gpaSpan = e1.querySelector('.inline-flex span:last-child');
+              if (gpaSpan) gpaSpan.textContent = s5.eduGpa;
+            }
+          }
+        }
+        if (s5.org1Name) {
+          const o1 = document.querySelector('[data-node="o1"]');
+          if (o1) {
+            const h = o1.querySelector('h4');
+            if (h) h.textContent = s5.org1Name;
+            const p = o1.querySelector('p');
+            if (p && s5.org1Role) p.textContent = s5.org1Role;
+          }
+        }
+        if (s5.org2Name) {
+          const o2 = document.querySelector('[data-node="o2"]');
+          if (o2) {
+            const h = o2.querySelector('h4');
+            if (h) h.textContent = s5.org2Name;
+            const p = o2.querySelector('p');
+            if (p && s5.org2Role) p.textContent = s5.org2Role;
+          }
+        }
+
+        // 3. Profil Eksekutif & Kontak (Sec 07)
         const s7 = JSON.parse(localStorage.getItem('fathur_portfolio_sec07_data') || '{}');
         if (s7.cardImgUrl) {
           const cardImg = document.getElementById('canvaCardImg');
           if (cardImg) cardImg.src = s7.cardImgUrl;
+        }
+        if (s7.whatsapp) {
+          const waNum = s7.whatsapp.replace(/[^0-9]/g, '');
+          document.querySelectorAll('a[href*="wa.me"]').forEach(el => {
+            el.href = 'https://wa.me/' + waNum;
+          });
+        }
+        if (s7.email) {
+          document.querySelectorAll('a[href^="mailto:"]').forEach(el => {
+            el.href = 'mailto:' + s7.email;
+            if (el.textContent.includes('@')) el.textContent = s7.email;
+          });
+        }
+        if (s7.instagram) {
+          document.querySelectorAll('a[href*="instagram.com/portofess"]').forEach(el => {
+            el.href = s7.instagram;
+          });
         }
       } catch (e) {}
     }

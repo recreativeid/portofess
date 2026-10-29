@@ -1845,10 +1845,11 @@
       </div>
 
       <!-- Interactive Canvas Map -->
-      <div class="p-4 sm:p-5 flex-1 overflow-hidden flex flex-col justify-center items-center bg-slate-950 relative">
-        <canvas id="pickerMapCanvas" class="w-full h-80 sm:h-96 rounded-xl border border-slate-800 bg-slate-950 cursor-crosshair shadow-inner"></canvas>
-        <div class="absolute bottom-6 left-7 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-sm border border-slate-700 text-white text-[11px] font-mono pointer-events-none">
-          💡 Klik di mana saja pada peta untuk meletakkan titik tujuan
+      <div class="p-4 sm:p-5 flex-1 overflow-hidden flex flex-col justify-center items-center bg-slate-100 relative">
+        <canvas id="pickerMapCanvas" class="w-full h-80 sm:h-96 rounded-xl border-2 border-slate-300 bg-white cursor-crosshair shadow-md"></canvas>
+        <div class="absolute bottom-6 left-7 px-3.5 py-2 rounded-xl bg-white/95 backdrop-blur-md border border-slate-300 text-slate-800 text-[11px] font-mono shadow-md pointer-events-none flex items-center gap-1.5">
+          <span>💡</span>
+          <span class="font-bold">Klik di mana saja pada peta untuk meletakkan titik tujuan</span>
         </div>
       </div>
 
@@ -1884,6 +1885,7 @@
     </div>
   </div>
   <!-- 3. JAVASCRIPT CONTROLLER (STANDALONE LOGIC WITH STORAGE SYNC) -->
+  <script src="../assets/world-land.js"></script>
   <script>
 
     /* Default Datasets */
@@ -2471,6 +2473,10 @@
         const storedProj = localStorage.getItem('fathur_portfolio_website_projects');
         currentProjects = storedProj ? JSON.parse(storedProj) : JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
       } catch (e) { currentProjects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS)); }
+      if (!currentProjects || !Array.isArray(currentProjects) || currentProjects.length === 0) {
+        currentProjects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+        localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
+      }
       if (Array.isArray(currentProjects)) {
         currentProjects = currentProjects.map(function(p) {
           var def = DEFAULT_PROJECTS.find(function(d) { return d.id === p.id; }) || {};
@@ -2569,14 +2575,25 @@
 
       if (tabKey === 'tentang') {
         loadSec01Form();
+      } else if (tabKey === 'skill') {
+        loadSec02Form();
+      } else if (tabKey === 'projects') {
+        renderProjectsCards();
       } else if (tabKey === 'medsos') {
         renderMedsosAccountsDropdown();
         renderActiveFeedsGrid();
       } else if (tabKey === 'video') {
         renderVideoAccountsDropdown();
         renderVideosCards();
+      } else if (tabKey === 'jejak') {
+        loadPapanJejakForm();
+        renderPapanJejakView();
       } else if (tabKey === 'prestasi') {
         renderCertsCards();
+      } else if (tabKey === 'eksekutif') {
+        loadSec07Form();
+      } else if (tabKey === 'network') {
+        renderRoutesTable();
       }
     }
 
@@ -3286,9 +3303,9 @@
           embedBox.classList.remove('hidden');
           embedBox.innerHTML = `
             <div class="w-full h-full relative overflow-hidden bg-black flex items-center justify-center">
-              <iframe src="${igEmbedSrc}" class="absolute border-none" style="top: -60px; height: calc(100% + 260px); width: calc(100% + 6px); left: -3px;" scrolling="no"></iframe>
-              <div class="absolute top-0 inset-x-0 h-1.5 bg-black pointer-events-none z-10"></div>
-              <div class="absolute bottom-0 inset-x-0 h-2.5 bg-black pointer-events-none z-10"></div>
+              <iframe src="${igEmbedSrc}" class="border-none w-full h-full" style="width: 100%; height: 100%; transform: scale(1.48); transform-origin: center 46%; pointer-events: auto;" scrolling="no"></iframe>
+              <div class="absolute top-0 inset-x-0 h-4 bg-black pointer-events-none z-20"></div>
+              <div class="absolute bottom-0 inset-x-0 h-8 bg-black pointer-events-none z-20"></div>
             </div>
           `;
         }
@@ -3881,12 +3898,12 @@
       const w = rect.width;
       const h = rect.height;
 
-      // Dark space background
-      pickerCtx.fillStyle = '#090D16';
+      // 1. Crisp White Background (Matching landing page world map)
+      pickerCtx.fillStyle = '#FFFFFF';
       pickerCtx.fillRect(0, 0, w, h);
 
-      // Draw subtle grid lines
-      pickerCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+      // 2. Draw subtle coordinate grid lines
+      pickerCtx.strokeStyle = 'rgba(15, 23, 42, 0.05)';
       pickerCtx.lineWidth = 1;
       for (let x = 0; x <= w; x += w / 12) {
         pickerCtx.beginPath();
@@ -3901,8 +3918,8 @@
         pickerCtx.stroke();
       }
 
-      // Draw equator & prime meridian accent
-      pickerCtx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
+      // 3. Equator & Prime Meridian subtle guides
+      pickerCtx.strokeStyle = 'rgba(2, 132, 199, 0.15)';
       pickerCtx.beginPath();
       pickerCtx.moveTo(0, h / 2);
       pickerCtx.lineTo(w, h / 2);
@@ -3913,18 +3930,43 @@
       pickerCtx.lineTo(w / 2, h);
       pickerCtx.stroke();
 
-      // Draw reference major cities
+      // 4. Render Real-World Landmass & Indonesia Archipelago Polygons
+      if (typeof window.WORLD_LAND_POLYGONS !== 'undefined') {
+        pickerCtx.save();
+        pickerCtx.fillStyle = '#E2E8F0'; // Soft crisp light slate continent fill
+        pickerCtx.strokeStyle = '#CBD5E1'; // Clean continent boundary
+        pickerCtx.lineWidth = 0.8;
+        for (const k in window.WORLD_LAND_POLYGONS) {
+          const poly = window.WORLD_LAND_POLYGONS[k];
+          if (!poly || poly.length < 3) continue;
+          pickerCtx.beginPath();
+          for (let i = 0; i < poly.length; i++) {
+            const lng = poly[i][0];
+            const lat = poly[i][1];
+            const px = ((lng + 180) / 360) * w;
+            const py = ((90 - lat) / 180) * h;
+            if (i === 0) pickerCtx.moveTo(px, py);
+            else pickerCtx.lineTo(px, py);
+          }
+          pickerCtx.closePath();
+          pickerCtx.fill();
+          pickerCtx.stroke();
+        }
+        pickerCtx.restore();
+      }
+
+      // 5. Draw reference major cities
       WORLD_CITIES_REF.forEach(function(c) {
         const cx = ((c.lng + 180) / 360) * w;
         const cy = ((90 - c.lat) / 180) * h;
 
-        pickerCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        pickerCtx.fillStyle = 'rgba(100, 116, 139, 0.45)';
         pickerCtx.beginPath();
-        pickerCtx.arc(cx, cy, 2, 0, Math.PI * 2);
+        pickerCtx.arc(cx, cy, 2.5, 0, Math.PI * 2);
         pickerCtx.fill();
       });
 
-      // Magelang HQ Home
+      // 6. Magelang HQ Home Pin & Beacon
       const hqLat = -7.4706;
       const hqLng = 110.2178;
       const hqX = ((hqLng + 180) / 360) * w;
@@ -3937,8 +3979,8 @@
       const midX = (hqX + targetX) / 2;
       const midY = (hqY + targetY) / 2 - Math.min(Math.abs(targetX - hqX) * 0.25, 60);
 
-      pickerCtx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
-      pickerCtx.lineWidth = 2;
+      pickerCtx.strokeStyle = '#0284C7';
+      pickerCtx.lineWidth = 2.2;
       pickerCtx.setLineDash([4, 4]);
       pickerCtx.beginPath();
       pickerCtx.moveTo(hqX, hqY);
@@ -3946,43 +3988,49 @@
       pickerCtx.stroke();
       pickerCtx.setLineDash([]);
 
-      // Magelang HQ pin (Emerald)
-      pickerCtx.fillStyle = '#10B981';
+      // Magelang HQ Ripple & Pin (Emerald)
+      pickerCtx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+      pickerCtx.lineWidth = 1.5;
+      pickerCtx.beginPath();
+      pickerCtx.arc(hqX, hqY, 9, 0, Math.PI * 2);
+      pickerCtx.stroke();
+
+      pickerCtx.fillStyle = '#059669';
       pickerCtx.beginPath();
       pickerCtx.arc(hqX, hqY, 5, 0, Math.PI * 2);
       pickerCtx.fill();
       pickerCtx.strokeStyle = '#FFFFFF';
-      pickerCtx.lineWidth = 1.5;
+      pickerCtx.lineWidth = 1.8;
       pickerCtx.stroke();
 
-      pickerCtx.fillStyle = '#34D399';
-      pickerCtx.font = 'bold 9px monospace';
-      pickerCtx.fillText('Magelang HQ', hqX + 8, hqY - 5);
+      pickerCtx.fillStyle = '#065F46';
+      pickerCtx.font = 'bold 10px monospace';
+      pickerCtx.fillText('Magelang HQ', hqX + 9, hqY - 5);
 
-      // Target pin (Sky/Yellow target)
-      pickerCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      // Target pin (Sky/Amber with double rings)
+      pickerCtx.strokeStyle = 'rgba(2, 132, 199, 0.4)';
       pickerCtx.lineWidth = 2;
       pickerCtx.beginPath();
       pickerCtx.arc(targetX, targetY, 14, 0, Math.PI * 2);
       pickerCtx.stroke();
 
-      pickerCtx.strokeStyle = '#38BDF8';
+      pickerCtx.strokeStyle = '#0284C7';
       pickerCtx.beginPath();
       pickerCtx.arc(targetX, targetY, 7, 0, Math.PI * 2);
       pickerCtx.stroke();
 
-      pickerCtx.fillStyle = '#F59E0B';
+      pickerCtx.fillStyle = '#EA580C';
       pickerCtx.beginPath();
-      pickerCtx.arc(targetX, targetY, 3, 0, Math.PI * 2);
+      pickerCtx.arc(targetX, targetY, 3.5, 0, Math.PI * 2);
       pickerCtx.fill();
 
-      // Label at target
-      pickerCtx.fillStyle = '#FFFFFF';
-      pickerCtx.font = 'bold 11px sans-serif';
-      pickerCtx.fillText(pickerCity, targetX + 12, targetY - 6);
-      pickerCtx.fillStyle = '#94A3B8';
-      pickerCtx.font = '9px monospace';
-      pickerCtx.fillText(pickerLat.toFixed(2) + ', ' + pickerLng.toFixed(2), targetX + 12, targetY + 8);
+      // Label at target in crisp dark typography
+      pickerCtx.fillStyle = '#0F172A';
+      pickerCtx.font = 'bold 12px sans-serif';
+      pickerCtx.fillText(pickerCity, targetX + 12, targetY - 5);
+      pickerCtx.fillStyle = '#475569';
+      pickerCtx.font = 'bold 10px monospace';
+      pickerCtx.fillText(pickerLat.toFixed(2) + ', ' + pickerLng.toFixed(2), targetX + 12, targetY + 9);
     }
 
     function applyMapPickerPoint() {
@@ -4228,6 +4276,10 @@
     function renderProjectsCards() {
       const container = document.getElementById('projectsCardsContainer');
       if (!container) return;
+      if (!currentProjects || !Array.isArray(currentProjects) || currentProjects.length === 0) {
+        currentProjects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+        try { localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects)); } catch (e) {}
+      }
       container.innerHTML = currentProjects.map(function(p) {
         const techs = (p.techStack && p.techStack.length) ? p.techStack.slice(0, 3).join(', ') : 'HTML5, CSS3';
         const dbs = (p.database && p.database.length) ? p.database.join(', ') : 'MySQL';
