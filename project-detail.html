@@ -484,7 +484,12 @@
     document.getElementById('pageTitle').textContent = `${currentProject.title} — Detail Proyek & Arsitektur`;
     document.getElementById('navCategoryBadge').textContent = currentProject.category;
     document.getElementById('badgeIndex').textContent = `PROYEK #${String(currentProject.id).padStart(2, '0')}`;
-    document.getElementById('badgeCategory').textContent = currentProject.category;
+    
+    const isCaseStudy = (currentProject.projectType === 'case-study' || currentProject.id === 3 || currentProject.id === 12 || currentProject.id === 14 || (currentProject.category && currentProject.category.includes('Edukasi')));
+    document.getElementById('badgeCategory').innerHTML = isCaseStudy
+      ? '<span class="text-sky-700 font-bold">🔵 Interactive Case Study &amp; R&amp;D</span> · ' + currentProject.category
+      : '<span class="text-emerald-700 font-bold">🟢 Real-World Client</span> · ' + currentProject.category;
+
     document.getElementById('projectTitle').textContent = currentProject.title;
     document.getElementById('projectDesc').textContent = currentProject.desc;
 

@@ -865,28 +865,35 @@
   <!-- High-Precision World & Detailed Indonesia Landmass Polygons for Dotted Map -->
   <script src="assets/world-land.js"></script>
   <script>
-    // Failsafe: Smooth 3.5s blur-fade opening transition with 5s max auto-dismissal
+    // Failsafe: Smooth 3.5s blur-fade opening transition with 5s max auto-dismissal & Instant Recruiter Skip
     var introTimer = null;
-    window.dismissCinematicIntro = function() {
+    window.dismissCinematicIntro = function(instant) {
       var intro = document.getElementById('cinematicOpeningScreen');
       if (!intro || intro.dataset.dismissed === 'true') return;
       intro.dataset.dismissed = 'true';
       if (introTimer) { clearTimeout(introTimer); introTimer = null; }
       
       intro.style.pointerEvents = 'none';
-      intro.style.transition = 'opacity 3.5s cubic-bezier(0.4, 0, 0.2, 1), filter 3.5s cubic-bezier(0.4, 0, 0.2, 1), transform 3.5s cubic-bezier(0.4, 0, 0.2, 1)';
-      intro.style.filter = 'blur(40px)';
-      intro.style.opacity = '0';
-      intro.style.transform = 'scale(1.05)';
-
-      try {
-        sessionStorage.setItem('fathur_intro_dismissed', 'true');
-      } catch (e) {}
-
-      setTimeout(function() {
-        intro.style.display = 'none';
-        document.body.style.overflow = '';
-      }, 3500);
+      if (instant) {
+        intro.style.transition = 'opacity 0.25s ease-out, filter 0.25s ease-out';
+        intro.style.filter = 'blur(10px)';
+        intro.style.opacity = '0';
+        try { sessionStorage.setItem('fathur_intro_dismissed', 'true'); } catch (e) {}
+        setTimeout(function() {
+          intro.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 260);
+      } else {
+        intro.style.transition = 'opacity 3.5s cubic-bezier(0.4, 0, 0.2, 1), filter 3.5s cubic-bezier(0.4, 0, 0.2, 1), transform 3.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        intro.style.filter = 'blur(40px)';
+        intro.style.opacity = '0';
+        intro.style.transform = 'scale(1.05)';
+        try { sessionStorage.setItem('fathur_intro_dismissed', 'true'); } catch (e) {}
+        setTimeout(function() {
+          intro.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 3500);
+      }
     };
 
     // Auto-enter landing page after 5 seconds if visitor does not click
@@ -923,11 +930,11 @@
       <div class="cinematic-shimmer"></div>
     </div>
 
-    <!-- Top Bar: Skip Button -->
+    <!-- Top Bar: Instant Recruiter Skip Button -->
     <div class="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-12 pt-6 sm:pt-8 flex items-center justify-end text-white/80">
-      <button onclick="event.stopPropagation(); dismissCinematicIntro();" class="px-5 py-2 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 border border-white/25 backdrop-blur-md text-xs font-mono font-medium text-white hover:text-white transition flex items-center gap-2 shadow-2xl group cursor-pointer">
-        <span>Lewati Intro</span>
-        <span class="group-hover:translate-x-1 transition duration-300">↘</span>
+      <button onclick="event.stopPropagation(); dismissCinematicIntro(true);" class="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 active:scale-95 border border-white/30 backdrop-blur-md text-xs font-mono font-bold text-white hover:text-white transition flex items-center gap-2 shadow-2xl group cursor-pointer" title="Langsung masuk ke portofolio tanpa menunggu">
+        <span>⚡ Lewati Pembuka (Langsung ke Portofolio)</span>
+        <span class="group-hover:translate-x-1 transition duration-300">↗</span>
       </button>
     </div>
 
@@ -1060,7 +1067,7 @@
 
                     <div class="text-center">
                       <h2 id="idCardNameFront" class="font-display font-extrabold text-base text-ink leading-tight">Muhammad Fathur Rohman</h2>
-                      <p id="idCardRoleFront" class="text-[11px] font-semibold text-crimson mt-0.5">Web Engineer, Designer Grafis · Video Editor</p>
+                      <p id="idCardRoleFront" class="text-[11px] font-semibold text-crimson mt-0.5">Full Stack Web Developer · Designer Grafis · Video Editor</p>
                     </div>
 
                     <div class="pt-2.5 border-t border-stone-200 flex items-center justify-between text-[10px] font-mono text-stone-500">
@@ -1127,6 +1134,18 @@
                   Hello!
                 </h1>
 
+                <!-- Recruiter Status & CV Action -->
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-mono font-bold shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Open to Work · Remote &amp; Relocation Ready</span>
+                  </span>
+                  <button type="button" onclick="handleCvDownloadClick()" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#155293] hover:bg-[#0f3d6e] text-white text-[11px] font-bold transition shadow-sm hover:scale-105 cursor-pointer" title="Unduh Curriculum Vitae resmi">
+                    <span>📄 Unduh CV / Resume (PDF)</span>
+                    <span>↗</span>
+                  </button>
+                </div>
+
                 <p class="text-base sm:text-lg text-stone-700 font-medium">Perkenalkan, Saya</p>
                 <h2 id="clipboardFullName" class="font-display font-extrabold text-2xl sm:text-3xl md:text-4xl text-ink tracking-tight mt-0.5 profile-name-sync">
                   Muhammad Fathur Rohman
@@ -1136,7 +1155,7 @@
                 <div class="mt-2.5 mb-5 flex items-center">
                   <div class="relative inline-flex flex-col items-center justify-center px-5 sm:px-7 py-2 sm:py-2.5 group select-none text-center">
                     <span id="clipboardRoleLine1" class="font-serif italic font-bold text-[16px] sm:text-[18px] md:text-[19px] text-[#155293] relative z-10 whitespace-nowrap leading-[1.12] tracking-tight">
-                      Web Engineer, Designer Grafis
+                      Full Stack Web Developer, Designer Grafis
                     </span>
                     <span id="clipboardRoleLine2" class="font-serif italic font-bold text-[16px] sm:text-[18px] md:text-[19px] text-[#155293] relative z-10 whitespace-nowrap leading-[1.12] mt-0.5 sm:mt-1 tracking-tight">
                       Video Editor
@@ -1181,13 +1200,83 @@
                 <div class="mt-6 pt-5 border-t border-stone-300/80 flex flex-col lg:flex-row items-start justify-between gap-6">
                   <!-- Tech Stack & Action Links -->
                   <div class="flex-1 min-w-0">
-                    <h3 class="font-display font-extrabold text-sm sm:text-base text-ink mb-3">Program Editing &amp; Tech Stack</h3>
-                    <div class="flex flex-wrap items-center gap-2.5">
-                      <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 text-white font-serif italic font-bold text-xs flex items-center justify-center shadow-md">Canva</div>
-                      <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#001E36] border border-[#31A8FF] text-[#31A8FF] font-display font-extrabold text-base sm:text-lg flex items-center justify-center shadow-md">Ps</div>
-                      <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#00005B] border border-[#9999FF] text-[#9999FF] font-display font-extrabold text-base sm:text-lg flex items-center justify-center shadow-md">Pr</div>
-                      <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-stone-900 text-white font-display font-bold text-xs flex items-center justify-center shadow-md">Figma</div>
-                      <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-crimson text-white font-mono font-bold text-sm flex items-center justify-center shadow-md">&lt;/&gt;</div>
+                    <!-- Categorized Tech Stack Matching Pitch Deck (Program Web Tools, Design Tools, Video Edit Tools) -->
+                    <div class="space-y-3.5 mb-4">
+                      <!-- Program Web Tools : -->
+                      <div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-stone-500 block mb-1.5">Program Web Tools :</span>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                          <span class="px-2.5 py-1 rounded-lg bg-stone-900 text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-2xs">
+                            <span class="text-sky-400 font-extrabold">&lt;/&gt;</span> Next.js / Code
+                          </span>
+                          <span class="px-2.5 py-1 rounded-lg bg-white border border-stone-300 text-stone-800 text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-2xs">
+                            <span class="text-purple-600 font-bold">❖</span> Figma
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            <span class="text-emerald-600">●</span> ChatGPT
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-blue-50 border border-blue-300 text-blue-800 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            <span class="text-blue-600">✦</span> Gemini
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-sky-50 border border-sky-300 text-sky-800 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            🐬 MySQL
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-slate-100 border border-slate-300 text-slate-800 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            WordPress
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-stone-900 text-white text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            GitHub
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            Claude
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-emerald-950 text-emerald-300 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            ⚡ Supabase
+                          </span>
+                          <span class="text-[10px] font-mono font-bold text-stone-400 pl-1">+others</span>
+                        </div>
+                      </div>
+
+                      <!-- Design Tools : -->
+                      <div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-stone-500 block mb-1.5">Design Tools :</span>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                          <span class="px-2.5 py-1 rounded-lg bg-white border border-stone-300 text-stone-800 text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-2xs">
+                            <span class="text-purple-600 font-bold">❖</span> Figma
+                          </span>
+                          <span class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-[11px] font-serif italic font-bold flex items-center gap-1.5 shadow-2xs">
+                            Canva
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            <span class="text-emerald-600">●</span> ChatGPT
+                          </span>
+                          <span class="px-2.5 py-1 rounded-lg bg-[#001E36] border border-[#31A8FF] text-[#31A8FF] text-[11px] font-bold shadow-2xs">
+                            Photoshop
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Video Edit Tools : -->
+                      <div>
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-stone-500 block mb-1.5">Video Edit Tools :</span>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                          <span class="px-2.5 py-1 rounded-lg bg-black text-white text-[11px] font-mono font-bold flex items-center gap-1.5 shadow-2xs">
+                            ✂️ CapCut
+                          </span>
+                          <span class="px-2.5 py-1 rounded-lg bg-[#00005B] border border-[#9999FF] text-[#9999FF] text-[11px] font-bold shadow-2xs">
+                            Premiere Pro
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-mono font-bold flex items-center gap-1 shadow-2xs">
+                            <span class="text-emerald-600">●</span> ChatGPT
+                          </span>
+                          <span class="px-2 py-1 rounded-lg bg-orange-600 text-white text-[11px] font-mono font-bold shadow-2xs">
+                            VN Editor
+                          </span>
+                          <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-white text-[11px] font-mono font-bold shadow-2xs">
+                            OBS Studio
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="flex flex-wrap gap-2.5 mt-4">
@@ -1715,10 +1804,6 @@
               <button onclick="setPhoneScreenDesignIndex(1)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Karya 2">#2</button>
               <button onclick="setPhoneScreenDesignIndex(2)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Karya 3">#3</button>
             </div>
-            <a href="admin/index.html" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 hover:text-stone-900 text-xs font-mono font-semibold flex items-center gap-1.5 transition shadow-sm ml-1" title="Buka Dashboard Admin Studio">
-              <svg class="w-3.5 h-3.5 text-stone-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              <span>Admin Studio</span>
-            </a>
           </div>
         </div>
 
@@ -3798,6 +3883,39 @@
     </div>
   </div>
 
+  <!-- CV / RESUME REQUEST MODAL (LEAD GENERATOR FOR HR / RECRUITER) -->
+  <div id="cvRequestModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeCvRequestModal()">
+    <div class="bg-white dark:bg-stone-900 rounded-3xl max-w-md w-full p-6 sm:p-7 border border-stone-200 dark:border-stone-800 shadow-2xl relative select-none" onclick="event.stopPropagation()">
+      <button onclick="closeCvRequestModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 dark:hover:text-white p-1 text-sm font-bold cursor-pointer">✕</button>
+      
+      <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-[#155293] dark:text-sky-400 flex items-center justify-center text-2xl mb-4 shadow-xs">
+        📄
+      </div>
+
+      <h3 class="font-display font-extrabold text-xl text-ink dark:text-white leading-tight">
+        Curriculum Vitae (PDF)
+      </h3>
+      <p class="text-xs sm:text-[13px] text-stone-600 dark:text-stone-300 mt-2 leading-relaxed">
+        Draf resmi CV &amp; Resume <strong>Muhammad Fathur Rohman, S.Kom</strong> (Fresh Graduate S1 Informatika - Cum Laude) siap dikirimkan langsung ke meja HRD / Recruiter.
+      </p>
+
+      <div class="mt-5 space-y-2.5">
+        <a id="btnModalRequestCvWa" href="https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20portofolio%20Anda%20dan%20ingin%20meminta%20berkas%20CV%20/%20Resume%20resmi%20(PDF)%20terbaru." target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+          <span>💬 Minta CV via WhatsApp Langsung</span>
+          <span>↗</span>
+        </a>
+        <a id="btnModalRequestCvEmail" href="mailto:hyungkun.co@gmail.com?subject=Permintaan%20Berkas%20CV%20Muhammad%20Fathur%20Rohman&amp;body=Halo%20Fathur,%20kami%20tertarik%20melihat%20portofolio%20Anda%20dan%20ingin%20meminta%20berkas%20CV%20(PDF)%20resmi%20terbaru." class="w-full py-2.5 px-4 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 text-stone-800 dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer">
+          <span>✉️ Kirim Permintaan via Email</span>
+          <span>↗</span>
+        </a>
+      </div>
+
+      <p class="text-[10px] font-mono text-stone-400 text-center mt-4">
+        🟢 Open to Work · Full-Time, Kontrak, &amp; Relokasi / Remote Ready
+      </p>
+    </div>
+  </div>
+
   <!-- CANVA EMBEDDED MODAL (Direct Official Canva Embed) -->
   <div id="canvaEmbedModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6" onclick="closeCanvaEmbedModal()">
     <div class="bg-[#0f172a] rounded-3xl max-w-5xl w-full h-[85vh] overflow-hidden shadow-2xl border-2 border-purple-500/40 flex flex-col justify-between" onclick="event.stopPropagation()">
@@ -4074,6 +4192,12 @@
       const rawImg = (p.img && typeof p.img === 'string' && p.img.trim()) ? p.img.trim() : '';
       const fallbackSvg = makeSvgBanner(p.title, p.category, p.color);
       const imgSrc = rawImg || fallbackSvg;
+
+      const isCaseStudy = (p.projectType === 'case-study' || p.id === 3 || p.id === 12 || p.id === 14 || (p.category && p.category.includes('Edukasi')));
+      const badgeHtml = isCaseStudy
+        ? '<span class="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-sky-100 text-sky-800 border border-sky-200">🔵 Case Study &amp; R&amp;D</span>'
+        : '<span class="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">🟢 Real-World Client</span>';
+
       return `
         <article class="bg-white p-4 pb-5 rounded-xl border border-stone-200 shadow-md ${p.rot || ''} polaroid-hover flex flex-col justify-between">
           <div>
@@ -4087,10 +4211,18 @@
                 </span>
               </div>
             </div>
-            <h3 class="font-display font-extrabold text-lg text-ink mt-3.5">
+            <div class="flex items-center justify-between gap-1.5 mt-3 mb-1">
+              ${badgeHtml}
+              <span class="text-[10px] font-mono text-stone-400 font-bold">#0${p.id}</span>
+            </div>
+            <h3 class="font-display font-extrabold text-lg text-ink">
               <a href="project-detail.html?id=${p.id}" class="hover:text-crimson transition">${p.title}</a>
             </h3>
             <p class="text-xs text-stone-600 mt-1 leading-relaxed">${p.desc}</p>
+            <div class="mt-2.5 py-1 px-2.5 rounded-lg bg-stone-50 border border-stone-200/80 text-[10px] font-mono text-stone-600 flex items-center justify-between">
+              <span class="text-stone-400 font-semibold">⚡ Kinerja:</span>
+              <span class="font-bold text-ink truncate ml-1">${p.impact || 'Load Speed < 1.0s · 100% Responsif · SEO Ready'}</span>
+            </div>
           </div>
           <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between text-xs font-bold">
             ${p.url
@@ -4584,6 +4716,25 @@
       }
       modal.classList.add('hidden');
       document.body.style.overflow = '';
+    }
+
+    function handleCvDownloadClick() {
+      const s7 = JSON.parse(localStorage.getItem('fathur_portfolio_sec07_data') || '{}');
+      if (s7.cvLink && s7.cvLink.trim() && s7.cvLink.trim() !== '#') {
+        window.open(s7.cvLink.trim(), '_blank');
+      } else {
+        openCvRequestModal();
+      }
+    }
+
+    function openCvRequestModal() {
+      const modal = document.getElementById('cvRequestModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeCvRequestModal() {
+      const modal = document.getElementById('cvRequestModal');
+      if (modal) modal.classList.add('hidden');
     }
 
     /* =================================================================== */
