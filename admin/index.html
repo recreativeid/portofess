@@ -4254,13 +4254,16 @@
           });
         }
 
-        // 4. Fetch & Parse README.md from GitHub for Description & Features
+        // 4. Fetch & Parse Documentation (README.md, PROJECT_MAP.md, or any root .md)
         var readmeFound = false;
+        var docFileName = '';
+        var rawMarkdown = '';
         try {
+          // 4a. Cek endpoint resmi /readme terlebih dahulu
           var resReadme = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/readme');
           if (resReadme.ok) {
             var dataReadme = await resReadme.json();
-            var rawMarkdown = '';
+            docFileName = dataReadme.name || 'README.md';
             if (dataReadme.content) {
               try {
                 rawMarkdown = decodeURIComponent(escape(window.atob(dataReadme.content.replace(/\s/g, ''))));
@@ -4268,111 +4271,137 @@
                 rawMarkdown = window.atob(dataReadme.content.replace(/\s/g, ''));
               }
             }
-
-            if (rawMarkdown) {
-              readmeFound = true;
-
-              // A. If description is empty or short, extract lead overview paragraph
-              if (!inpDesc.value.trim() || inpDesc.value.length < 15) {
-                var linesAll = rawMarkdown.split('\n');
-                for (var li = 0; li < linesAll.length; li++) {
-                  var lineStr = linesAll[li].trim();
-                  if (!lineStr || lineStr.startsWith('#') || lineStr.startsWith('![') || lineStr.startsWith('>[') || lineStr.startsWith('>') || lineStr.startsWith('---') || lineStr.startsWith('```')) continue;
-                  var cleanLead = lineStr.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
-                  if (cleanLead.length > 20) {
-                    inpDesc.value = cleanLead.slice(0, 160) + (cleanLead.length > 160 ? '...' : '');
-                    break;
+          } else {
+            // 4b. Jika repositori tidak memiliki file bernama persis "README.md", periksa file dokumentasi lain (mis. PROJECT_MAP.md, PANDUAN.md)
+            var resContents = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/contents');
+            if (resContents.ok) {
+              var rootFiles = await resContents.json();
+              if (Array.isArray(rootFiles)) {
+                var mdCandidates = rootFiles.filter(function(f) {
+                  return f.name && f.name.endsWith('.md') && !f.name.toLowerCase().includes('license') && !f.name.toLowerCase().includes('changelog');
+                });
+                mdCandidates.sort(function(a, b) {
+                  var aLow = a.name.toLowerCase();
+                  var bLow = b.name.toLowerCase();
+                  var aScore = (aLow.includes('readme') ? 10 : (aLow.includes('map') ? 8 : (aLow.includes('blueprint') ? 7 : (aLow.includes('doc') ? 6 : 1))));
+                  var bScore = (bLow.includes('readme') ? 10 : (bLow.includes('map') ? 8 : (bLow.includes('blueprint') ? 7 : (bLow.includes('doc') ? 6 : 1))));
+                  return bScore - aScore;
+                });
+                if (mdCandidates.length > 0 && mdCandidates[0].download_url) {
+                  docFileName = mdCandidates[0].name;
+                  var resAlt = await fetch(mdCandidates[0].download_url);
+                  if (resAlt.ok) {
+                    rawMarkdown = await resAlt.text();
                   }
-                }
-              }
-
-              // B. Extract Features / Fitur bullet points into inpProjectFeatures
-              var extractedFeatures = [];
-              var inFeaturesSection = false;
-              var mdLines = rawMarkdown.split('\n');
-
-              for (var j = 0; j < mdLines.length; j++) {
-                var curLine = mdLines[j].trim();
-                if (/^#{1,4}\s*(.*(fitur|feature|keunggulan|spesifikasi|highlight|capabilities|modul|overview).*)/i.test(curLine)) {
-                  inFeaturesSection = true;
-                  continue;
-                }
-                if (inFeaturesSection && /^#{1,4}\s+/.test(curLine)) {
-                  inFeaturesSection = false;
-                }
-
-                var bulletMatch = curLine.match(/^[\-\*\•]\s+(.+)/) || (inFeaturesSection && curLine.match(/^\d+\.\s+(.+)/));
-                if (bulletMatch) {
-                  var featText = bulletMatch[1].replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
-                  if (featText.length > 8 && !featText.startsWith('http') && !featText.startsWith('<img') && !featText.startsWith('[')) {
-                    extractedFeatures.push('• ' + featText);
-                  }
-                }
-              }
-
-              // If no bullet points under explicit headers, collect top bullet points
-              if (extractedFeatures.length === 0) {
-                for (var k = 0; k < mdLines.length && extractedFeatures.length < 6; k++) {
-                  var bMatch = mdLines[k].trim().match(/^[\-\*\•]\s+(.+)/);
-                  if (bMatch) {
-                    var fText = bMatch[1].replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
-                    if (fText.length > 12 && !fText.startsWith('http') && !fText.startsWith('<img') && !fText.startsWith('[')) {
-                      extractedFeatures.push('• ' + fText);
-                    }
-                  }
-                }
-              }
-
-              var inpFeatures = document.getElementById('inpProjectFeatures');
-              if (extractedFeatures.length > 0) {
-                inpFeatures.value = extractedFeatures.join('\n');
-              }
-
-              // C. Scan README text for popular stacks & databases
-              var lowerMd = rawMarkdown.toLowerCase();
-              var commonTechMap = {
-                'tailwind': 'Tailwind CSS',
-                'bootstrap': 'Bootstrap',
-                'react': 'React',
-                'next.js': 'Next.js',
-                'vue': 'Vue.js',
-                'chart.js': 'Chart.js',
-                'three.js': 'Three.js',
-                'leaflet': 'Leaflet.js',
-                'laravel': 'Laravel',
-                'codeigniter': 'CodeIgniter',
-                'express': 'Express.js',
-                'fastapi': 'FastAPI'
-              };
-              for (var key in commonTechMap) {
-                if (lowerMd.indexOf(key) !== -1) {
-                  addTechChip(commonTechMap[key]);
-                }
-              }
-
-              var commonDbMap = {
-                'mysql': 'MySQL',
-                'postgresql': 'PostgreSQL',
-                'postgres': 'PostgreSQL',
-                'supabase': 'Supabase',
-                'firebase': 'Firebase Firestore',
-                'sqlite': 'SQLite',
-                'mongodb': 'MongoDB',
-                'redis': 'Redis',
-                'mariadb': 'MariaDB'
-              };
-              for (var dKey in commonDbMap) {
-                if (lowerMd.indexOf(dKey) !== -1) {
-                  addDbChip(commonDbMap[dKey]);
                 }
               }
             }
           }
+
+          if (rawMarkdown) {
+            readmeFound = true;
+
+            // A. Ekstrak paragraf pengantar untuk deskripsi singkat jika belum diisi
+            if (!inpDesc.value.trim() || inpDesc.value.length < 15) {
+              var linesAll = rawMarkdown.split('\n');
+              for (var li = 0; li < linesAll.length; li++) {
+                var lineStr = linesAll[li].trim();
+                if (!lineStr || lineStr.startsWith('#') || lineStr.startsWith('![') || lineStr.startsWith('>[') || lineStr.startsWith('>') || lineStr.startsWith('---') || lineStr.startsWith('```')) continue;
+                var cleanLead = lineStr.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
+                if (cleanLead.length > 20) {
+                  inpDesc.value = cleanLead.slice(0, 160) + (cleanLead.length > 160 ? '...' : '');
+                  break;
+                }
+              }
+            }
+
+            // B. Ekstrak poin-poin fitur ke kolom inpProjectFeatures
+            var extractedFeatures = [];
+            var inFeaturesSection = false;
+            var mdLines = rawMarkdown.split('\n');
+
+            for (var j = 0; j < mdLines.length; j++) {
+              var curLine = mdLines[j].trim();
+              if (/^#{1,4}\s*(.*(fitur|feature|keunggulan|spesifikasi|highlight|capabilities|modul|desain|tema).*)/i.test(curLine)) {
+                inFeaturesSection = true;
+                continue;
+              }
+              if (inFeaturesSection && /^#{1,4}\s+/.test(curLine)) {
+                inFeaturesSection = false;
+              }
+
+              var bulletMatch = curLine.match(/^[\-\*\•]\s+(.+)/) || (inFeaturesSection && curLine.match(/^\d+\.\s+(.+)/));
+              if (bulletMatch) {
+                var featText = bulletMatch[1].replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
+                // Filter baris kredensial sensitif atau URL teknis
+                if (featText.length > 10 && !featText.startsWith('http') && !featText.startsWith('<img') && !featText.startsWith('[') && !featText.startsWith('URL Login') && !featText.startsWith('Username') && !featText.startsWith('Password') && !featText.startsWith('c:\\')) {
+                  extractedFeatures.push('• ' + featText);
+                }
+              }
+            }
+
+            // Jika tidak ada heading eksplisit fitur, kumpulkan bullet points bermakna dari dokumen
+            if (extractedFeatures.length === 0) {
+              for (var k = 0; k < mdLines.length && extractedFeatures.length < 6; k++) {
+                var bMatch = mdLines[k].trim().match(/^[\-\*\•]\s+(.+)/);
+                if (bMatch) {
+                  var fText = bMatch[1].replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
+                  if (fText.length > 12 && !fText.startsWith('http') && !fText.startsWith('<img') && !fText.startsWith('[') && !fText.startsWith('URL') && !fText.startsWith('Username') && !fText.startsWith('Password') && !fText.startsWith('c:\\')) {
+                    extractedFeatures.push('• ' + fText);
+                  }
+                }
+              }
+            }
+
+            var inpFeatures = document.getElementById('inpProjectFeatures');
+            if (extractedFeatures.length > 0) {
+              inpFeatures.value = extractedFeatures.slice(0, 8).join('\n');
+            }
+
+            // C. Pindai isi dokumen untuk mendeteksi stack & database tambahan
+            var lowerMd = rawMarkdown.toLowerCase();
+            var commonTechMap = {
+              'tailwind': 'Tailwind CSS',
+              'bootstrap': 'Bootstrap',
+              'react': 'React',
+              'next.js': 'Next.js',
+              'vue': 'Vue.js',
+              'chart.js': 'Chart.js',
+              'three.js': 'Three.js',
+              'leaflet': 'Leaflet.js',
+              'laravel': 'Laravel',
+              'codeigniter': 'CodeIgniter',
+              'express': 'Express.js',
+              'fastapi': 'FastAPI'
+            };
+            for (var key in commonTechMap) {
+              if (lowerMd.indexOf(key) !== -1) {
+                addTechChip(commonTechMap[key]);
+              }
+            }
+
+            var commonDbMap = {
+              'mysql': 'MySQL',
+              'postgresql': 'PostgreSQL',
+              'postgres': 'PostgreSQL',
+              'supabase': 'Supabase',
+              'firebase': 'Firebase Firestore',
+              'sqlite': 'SQLite',
+              'mongodb': 'MongoDB',
+              'redis': 'Redis',
+              'mariadb': 'MariaDB'
+            };
+            for (var dKey in commonDbMap) {
+              if (lowerMd.indexOf(dKey) !== -1) {
+                addDbChip(commonDbMap[dKey]);
+              }
+            }
+          }
         } catch (readmeErr) {
-          console.log('Catatan: README tidak ditemukan atau gagal diparsing:', readmeErr);
+          console.log('Catatan pemrosesan dokumentasi repo:', readmeErr);
         }
 
-        // D. Fallback if Features is still empty
+        // D. Fallback hanya jika Features benar-benar masih kosong
         var inpFeaturesFinal = document.getElementById('inpProjectFeatures');
         if (!inpFeaturesFinal.value.trim()) {
           var featLines = [];
@@ -4383,7 +4412,11 @@
           inpFeaturesFinal.value = featLines.join('\n');
         }
 
-        notifyDataSaved('⚡ Auto-Detect Berhasil! ' + (readmeFound ? 'Fitur & deskripsi dari README.md berhasil diekstrak.' : 'Data repositori dan stack berhasil diimpor.'));
+        if (readmeFound) {
+          notifyDataSaved('⚡ Auto-Detect Berhasil! Berhasil mengekstrak fitur & info dari file ' + docFileName + '!');
+        } else {
+          alert('ℹ️ Informasi Repositori GitHub:\n\nRepositori ini tidak memiliki file README.md atau file dokumentasi .md di dalamnya.\n\nSistem mengisi draf fitur standar agar Anda dapat melengkapinya secara manual.');
+        }
       } catch (err) {
         alert('Gagal auto-detect GitHub: ' + err.message);
       } finally {
