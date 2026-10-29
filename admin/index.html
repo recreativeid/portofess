@@ -4364,7 +4364,8 @@
       const title = document.getElementById('inpProjectTitle').value.trim();
       const cat = document.getElementById('inpProjectCategory').value;
       const url = document.getElementById('inpProjectUrl').value.trim();
-      const githubUrl = document.getElementById('inpProjectGithub').value.trim();
+      const rawGithub = document.getElementById('inpProjectGithub').value.trim();
+      const githubUrl = rawGithub ? rawGithub.replace(/\.git$/, '') : '';
       const desc = document.getElementById('inpProjectDesc').value.trim();
       const features = document.getElementById('inpProjectFeatures').value.trim();
       const color = document.getElementById('inpProjectColor').value;
