@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">Detail Proyek — Muhammad Fathur Rohman</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Manrope', 'Plus Jakarta Sans', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Manrope', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            poppins: ['Poppins', 'sans-serif']
+          },
+          colors: {
+            paper: '#F7F7F5',
+            ink: '#171717',
+            crimson: '#C62828',
+            blueprint: '#155293',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .browser-mockup {
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-900 font-sans min-h-screen flex flex-col antialiased selection:bg-crimson selection:text-white">
+
+  <!-- Sticky Top Navigation -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html#projects" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-stone-200 bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Kembali ke Portofolio
+        </a>
+        <span class="hidden sm:inline text-stone-300">/</span>
+        <span id="navCategoryBadge" class="hidden sm:inline px-2.5 py-0.5 rounded-md bg-stone-100 text-stone-600 font-mono text-[11px] font-bold">Kategori</span>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="shareProject()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 bg-white hover:border-stone-400 text-stone-700 text-xs font-bold transition shadow-2xs cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+          <span class="hidden sm:inline">Bagikan</span>
+        </button>
+        <a id="btnLiveTop" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-crimson hover:bg-red-700 text-white text-xs font-bold transition shadow-xs">
+          <span>Kunjungi Website</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-10">
+
+    <!-- Hero Title & Category -->
+    <div class="space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <span id="badgeIndex" class="px-2.5 py-1 rounded-md bg-stone-900 text-white font-mono text-xs font-bold tracking-wider">PROYEK #01</span>
+        <span id="badgeCategory" class="px-3 py-1 rounded-md bg-blue-50 text-[#155293] border border-blue-200 font-mono text-xs font-bold">Website Bisnis</span>
+        <span id="badgeStatus" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Live Terverifikasi
+        </span>
+      </div>
+      <h1 id="projectTitle" class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">SOLVETA</h1>
+      <p id="projectDesc" class="text-base sm:text-lg text-stone-600 max-w-3xl leading-relaxed">Website agensi teknologi digital profesional dengan sistem arsitektur modern.</p>
+    </div>
+
+    <!-- Website Mockup Interactive Banner (Klik Langsung ke Website) -->
+    <div class="space-y-4">
+      <div class="browser-mockup rounded-2xl border-2 border-stone-800 bg-stone-900 overflow-hidden group relative">
+        <!-- Mockup Browser Header Bar -->
+        <div class="px-4 py-3 bg-stone-800 border-b border-stone-700 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+          </div>
+          <!-- Fake Address Bar -->
+          <div class="flex-1 max-w-md mx-auto px-4 py-1.5 rounded-lg bg-stone-900 border border-stone-700 text-stone-300 text-xs font-mono flex items-center justify-center gap-2 truncate">
+            <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <span id="mockupUrlText" class="truncate">https://solveta.asia</span>
+          </div>
+          <div class="text-stone-400 font-mono text-[11px] hidden sm:block">HTTPS / Secure</div>
+        </div>
+
+        <!-- Cover Image Container (Clickable) -->
+        <a id="mockupCoverLink" href="#" target="_blank" rel="noopener noreferrer" class="block relative aspect-[16/9] w-full overflow-hidden bg-stone-950 cursor-pointer">
+          <img id="mockupCoverImg" src="" alt="Pratinjau Website" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103" />
+          <div class="absolute inset-0 bg-stone-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <span class="px-6 py-3 rounded-xl bg-white text-ink font-display font-extrabold text-sm shadow-xl flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              <span>Buka Website Langsung</span>
+              <svg class="w-4 h-4 text-crimson" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <div class="flex flex-wrap items-center gap-3">
+          <a id="btnMainVisit" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-crimson hover:bg-red-700 text-white font-display font-bold text-sm transition shadow-md hover:shadow-lg">
+            <span>🚀 Kunjungi Website Langsung</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          </a>
+          <a id="btnGithubRepo" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-display font-bold text-sm transition shadow-md">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+            <span>Repositori GitHub ↗</span>
+          </a>
+        </div>
+        <p class="text-xs text-stone-500 font-mono">Status: Akses Terbuka untuk Publik</p>
+      </div>
+    </div>
+
+    <!-- Grid: Teknologi & Basis Data -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Kolom 1: Arsitektur & Teknologi Stack -->
+      <section class="p-6 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-4">
+        <div class="flex items-center gap-2.5 border-b border-stone-100 pb-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#155293] flex items-center justify-center font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-base text-ink">Arsitektur & Stack Teknologi</h2>
+            <p class="text-xs text-stone-500">Framework, bahasa, dan pustaka antarmuka yang digunakan.</p>
+          </div>
+        </div>
+
+        <!-- Tech Chips Container -->
+        <div id="techStackContainer" class="flex flex-wrap gap-2 pt-1">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Kolom 2: Basis Data & Cloud Database (Disendirikan) -->
+      <section class="p-6 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-4">
+        <div class="flex items-center gap-2.5 border-b border-stone-100 pb-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-base text-ink">Basis Data & Cloud Database</h2>
+            <p class="text-xs text-stone-500">Penyimpanan terstruktur, sistem relasi data, &amp; BaaS.</p>
+          </div>
+        </div>
+
+        <!-- Database Chips Container -->
+        <div id="databaseContainer" class="flex flex-wrap gap-2 pt-1">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Spesifikasi & Rincian Fitur Utama Proyek (Bukan README) -->
+    <section class="p-6 sm:p-8 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-5">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-stone-100 text-stone-800 flex items-center justify-center font-bold">
+            <svg class="w-5 h-5 text-crimson" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          </div>
+          <div>
+            <h2 class="font-display font-extrabold text-lg text-ink">Spesifikasi & Rincian Fitur Utama Proyek</h2>
+            <p class="text-xs text-stone-500">Kapabilitas teknis, alur fungsional, dan implementasi sistem.</p>
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded bg-stone-100 font-mono text-[11px] font-bold text-stone-600">Dokumentasi Resmi</span>
+      </div>
+
+      <!-- Features List / Description Content -->
+      <div id="featuresListContainer" class="space-y-3 text-sm text-stone-700 leading-relaxed">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+
+    <!-- Bottom Navigation: Proyek Sebelumnya & Selanjutnya -->
+    <div class="pt-6 border-t border-stone-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a id="btnPrevProject" href="#" class="p-4 rounded-xl border border-stone-200 bg-white hover:border-stone-400 hover:bg-stone-50 transition flex items-center gap-3 group">
+        <div class="w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center text-stone-500 group-hover:text-ink">
+          ←
+        </div>
+        <div class="min-w-0">
+          <span class="text-[10px] font-mono text-stone-400 uppercase tracking-wider block">Proyek Sebelumnya</span>
+          <span id="prevProjectTitle" class="font-display font-bold text-xs sm:text-sm text-ink truncate block">Judul Proyek</span>
+        </div>
+      </a>
+
+      <a id="btnNextProject" href="#" class="p-4 rounded-xl border border-stone-200 bg-white hover:border-stone-400 hover:bg-stone-50 transition flex items-center justify-end text-right gap-3 group">
+        <div class="min-w-0">
+          <span class="text-[10px] font-mono text-stone-400 uppercase tracking-wider block">Proyek Selanjutnya</span>
+          <span id="nextProjectTitle" class="font-display font-bold text-xs sm:text-sm text-ink truncate block">Judul Proyek</span>
+        </div>
+        <div class="w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center text-stone-500 group-hover:text-ink">
+          →
+        </div>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-8 bg-white border-t border-stone-200 text-center text-xs text-stone-500 font-mono">
+    <div class="max-w-5xl mx-auto px-4">
+      <p>© 2026 Muhammad Fathur Rohman — Portofolio &amp; Sistem Terintegrasi.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 px-4 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-bold shadow-xl flex items-center gap-2">
+    <span>Tautan disalin ke papan klip!</span>
+  </div>
+
+  <script>
+    /* 14 PROYEK DEFAULT RESMI DENGAN STACK, DATABASE & FITUR LENGKAP */
+    const DEFAULT_PROJECTS = [
+      {
+        id: 1,
+        title: 'SOLVETA',
+        category: 'Website Bisnis',
+        url: 'https://solveta.asia',
+        githubUrl: '',
+        desc: 'Website agensi teknologi digital profesional dengan sistem arsitektur modern.',
+        rot: '-rotate-1',
+        color: '#155293',
+        techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Node.js', 'REST API'],
+        database: ['PostgreSQL', 'Supabase'],
+        features: '• Landing page agensi teknologi interaktif dengan transisi halus dan animasi sinematik.\n• Katalog portofolio layanan digital dinamis dan terstruktur.\n• Formulir kontak dan konsultasi klien terenkripsi terhubung langsung ke dashboard.\n• Optimasi skor Google Lighthouse 95+ dan performa responsive mobile-first.'
+      },
+      {
+        id: 2,
+        title: 'TeKaPe.id',
+        category: 'Website Bisnis',
+        url: 'https://TeKaPe.id',
+        githubUrl: '',
+        desc: 'Website digital kreatif dan showcase layanan agensi terintegrasi.',
+        rot: 'rotate-1',
+        color: '#1F2937',
+        techStack: ['PHP', 'Laravel', 'Bootstrap 5', 'JavaScript', 'CSS3'],
+        database: ['MySQL'],
+        features: '• Platform agensi kreatif digital & periklanan terpadu.\n• Sistem showcase karya video, branding, dan desain grafis beresolusi tinggi.\n• Manajemen klien & pemesanan layanan daring secara otomatis.\n• Desain adaptif dengan waktu pemuatan halaman di bawah 1.2 detik.'
+      },
+      {
+        id: 3,
+        title: 'Konservasi Akuatik',
+        category: 'Edukasi & Informasi',
+        url: 'https://konservasiakuatik.space',
+        githubUrl: '',
+        desc: 'Website edukatif bertema pelestarian ekosistem dan keanekaragaman hayati akuatik.',
+        rot: '-rotate-2',
+        color: '#0F766E',
+        techStack: ['HTML5', 'Tailwind CSS', 'JavaScript', 'Chart.js', 'Leaflet.js'],
+        database: ['Supabase', 'PostgreSQL'],
+        features: '• Portal edukasi interaktif pelestarian ekosistem perairan dan laut Indonesia.\n• Peta interaktif sebaran kawasan konservasi laut berbasis geospatial Leaflet.\n• Visualisasi grafik populasi fauna laut terancam punah dengan Chart.js.\n• Repositori artikel ilmiah dan modul panduan konservasi yang dapat diunduh.'
+      },
+      {
+        id: 4,
+        title: 'Travel Bukittinggi Pekanbaru',
+        category: 'Website Bisnis',
+        url: 'https://travelbukittkinggipekanbaru.site',
+        githubUrl: '',
+        desc: 'Website layanan reservasi perjalanan antarkota secara cepat dan terpercaya.',
+        rot: 'rotate-1',
+        color: '#B45309',
+        techStack: ['PHP', 'JavaScript', 'Tailwind CSS', 'HTML5', 'REST API'],
+        database: ['MySQL'],
+        features: '• Sistem reservasi tiket perjalanan antarkota secara online 24 jam.\n• Integrasi pemesanan kilat WhatsApp Direct Booking dengan format data otomatis.\n• Pemilihan titik jemput, tujuan, dan jenis armada secara fleksibel.\n• Panel kalkulator estimasi tarif perjalanan transparan tanpa biaya tersembunyi.'
+      },
+      {
+        id: 5,
+        title: 'REVO BULLION',
+        category: 'Website Bisnis',
+        url: 'http://revobullion.com',
+        githubUrl: '',
+        desc: 'Website bisnis perdagangan dan edukasi investasi emas dan perak untuk pasar Malaysia.',
+        rot: '-rotate-1',
+        color: '#92400E',
+        techStack: ['React', 'Tailwind CSS', 'Chart.js', 'Vite', 'Lucide Icons'],
+        database: ['PostgreSQL', 'Redis'],
+        features: '• Platform informasi perdagangan emas dan perak fisik berstandar internasional.\n• Grafik pergerakan harga emas real-time berbasis candlestick & line chart.\n• Kalkulator simulasi tabungan emas dan konversi multi-mata uang (MYR / IDR).\n• Katalog produk koin dan batangan emas bersertifikat LBMA dengan kode verifikasi.'
+      },
+      {
+        id: 6,
+        title: 'Japakeh Post',
+        category: 'Edukasi & Informasi',
+        url: 'https://www.japakehpost.com',
+        githubUrl: '',
+        desc: 'Website publikasi berita digital, opini publik, dan informasi edukasi terkini.',
+        rot: 'rotate-2',
+        color: '#1E3A8A',
+        techStack: ['PHP', 'WordPress', 'Tailwind CSS', 'JavaScript', 'REST API'],
+        database: ['MySQL'],
+        features: '• Portal media online publikasi artikel berita dan opini terverifikasi.\n• Pengelompokan rubrik berita (Nasional, Budaya, Opini Publik, Edukasi).\n• Kolom diskusi pembaca terintegrasi moderasi spam otomatis.\n• Dukungan feed RSS dan optimasi metadata Open Graph untuk share media sosial.'
+      },
+      {
+        id: 7,
+        title: 'Emha Donasi',
+        category: 'Organisasi & Sosial',
+        url: 'https://emhadonasi.netlify.app',
+        githubUrl: '',
+        desc: 'Platform digital penggalangan donasi dan penyaluran bantuan sosial kemanusiaan.',
+        rot: '-rotate-1',
+        color: '#065F46',
+        techStack: ['Vue.js', 'Tailwind CSS', 'JavaScript', 'REST API'],
+        database: ['Firebase Firestore', 'Supabase'],
+        features: '• Platform crowdfunding sosial transparan dan terpercaya.\n• Indikator progress bar pengumpulan donasi real-time per kampanye.\n• Laporan rekapitulasi penyaluran donasi dan daftar donatur publik.\n• Integrasi pembayaran digital, QRIS, dan transfer bank instan.'
+      },
+      {
+        id: 8,
+        title: 'Cliento',
+        category: 'Sistem & Aplikasi',
+        url: 'https://recreativeid.github.io/cliento',
+        githubUrl: 'https://github.com/recreativeid/cliento',
+        desc: 'Aplikasi pencarian prospek bisnis (lead generation) dan manajemen pemasaran digital.',
+        rot: 'rotate-1',
+        color: '#3730A3',
+        techStack: ['JavaScript', 'HTML5', 'Tailwind CSS', 'Vite', 'REST API'],
+        database: ['SQLite', 'Supabase'],
+        features: '• Tool otomatisasi pencarian prospek bisnis (lead generation) tertarget.\n• Penyaringan kontak bisnis berdasarkan industri, lokasi, dan skala usaha.\n• Ekspor data prospek siap olah ke format spreadsheet (CSV / Excel).\n• Panel manajemen pipeline prospek untuk tracking komunikasi penjualan.'
+      },
+      {
+        id: 9,
+        title: 'HALTEA',
+        category: 'Website Bisnis',
+        url: 'https://recreativeid.github.io/haltea/',
+        githubUrl: 'https://github.com/recreativeid/haltea',
+        desc: 'Website profil merek dan katalog minuman Haltea Magelang.',
+        rot: '-rotate-2',
+        color: '#C62828',
+        techStack: ['HTML5', 'CSS3', 'Tailwind CSS', 'JavaScript', 'GSAP'],
+        database: ['Firebase Firestore'],
+        features: '• Website profil brand minuman kekinian HALTEA Magelang dengan interaksi visual halus.\n• Menu interaktif lengkap dengan filter seri Kopi, Susu, dan Teh Segar.\n• Petunjuk lokasi gerai terintegrasi Google Maps dan navigasi rute.\n• Galeri produk high-definition dan tautan order online GoFood & GrabFood.'
+      },
+      {
+        id: 10,
+        title: 'Manajemen MBG',
+        category: 'Sistem & Aplikasi',
+        url: 'https://manajemen-mbg.vercel.app',
+        githubUrl: '',
+        desc: 'Aplikasi web pengelolaan operasional, logistik, dan inventaris MBG.',
+        rot: 'rotate-1',
+        color: '#1E293B',
+        techStack: ['React', 'Next.js', 'Tailwind CSS', 'Chart.js', 'TypeScript'],
+        database: ['PostgreSQL', 'Supabase'],
+        features: '• Sistem enterprise pengelolaan operasional dan rantai pasok MBG.\n• Dashboard inventaris stok bahan baku dengan notifikasi restock otomatis.\n• Manajemen hak akses multi-role (Administrator, Staf Dapur, Supervisor).\n• Laporan rekapitulasi harian dan visualisasi grafik efisiensi logistik.'
+      },
+      {
+        id: 11,
+        title: 'Database Dasawisma',
+        category: 'Sistem & Aplikasi',
+        url: 'https://recreativeid.github.io/db_dawis',
+        githubUrl: 'https://github.com/recreativeid/db_dawis',
+        desc: 'Aplikasi pengelolaan data kependudukan dan sensus keluarga Dasawisma.',
+        rot: '-rotate-1',
+        color: '#0369A1',
+        techStack: ['HTML5', 'Bootstrap 5', 'JavaScript', 'DataTables'],
+        database: ['MySQL', 'IndexedDB'],
+        features: '• Sistem digitalisasi pencatatan data keluarga dan sensus warga Dasawisma.\n• Formulir input terstruktur mencakup data demografi, kesehatan, dan sanitasi.\n• Validasi formulir otomatis mencegah duplikasi NIK dan ketidaksesuaian data.\n• Fitur cetak rekapitulasi data sensus resmi untuk laporan berkala RT/RW.'
+      },
+      {
+        id: 12,
+        title: 'Buser Info',
+        category: 'Edukasi & Informasi',
+        url: 'https://recreativeid.github.io/buser_info',
+        githubUrl: 'https://github.com/recreativeid/buser_info',
+        desc: 'Website pusat informasi cepat tanggap, layanan aduan publik, dan edukasi hukum.',
+        rot: 'rotate-2',
+        color: '#7C2D12',
+        techStack: ['HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS'],
+        database: ['SQLite'],
+        features: '• Portal informasi tanggap darurat dan salurn aduan publik terintegrasi.\n• Panduan kesiapsiagaan keselamatan warga dan edukasi hukum praktis.\n• Direktori nomor darurat kepolisian, medis, dan pemadam kebakaran.\n• Arsitektur ringan yang dapat diakses cepat bahkan pada koneksi internet lambat.'
+      },
+      {
+        id: 13,
+        title: 'tidurnyenyak.com',
+        category: 'Website Bisnis',
+        url: 'https://tidurnyenyak.com',
+        githubUrl: '',
+        desc: 'Toko online resmi produk herbal pengoptimal kualitas tidur dari Herbal Indo Utama.',
+        rot: '-rotate-1',
+        color: '#0F172A',
+        techStack: ['WordPress', 'WooCommerce', 'PHP', 'CSS3', 'JavaScript'],
+        database: ['MySQL'],
+        features: '• Toko online resmi produk herbal tidur nyenyak Herbal Indo Utama (HIU).\n• Katalog varian produk lengkap dengan informasi dosis dan sertifikasi BPOM.\n• Alur keranjang belanja (cart) dan checkout praktis dengan kalkulasi ongkir.\n• Fitur testimoni pengguna asli dan konsultasi live via WhatsApp CS.'
+      },
+      {
+        id: 14,
+        title: 'squabumin.id',
+        category: 'Website Bisnis',
+        url: 'https://squabumin.id',
+        githubUrl: '',
+        desc: 'Official landing page kapsul albumin minyak ikan Squabumin dari Herbal Indo Utama.',
+        rot: 'rotate-1',
+        color: '#14532D',
+        techStack: ['PHP', 'Tailwind CSS', 'JavaScript', 'HTML5'],
+        database: ['MySQL'],
+        features: '• Landing page resmi kapsul albumin minyak ikan gabus Squabumin.\n• Bagian edukasi klinis mengenai manfaat albumin untuk pemulihan pasca operasi.\n• Sistem verifikasi segel keaslian produk untuk perlindungan konsumen.\n• Integrasi tombol pemesanan ekspres WhatsApp dengan pelacakan konversi.'
+      }
+    ];
+
+    function makeSvgBanner(title, subtitle, bgHex) {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+        <defs>
+          <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="${bgHex || '#155293'}" />
+            <stop offset="100%" stop-color="#0B132B" />
+          </linearGradient>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="960" height="540" fill="url(#g)" />
+        <rect width="960" height="540" fill="url(#grid)" />
+        <circle cx="820" cy="120" r="200" fill="#ffffff" fill-opacity="0.04" />
+        <circle cx="120" cy="460" r="260" fill="#ffffff" fill-opacity="0.02" />
+        <rect x="48" y="48" width="864" height="444" rx="20" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" />
+        <circle cx="80" cy="80" r="6" fill="#EF4444" />
+        <circle cx="102" cy="80" r="6" fill="#F59E0B" />
+        <circle cx="124" cy="80" r="6" fill="#10B981" />
+        <text x="50%" y="46%" font-family="Plus Jakarta Sans, sans-serif" font-weight="900" font-size="44" fill="#ffffff" text-anchor="middle" letter-spacing="2">${title}</text>
+        <text x="50%" y="56%" font-family="JetBrains Mono, monospace" font-size="18" fill="#cbd5e1" text-anchor="middle" letter-spacing="0.5">${subtitle || ''}</text>
+        <text x="50%" y="82%" font-family="JetBrains Mono, monospace" font-size="12" fill="#ffffff" fill-opacity="0.4" text-anchor="middle">RECREATIVE STUDIO · WEB PRODUCTION</text>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    // Load Projects Data
+    let allProjects = DEFAULT_PROJECTS;
+    try {
+      const stored = localStorage.getItem('fathur_portfolio_website_projects');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          allProjects = parsed.map(p => {
+            const def = DEFAULT_PROJECTS.find(d => d.id === p.id) || {};
+            return {
+              id: p.id,
+              title: p.title || def.title || 'Proyek Website',
+              category: p.category || def.category || 'Website Bisnis',
+              url: p.url || def.url || '',
+              githubUrl: p.githubUrl || def.githubUrl || '',
+              desc: p.desc || def.desc || '',
+              color: p.color || def.color || '#155293',
+              rot: p.rot || def.rot || '',
+              img: p.img || def.img || '',
+              techStack: (p.techStack && p.techStack.length) ? p.techStack : (def.techStack || ['HTML5', 'CSS3', 'JavaScript']),
+              database: (p.database && p.database.length) ? p.database : (def.database || ['MySQL']),
+              features: p.features || def.features || ('• ' + (p.desc || 'Sistem aplikasi web modern.'))
+            };
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error loading projects:', e);
+    }
+
+    // Get Active Project from URL
+    const params = new URLSearchParams(window.location.search);
+    let currentId = parseInt(params.get('id') || '1', 10);
+    let currentIndex = allProjects.findIndex(p => p.id === currentId);
+    if (currentIndex === -1) {
+      currentIndex = 0;
+      currentId = allProjects[0].id;
+    }
+    const currentProject = allProjects[currentIndex];
+
+    // Populate Page
+    document.getElementById('pageTitle').textContent = `${currentProject.title} — Detail Proyek & Arsitektur`;
+    document.getElementById('navCategoryBadge').textContent = currentProject.category;
+    document.getElementById('badgeIndex').textContent = `PROYEK #${String(currentProject.id).padStart(2, '0')}`;
+    document.getElementById('badgeCategory').textContent = currentProject.category;
+    document.getElementById('projectTitle').textContent = currentProject.title;
+    document.getElementById('projectDesc').textContent = currentProject.desc;
+
+    // Live URL Logic
+    const targetUrl = currentProject.url || '#';
+    const displayUrl = currentProject.url || `https://${currentProject.title.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+    document.getElementById('mockupUrlText').textContent = displayUrl;
+
+    if (currentProject.url) {
+      document.getElementById('btnLiveTop').href = currentProject.url;
+      document.getElementById('btnMainVisit').href = currentProject.url;
+      document.getElementById('mockupCoverLink').href = currentProject.url;
+    } else {
+      document.getElementById('btnLiveTop').classList.add('opacity-50', 'pointer-events-none');
+      document.getElementById('btnMainVisit').classList.add('opacity-50', 'pointer-events-none');
+      document.getElementById('btnMainVisit').innerHTML = '<span>Tautan Belum Tersedia</span>';
+      document.getElementById('badgeStatus').innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span> Tahap Pengembangan';
+      document.getElementById('badgeStatus').className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200 font-mono text-xs font-semibold';
+      document.getElementById('mockupCoverLink').removeAttribute('href');
+    }
+
+    // GitHub Repo Button
+    const btnGithub = document.getElementById('btnGithubRepo');
+    if (currentProject.githubUrl) {
+      btnGithub.href = currentProject.githubUrl;
+      btnGithub.classList.remove('hidden');
+    } else {
+      btnGithub.classList.add('hidden');
+    }
+
+    // Mockup Cover Image
+    const coverSrc = currentProject.img || makeSvgBanner(currentProject.title, currentProject.category, currentProject.color);
+    document.getElementById('mockupCoverImg').src = coverSrc;
+
+    // Render Tech Stack Chips
+    const techBox = document.getElementById('techStackContainer');
+    const techList = currentProject.techStack || ['HTML5', 'CSS3', 'JavaScript'];
+    techBox.innerHTML = techList.map(t => {
+      return `<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200 hover:border-slate-300 transition">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#155293]"></span>
+        ${t}
+      </span>`;
+    }).join('');
+
+    // Render Database Chips (Segregated Table/Cards)
+    const dbBox = document.getElementById('databaseContainer');
+    const dbList = currentProject.database || ['MySQL'];
+    dbBox.innerHTML = dbList.map(db => {
+      return `<div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+        <span>${db}</span>
+        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">Storage / DB</span>
+      </div>`;
+    }).join('');
+
+    // Render Features List
+    const featBox = document.getElementById('featuresListContainer');
+    const featRaw = currentProject.features || currentProject.desc;
+    const lines = featRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    featBox.innerHTML = lines.map(line => {
+      const cleanLine = line.replace(/^[•\-\*]\s*/, '');
+      return `<div class="flex items-start gap-3 p-3.5 rounded-xl bg-stone-50 border border-stone-200/80 hover:bg-stone-100/70 transition">
+        <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+        </div>
+        <p class="text-stone-800 leading-relaxed font-medium">${cleanLine}</p>
+      </div>`;
+    }).join('');
+
+    // Bottom Navigation Logic (Prev / Next)
+    const prevIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
+    const nextIndex = (currentIndex + 1) % allProjects.length;
+    const prevProj = allProjects[prevIndex];
+    const nextProj = allProjects[nextIndex];
+
+    document.getElementById('btnPrevProject').href = `project-detail.html?id=${prevProj.id}`;
+    document.getElementById('prevProjectTitle').textContent = `#0${prevProj.id} · ${prevProj.title}`;
+
+    document.getElementById('btnNextProject').href = `project-detail.html?id=${nextProj.id}`;
+    document.getElementById('nextProjectTitle').textContent = `#0${nextProj.id} · ${nextProj.title}`;
+
+    // Share link handler
+    function shareProject() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+      }
+      const toast = document.getElementById('toastNotification');
+      toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

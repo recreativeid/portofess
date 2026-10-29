@@ -3726,27 +3726,214 @@
     /* 14 PROYEK WEBSITE (6 DITAMPILKAN DI LANDING PAGE, SEMUA DI FULL VIEW) */
     /* =================================================================== */
     let websiteProjects = [
-      { id: 1, title: 'SOLVETA', category: 'Website Bisnis', url: 'https://solveta.asia', desc: 'Website agensi teknologi digital.', rot: '-rotate-1', color: '#155293' },
-      { id: 2, title: 'TeKaPe.id', category: 'Website Bisnis', url: 'https://TeKaPe.id', desc: 'Website digital kreatif.', rot: 'rotate-1', color: '#1F2937' },
-      { id: 3, title: 'Konservasi Akuatik', category: 'Edukasi & Informasi', url: 'https://konservasiakuatik.space', desc: 'Website bertema konservasi ekosistem akuatik.', rot: '-rotate-2', color: '#0F766E' },
-      { id: 4, title: 'Travel Bukittinggi Pekanbaru', category: 'Website Bisnis', url: 'https://travelbukittkinggipekanbaru.site', desc: 'Website layanan perjalanan.', rot: 'rotate-1', color: '#B45309' },
-      { id: 5, title: 'REVO BULLION', category: 'Website Bisnis', url: '', desc: 'Website bisnis emas dan perak untuk pasar Malaysia.', rot: '-rotate-1', color: '#92400E' },
-      { id: 6, title: 'Japakeh Post', category: 'Edukasi & Informasi', url: 'https://www.japakehpost.com', desc: 'Website publikasi dan informasi digital.', rot: 'rotate-2', color: '#1E3A8A' },
-      { id: 7, title: 'Emha Donasi', category: 'Organisasi & Sosial', url: 'https://emhadonasi.netlify.app', desc: 'Platform digital untuk kebutuhan donasi.', rot: '-rotate-1', color: '#065F46' },
-      { id: 8, title: 'Cliento', category: 'Sistem & Aplikasi', url: 'https://recreativeid.github.io/cliento', desc: 'Proyek digital pencarian prospek bisnis dan pemasaran.', rot: 'rotate-1', color: '#3730A3' },
-      { id: 9, title: 'HALTEA', category: 'Website Bisnis', url: 'https://recreativeid.github.io/haltea/', desc: 'Proyek website untuk bisnis minuman HALTEA.', rot: '-rotate-2', color: '#C62828' },
-      { id: 10, title: 'Manajemen MBG', category: 'Sistem & Aplikasi', url: 'https://manajemen-mbg.vercel.app', desc: 'Aplikasi web pengelolaan operasional MBG.', rot: 'rotate-1', color: '#1E293B' },
-      { id: 11, title: 'Database Dasawisma', category: 'Sistem & Aplikasi', url: 'https://recreativeid.github.io/db_dawis', desc: 'Aplikasi pengelolaan data Dasawisma.', rot: '-rotate-1', color: '#0369A1' },
-      { id: 12, title: 'Buser Info', category: 'Edukasi & Informasi', url: 'https://recreativeid.github.io/buser_info', desc: 'Proyek website informasi.', rot: 'rotate-2', color: '#7C2D12' },
-      { id: 13, title: 'tidurnyenyak.com', category: 'Website Bisnis', url: 'https://tidurnyenyak.com', desc: 'Pengembangan website Herbal Indo Utama.', rot: '-rotate-1', color: '#0F172A' },
-      { id: 14, title: 'squabumin.id', category: 'Website Bisnis', url: 'https://squabumin.id', desc: 'Pengembangan website Herbal Indo Utama.', rot: 'rotate-1', color: '#14532D' }
+      {
+        id: 1,
+        title: 'SOLVETA',
+        category: 'Website Bisnis',
+        url: 'https://solveta.asia',
+        githubUrl: '',
+        desc: 'Website agensi teknologi digital profesional dengan sistem arsitektur modern.',
+        rot: '-rotate-1',
+        color: '#155293',
+        techStack: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Node.js', 'REST API'],
+        database: ['PostgreSQL', 'Supabase'],
+        features: '• Landing page agensi teknologi interaktif dengan transisi halus dan animasi sinematik.\n• Katalog portofolio layanan digital dinamis dan terstruktur.\n• Formulir kontak dan konsultasi klien terenkripsi terhubung langsung ke dashboard.\n• Optimasi skor Google Lighthouse 95+ dan performa responsive mobile-first.'
+      },
+      {
+        id: 2,
+        title: 'TeKaPe.id',
+        category: 'Website Bisnis',
+        url: 'https://TeKaPe.id',
+        githubUrl: '',
+        desc: 'Website digital kreatif dan showcase layanan agensi terintegrasi.',
+        rot: 'rotate-1',
+        color: '#1F2937',
+        techStack: ['PHP', 'Laravel', 'Bootstrap 5', 'JavaScript', 'CSS3'],
+        database: ['MySQL'],
+        features: '• Platform agensi kreatif digital & periklanan terpadu.\n• Sistem showcase karya video, branding, dan desain grafis beresolusi tinggi.\n• Manajemen klien & pemesanan layanan daring secara otomatis.\n• Desain adaptif dengan waktu pemuatan halaman di bawah 1.2 detik.'
+      },
+      {
+        id: 3,
+        title: 'Konservasi Akuatik',
+        category: 'Edukasi & Informasi',
+        url: 'https://konservasiakuatik.space',
+        githubUrl: '',
+        desc: 'Website edukatif bertema pelestarian ekosistem dan keanekaragaman hayati akuatik.',
+        rot: '-rotate-2',
+        color: '#0F766E',
+        techStack: ['HTML5', 'Tailwind CSS', 'JavaScript', 'Chart.js', 'Leaflet.js'],
+        database: ['Supabase', 'PostgreSQL'],
+        features: '• Portal edukasi interaktif pelestarian ekosistem perairan dan laut Indonesia.\n• Peta interaktif sebaran kawasan konservasi laut berbasis geospatial Leaflet.\n• Visualisasi grafik populasi fauna laut terancam punah dengan Chart.js.\n• Repositori artikel ilmiah dan modul panduan konservasi yang dapat diunduh.'
+      },
+      {
+        id: 4,
+        title: 'Travel Bukittinggi Pekanbaru',
+        category: 'Website Bisnis',
+        url: 'https://travelbukittkinggipekanbaru.site',
+        githubUrl: '',
+        desc: 'Website layanan reservasi perjalanan antarkota secara cepat dan terpercaya.',
+        rot: 'rotate-1',
+        color: '#B45309',
+        techStack: ['PHP', 'JavaScript', 'Tailwind CSS', 'HTML5', 'REST API'],
+        database: ['MySQL'],
+        features: '• Sistem reservasi tiket perjalanan antarkota secara online 24 jam.\n• Integrasi pemesanan kilat WhatsApp Direct Booking dengan format data otomatis.\n• Pemilihan titik jemput, tujuan, dan jenis armada secara fleksibel.\n• Panel kalkulator estimasi tarif perjalanan transparan tanpa biaya tersembunyi.'
+      },
+      {
+        id: 5,
+        title: 'REVO BULLION',
+        category: 'Website Bisnis',
+        url: 'http://revobullion.com',
+        githubUrl: '',
+        desc: 'Website bisnis perdagangan dan edukasi investasi emas dan perak untuk pasar Malaysia.',
+        rot: '-rotate-1',
+        color: '#92400E',
+        techStack: ['React', 'Tailwind CSS', 'Chart.js', 'Vite', 'Lucide Icons'],
+        database: ['PostgreSQL', 'Redis'],
+        features: '• Platform informasi perdagangan emas dan perak fisik berstandar internasional.\n• Grafik pergerakan harga emas real-time berbasis candlestick & line chart.\n• Kalkulator simulasi tabungan emas dan konversi multi-mata uang (MYR / IDR).\n• Katalog produk koin dan batangan emas bersertifikat LBMA dengan kode verifikasi.'
+      },
+      {
+        id: 6,
+        title: 'Japakeh Post',
+        category: 'Edukasi & Informasi',
+        url: 'https://www.japakehpost.com',
+        githubUrl: '',
+        desc: 'Website publikasi berita digital, opini publik, dan informasi edukasi terkini.',
+        rot: 'rotate-2',
+        color: '#1E3A8A',
+        techStack: ['PHP', 'WordPress', 'Tailwind CSS', 'JavaScript', 'REST API'],
+        database: ['MySQL'],
+        features: '• Portal media online publikasi artikel berita dan opini terverifikasi.\n• Pengelompokan rubrik berita (Nasional, Budaya, Opini Publik, Edukasi).\n• Kolom diskusi pembaca terintegrasi moderasi spam otomatis.\n• Dukungan feed RSS dan optimasi metadata Open Graph untuk share media sosial.'
+      },
+      {
+        id: 7,
+        title: 'Emha Donasi',
+        category: 'Organisasi & Sosial',
+        url: 'https://emhadonasi.netlify.app',
+        githubUrl: '',
+        desc: 'Platform digital penggalangan donasi dan penyaluran bantuan sosial kemanusiaan.',
+        rot: '-rotate-1',
+        color: '#065F46',
+        techStack: ['Vue.js', 'Tailwind CSS', 'JavaScript', 'REST API'],
+        database: ['Firebase Firestore', 'Supabase'],
+        features: '• Platform crowdfunding sosial transparan dan terpercaya.\n• Indikator progress bar pengumpulan donasi real-time per kampanye.\n• Laporan rekapitulasi penyaluran donasi dan daftar donatur publik.\n• Integrasi pembayaran digital, QRIS, dan transfer bank instan.'
+      },
+      {
+        id: 8,
+        title: 'Cliento',
+        category: 'Sistem & Aplikasi',
+        url: 'https://recreativeid.github.io/cliento',
+        githubUrl: 'https://github.com/recreativeid/cliento',
+        desc: 'Aplikasi pencarian prospek bisnis (lead generation) dan manajemen pemasaran digital.',
+        rot: 'rotate-1',
+        color: '#3730A3',
+        techStack: ['JavaScript', 'HTML5', 'Tailwind CSS', 'Vite', 'REST API'],
+        database: ['SQLite', 'Supabase'],
+        features: '• Tool otomatisasi pencarian prospek bisnis (lead generation) tertarget.\n• Penyaringan kontak bisnis berdasarkan industri, lokasi, dan skala usaha.\n• Ekspor data prospek siap olah ke format spreadsheet (CSV / Excel).\n• Panel manajemen pipeline prospek untuk tracking komunikasi penjualan.'
+      },
+      {
+        id: 9,
+        title: 'HALTEA',
+        category: 'Website Bisnis',
+        url: 'https://recreativeid.github.io/haltea/',
+        githubUrl: 'https://github.com/recreativeid/haltea',
+        desc: 'Website profil merek dan katalog minuman Haltea Magelang.',
+        rot: '-rotate-2',
+        color: '#C62828',
+        techStack: ['HTML5', 'CSS3', 'Tailwind CSS', 'JavaScript', 'GSAP'],
+        database: ['Firebase Firestore'],
+        features: '• Website profil brand minuman kekinian HALTEA Magelang dengan interaksi visual halus.\n• Menu interaktif lengkap dengan filter seri Kopi, Susu, dan Teh Segar.\n• Petunjuk lokasi gerai terintegrasi Google Maps dan navigasi rute.\n• Galeri produk high-definition dan tautan order online GoFood & GrabFood.'
+      },
+      {
+        id: 10,
+        title: 'Manajemen MBG',
+        category: 'Sistem & Aplikasi',
+        url: 'https://manajemen-mbg.vercel.app',
+        githubUrl: '',
+        desc: 'Aplikasi web pengelolaan operasional, logistik, dan inventaris MBG.',
+        rot: 'rotate-1',
+        color: '#1E293B',
+        techStack: ['React', 'Next.js', 'Tailwind CSS', 'Chart.js', 'TypeScript'],
+        database: ['PostgreSQL', 'Supabase'],
+        features: '• Sistem enterprise pengelolaan operasional dan rantai pasok MBG.\n• Dashboard inventaris stok bahan baku dengan notifikasi restock otomatis.\n• Manajemen hak akses multi-role (Administrator, Staf Dapur, Supervisor).\n• Laporan rekapitulasi harian dan visualisasi grafik efisiensi logistik.'
+      },
+      {
+        id: 11,
+        title: 'Database Dasawisma',
+        category: 'Sistem & Aplikasi',
+        url: 'https://recreativeid.github.io/db_dawis',
+        githubUrl: 'https://github.com/recreativeid/db_dawis',
+        desc: 'Aplikasi pengelolaan data kependudukan dan sensus keluarga Dasawisma.',
+        rot: '-rotate-1',
+        color: '#0369A1',
+        techStack: ['HTML5', 'Bootstrap 5', 'JavaScript', 'DataTables'],
+        database: ['MySQL', 'IndexedDB'],
+        features: '• Sistem digitalisasi pencatatan data keluarga dan sensus warga Dasawisma.\n• Formulir input terstruktur mencakup data demografi, kesehatan, dan sanitasi.\n• Validasi formulir otomatis mencegah duplikasi NIK dan ketidaksesuaian data.\n• Fitur cetak rekapitulasi data sensus resmi untuk laporan berkala RT/RW.'
+      },
+      {
+        id: 12,
+        title: 'Buser Info',
+        category: 'Edukasi & Informasi',
+        url: 'https://recreativeid.github.io/buser_info',
+        githubUrl: 'https://github.com/recreativeid/buser_info',
+        desc: 'Website pusat informasi cepat tanggap, layanan aduan publik, dan edukasi hukum.',
+        rot: 'rotate-2',
+        color: '#7C2D12',
+        techStack: ['HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS'],
+        database: ['SQLite'],
+        features: '• Portal informasi tanggap darurat dan salurn aduan publik terintegrasi.\n• Panduan kesiapsiagaan keselamatan warga dan edukasi hukum praktis.\n• Direktori nomor darurat kepolisian, medis, dan pemadam kebakaran.\n• Arsitektur ringan yang dapat diakses cepat bahkan pada koneksi internet lambat.'
+      },
+      {
+        id: 13,
+        title: 'tidurnyenyak.com',
+        category: 'Website Bisnis',
+        url: 'https://tidurnyenyak.com',
+        githubUrl: '',
+        desc: 'Toko online resmi produk herbal pengoptimal kualitas tidur dari Herbal Indo Utama.',
+        rot: '-rotate-1',
+        color: '#0F172A',
+        techStack: ['WordPress', 'WooCommerce', 'PHP', 'CSS3', 'JavaScript'],
+        database: ['MySQL'],
+        features: '• Toko online resmi produk herbal tidur nyenyak Herbal Indo Utama (HIU).\n• Katalog varian produk lengkap dengan informasi dosis dan sertifikasi BPOM.\n• Alur keranjang belanja (cart) dan checkout praktis dengan kalkulasi ongkir.\n• Fitur testimoni pengguna asli dan konsultasi live via WhatsApp CS.'
+      },
+      {
+        id: 14,
+        title: 'squabumin.id',
+        category: 'Website Bisnis',
+        url: 'https://squabumin.id',
+        githubUrl: '',
+        desc: 'Official landing page kapsul albumin minyak ikan Squabumin dari Herbal Indo Utama.',
+        rot: 'rotate-1',
+        color: '#14532D',
+        techStack: ['PHP', 'Tailwind CSS', 'JavaScript', 'HTML5'],
+        database: ['MySQL'],
+        features: '• Landing page resmi kapsul albumin minyak ikan gabus Squabumin.\n• Bagian edukasi klinis mengenai manfaat albumin untuk pemulihan pasca operasi.\n• Sistem verifikasi segel keaslian produk untuk perlindungan konsumen.\n• Integrasi tombol pemesanan ekspres WhatsApp dengan pelacakan konversi.'
+      }
     ];
 
     const defaultWebsiteProjects = JSON.parse(JSON.stringify(websiteProjects));
     try {
       const storedProj = localStorage.getItem('fathur_portfolio_website_projects');
       if (storedProj) {
-        websiteProjects = JSON.parse(storedProj);
+        const parsed = JSON.parse(storedProj);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          websiteProjects = parsed.map(p => {
+            const def = defaultWebsiteProjects.find(d => d.id === p.id) || {};
+            return {
+              id: p.id,
+              title: p.title || def.title || 'Proyek Website',
+              category: p.category || def.category || 'Website Bisnis',
+              url: p.url || def.url || '',
+              githubUrl: p.githubUrl || def.githubUrl || '',
+              desc: p.desc || def.desc || '',
+              color: p.color || def.color || '#155293',
+              rot: p.rot || def.rot || '',
+              img: p.img || def.img || '',
+              techStack: (p.techStack && p.techStack.length) ? p.techStack : (def.techStack || ['HTML5', 'CSS3', 'JavaScript']),
+              database: (p.database && p.database.length) ? p.database : (def.database || ['MySQL']),
+              features: p.features || def.features || ('• ' + (p.desc || 'Sistem aplikasi web modern.'))
+            };
+          });
+        }
       }
     } catch (e) {}
 
@@ -3786,19 +3973,27 @@
       return `
         <article class="bg-white p-4 pb-5 rounded-xl border border-stone-200 shadow-md ${p.rot || ''} polaroid-hover flex flex-col justify-between">
           <div>
-            <div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-stone-900 border border-stone-200 relative group cursor-pointer" onclick="openLightbox('${p.title}', '${p.category}', '${p.desc}', '${imgSrc}')">
+            <div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-stone-900 border border-stone-200 relative group cursor-pointer" onclick="window.location.href='project-detail.html?id=${p.id}'" title="Buka Detail Proyek ${p.title}">
               <img src="${imgSrc}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
               <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-black/75 text-white font-mono text-[10px] font-bold">0${p.id} · ${p.category}</span>
+              <div class="absolute inset-0 bg-stone-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <span class="px-3.5 py-1.5 rounded-lg bg-white/95 text-ink font-mono text-[11px] font-extrabold shadow-md flex items-center gap-1.5">
+                  <span>Lihat Detail Proyek</span>
+                  <span class="text-crimson">↗</span>
+                </span>
+              </div>
             </div>
-            <h3 class="font-display font-extrabold text-lg text-ink mt-3.5">${p.title}</h3>
+            <h3 class="font-display font-extrabold text-lg text-ink mt-3.5">
+              <a href="project-detail.html?id=${p.id}" class="hover:text-crimson transition">${p.title}</a>
+            </h3>
             <p class="text-xs text-stone-600 mt-1 leading-relaxed">${p.desc}</p>
           </div>
           <div class="mt-4 pt-3 border-t border-stone-200 flex items-center justify-between text-xs font-bold">
             ${p.url
-              ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="text-crimson hover:underline">Kunjungi Website ↗</a>`
+              ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="text-crimson hover:underline flex items-center gap-1">Kunjungi Website ↗</a>`
               : `<span class="text-amber-700 font-mono text-[11px]">URL Segera Hadir</span>`
             }
-            <button onclick="openLightbox('${p.title}', '${p.category}', '${p.desc}', '${imgSrc}')" class="text-stone-500 hover:text-ink">Pratinjau</button>
+            <a href="project-detail.html?id=${p.id}" class="text-stone-500 hover:text-ink flex items-center gap-1 font-bold">Detail &amp; Stack ↗</a>
           </div>
         </article>
       `;
