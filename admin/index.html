@@ -2024,6 +2024,89 @@
 
       </main>
 
+  <!-- UNIVERSAL INTERACTIVE IMAGE CROPPER MODAL (DRAG, RESIZE, ZOOM & CROP) -->
+  <div id="universalImageCropperModal" class="fixed inset-0 z-[999999] bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 hidden select-none">
+    <div class="bg-slate-900 border border-slate-700/90 rounded-3xl w-full max-w-4xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden text-slate-100">
+      
+      <!-- Modal Header -->
+      <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-[#155293] flex items-center justify-center text-white text-base shadow-sm">
+            ✂️
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-sm sm:text-base text-white leading-tight">Sesuaikan &amp; Potong Gambar (Interactive Cropper)</h3>
+            <p class="text-[11px] text-slate-400">Tarik kotak untuk mengatur ukuran potong, geser gambar untuk posisi, gunakan slider untuk zoom.</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeUniversalCropper()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-400 hover:text-white transition flex items-center justify-center text-xs font-bold cursor-pointer" title="Tutup / Batal">
+          ✕
+        </button>
+      </div>
+
+      <!-- Main Canvas Stage Wrapper -->
+      <div id="cropperStageWrapper" class="relative flex-1 bg-slate-950 flex items-center justify-center overflow-hidden h-[360px] sm:h-[430px] md:h-[480px]">
+        <canvas id="cropperStageCanvas" class="w-full h-full block cursor-crosshair touch-none"></canvas>
+        <div id="cropperLoadingSpinner" class="absolute inset-0 bg-slate-950/70 flex items-center justify-center text-xs font-mono text-slate-400 hidden">
+          <span>Memuat gambar...</span>
+        </div>
+      </div>
+
+      <!-- Controls & Ratio Selector Toolbar -->
+      <div class="p-4 bg-slate-900 border-t border-slate-800 space-y-3">
+        <!-- Top Toolbar: Zoom & Rotation Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+          <!-- Zoom Controls -->
+          <div class="flex items-center gap-2 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700">
+            <span class="text-slate-400 font-semibold text-[11px]">Zoom:</span>
+            <button type="button" onclick="cropperAdjustZoom(-0.1)" class="w-6 h-6 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold flex items-center justify-center transition cursor-pointer" title="Zoom Out">−</button>
+            <input type="range" id="cropperZoomSlider" min="0.2" max="3.0" step="0.05" value="1" oninput="cropperSetZoom(this.value)" class="w-24 sm:w-36 accent-[#155293] cursor-pointer" />
+            <button type="button" onclick="cropperAdjustZoom(0.1)" class="w-6 h-6 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold flex items-center justify-center transition cursor-pointer" title="Zoom In">+</button>
+            <span id="cropperZoomVal" class="text-[11px] font-mono font-bold text-sky-400 w-10 text-right">100%</span>
+          </div>
+
+          <!-- Rotation & Reset -->
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="cropperRotate90()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Putar 90 Derajat">
+              <span>🔄 Putar 90°</span>
+            </button>
+            <button type="button" onclick="cropperResetTransform()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer" title="Kembalikan Posisi Semula">
+              <span>↺ Reset</span>
+            </button>
+          </div>
+
+          <!-- Aspect Ratio Presets -->
+          <div class="flex items-center gap-1.5 bg-slate-800/90 p-1 rounded-xl border border-slate-700">
+            <span class="text-[10px] font-mono font-bold text-slate-400 px-2 uppercase">Rasio:</span>
+            <button type="button" id="cropRatioBtn_16_10" onclick="cropperSetRatio(16/10, '16_10')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-[#155293] text-white transition cursor-pointer">16:10</button>
+            <button type="button" id="cropRatioBtn_16_9" onclick="cropperSetRatio(16/9, '16_9')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">16:9</button>
+            <button type="button" id="cropRatioBtn_4_5" onclick="cropperSetRatio(4/5, '4_5')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">4:5</button>
+            <button type="button" id="cropRatioBtn_1_1" onclick="cropperSetRatio(1/1, '1_1')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">1:1</button>
+            <button type="button" id="cropRatioBtn_4_3" onclick="cropperSetRatio(4/3, '4_3')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">4:3</button>
+            <button type="button" id="cropRatioBtn_free" onclick="cropperSetRatio(null, 'free')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">Bebas</button>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar: Cancel & Apply Crop Button -->
+        <div class="pt-2 border-t border-slate-800 flex items-center justify-between gap-3">
+          <span class="text-[11px] text-slate-400 font-mono hidden sm:inline">
+            💡 Tips: Tekan &amp; geser di dalam kotak untuk memindah, tarik 8 titik putih di sudut/tepi untuk mengubah ukuran.
+          </span>
+          <div class="flex items-center gap-2.5 ml-auto">
+            <button type="button" onclick="closeUniversalCropper()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer">
+              Batal
+            </button>
+            <button type="button" onclick="applyUniversalCrop()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-md hover:shadow-lg transition flex items-center gap-1.5 cursor-pointer">
+              <span>✂️ Terapkan &amp; Simpan Gambar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
   <!-- Interactive World Map Point Picker Modal -->
   <div id="modalMapPicker" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[95vh]">
@@ -2952,6 +3035,474 @@
     }
 
     /* Utility: Downscale and compress image to avoid localStorage QuotaExceededError */
+    
+    /* =================================================================== */
+    /* UNIVERSAL INTERACTIVE IMAGE CROPPER ENGINE (DRAG, RESIZE, ZOOM)    */
+    /* =================================================================== */
+    let cropperState = {
+      image: null,
+      imgLoaded: false,
+      zoom: 1,
+      minZoom: 0.2,
+      maxZoom: 3.5,
+      rotation: 0,
+      offsetX: 0,
+      offsetY: 0,
+      cropRect: { x: 50, y: 50, w: 320, h: 200 },
+      aspectRatio: 16 / 10,
+      targetMaxWidth: 640,
+      targetFormat: 'image/jpeg',
+      callback: null,
+      isDraggingCrop: false,
+      isPanningImage: false,
+      activeHandle: null,
+      dragStartX: 0,
+      dragStartY: 0,
+      cropStartX: 0,
+      cropStartY: 0,
+      cropStartW: 0,
+      cropStartH: 0,
+      imgStartX: 0,
+      imgStartY: 0
+    };
+
+    function openImageCropper(fileOrUrl, ratio = 16/10, targetMaxWidth = 640, format = 'image/jpeg', callback) {
+      if (!fileOrUrl) return;
+      cropperState.aspectRatio = ratio;
+      cropperState.targetMaxWidth = targetMaxWidth;
+      cropperState.targetFormat = format;
+      cropperState.callback = callback;
+      cropperState.rotation = 0;
+      cropperState.zoom = 1;
+      cropperState.offsetX = 0;
+      cropperState.offsetY = 0;
+
+      const modal = document.getElementById('universalImageCropperModal');
+      const spinner = document.getElementById('cropperLoadingSpinner');
+      if (modal) modal.classList.remove('hidden');
+      if (spinner) spinner.classList.remove('hidden');
+
+      // Update active ratio button
+      updateRatioButtonsUI(ratio);
+
+      const img = new Image();
+      img.onload = function() {
+        cropperState.image = img;
+        cropperState.imgLoaded = true;
+        if (spinner) spinner.classList.add('hidden');
+        initCropperStage();
+      };
+      img.onerror = function() {
+        if (spinner) spinner.classList.add('hidden');
+        alert('Gagal memuat gambar untuk dipotong.');
+        closeUniversalCropper();
+      };
+
+      if (typeof fileOrUrl === 'string') {
+        img.src = fileOrUrl;
+      } else if (fileOrUrl instanceof File || fileOrUrl instanceof Blob) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(fileOrUrl);
+      }
+    }
+
+    function closeUniversalCropper() {
+      const modal = document.getElementById('universalImageCropperModal');
+      if (modal) modal.classList.add('hidden');
+      cropperState.imgLoaded = false;
+      cropperState.image = null;
+    }
+
+    function updateRatioButtonsUI(ratio) {
+      const btnMap = {
+        '16_10': document.getElementById('cropRatioBtn_16_10'),
+        '16_9': document.getElementById('cropRatioBtn_16_9'),
+        '4_5': document.getElementById('cropRatioBtn_4_5'),
+        '1_1': document.getElementById('cropRatioBtn_1_1'),
+        '4_3': document.getElementById('cropRatioBtn_4_3'),
+        'free': document.getElementById('cropRatioBtn_free')
+      };
+      Object.values(btnMap).forEach(btn => {
+        if (btn) {
+          btn.className = 'px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer';
+        }
+      });
+      let targetKey = 'free';
+      if (ratio) {
+        if (Math.abs(ratio - (16/10)) < 0.01) targetKey = '16_10';
+        else if (Math.abs(ratio - (16/9)) < 0.01) targetKey = '16_9';
+        else if (Math.abs(ratio - (4/5)) < 0.01) targetKey = '4_5';
+        else if (Math.abs(ratio - 1) < 0.01) targetKey = '1_1';
+        else if (Math.abs(ratio - (4/3)) < 0.01) targetKey = '4_3';
+      }
+      if (btnMap[targetKey]) {
+        btnMap[targetKey].className = 'px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-[#155293] text-white transition cursor-pointer shadow-xs';
+      }
+    }
+
+    function cropperSetRatio(ratio, key) {
+      cropperState.aspectRatio = ratio;
+      updateRatioButtonsUI(ratio);
+      resetCropRectToRatio();
+      drawCropper();
+    }
+
+    function initCropperStage() {
+      const canvas = document.getElementById('cropperStageCanvas');
+      const wrapper = document.getElementById('cropperStageWrapper');
+      if (!canvas || !wrapper) return;
+
+      const rect = wrapper.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      // Fit image into canvas
+      const imgW = cropperState.image.naturalWidth || cropperState.image.width;
+      const imgH = cropperState.image.naturalHeight || cropperState.image.height;
+      const scaleX = (canvas.width * 0.8) / imgW;
+      const scaleY = (canvas.height * 0.8) / imgH;
+      cropperState.zoom = Math.min(scaleX, scaleY, 1);
+      cropperState.offsetX = canvas.width / 2;
+      cropperState.offsetY = canvas.height / 2;
+
+      document.getElementById('cropperZoomSlider').value = cropperState.zoom.toFixed(2);
+      document.getElementById('cropperZoomVal').textContent = Math.round(cropperState.zoom * 100) + '%';
+
+      resetCropRectToRatio();
+      bindCropperEvents();
+      drawCropper();
+    }
+
+    function resetCropRectToRatio() {
+      const canvas = document.getElementById('cropperStageCanvas');
+      if (!canvas) return;
+
+      const maxBoxW = canvas.width * 0.72;
+      const maxBoxH = canvas.height * 0.72;
+      let w = maxBoxW;
+      let h = maxBoxH;
+
+      if (cropperState.aspectRatio) {
+        if (maxBoxW / cropperState.aspectRatio <= maxBoxH) {
+          w = maxBoxW;
+          h = w / cropperState.aspectRatio;
+        } else {
+          h = maxBoxH;
+          w = h * cropperState.aspectRatio;
+        }
+      }
+
+      cropperState.cropRect = {
+        x: (canvas.width - w) / 2,
+        y: (canvas.height - h) / 2,
+        w: w,
+        h: h
+      };
+    }
+
+    function cropperSetZoom(val) {
+      cropperState.zoom = parseFloat(val);
+      document.getElementById('cropperZoomVal').textContent = Math.round(cropperState.zoom * 100) + '%';
+      drawCropper();
+    }
+
+    function cropperAdjustZoom(delta) {
+      let z = cropperState.zoom + delta;
+      z = Math.max(cropperState.minZoom, Math.min(cropperState.maxZoom, z));
+      cropperState.zoom = z;
+      document.getElementById('cropperZoomSlider').value = z.toFixed(2);
+      document.getElementById('cropperZoomVal').textContent = Math.round(z * 100) + '%';
+      drawCropper();
+    }
+
+    function cropperRotate90() {
+      cropperState.rotation = (cropperState.rotation + 90) % 360;
+      drawCropper();
+    }
+
+    function cropperResetTransform() {
+      initCropperStage();
+    }
+
+    function drawCropper() {
+      const canvas = document.getElementById('cropperStageCanvas');
+      if (!canvas || !cropperState.imgLoaded || !cropperState.image) return;
+      const ctx = canvas.getContext('2d');
+      const cw = canvas.width;
+      const ch = canvas.height;
+
+      // 1. Background Grid Checkerboard
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, cw, ch);
+
+      // 2. Draw Transformed Image
+      ctx.save();
+      ctx.translate(cropperState.offsetX, cropperState.offsetY);
+      ctx.rotate((cropperState.rotation * Math.PI) / 180);
+      ctx.scale(cropperState.zoom, cropperState.zoom);
+      const img = cropperState.image;
+      const iw = img.naturalWidth || img.width;
+      const ih = img.naturalHeight || img.height;
+      ctx.drawImage(img, -iw / 2, -ih / 2, iw, ih);
+      ctx.restore();
+
+      // 3. Dark Semi-Transparent Vignette Mask Outside Crop Box
+      const cr = cropperState.cropRect;
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.72)';
+      // Top
+      ctx.fillRect(0, 0, cw, cr.y);
+      // Bottom
+      ctx.fillRect(0, cr.y + cr.h, cw, ch - (cr.y + cr.h));
+      // Left
+      ctx.fillRect(0, cr.y, cr.x, cr.h);
+      // Right
+      ctx.fillRect(cr.x + cr.w, cr.y, cw - (cr.x + cr.w), cr.h);
+
+      // 4. Crop Box Border & Drop Shadow
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(cr.x, cr.y, cr.w, cr.h);
+
+      // 5. Rule of Thirds Grid Lines inside Crop Box
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      // Verticals
+      ctx.moveTo(cr.x + cr.w / 3, cr.y);
+      ctx.lineTo(cr.x + cr.w / 3, cr.y + cr.h);
+      ctx.moveTo(cr.x + (cr.w * 2) / 3, cr.y);
+      ctx.lineTo(cr.x + (cr.w * 2) / 3, cr.y + cr.h);
+      // Horizontals
+      ctx.moveTo(cr.x, cr.y + cr.h / 3);
+      ctx.lineTo(cr.x + cr.w, cr.y + cr.h / 3);
+      ctx.moveTo(cr.x, cr.y + (cr.h * 2) / 3);
+      ctx.lineTo(cr.x + cr.w, cr.y + (cr.h * 2) / 3);
+      ctx.stroke();
+
+      // 6. 8 Interactive Handles (White squares with subtle shadow)
+      const handleSize = 10;
+      const handles = getCropHandles();
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#155293';
+      ctx.lineWidth = 2;
+      Object.keys(handles).forEach(k => {
+        const pt = handles[k];
+        ctx.fillRect(pt.x - handleSize / 2, pt.y - handleSize / 2, handleSize, handleSize);
+        ctx.strokeRect(pt.x - handleSize / 2, pt.y - handleSize / 2, handleSize, handleSize);
+      });
+    }
+
+    function getCropHandles() {
+      const cr = cropperState.cropRect;
+      return {
+        nw: { x: cr.x, y: cr.y },
+        ne: { x: cr.x + cr.w, y: cr.y },
+        sw: { x: cr.x, y: cr.y + cr.h },
+        se: { x: cr.x + cr.w, y: cr.y + cr.h },
+        n:  { x: cr.x + cr.w / 2, y: cr.y },
+        s:  { x: cr.x + cr.w / 2, y: cr.y + cr.h },
+        w:  { x: cr.x, y: cr.y + cr.h / 2 },
+        e:  { x: cr.x + cr.w, y: cr.y + cr.h / 2 }
+      };
+    }
+
+    let cropperEventsBound = false;
+    function bindCropperEvents() {
+      if (cropperEventsBound) return;
+      cropperEventsBound = true;
+      const canvas = document.getElementById('cropperStageCanvas');
+      if (!canvas) return;
+
+      const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      };
+
+      const findHandle = (x, y) => {
+        const handles = getCropHandles();
+        const radius = 12;
+        for (const k in handles) {
+          const h = handles[k];
+          if (Math.abs(x - h.x) <= radius && Math.abs(y - h.y) <= radius) {
+            return k;
+          }
+        }
+        return null;
+      };
+
+      const onStart = (e) => {
+        const pos = getPos(e);
+        const handle = findHandle(pos.x, pos.y);
+        cropperState.dragStartX = pos.x;
+        cropperState.dragStartY = pos.y;
+        cropperState.cropStartX = cropperState.cropRect.x;
+        cropperState.cropStartY = cropperState.cropRect.y;
+        cropperState.cropStartW = cropperState.cropRect.w;
+        cropperState.cropStartH = cropperState.cropRect.h;
+        cropperState.imgStartX = cropperState.offsetX;
+        cropperState.imgStartY = cropperState.offsetY;
+
+        if (handle) {
+          cropperState.activeHandle = handle;
+        } else if (
+          pos.x >= cropperState.cropRect.x &&
+          pos.x <= cropperState.cropRect.x + cropperState.cropRect.w &&
+          pos.y >= cropperState.cropRect.y &&
+          pos.y <= cropperState.cropRect.y + cropperState.cropRect.h
+        ) {
+          cropperState.activeHandle = 'move-crop';
+        } else {
+          cropperState.activeHandle = 'pan-img';
+        }
+        e.preventDefault();
+      };
+
+      const onMove = (e) => {
+        const pos = getPos(e);
+        const dx = pos.x - cropperState.dragStartX;
+        const dy = pos.y - cropperState.dragStartY;
+
+        if (!cropperState.activeHandle) {
+          // Update cursor hover
+          const h = findHandle(pos.x, pos.y);
+          if (h) {
+            canvas.style.cursor = h + '-resize';
+          } else if (
+            pos.x >= cropperState.cropRect.x &&
+            pos.x <= cropperState.cropRect.x + cropperState.cropRect.w &&
+            pos.y >= cropperState.cropRect.y &&
+            pos.y <= cropperState.cropRect.y + cropperState.cropRect.h
+          ) {
+            canvas.style.cursor = 'move';
+          } else {
+            canvas.style.cursor = 'grab';
+          }
+          return;
+        }
+
+        if (cropperState.activeHandle === 'pan-img') {
+          cropperState.offsetX = cropperState.imgStartX + dx;
+          cropperState.offsetY = cropperState.imgStartY + dy;
+        } else if (cropperState.activeHandle === 'move-crop') {
+          let nx = cropperState.cropStartX + dx;
+          let ny = cropperState.cropStartY + dy;
+          nx = Math.max(0, Math.min(canvas.width - cropperState.cropRect.w, nx));
+          ny = Math.max(0, Math.min(canvas.height - cropperState.cropRect.h, ny));
+          cropperState.cropRect.x = nx;
+          cropperState.cropRect.y = ny;
+        } else {
+          // Resize handle
+          let newX = cropperState.cropStartX;
+          let newY = cropperState.cropStartY;
+          let newW = cropperState.cropStartW;
+          let newH = cropperState.cropStartH;
+          const minDim = 40;
+
+          const h = cropperState.activeHandle;
+          if (h.includes('e')) newW = Math.max(minDim, cropperState.cropStartW + dx);
+          if (h.includes('s')) newH = Math.max(minDim, cropperState.cropStartH + dy);
+          if (h.includes('w')) {
+            const potentialW = cropperState.cropStartW - dx;
+            if (potentialW >= minDim) {
+              newW = potentialW;
+              newX = cropperState.cropStartX + dx;
+            }
+          }
+          if (h.includes('n')) {
+            const potentialH = cropperState.cropStartH - dy;
+            if (potentialH >= minDim) {
+              newH = potentialH;
+              newY = cropperState.cropStartY + dy;
+            }
+          }
+
+          if (cropperState.aspectRatio) {
+            // Lock aspect ratio
+            if (h === 'e' || h === 'w' || h === 'se' || h === 'sw') {
+              newH = newW / cropperState.aspectRatio;
+            } else {
+              newW = newH * cropperState.aspectRatio;
+            }
+          }
+
+          cropperState.cropRect = { x: newX, y: newY, w: newW, h: newH };
+        }
+
+        drawCropper();
+        e.preventDefault();
+      };
+
+      const onEnd = () => {
+        cropperState.activeHandle = null;
+        canvas.style.cursor = 'default';
+      };
+
+      canvas.addEventListener('mousedown', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onEnd);
+
+      canvas.addEventListener('touchstart', onStart, { passive: false });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onEnd);
+
+      // Wheel Zoom
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.08 : -0.08;
+        cropperAdjustZoom(delta);
+      }, { passive: false });
+    }
+
+    function applyUniversalCrop() {
+      if (!cropperState.image || !cropperState.imgLoaded) return;
+      const canvas = document.getElementById('cropperStageCanvas');
+      if (!canvas) return;
+
+      const img = cropperState.image;
+      const iw = img.naturalWidth || img.width;
+      const ih = img.naturalHeight || img.height;
+
+      // Create an export canvas of exact aspect ratio
+      const cr = cropperState.cropRect;
+      const exportW = Math.min(cropperState.targetMaxWidth, Math.round(cr.w * 2));
+      const exportH = Math.round(exportW * (cr.h / cr.w));
+
+      const expCanvas = document.createElement('canvas');
+      expCanvas.width = exportW;
+      expCanvas.height = exportH;
+      const expCtx = expCanvas.getContext('2d');
+
+      // Map canvas crop rect back to original image space
+      expCtx.save();
+      // Scale to export canvas
+      expCtx.scale(exportW / cr.w, exportH / cr.h);
+      // Translate origin to top-left of crop rect in canvas space
+      expCtx.translate(-cr.x, -cr.y);
+      // Apply the same transform as stage canvas
+      expCtx.translate(cropperState.offsetX, cropperState.offsetY);
+      expCtx.rotate((cropperState.rotation * Math.PI) / 180);
+      expCtx.scale(cropperState.zoom, cropperState.zoom);
+      expCtx.drawImage(img, -iw / 2, -ih / 2, iw, ih);
+      expCtx.restore();
+
+      // Compress output to lightweight DataURL
+      const quality = 0.80;
+      const format = cropperState.targetFormat || 'image/jpeg';
+      const croppedDataUrl = expCanvas.toDataURL(format, quality);
+
+      closeUniversalCropper();
+
+      if (typeof cropperState.callback === 'function') {
+        cropperState.callback(croppedDataUrl);
+      }
+      notifyDataSaved('Gambar berhasil dipotong dan disesuaikan!');
+    }
+
     function downscaleImage(src, maxDim, quality, callback) {
       if (!src) { callback(''); return; }
       if (!src.startsWith('data:image')) { callback(src); return; }
@@ -4637,31 +5188,11 @@
     function handleProjectThumbFile(input) {
       if (!input || !input.files || !input.files[0]) return;
       const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const rawUrl = e.target.result;
-        // Optimize & compress image using canvas to ensure localStorage stays healthy
-        const img = new Image();
-        img.onload = function() {
-          const maxW = 1200;
-          let w = img.width;
-          let h = img.height;
-          if (w > maxW) {
-            h = Math.round((h * maxW) / w);
-            w = maxW;
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, w, h);
-          const compressed = canvas.toDataURL('image/jpeg', 0.85);
-          document.getElementById('inpProjectImg').value = compressed;
-          updateProjectThumbPreview(compressed);
-        };
-        img.src = rawUrl;
-      };
-      reader.readAsDataURL(file);
+      openImageCropper(file, 16 / 10, 640, 'image/jpeg', function(croppedDataUrl) {
+        document.getElementById('inpProjectImg').value = croppedDataUrl;
+        updateProjectThumbPreview(croppedDataUrl);
+        input.value = '';
+      });
     }
 
     function updateProjectThumbPreview(url) {
@@ -4838,11 +5369,38 @@
         });
       }
 
-      localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
-      renderProjectsCards();
-      renderOverviewStats();
-      toggleProjectForm(false);
-      notifyDataSaved('Proyek website berhasil disimpan!');
+      try {
+        localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
+        renderProjectsCards();
+        renderOverviewStats();
+        toggleProjectForm(false);
+        notifyDataSaved('Proyek website berhasil disimpan!');
+      } catch (err) {
+        console.warn('LocalStorage quota warning in saveProjectRecord, optimizing...', err);
+        // Safeguard: Compress legacy oversized base64 images in currentProjects
+        currentProjects.forEach(p => {
+          if (p.img && p.img.startsWith('data:image') && p.img.length > 80000) {
+            // Downscale to 500px jpeg
+            const canvas = document.createElement('canvas');
+            canvas.width = 480;
+            canvas.height = 300;
+            const ctx = canvas.getContext('2d');
+            const im = new Image();
+            im.src = p.img;
+            ctx.drawImage(im, 0, 0, 480, 300);
+            p.img = canvas.toDataURL('image/jpeg', 0.70);
+          }
+        });
+        try {
+          localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
+          renderProjectsCards();
+          renderOverviewStats();
+          toggleProjectForm(false);
+          notifyDataSaved('Proyek berhasil disimpan (dengan kompresi otomatis)!');
+        } catch (e2) {
+          alert('Penyimpanan lokal browser penuh. Gunakan tombol crop gambar untuk memperkecil ukuran sampul proyek.');
+        }
+      }
     }
 
     /* Routes Logic */
@@ -5296,16 +5854,11 @@
 
     function handleToolLogoFileUpload(input) {
       if (!input || !input.files || !input.files[0]) return;
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const rawUrl = e.target.result;
-        downscaleImage(rawUrl, 200, 0.9, function(compressed) {
-          currentNewToolLogoBase64 = compressed;
-          updateNewToolPreview();
-        });
-      };
-      reader.readAsDataURL(file);
+      openImageCropper(input.files[0], 1 / 1, 200, 'image/png', function(cropped) {
+        currentNewToolLogoBase64 = cropped;
+        updateNewToolPreview();
+        input.value = '';
+      });
     }
 
     function updateNewToolPreview() {

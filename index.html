@@ -95,31 +95,32 @@
     }
 
     /* Section 03 Project Cards in Blue Mode */
+    /* Section 03 Project Cards in Blue Mode: Crisp white tactile cards on blue grid */
     body.blueprint-mode #my-project article {
-      background-color: #0d2b50 !important;
-      border-color: rgba(255, 255, 255, 0.2) !important;
-      color: #FFFFFF !important;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4) !important;
+      background-color: #FFFFFF !important;
+      border-color: rgba(255, 255, 255, 0.4) !important;
+      color: #0F172A !important;
+      box-shadow: 0 14px 35px -5px rgba(0, 0, 0, 0.45) !important;
     }
     body.blueprint-mode #my-project article h3 a {
-      color: #FFFFFF !important;
+      color: #0F172A !important;
     }
     body.blueprint-mode #my-project article p {
-      color: #CBD5E1 !important;
+      color: #475569 !important;
     }
     body.blueprint-mode #my-project article .bg-stone-50 {
-      background-color: rgba(255, 255, 255, 0.08) !important;
-      border-color: rgba(255, 255, 255, 0.15) !important;
-      color: #E2E8F0 !important;
+      background-color: #F8FAFC !important;
+      border-color: #E2E8F0 !important;
+      color: #334155 !important;
     }
     body.blueprint-mode #my-project article .text-ink {
-      color: #FFFFFF !important;
+      color: #0F172A !important;
     }
     body.blueprint-mode #my-project article .text-stone-400 {
-      color: #94A3B8 !important;
+      color: #64748B !important;
     }
     body.blueprint-mode #my-project article .border-stone-200 {
-      border-color: rgba(255, 255, 255, 0.15) !important;
+      border-color: #E2E8F0 !important;
     }
 
     body.blueprint-mode {
@@ -208,36 +209,93 @@
     body.dark-mode .clipboard-wood {
       box-shadow: 0 0 0 6px #FFFFFF, 0 28px 60px rgba(0,0,0,0.65);
     }
-    /* Automatic High-Contrast Text Adaptations for Dark & Blueprint Modes */
-    body.dark-mode .text-ink,
-    body.dark-mode h1:not(.keep-colored),
-    body.dark-mode h2:not(.keep-colored),
-    body.dark-mode h3:not(.keep-colored),
-    body.dark-mode h4:not(.keep-colored) {
-      color: #FFFFFF !important;
-    }
-    body.dark-mode .text-stone-700,
-    body.dark-mode .text-stone-600 {
-      color: #E2E8F0 !important;
-    }
-    body.dark-mode .text-stone-500 {
-      color: #94A3B8 !important;
-    }
-    body.blueprint-mode .text-ink,
-    body.blueprint-mode h1:not(.keep-colored),
-    body.blueprint-mode h2:not(.keep-colored),
-    body.blueprint-mode h3:not(.keep-colored),
-    body.blueprint-mode h4:not(.keep-colored) {
-      color: #FFFFFF !important;
-    }
-    body.blueprint-mode .text-stone-700,
-    body.blueprint-mode .text-stone-600 {
-      color: #F1F5F9 !important;
-    }
-    body.blueprint-mode .text-stone-500 {
-      color: #CBD5E1 !important;
+    /* =================================================================== */
+    /* BULLETPROOF CONTRAST & LEGIBILITY RULES (WHITE & BLUE THEMES)       */
+    /* =================================================================== */
+    /* 1. All white/light surface cards (bg-white, paper-sheet, bg-stone-50, etc.)
+          MUST ALWAYS maintain crisp, high-contrast dark text in BOTH White & Blue themes. */
+    .bg-white,
+    .paper-sheet,
+    .bg-stone-50,
+    .bg-stone-100,
+    .bg-\[\#FFFDF7\],
+    .modal-dialog-white {
+      color: #0F172A;
     }
 
+    /* Enforce dark typography inside ANY white/light container */
+    .bg-white .text-ink,
+    .paper-sheet .text-ink,
+    .bg-stone-50 .text-ink,
+    .bg-\[\#FFFDF7\] .text-ink,
+    body.blueprint-mode .bg-white .text-ink,
+    body.blueprint-mode .paper-sheet .text-ink,
+    body.blueprint-mode .bg-stone-50 .text-ink,
+    body.blueprint-mode .bg-\[\#FFFDF7\] .text-ink {
+      color: #0F172A !important;
+    }
+
+    .bg-white h1:not(.keep-colored),
+    .bg-white h2:not(.keep-colored),
+    .bg-white h3:not(.keep-colored),
+    .bg-white h4:not(.keep-colored),
+    .bg-white h5:not(.keep-colored),
+    .paper-sheet h1:not(.keep-colored),
+    .paper-sheet h2:not(.keep-colored),
+    .paper-sheet h3:not(.keep-colored),
+    .paper-sheet h4:not(.keep-colored),
+    .paper-sheet h5:not(.keep-colored),
+    body.blueprint-mode .bg-white h1:not(.keep-colored),
+    body.blueprint-mode .bg-white h2:not(.keep-colored),
+    body.blueprint-mode .bg-white h3:not(.keep-colored),
+    body.blueprint-mode .bg-white h4:not(.keep-colored),
+    body.blueprint-mode .bg-white h5:not(.keep-colored),
+    body.blueprint-mode .paper-sheet h1:not(.keep-colored),
+    body.blueprint-mode .paper-sheet h2:not(.keep-colored),
+    body.blueprint-mode .paper-sheet h3:not(.keep-colored),
+    body.blueprint-mode .paper-sheet h4:not(.keep-colored),
+    body.blueprint-mode .paper-sheet h5:not(.keep-colored) {
+      color: #0F172A !important;
+    }
+
+    .bg-white p,
+    .paper-sheet p,
+    body.blueprint-mode .bg-white p,
+    body.blueprint-mode .paper-sheet p {
+      color: #334155;
+    }
+
+    .bg-white .text-stone-700,
+    .paper-sheet .text-stone-700,
+    body.blueprint-mode .bg-white .text-stone-700,
+    body.blueprint-mode .paper-sheet .text-stone-700 {
+      color: #334155 !important;
+    }
+
+    .bg-white .text-stone-600,
+    .paper-sheet .text-stone-600,
+    body.blueprint-mode .bg-white .text-stone-600,
+    body.blueprint-mode .paper-sheet .text-stone-600 {
+      color: #475569 !important;
+    }
+
+    .bg-white .text-stone-500,
+    .paper-sheet .text-stone-500,
+    body.blueprint-mode .bg-white .text-stone-500,
+    body.blueprint-mode .paper-sheet .text-stone-500 {
+      color: #64748B !important;
+    }
+
+    /* In Section 02 20+ Sertifikat table, ensure all labels are bold dark ink */
+    #curated-experience .grid-cols-1 span.text-xs,
+    #curated-experience .grid-cols-2 span.text-xs,
+    body.blueprint-mode #curated-experience .grid-cols-1 span.text-xs,
+    body.blueprint-mode #curated-experience .grid-cols-2 span.text-xs {
+      color: #0F172A !important;
+      font-weight: 700;
+    }
+
+    /* 2. Elements directly on the blueprint background (outside white cards) */
     body.blueprint-mode header a,
     body.blueprint-mode header nav a {
       color: #FFFFFF !important;
@@ -923,6 +981,33 @@
     .canva-empty-slot:hover {
       border-color: #0284C7;
       background: #F0F9FF;
+    }
+
+  
+    /* =================================================================== */
+    /* 3-SECOND BIDIRECTIONAL CINEMATIC SCROLL BLUR SYSTEM                 */
+    /* =================================================================== */
+    .scroll-blur-section {
+      transition: filter 3s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 3s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: filter, opacity, transform;
+    }
+
+    /* Off-screen state: blurred and semi-transparent (both top & bottom exits) */
+    .scroll-blur-section.scroll-blur-out {
+      filter: blur(14px);
+      opacity: 0.10;
+      transform: translateY(28px) scale(0.985);
+      pointer-events: none;
+    }
+
+    /* In-viewport state: razor sharp, full opacity, perfect position */
+    .scroll-blur-section.scroll-blur-in {
+      filter: blur(0px);
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
     }
 
   </style>
@@ -1635,31 +1720,31 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-ink">
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-crimson font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">10x</span>
-                <span class="text-xs">Sertifikat Kejuaraan Lomba Desain Grafis</span>
+                <span class="text-xs font-bold text-slate-800">Sertifikat Kejuaraan Lomba Desain Grafis</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-crimson font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">4x</span>
-                <span class="text-xs">Kejuaraan &amp; Penghargaan Kompetisi Internasional</span>
+                <span class="text-xs font-bold text-slate-800">Kejuaraan &amp; Penghargaan Kompetisi Internasional</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-crimson font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">2x</span>
-                <span class="text-xs">Sertifikat Media Creative</span>
+                <span class="text-xs font-bold text-slate-800">Sertifikat Media Creative</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-[#155293] font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
-                <span class="text-xs">Sertifikat Internship Web Developer</span>
+                <span class="text-xs font-bold text-slate-800">Sertifikat Internship Web Developer</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-[#155293] font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
-                <span class="text-xs">Sertifikat Pekerjaan Multimedia</span>
+                <span class="text-xs font-bold text-slate-800">Sertifikat Pekerjaan Multimedia</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-amber-700 font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
-                <span class="text-xs">Narasumber Workshop Digital Marketing</span>
+                <span class="text-xs font-bold text-slate-800">Narasumber Workshop Digital Marketing</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-amber-700 font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
-                <span class="text-xs">Narasumber Workshop Konten Video</span>
+                <span class="text-xs font-bold text-slate-800">Narasumber Workshop Konten Video</span>
               </div>
               <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-amber-300 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-[#155293] font-black text-sm flex-shrink-0 whitespace-nowrap bg-amber-100 px-2 py-1 rounded shadow-xs border border-amber-300">20+</span>
@@ -1688,7 +1773,7 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 01: WEB ENGINEER (FULL VIEWPORT SCROLL EXPERIENCE) -->
     <!-- =================================================================== -->
-    <section id="chapter-web-engineer" class="min-h-[85vh] sm:min-h-[90vh] py-28 sm:py-36 flex flex-col justify-center items-center text-center my-14 sm:my-24 relative select-none">
+    <section id="chapter-web-engineer" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="cinematic-blur-card text-center space-y-6">
           <div>
@@ -1756,7 +1841,7 @@
     <!-- =================================================================== -->
     <!-- SECTION 03: 03 / MY PROJECT (14 WEBSITE)                           -->
     <!-- =================================================================== -->
-    <section id="my-project" class="py-16 sm:py-24">
+    <section id="my-project" class="py-20 sm:py-28 scroll-blur-section">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
@@ -1803,7 +1888,7 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 02: DESIGN GRAFIS & VIDEO EDITOR (FULL VIEWPORT) -->
     <!-- =================================================================== -->
-    <section id="chapter-multimedia" class="min-h-[85vh] sm:min-h-[90vh] py-28 sm:py-36 flex flex-col justify-center items-center text-center my-14 sm:my-24 relative select-none">
+    <section id="chapter-multimedia" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="cinematic-blur-card text-center space-y-4">
           <h2 class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center">
@@ -1819,7 +1904,7 @@
     <!-- =================================================================== -->
     <!-- SECTION 04: DESIGN PORTFOLIO & 3D SMARTPHONE SHOWCASE              -->
     <!-- =================================================================== -->
-    <section id="kelola-medsos" class="py-16 sm:py-24 border-y border-stone-300/40 relative">
+    <section id="kelola-medsos" class="py-20 sm:py-28 border-y border-stone-300/40 relative scroll-blur-section">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
@@ -2001,7 +2086,7 @@
     <!-- SECTION 05: 05 / PAPAN JEJAK PENGALAMAN, PENDIDIKAN & ORGANISASI    -->
     <!--             (SINGLE HEADER TAG, NO NUMBERS ON SUB-BOARDS, WHITE RIM)-->
     <!-- =================================================================== -->
-    <section id="papan-jejak" class="py-14">
+    <section id="papan-jejak" class="py-20 sm:py-28 scroll-blur-section">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
         <!-- Single Represented Header Badge Only (No duplicate H2 or paragraph below it) -->
@@ -2402,7 +2487,7 @@
 
     <!-- SECTION 07: PROFIL EKSEKUTIF (CANVA SLIDE IMAGE CARD & 3D TILT)    -->
     <!-- =================================================================== -->
-    <section id="executive-closing" class="relative py-14 overflow-hidden">
+    <section id="executive-closing" class="relative py-20 sm:py-28 overflow-hidden scroll-blur-section">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <!-- Top Section Header -->
@@ -5974,7 +6059,44 @@
       }
     });
 
+    
+    /* =================================================================== */
+    /* 3-SECOND BIDIRECTIONAL SCROLL BLUR OBSERVER                         */
+    /* =================================================================== */
+    function initBidirectionalScrollBlur() {
+      const sections = document.querySelectorAll('.scroll-blur-section');
+      if (!sections || !sections.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Smoothly unblur to 0px over 3 seconds
+            entry.target.classList.remove('scroll-blur-out');
+            entry.target.classList.add('scroll-blur-in');
+          } else {
+            // Smoothly blur to 14px over 3 seconds when scrolled past (top or bottom)
+            entry.target.classList.remove('scroll-blur-in');
+            entry.target.classList.add('scroll-blur-out');
+          }
+        });
+      }, {
+        threshold: 0.08,
+        rootMargin: '0px 0px -5% 0px'
+      });
+
+      sections.forEach((sec, idx) => {
+        // Hero section (index 0) starts visible on page load
+        if (idx === 0) {
+          sec.classList.add('scroll-blur-in');
+        } else {
+          sec.classList.add('scroll-blur-out');
+        }
+        observer.observe(sec);
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      initBidirectionalScrollBlur();
       if (window.location.hash === '#admin') {
         openSecretAdminModal();
       }
@@ -8762,4 +8884,3 @@
   </script>
 </body>
 </html>
-
