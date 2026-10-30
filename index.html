@@ -1063,27 +1063,31 @@
     }
 
     
+    
     /* =================================================================== */
-    /* 3-SECOND BIDIRECTIONAL CINEMATIC SCROLL BLUR SYSTEM                 */
+    /* ALL-CONTAINER BIDIRECTIONAL SMOOTH SCROLL BLUR SYSTEM               */
     /* =================================================================== */
+    .smooth-blur-container,
     .scroll-blur-section,
     .smooth-blur-reveal {
-      transition: filter 3s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 3s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: filter 1.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: filter, opacity, transform;
     }
 
-    /* Off-screen state: blurred and semi-transparent (both top & bottom exits) */
+    /* Out of viewport: blurred and soft opacity */
+    .smooth-blur-container.scroll-blur-out,
     .scroll-blur-section.scroll-blur-out,
     .smooth-blur-reveal.scroll-blur-out {
-      filter: blur(16px);
-      opacity: 0.12;
-      transform: translateY(26px) scale(0.985);
+      filter: blur(14px);
+      opacity: 0.15;
+      transform: translateY(22px) scale(0.985);
       pointer-events: none;
     }
 
-    /* In-viewport state: razor sharp, full opacity, perfect position */
+    /* Inside active reading viewport: crystal clear, fully opaque */
+    .smooth-blur-container.scroll-blur-in,
     .scroll-blur-section.scroll-blur-in,
     .smooth-blur-reveal.scroll-blur-in {
       filter: blur(0px);
@@ -1092,41 +1096,33 @@
       pointer-events: auto;
     }
 
-
-  </style>
-  <!-- High-Precision World & Detailed Indonesia Landmass Polygons for Dotted Map -->
-  <script src="assets/world-land.js"></script>
-  <script>
-    // Failsafe: Smooth 3.5s blur-fade opening transition with 5s max auto-dismissal & Instant Recruiter Skip
-    var introTimer = null;
-    window.dismissCinematicIntro = function(instant) {
-      var intro = document.getElementById('cinematicOpeningScreen');
-      if (!intro || intro.dataset.dismissed === 'true') return;
-      intro.dataset.dismissed = 'true';
-      if (introTimer) { clearTimeout(introTimer); introTimer = null; }
-      
-      intro.style.pointerEvents = 'none';
-      if (instant) {
-        intro.style.transition = 'opacity 0.25s ease-out, filter 0.25s ease-out';
-        intro.style.filter = 'blur(10px)';
-        intro.style.opacity = '0';
-        try { sessionStorage.setItem('fathur_intro_dismissed', 'true'); } catch (e) {}
-        setTimeout(function() {
-          intro.style.display = 'none';
-          document.body.style.overflow = '';
-        }, 260);
-      } else {
-        intro.style.transition = 'opacity 3.5s cubic-bezier(0.4, 0, 0.2, 1), filter 3.5s cubic-bezier(0.4, 0, 0.2, 1), transform 3.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        intro.style.filter = 'blur(40px)';
-        intro.style.opacity = '0';
-        intro.style.transform = 'scale(1.05)';
-        try { sessionStorage.setItem('fathur_intro_dismissed', 'true'); } catch (e) {}
-        setTimeout(function() {
-          intro.style.display = 'none';
-          document.body.style.overflow = '';
-        }, 3500);
+    /* Native View Timeline on Chromium (Chrome, Edge) for buttery smooth 120fps */
+    @supports (animation-timeline: view()) {
+      .smooth-blur-container {
+        animation: bidirectionalScrollBlur auto cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-timeline: view();
+        animation-range: entry -8% cover 108%;
       }
-    };
+
+      @keyframes bidirectionalScrollBlur {
+        0% {
+          filter: blur(15px);
+          opacity: 0.12;
+          transform: translateY(24px) scale(0.98);
+        }
+        14%, 86% {
+          filter: blur(0px);
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          filter: blur(15px);
+          opacity: 0.12;
+          transform: translateY(-24px) scale(0.98);
+        }
+      }
+    }
+;
 
     // Auto-enter landing page after 5 seconds if visitor does not click
     introTimer = setTimeout(function() {
@@ -1247,7 +1243,7 @@
     <!-- =================================================================== -->
     <!-- SECTION 01: 01 / TENTANG SAYA (SINGLE HEADER TAG, NO SUB-DESC)      -->
     <!-- =================================================================== -->
-    <section id="tentang-saya" class="relative pt-8 pb-14 overflow-hidden">
+    <section id="tentang-saya" class="relative pt-8 pb-14 overflow-hidden smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Single Represented Header Badge Only -->
@@ -1335,7 +1331,7 @@
             </div>
 
             <!-- Action Hub Below ID Card: Open to Work & Download CV -->
-            <div class="w-full max-w-[420px] mt-4 space-y-2.5 px-1 sm:px-2">
+            <div class="w-full max-w-[420px] mt-4 space-y-2.5 px-1 sm:px-2 smooth-blur-container">
               <!-- Open to Work Blue Gradient Banner (Without Neon, Distinct Poppins Typography) -->
               <div class="w-full py-2.5 sm:py-3 px-4 rounded-2xl bg-gradient-to-r from-[#0d3b66] via-[#155293] to-[#1f66b1] text-white shadow-md border border-white/20 flex items-center justify-center gap-2.5 text-center">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 animate-pulse"></span>
@@ -1363,7 +1359,7 @@
               <div class="w-0 h-0 border-t-[3px] border-t-transparent border-b-[3px] border-b-transparent border-l-[7px] border-l-stone-800 -ml-1"></div>
             </div>
 
-            <div class="clipboard-wood rounded-[28px] p-4 sm:p-7 md:p-9 relative">
+            <div class="clipboard-wood smooth-blur-container rounded-[28px] p-4 sm:p-7 md:p-9 relative">
               <div class="metal-clip w-44 sm:w-56 h-12 rounded-t-xl rounded-b-md mx-auto -mt-8 sm:-mt-11 mb-4 relative z-30 flex items-center justify-center">
                 <div class="w-28 h-4 rounded-full bg-stone-700/80 border border-stone-400"></div>
               </div>
@@ -1417,7 +1413,7 @@
                 </div>
 
                 <!-- 4 Key Statistics inside Clipboard Card -->
-                <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50/90 p-4 rounded-xl border border-stone-200/90 shadow-sm">
+                <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50/90 smooth-blur-container p-4 rounded-xl border border-stone-200/90 shadow-sm">
                   <div class="border-r border-stone-200 pr-2 sm:pr-3">
                     <span id="clipboardStatYearsVal" class="font-display font-extrabold text-2xl sm:text-3xl text-ink block">3,5+</span>
                     <span id="clipboardStatYearsLbl" class="text-[11px] sm:text-xs font-semibold text-stone-600">Tahun Pengalaman</span>
@@ -1441,7 +1437,7 @@
                   <!-- Tech Stack & Action Links -->
                   <div class="flex-1 min-w-0">
                     <!-- Categorized Tech Stack Matching Pitch Deck (Program Web Tools, Design Tools, Video Edit Tools) -->
-                    <div class="space-y-4 mb-4">
+                    <div class="space-y-4 mb-4 smooth-blur-container">
                       <!-- Program Web Tools : -->
                       <div>
                         <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-stone-500 block mb-2">Program Web Tools :</span>
@@ -1471,7 +1467,7 @@
                   </div>
 
                   <!-- Sticky Note: Kontak & Link Portfolio -->
-                  <div class="w-full lg:w-72 bg-[#FFFDF7] border-2 border-stone-300 p-4 sm:p-5 rounded-xl shadow-xl rotate-1 relative shrink-0">
+                  <div class="w-full lg:w-72 bg-[#FFFDF7] border-2 border-stone-300 smooth-blur-container p-4 sm:p-5 rounded-xl shadow-xl rotate-1 relative shrink-0">
                     <div class="w-14 h-3.5 bg-amber-200/90 border border-amber-300 mx-auto -mt-6 sm:-mt-7 mb-2.5 rotate-1"></div>
                     <h4 class="font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider text-ink mb-2">Kontak &amp; Link Portfolio</h4>
                     <ul class="space-y-2 text-xs text-stone-700 font-medium">
@@ -1660,7 +1656,7 @@
     <!-- =================================================================== -->
     <!-- SECTION 02: 02 / SKILL DAN KOMPETENSI (SINGLE HEADER TAG ONLY)      -->
     <!-- =================================================================== -->
-    <section id="skill-kompetensi" class="py-14">
+    <section id="skill-kompetensi" class="py-14 smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Single Represented Header Badge Only -->
@@ -1740,7 +1736,7 @@
           </div>
 
           <!-- Row 2: Pengalaman Founder & Co-Founder (3 Entitas) -->
-          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-stone-200/90 shadow-lg smooth-blur-reveal">
+          <div class="glass-card smooth-blur-container p-6 sm:p-8 rounded-3xl border border-stone-200/90 shadow-lg smooth-blur-reveal">
             <div class="inline-block bg-[#B45309] text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-3.5 py-1 rounded shadow-sm -rotate-1 mb-4">
               PENGALAMAN FOUNDER &amp; AGENSI TEKNOLOGI
             </div>
@@ -1801,35 +1797,35 @@
               <span class="text-xs font-mono font-bold text-stone-500">REKAPITULASI RESMI</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-ink">
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-crimson font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">10x</span>
                 <span class="text-xs font-bold text-slate-800">Sertifikat Kejuaraan Lomba Desain Grafis</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-crimson font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">4x</span>
                 <span class="text-xs font-bold text-slate-800">Kejuaraan &amp; Penghargaan Kompetisi Internasional</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-crimson font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">2x</span>
                 <span class="text-xs font-bold text-slate-800">Sertifikat Media Creative</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-[#155293] font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
                 <span class="text-xs font-bold text-slate-800">Sertifikat Internship Web Developer</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-[#155293] font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
                 <span class="text-xs font-bold text-slate-800">Sertifikat Pekerjaan Multimedia</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-amber-700 font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
                 <span class="text-xs font-bold text-slate-800">Narasumber Workshop Digital Marketing</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-stone-200/90 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-amber-700 font-black text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-2 py-1 rounded shadow-xs border border-stone-200">1x</span>
                 <span class="text-xs font-bold text-slate-800">Narasumber Workshop Konten Video</span>
               </div>
-              <div class="flex items-center gap-3 bg-white p-3.5 rounded-xl border-2 border-amber-300 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
+              <div class="flex items-center gap-3 glass-card smooth-blur-container p-3.5 rounded-xl border border-amber-300 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
                 <span class="text-[#155293] font-black text-sm flex-shrink-0 whitespace-nowrap bg-amber-100 px-2 py-1 rounded shadow-xs border border-amber-300">20+</span>
                 <span class="text-xs text-[#155293]">Total Sertifikasi &amp; Prestasi Terverifikasi</span>
               </div>
@@ -1856,7 +1852,7 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 01: WEB ENGINEER (FULL VIEWPORT SCROLL EXPERIENCE) -->
     <!-- =================================================================== -->
-    <section id="chapter-web-engineer" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section">
+    <section id="chapter-web-engineer" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section smooth-blur-container">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="cinematic-blur-card text-center space-y-6">
           <div>
@@ -1869,7 +1865,7 @@
           </div>
 
           <!-- 4 Kolom Teknologi Font Kecil -->
-          <div class="chapter-skill-matrix glass-card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 sm:p-8 rounded-3xl shadow-xl text-left smooth-blur-reveal">
+          <div class="chapter-skill-matrix glass-card smooth-blur-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 sm:p-8 rounded-3xl shadow-xl text-left smooth-blur-reveal">
             <!-- Kolom 1: FRONTEND -->
             <div class="space-y-2 text-xs font-mono">
               <div class="font-extrabold text-[12px] text-[#155293] uppercase tracking-wider pb-1.5 border-b border-stone-200">
@@ -1924,7 +1920,7 @@
     <!-- =================================================================== -->
     <!-- SECTION 03: 03 / MY PROJECT (14 WEBSITE)                           -->
     <!-- =================================================================== -->
-    <section id="my-project" class="py-20 sm:py-28 scroll-blur-section">
+    <section id="my-project" class="py-20 sm:py-28 scroll-blur-section smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
@@ -1971,7 +1967,7 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 02: DESIGN GRAFIS & VIDEO EDITOR (FULL VIEWPORT) -->
     <!-- =================================================================== -->
-    <section id="chapter-multimedia" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section">
+    <section id="chapter-multimedia" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section smooth-blur-container">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="cinematic-blur-card text-center space-y-4">
           <h2 class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center">
@@ -1987,7 +1983,7 @@
     <!-- =================================================================== -->
     <!-- SECTION 04: DESIGN PORTFOLIO & 3D SMARTPHONE SHOWCASE              -->
     <!-- =================================================================== -->
-    <section id="kelola-medsos" class="py-20 sm:py-28 border-y border-stone-300/40 relative scroll-blur-section">
+    <section id="kelola-medsos" class="py-20 sm:py-28 border-y border-stone-300/40 relative scroll-blur-section smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
@@ -1999,7 +1995,7 @@
           </div>
 
           <!-- Quick Screen Presets & Discreet Admin Trigger -->
-          <div class="flex items-center gap-2 glass-card px-4 py-2 rounded-2xl shadow-sm smooth-blur-reveal">
+          <div class="flex items-center gap-2 glass-card smooth-blur-container px-4 py-2 rounded-2xl shadow-sm smooth-blur-reveal">
             <span class="text-xs font-mono font-bold text-stone-500 hidden sm:inline">Pilih Layar HP:</span>
             <div class="flex items-center gap-1.5 p-0.5 rounded-xl bg-stone-100 border border-stone-300">
               <button onclick="setPhoneScreenToInstagram()" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50" title="Profil Instagram Akun">IG</button>
@@ -2169,7 +2165,7 @@
     <!-- SECTION 05: 05 / PAPAN JEJAK PENGALAMAN, PENDIDIKAN & ORGANISASI    -->
     <!--             (SINGLE HEADER TAG, NO NUMBERS ON SUB-BOARDS, WHITE RIM)-->
     <!-- =================================================================== -->
-    <section id="papan-jejak" class="py-20 sm:py-28 scroll-blur-section">
+    <section id="papan-jejak" class="py-20 sm:py-28 scroll-blur-section smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
         <!-- Single Represented Header Badge Only (No duplicate H2 or paragraph below it) -->
@@ -2376,7 +2372,7 @@
     <!-- SECTION 06: 06 / PRESTASI, SERTIFIKASI & PENGHARGAAN                -->
     <!--             (22 SERTIFIKAT HYUNGKUN: TERKELOMPOKKAN & MINIMALIS)    -->
     <!-- =================================================================== -->
-    <section id="prestasi-nasional" class="py-14 border-t border-stone-200/40 transition-colors duration-300">
+    <section id="prestasi-nasional" class="py-14 border-t border-stone-200/40 transition-colors duration-300 smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- Header -->
@@ -2427,7 +2423,7 @@
     <!-- =================================================================== -->
     <!-- GLOBAL NETWORK & CLIENT REACH (DOTTED WORLD MAP & FLIGHT PATHS)     -->
     <!-- =================================================================== -->
-    <section id="global-network" class="py-14 border-t border-stone-200/40 bg-stone-50/50 dark:bg-stone-950/50 transition-colors duration-300">
+    <section id="global-network" class="py-14 border-t border-stone-200/40 bg-stone-50/50 dark:bg-stone-950/50 transition-colors duration-300 smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5">
@@ -2570,7 +2566,7 @@
 
     <!-- SECTION 07: PROFIL EKSEKUTIF (CANVA SLIDE IMAGE CARD & 3D TILT)    -->
     <!-- =================================================================== -->
-    <section id="executive-closing" class="relative py-20 sm:py-28 overflow-hidden scroll-blur-section">
+    <section id="executive-closing" class="relative py-20 sm:py-28 overflow-hidden scroll-blur-section smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <!-- Top Section Header -->
@@ -2581,7 +2577,7 @@
         </div>
 
         <!-- TACTILE 3D CARD WRAPPER WITH DYNAMIC CANVA IMAGE & OVERLAID SOCIAL BUTTONS -->
-        <div class="canva-3d-card-stage max-w-5xl mx-auto">
+        <div class="canva-3d-card-stage max-w-5xl mx-auto smooth-blur-container">
           <div id="executiveProfileCard" class="canva-3d-card-inner group">
 
             <!-- Canva Slide Image (Updates automatically with theme: white/blue/dark) -->
@@ -3333,7 +3329,7 @@
             </div>
 
             <!-- 3 Pilar Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 smooth-blur-reveal">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 smooth-blur-container smooth-blur-reveal">
               <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/50 space-y-2">
                 <span class="text-xs font-bold text-[#155293] uppercase block">💻 Pilar 1: Web Developer</span>
                 <input id="adminSec02Title1" type="text" value="Web Developer" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white" />
@@ -4414,7 +4410,7 @@
         : '<span class="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">🟢 Real-World Client</span>';
 
       return `
-        <article class="glass-card p-4 pb-5 rounded-2xl border border-stone-200/90 shadow-md ${p.rot || ''} polaroid-hover flex flex-col justify-between smooth-blur-reveal">
+        <article class="glass-card p-4 pb-5 rounded-2xl border border-stone-200/90 shadow-md ${p.rot || ''} polaroid-hover flex flex-col justify-between smooth-blur-container">
           <div>
             <div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-stone-900 border border-stone-200 relative group cursor-pointer" onclick="window.location.href='project-detail.html?id=${p.id}'" title="Buka Detail Proyek ${p.title}">
               <img src="${imgSrc}" alt="${titleEsc}" data-title="${titleEsc}" data-cat="${catEsc}" data-color="${colorEsc}" onerror="this.onerror=null;this.src=makeSvgBanner(this.getAttribute('data-title'), this.getAttribute('data-cat'), this.getAttribute('data-color'));" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
@@ -6147,7 +6143,7 @@
     /* 3-SECOND BIDIRECTIONAL SCROLL BLUR OBSERVER                         */
     /* =================================================================== */
     function initBidirectionalScrollBlur() {
-      const selector = '.scroll-blur-section, .smooth-blur-reveal';
+      const selector = '.smooth-blur-container, .scroll-blur-section, .smooth-blur-reveal';
       const elements = document.querySelectorAll(selector);
       if (!elements || !elements.length) return;
 
@@ -6158,18 +6154,18 @@
       window.blurScrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Smoothly sharpen into crystal clarity over 3 seconds
+            // Smooth unblur into razor-sharp focus
             entry.target.classList.remove('scroll-blur-out');
             entry.target.classList.add('scroll-blur-in');
           } else {
-            // Smoothly blur away over 3 seconds when scrolled past (top or bottom exit)
+            // Smooth blur out when scrolled past either top or bottom
             entry.target.classList.remove('scroll-blur-in');
             entry.target.classList.add('scroll-blur-out');
           }
         });
       }, {
         threshold: 0.08,
-        rootMargin: '0px 0px -4% 0px'
+        rootMargin: '0px 0px -5% 0px'
       });
 
       elements.forEach((el) => {
