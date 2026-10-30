@@ -139,12 +139,7 @@
 
     body {
       background-color: var(--bg-base);
-      background-image:
-        linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
-        linear-gradient(to right, var(--grid-minor) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid-minor) 1px, transparent 1px);
-      background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+      background-image: none !important;
       color: var(--ink);
       overflow-x: hidden;
       transition: background-color 0.4s ease, color 0.4s ease;
@@ -535,8 +530,8 @@
     /* All-White Adaptive Shape Cards for UI/UX & Product Showcase */
     .adaptive-white-card {
       background-color: #FFFFFF;
-      background-image: radial-gradient(rgba(21, 66, 120, 0.09) 1px, transparent 1px);
-      background-size: 20px 20px;
+      background-image: none !important;
+      
       border: 2px solid #E2E8F0;
       box-shadow:
         0 20px 45px rgba(15, 23, 42, 0.10),
@@ -984,10 +979,95 @@
     }
 
   
+    
+    /* =================================================================== */
+    /* SMOOTH & MINIMALIST GLASSMORPHISM SYSTEM                            */
+    /* =================================================================== */
+    .glass-card,
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(18px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+      border: 1px solid rgba(226, 232, 240, 0.85) !important;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.6) inset !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      box-shadow: 0 18px 42px -6px rgba(0, 0, 0, 0.09), 0 0 0 1px rgba(255, 255, 255, 0.9) inset !important;
+      transform: translateY(-3px);
+    }
+
+    /* Glassmorphism in Blue Blueprint Mode */
+    body.blueprint-mode .glass-card,
+    body.blueprint-mode .glass-panel {
+      background: rgba(14, 42, 77, 0.78) !important;
+      backdrop-filter: blur(20px) saturate(190%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.09) inset !important;
+      color: #F8FAFC !important;
+    }
+    body.blueprint-mode .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.28) !important;
+      box-shadow: 0 24px 50px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.18) inset !important;
+      transform: translateY(-3px);
+    }
+
+    /* Glass Card Typography inside Blue Mode */
+    body.blueprint-mode .glass-card .text-ink,
+    body.blueprint-mode .glass-card h1,
+    body.blueprint-mode .glass-card h2,
+    body.blueprint-mode .glass-card h3,
+    body.blueprint-mode .glass-card h4,
+    body.blueprint-mode .glass-card h5 {
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode .glass-card p {
+      color: #CBD5E1 !important;
+    }
+    body.blueprint-mode .glass-card .text-stone-700 {
+      color: #E2E8F0 !important;
+    }
+    body.blueprint-mode .glass-card .text-stone-600 {
+      color: #CBD5E1 !important;
+    }
+    body.blueprint-mode .glass-card .text-stone-500 {
+      color: #94A3B8 !important;
+    }
+    body.blueprint-mode .glass-card .bg-stone-50 {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: rgba(255, 255, 255, 0.14) !important;
+      color: #E2E8F0 !important;
+    }
+    body.blueprint-mode .glass-card .border-stone-200 {
+      border-color: rgba(255, 255, 255, 0.14) !important;
+    }
+
+    /* Floating Section Tag Pill Glassmorphism */
+    .glass-tag-pill {
+      background: rgba(255, 255, 255, 0.88) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      border: 1.5px solid rgba(21, 82, 147, 0.3) !important;
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.blueprint-mode .glass-tag-pill {
+      background: rgba(14, 42, 77, 0.88) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+      box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.38) !important;
+    }
+    body.blueprint-mode .glass-tag-pill span {
+      color: #FFFFFF !important;
+    }
+
+    
     /* =================================================================== */
     /* 3-SECOND BIDIRECTIONAL CINEMATIC SCROLL BLUR SYSTEM                 */
     /* =================================================================== */
-    .scroll-blur-section {
+    .scroll-blur-section,
+    .smooth-blur-reveal {
       transition: filter 3s cubic-bezier(0.16, 1, 0.3, 1),
                   opacity 3s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -995,20 +1075,23 @@
     }
 
     /* Off-screen state: blurred and semi-transparent (both top & bottom exits) */
-    .scroll-blur-section.scroll-blur-out {
-      filter: blur(14px);
-      opacity: 0.10;
-      transform: translateY(28px) scale(0.985);
+    .scroll-blur-section.scroll-blur-out,
+    .smooth-blur-reveal.scroll-blur-out {
+      filter: blur(16px);
+      opacity: 0.12;
+      transform: translateY(26px) scale(0.985);
       pointer-events: none;
     }
 
     /* In-viewport state: razor sharp, full opacity, perfect position */
-    .scroll-blur-section.scroll-blur-in {
+    .scroll-blur-section.scroll-blur-in,
+    .smooth-blur-reveal.scroll-blur-in {
       filter: blur(0px);
       opacity: 1;
       transform: translateY(0) scale(1);
       pointer-events: auto;
     }
+
 
   </style>
   <!-- High-Precision World & Detailed Indonesia Landmass Polygons for Dotted Map -->
@@ -1270,7 +1353,7 @@
           </div>
 
           <!-- RIGHT COLUMN (7 COLS): CLEAN 3D WOODEN CLIPBOARD BIO -->
-          <div class="lg:col-span-7 relative pt-2">
+          <div class="lg:col-span-7 relative pt-2 smooth-blur-reveal">
 
             <!-- 3D Decorative Yellow Pencil -->
             <div class="hidden sm:flex items-center absolute -top-3 -left-8 z-30 -rotate-45 pointer-events-none drop-shadow-lg">
@@ -1657,7 +1740,7 @@
           </div>
 
           <!-- Row 2: Pengalaman Founder & Co-Founder (3 Entitas) -->
-          <div class="bg-white p-6 rounded-2xl border-2 border-stone-200/90 shadow-[0_8px_24px_rgba(0,0,0,0.05)]">
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-stone-200/90 shadow-lg smooth-blur-reveal">
             <div class="inline-block bg-[#B45309] text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-3.5 py-1 rounded shadow-sm -rotate-1 mb-4">
               PENGALAMAN FOUNDER &amp; AGENSI TEKNOLOGI
             </div>
@@ -1786,7 +1869,7 @@
           </div>
 
           <!-- 4 Kolom Teknologi Font Kecil -->
-          <div class="chapter-skill-matrix grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 sm:p-8 rounded-3xl bg-white/90 border border-stone-200 shadow-xl backdrop-blur-sm text-left">
+          <div class="chapter-skill-matrix glass-card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 sm:p-8 rounded-3xl shadow-xl text-left smooth-blur-reveal">
             <!-- Kolom 1: FRONTEND -->
             <div class="space-y-2 text-xs font-mono">
               <div class="font-extrabold text-[12px] text-[#155293] uppercase tracking-wider pb-1.5 border-b border-stone-200">
@@ -1911,12 +1994,12 @@
 
         <!-- Top Section Header -->
         <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
-          <div class="inline-block bg-white border-2 border-stone-300 px-5 py-2 shadow-md -rotate-1">
+          <div class="inline-block glass-tag-pill px-5 py-2.5 rounded-2xl shadow-md -rotate-1 smooth-blur-reveal">
             <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">04 / Design Portfolio &amp; Mockup Showcase</span>
           </div>
 
           <!-- Quick Screen Presets & Discreet Admin Trigger -->
-          <div class="flex items-center gap-2 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-2xl border border-stone-300 shadow-sm">
+          <div class="flex items-center gap-2 glass-card px-4 py-2 rounded-2xl shadow-sm smooth-blur-reveal">
             <span class="text-xs font-mono font-bold text-stone-500 hidden sm:inline">Pilih Layar HP:</span>
             <div class="flex items-center gap-1.5 p-0.5 rounded-xl bg-stone-100 border border-stone-300">
               <button onclick="setPhoneScreenToInstagram()" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50" title="Profil Instagram Akun">IG</button>
@@ -2492,7 +2575,7 @@
 
         <!-- Top Section Header -->
         <div class="mb-8">
-          <div class="inline-block bg-white border-2 border-stone-300 px-5 py-2 shadow-md -rotate-1">
+          <div class="inline-block glass-tag-pill px-5 py-2.5 rounded-2xl shadow-md -rotate-1 smooth-blur-reveal">
             <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">07 / Profil Eksekutif Interaktif</span>
           </div>
         </div>
@@ -3250,7 +3333,7 @@
             </div>
 
             <!-- 3 Pilar Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 smooth-blur-reveal">
               <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/50 space-y-2">
                 <span class="text-xs font-bold text-[#155293] uppercase block">💻 Pilar 1: Web Developer</span>
                 <input id="adminSec02Title1" type="text" value="Web Developer" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white" />
@@ -4331,7 +4414,7 @@
         : '<span class="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">🟢 Real-World Client</span>';
 
       return `
-        <article class="bg-white p-4 pb-5 rounded-xl border border-stone-200 shadow-md ${p.rot || ''} polaroid-hover flex flex-col justify-between">
+        <article class="glass-card p-4 pb-5 rounded-2xl border border-stone-200/90 shadow-md ${p.rot || ''} polaroid-hover flex flex-col justify-between smooth-blur-reveal">
           <div>
             <div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-stone-900 border border-stone-200 relative group cursor-pointer" onclick="window.location.href='project-detail.html?id=${p.id}'" title="Buka Detail Proyek ${p.title}">
               <img src="${imgSrc}" alt="${titleEsc}" data-title="${titleEsc}" data-cat="${catEsc}" data-color="${colorEsc}" onerror="this.onerror=null;this.src=makeSvgBanner(this.getAttribute('data-title'), this.getAttribute('data-cat'), this.getAttribute('data-color'));" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
@@ -6064,34 +6147,40 @@
     /* 3-SECOND BIDIRECTIONAL SCROLL BLUR OBSERVER                         */
     /* =================================================================== */
     function initBidirectionalScrollBlur() {
-      const sections = document.querySelectorAll('.scroll-blur-section');
-      if (!sections || !sections.length) return;
+      const selector = '.scroll-blur-section, .smooth-blur-reveal';
+      const elements = document.querySelectorAll(selector);
+      if (!elements || !elements.length) return;
 
-      const observer = new IntersectionObserver((entries) => {
+      if (window.blurScrollObserver) {
+        window.blurScrollObserver.disconnect();
+      }
+
+      window.blurScrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Smoothly unblur to 0px over 3 seconds
+            // Smoothly sharpen into crystal clarity over 3 seconds
             entry.target.classList.remove('scroll-blur-out');
             entry.target.classList.add('scroll-blur-in');
           } else {
-            // Smoothly blur to 14px over 3 seconds when scrolled past (top or bottom)
+            // Smoothly blur away over 3 seconds when scrolled past (top or bottom exit)
             entry.target.classList.remove('scroll-blur-in');
             entry.target.classList.add('scroll-blur-out');
           }
         });
       }, {
         threshold: 0.08,
-        rootMargin: '0px 0px -5% 0px'
+        rootMargin: '0px 0px -4% 0px'
       });
 
-      sections.forEach((sec, idx) => {
-        // Hero section (index 0) starts visible on page load
-        if (idx === 0) {
-          sec.classList.add('scroll-blur-in');
+      elements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        // If element is currently visible in viewport, mark in
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('scroll-blur-in');
         } else {
-          sec.classList.add('scroll-blur-out');
+          el.classList.add('scroll-blur-out');
         }
-        observer.observe(sec);
+        window.blurScrollObserver.observe(el);
       });
     }
 
