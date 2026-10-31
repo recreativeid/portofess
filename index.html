@@ -1173,21 +1173,9 @@
       <div class="cinematic-shimmer"></div>
     </div>
 
-    <!-- Top Bar: Instant Recruiter Skip Button -->
-    <div class="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-12 pt-6 sm:pt-8 flex items-center justify-end text-white/80">
-      <button onclick="event.stopPropagation(); dismissCinematicIntro(true);" class="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 active:scale-95 border border-white/30 backdrop-blur-md text-xs font-mono font-bold text-white hover:text-white transition flex items-center gap-2 shadow-2xl group cursor-pointer" title="Langsung masuk ke portofolio tanpa menunggu">
-        <span>⚡ Lewati Pembuka (Langsung ke Portofolio)</span>
-        <span class="group-hover:translate-x-1 transition duration-300">↗</span>
-      </button>
-    </div>
+    
 
-    <!-- Bottom Bar: Prompt to Enter -->
-    <div class="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-12 pb-6 sm:pb-8 flex items-center justify-center text-white/80">
-      <div class="px-6 py-2.5 rounded-full bg-crimson hover:bg-red-700 active:scale-95 border border-white/20 text-xs sm:text-sm font-bold text-white tracking-wider uppercase flex items-center gap-2 shadow-2xl transition duration-200 cursor-pointer">
-        <span>Klik di mana saja untuk masuk</span>
-        <span class="animate-bounce">↓</span>
-      </div>
-    </div>
+
 
   </div>
 
@@ -6812,6 +6800,27 @@
           data = JSON.parse(raw);
         } else {
           data = DEFAULT_TOOLS_DATA;
+        }
+
+        // Check IndexedDB for high-capacity storage sync
+        if (window.indexedDB) {
+          try {
+            const req = window.indexedDB.open('FathurPortfolioDB', 1);
+            req.onsuccess = function(e) {
+              const db = e.target.result;
+              if (db.objectStoreNames.contains('portfolio_kv')) {
+                const tx = db.transaction('portfolio_kv', 'readonly');
+                const getReq = tx.objectStore('portfolio_kv').get('fathur_portfolio_tools_data');
+                getReq.onsuccess = function() {
+                  if (getReq.result && typeof getReq.result === 'object') {
+                    renderRow('heroWebToolsContainer', getReq.result.webTools || DEFAULT_TOOLS_DATA.webTools, true);
+                    renderRow('heroDesignToolsContainer', getReq.result.designTools || DEFAULT_TOOLS_DATA.designTools, false);
+                    renderRow('heroVideoToolsContainer', getReq.result.videoTools || DEFAULT_TOOLS_DATA.videoTools, false);
+                  }
+                };
+              }
+            };
+          } catch (eIdb) {}
         }
 
         const renderRow = (containerId, toolsList, isWeb = false) => {

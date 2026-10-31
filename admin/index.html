@@ -5819,7 +5819,75 @@
     let adminToolsData = null;
     let currentNewToolLogoBase64 = '';
 
-    function loadAdminToolsData() {
+        /* =================================================================== */
+    /* HIGH-CAPACITY STORAGE ENGINE (INDEXEDDB FALLBACK & QUOTA RESCUE)     */
+    /* =================================================================== */
+    const PORTFOLIO_IDB_NAME = 'FathurPortfolioDB';
+    const PORTFOLIO_IDB_STORE = 'portfolio_kv';
+
+    function getPortfolioIdb() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) return resolve(null);
+        try {
+          const req = window.indexedDB.open(PORTFOLIO_IDB_NAME, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(PORTFOLIO_IDB_STORE)) {
+              db.createObjectStore(PORTFOLIO_IDB_STORE);
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    }
+
+    async function portfolioIdbSet(key, val) {
+      try {
+        const db = await getPortfolioIdb();
+        if (!db) return false;
+        return new Promise((resolve) => {
+          const tx = db.transaction(PORTFOLIO_IDB_STORE, 'readwrite');
+          tx.objectStore(PORTFOLIO_IDB_STORE).put(val, key);
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        });
+      } catch (e) { return false; }
+    }
+
+    async function portfolioIdbGet(key) {
+      try {
+        const db = await getPortfolioIdb();
+        if (!db) return null;
+        return new Promise((resolve) => {
+          const tx = db.transaction(PORTFOLIO_IDB_STORE, 'readonly');
+          const req = tx.objectStore(PORTFOLIO_IDB_STORE).get(key);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        });
+      } catch (e) { return null; }
+    }
+
+    // Helper to compress custom logo to 64x64px
+    function compressLogoDataUrl(dataUrl, callback) {
+      if (!dataUrl || dataUrl.length < 4000) return callback(dataUrl);
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 64, 64);
+        const compressed = canvas.toDataURL('image/png');
+        callback(compressed || dataUrl);
+      };
+      img.onerror = function() { callback(dataUrl); };
+      img.src = dataUrl;
+    }
+
+function loadAdminToolsData() {
       try {
         const raw = localStorage.getItem('fathur_portfolio_tools_data');
         if (raw) {
@@ -5831,6 +5899,220 @@
         adminToolsData = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA));
       }
       renderAdminToolsList();
+
+      // Sync from IndexedDB in background (for large datasets)
+      if (window.indexedDB) {
+        portfolioIdbGet('fathur_portfolio_tools_data').then(idbData => {
+          if (idbData && typeof idbData === 'object') {
+            adminToolsData = idbData;
+            renderAdminToolsList();
+          }
+        }).catch(() => {});
+      }
+    }
+
+    async function saveAdminToolsData() {
+      if (!adminToolsData) loadAdminToolsData();
+
+      // Optimize: for tools with presetKey, eliminate redundant base64 logo
+      ['webTools', 'designTools', 'videoTools'].forEach(cat => {
+        if (Array.isArray(adminToolsData[cat])) {
+          adminToolsData[cat].forEach(item => {
+            if (item.presetKey && item.presetKey !== 'custom' && TOOL_PRESET_SVGS[item.presetKey]) {
+              item.logo = ''; // Use built-in SVG vector to save quota!
+            }
+          });
+        }
+      });
+
+      // Always save full copy to IndexedDB (virtually unlimited quota)
+      await portfolioIdbSet('fathur_portfolio_tools_data', adminToolsData);
+
+      // Attempt to save to localStorage
+      try {
+        localStorage.setItem('fathur_portfolio_tools_data', JSON.stringify(adminToolsData));
+        notifyDataSaved('Daftar logo tool & aplikasi berhasil disimpan!');
+        renderAdminToolsList();
+      } catch (e) {
+        console.warn('LocalStorage quota reached, optimizing payload for high-capacity storage:', e);
+        // Quota exceeded: compress and save lightweight version to localStorage
+        try {
+          const lightweight = JSON.parse(JSON.stringify(adminToolsData));
+          ['webTools', 'designTools', 'videoTools'].forEach(cat => {
+            if (Array.isArray(lightweight[cat])) {
+              lightweight[cat].forEach(item => {
+                if (item.logo && item.logo.length > 2000) {
+                  // Keep only essential info in localStorage; IndexedDB holds the full version
+                  item.logo = ''; 
+                }
+              });
+            }
+          });
+          lightweight.__saved_idb__ = true;
+          localStorage.setItem('fathur_portfolio_tools_data', JSON.stringify(lightweight));
+          notifyDataSaved('Daftar logo tool berhasil disimpan (Tersimpan aman di IndexedDB)!');
+          renderAdminToolsList();
+        } catch (e2) {
+          // If localStorage is completely full from other keys, IndexedDB still has it!
+          notifyDataSaved('Daftar logo tool berhasil disimpan di penyimpanan aman!');
+          renderAdminToolsList();
+        }
+      }
+    }
+
+    function resetAdminToolsToDefault() {
+      if (confirm('Kembalikan semua logo tool (Web, Design, Video) ke setelan bawaan pitch deck?')) {
+        adminToolsData = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA));
+        saveAdminToolsData();
+      }
+    }
+
+    function setAdminToolCategory(cat) {
+      currentToolCategory = cat;
+      document.querySelectorAll('.tool-cat-btn').forEach(b => {
+        if (b.getAttribute('data-cat') === cat) {
+          b.className = 'tool-cat-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-[#155293] text-white shadow-xs cursor-pointer';
+        } else {
+          b.className = 'tool-cat-btn px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+        }
+      });
+      renderAdminToolsList();
+    }
+
+    function handleToolLogoFileUpload(input) {
+      if (!input || !input.files || !input.files[0]) return;
+      // 64x64 px is retina-sharp for 24px tool icon and takes only ~1.5KB!
+      openImageCropper(input.files[0], 1 / 1, 64, 'image/png', function(cropped) {
+        compressLogoDataUrl(cropped, function(compressed) {
+          currentNewToolLogoBase64 = compressed;
+          updateNewToolPreview();
+          input.value = '';
+        });
+      });
+    }
+
+    function updateNewToolPreview() {
+      const previewBox = document.getElementById('newToolPreviewBox');
+      if (!previewBox) return;
+      const presetKey = document.getElementById('newToolPresetSelect')?.value;
+      const nameVal = document.getElementById('newToolNameInput')?.value?.trim() || 'Tool';
+
+      let visual = '';
+      if (currentNewToolLogoBase64) {
+        visual = `<img src="${currentNewToolLogoBase64}" alt="${nameVal}" class="w-full h-full object-contain" />`;
+      } else if (presetKey && TOOL_PRESET_SVGS[presetKey]) {
+        visual = TOOL_PRESET_SVGS[presetKey];
+      } else {
+        visual = `<span class="text-xs font-mono font-bold text-slate-400">${nameVal.substring(0, 2).toUpperCase()}</span>`;
+      }
+      previewBox.innerHTML = visual;
+    }
+
+    function addNewTool() {
+      const nameInput = document.getElementById('newToolNameInput');
+      const name = nameInput ? nameInput.value.trim() : '';
+      if (!name) {
+        alert('Silakan isi nama tool / aplikasi terlebih dahulu!');
+        nameInput?.focus();
+        return;
+      }
+
+      const presetSelect = document.getElementById('newToolPresetSelect');
+      const presetKey = presetSelect?.value || '';
+
+      // Hemat kuota: Jika user memilih preset (mis. WordPress), gunakan presetKey SVG vektor (0 byte base64)
+      let finalPresetKey = '';
+      let finalLogo = '';
+
+      if (presetKey && presetKey !== 'custom' && TOOL_PRESET_SVGS[presetKey]) {
+        finalPresetKey = presetKey;
+        finalLogo = '';
+      } else if (currentNewToolLogoBase64) {
+        finalPresetKey = '';
+        finalLogo = currentNewToolLogoBase64;
+      } else if (presetKey) {
+        finalPresetKey = presetKey;
+        finalLogo = '';
+      }
+
+      const newTool = {
+        id: 'tool-' + Date.now(),
+        name: name,
+        presetKey: finalPresetKey,
+        logo: finalLogo
+      };
+
+      if (!adminToolsData) loadAdminToolsData();
+      if (!adminToolsData[currentToolCategory]) adminToolsData[currentToolCategory] = [];
+      adminToolsData[currentToolCategory].push(newTool);
+
+      saveAdminToolsData();
+
+      // Reset form
+      if (nameInput) nameInput.value = '';
+      if (presetSelect) presetSelect.value = '';
+      const fileInput = document.getElementById('newToolFileInput');
+      if (fileInput) fileInput.value = '';
+      currentNewToolLogoBase64 = '';
+      updateNewToolPreview();
+    }
+
+    function deleteTool(index) {
+      if (!adminToolsData || !adminToolsData[currentToolCategory]) return;
+      const toolName = adminToolsData[currentToolCategory][index]?.name || 'Tool ini';
+      if (confirm(`Hapus logo "${toolName}" dari daftar?`)) {
+        adminToolsData[currentToolCategory].splice(index, 1);
+        saveAdminToolsData();
+      }
+    }
+
+    function renderAdminToolsList() {
+      if (!adminToolsData) loadAdminToolsData();
+
+      const cWeb = document.getElementById('countWebTools');
+      if (cWeb) cWeb.textContent = adminToolsData.webTools?.length || 0;
+      const cDes = document.getElementById('countDesignTools');
+      if (cDes) cDes.textContent = adminToolsData.designTools?.length || 0;
+      const cVid = document.getElementById('countVideoTools');
+      if (cVid) cVid.textContent = adminToolsData.videoTools?.length || 0;
+
+      const listContainer = document.getElementById('adminToolsListContainer');
+      if (!listContainer) return;
+
+      const items = adminToolsData[currentToolCategory] || [];
+      if (!items.length) {
+        listContainer.innerHTML = '<div class="col-span-full p-6 text-center text-xs font-mono text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">Belum ada logo tool di kategori ini. Tambahkan di form sebelah kiri.</div>';
+        return;
+      }
+
+      let html = '';
+      items.forEach((tool, idx) => {
+        let visual = '';
+        if (tool.presetKey && TOOL_PRESET_SVGS[tool.presetKey]) {
+          visual = TOOL_PRESET_SVGS[tool.presetKey];
+        } else if (tool.logo) {
+          visual = `<img src="${tool.logo}" alt="${tool.name}" class="w-full h-full object-contain" />`;
+        } else {
+          visual = `<span class="text-xs font-mono font-bold text-slate-500">${(tool.name || 'T').substring(0, 2).toUpperCase()}</span>`;
+        }
+
+        html += `<div class="p-3 rounded-2xl bg-slate-50 hover:bg-white border border-slate-200 hover:border-slate-300 shadow-2xs hover:shadow-xs transition flex items-center justify-between gap-3 group">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center p-2 shrink-0">
+              ${visual}
+            </div>
+            <div class="min-w-0">
+              <p class="text-xs font-bold text-slate-800 truncate leading-tight">${tool.name}</p>
+              <p class="text-[10px] font-mono text-slate-400 truncate">${tool.presetKey || 'kustom'}</p>
+            </div>
+          </div>
+          <button type="button" onclick="deleteTool(${idx})" class="w-7 h-7 rounded-lg bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200 hover:border-rose-200 flex items-center justify-center text-xs font-bold transition shrink-0 cursor-pointer" title="Hapus Tool">
+            ✕
+          </button>
+        </div>`;
+      });
+
+      listContainer.innerHTML = html;
     }
 
     function saveAdminToolsData() {
