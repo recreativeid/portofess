@@ -1096,37 +1096,15 @@
       pointer-events: auto;
     }
 
-    /* Native View Timeline on Chromium (Chrome, Edge) for buttery smooth 120fps */
-    @supports (animation-timeline: view()) {
-      .smooth-blur-container {
-        animation: bidirectionalScrollBlur auto cubic-bezier(0.16, 1, 0.3, 1) both;
-        animation-timeline: view();
-        animation-range: entry -8% cover 108%;
-      }
-
-      @keyframes bidirectionalScrollBlur {
-        0% {
-          filter: blur(15px);
-          opacity: 0.12;
-          transform: translateY(24px) scale(0.98);
-        }
-        14%, 86% {
-          filter: blur(0px);
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-        100% {
-          filter: blur(15px);
-          opacity: 0.12;
-          transform: translateY(-24px) scale(0.98);
-        }
-      }
-    }
-;
-
+  </style>
+  <!-- Three.js 3D Library for Photorealistic Smartphone on Stone Podium -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
     // Auto-enter landing page after 5 seconds if visitor does not click
-    introTimer = setTimeout(function() {
-      window.dismissCinematicIntro();
+    var introTimer = setTimeout(function() {
+      if (typeof window.dismissCinematicIntro === 'function') {
+        window.dismissCinematicIntro();
+      }
     }, 5000);
 
     // If user already dismissed intro in this session, skip curtain immediately
@@ -6164,14 +6142,14 @@
           }
         });
       }, {
-        threshold: 0.08,
-        rootMargin: '0px 0px -5% 0px'
+        threshold: 0.02,
+        rootMargin: '80px 0px 80px 0px'
       });
 
       elements.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        // If element is currently visible in viewport, mark in
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
+        // If element is currently in or near viewport, mark in immediately
+        if (rect.top < window.innerHeight + 150 && rect.bottom > -150) {
           el.classList.add('scroll-blur-in');
         } else {
           el.classList.add('scroll-blur-out');
@@ -8881,6 +8859,9 @@
       setTimeout(() => {
         intro.style.display = 'none';
         document.body.style.overflow = '';
+        if (typeof initBidirectionalScrollBlur === 'function') {
+          initBidirectionalScrollBlur();
+        }
       }, 420);
     }
     window.dismissCinematicIntro = dismissCinematicIntro;
