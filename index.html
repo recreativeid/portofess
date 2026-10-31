@@ -6260,8 +6260,10 @@
             titleSec.style.visibility = 'visible';
             titleSec.style.transform = `translateY(${(overlapRatio * -18).toFixed(1)}px)`;
 
-            // Saat kartu sudah menutup ~70% judul, animasi masuk blur konten Section 04 langsung mulai aktif!
-            if (overlapRatio >= 0.70) {
+            // PERMINTAAN PENGGUNA:
+            // "ketika tulisan atas sudah mulai memudah disitulah bagian shapnya mulai masuk efek blur muncul"
+            // Begitu tulisan atas mulai memudar/blur (overlapRatio > 0.08), animasi masuk blur konten shape langsung mulai aktif!
+            if (overlapRatio > 0.08) {
               isTitleCovered = true;
             }
           } 
@@ -6276,15 +6278,15 @@
           }
         } else {
           overlapRatio = Math.max(0, Math.min(1, (progress - 0.40) / 0.50));
-          if (progress >= 0.75) isTitleCovered = true;
+          if (progress >= 0.60) isTitleCovered = true;
         }
 
         // Stage 2: Inner Content Blur Entry Animation (Smooth 4 Detik)
         if (innerContent) {
           if (isTitleCovered) {
             innerContent.classList.add('is-revealed');
-          } else if (overlapRatio < 0.50) {
-            // Saat scroll balik ke atas, tutup kembali saat kartu turun
+          } else {
+            // Saat kartu turun kembali ke bawah teks judul, tutup/blur kembali kontennya
             innerContent.classList.remove('is-revealed');
           }
         }
