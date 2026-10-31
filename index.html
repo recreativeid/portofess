@@ -1871,7 +1871,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="cinematic-blur-card text-center space-y-6">
           <div>
-            <h2 id="chapterMultimediaTitle" class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center transition-transform duration-300 ease-out will-change-transform">
+            <h2 id="chapterWebEngineerTitle" class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center transition-transform duration-300 ease-out will-change-transform">
               Web Engineer
             </h2>
             <p class="chapter-subtitle text-xs sm:text-sm font-mono font-bold uppercase tracking-widest text-stone-500 text-center">
@@ -6193,9 +6193,11 @@
       const wrapper = document.getElementById('tabletScrollContainer');
       const card = document.getElementById('tabletDeviceCard');
       const titleSec = document.getElementById('chapter-multimedia');
-      const titleH2 = document.getElementById('chapterMultimediaTitle');
       const innerContent = document.getElementById('section04InnerContent');
       if (!wrapper || !card) return;
+
+      // Ambil elemen teks h2 khusus di dalam section chapter-multimedia (bukan dari section lain)
+      const titleH2 = titleSec ? (titleSec.querySelector('#chapterMultimediaTitle') || titleSec.querySelector('h2')) : null;
 
       let isTicking = false;
 
@@ -6233,42 +6235,43 @@
         let isTitleCovered = false;
         let overlapRatio = 0;
 
-        if (titleSec) {
-          // Ukur posisi fisik teks utama "Design Grafis & Video Editor"
-          const h2Rect = titleH2 ? titleH2.getBoundingClientRect() : titleSec.getBoundingClientRect();
+        if (titleSec && titleH2) {
+          const h2Rect = titleH2.getBoundingClientRect();
           const textTop = h2Rect.top;
-          const textBottom = h2Rect.bottom + (isMobile ? 24 : 32); // Sertakan baris subtitle
+          const textBottom = h2Rect.bottom + (isMobile ? 22 : 30); // Sertakan baris subtitle
           const textHeight = Math.max(1, textBottom - textTop);
 
-          // Berapa persen teks yang tertutup oleh tepi atas kartu putih?
-          if (cardRect.top < textBottom) {
-            overlapRatio = Math.max(0, Math.min(1, (textBottom - cardRect.top) / textHeight));
-          } else {
+          // 1. ZONA BELUM TERTUTUP: Tepi atas kartu masih di bawah teks
+          if (cardRect.top >= textBottom) {
             overlapRatio = 0;
-          }
+            titleSec.style.filter = 'none';
+            titleSec.style.opacity = '1';
+            titleSec.style.visibility = 'visible';
+            titleSec.style.transform = 'none';
+          } 
+          // 2. ZONA SEDANG TERTUTUP: Kartu sedang menutupi teks dari bawah ke atas
+          else if (cardRect.top > textTop + 10) {
+            overlapRatio = Math.max(0, Math.min(1, (textBottom - cardRect.top) / textHeight));
+            const blurPx = Math.pow(overlapRatio, 0.75) * 16;
+            const titleOpacity = Math.max(0.30, 1 - overlapRatio * 0.70);
 
-          // ATURAN EFEK SESUAI PERMINTAAN:
-          // 1. "ketika belum tertutup jangan mulai blur dulu":
-          //    Jika kartu masih di bawah teks (overlapRatio === 0), judul 100% TAJAM (blur 0px, opacity 1)!
-          // 2. "kalau sudah mau tertutup baru mulai animasi":
-          //    Saat kartu mulai menutup teks (overlapRatio > 0), efek blur aktif secara nyata dan pekat!
-          //    Opasitas dipertahankan tetap tampak jelas (tidak langsung hilang menjadi 0),
-          //    sehingga efek blur saat tertutup terlihat sangat menawan.
-          let blurPx = 0;
-          let titleOpacity = 1;
+            titleSec.style.filter = blurPx > 0.2 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
+            titleSec.style.opacity = titleOpacity.toFixed(2);
+            titleSec.style.visibility = 'visible';
+            titleSec.style.transform = `translateY(${(overlapRatio * -18).toFixed(1)}px)`;
 
-          if (overlapRatio > 0.05) {
-            blurPx = Math.pow(overlapRatio, 0.85) * 16;
-            titleOpacity = Math.max(0.40, 1 - overlapRatio * 0.55);
-          }
-
-          titleSec.style.filter = blurPx > 0.2 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
-          titleSec.style.opacity = titleOpacity.toFixed(2);
-          titleSec.style.transform = overlapRatio > 0 ? `translateY(${(overlapRatio * -18).toFixed(1)}px)` : 'none';
-
-          // Saat kartu sudah menutup ~70% judul (posisi mau tertutup penuh),
-          // animasi masuk blur konten Section 04 (durasi 4 detik) langsung aktif!
-          if (overlapRatio >= 0.70 || cardRect.top <= textTop + 24) {
+            // Saat kartu sudah menutup ~70% judul, animasi masuk blur konten Section 04 langsung mulai aktif!
+            if (overlapRatio >= 0.70) {
+              isTitleCovered = true;
+            }
+          } 
+          // 3. ZONA SUDAH TERTUTUP PENUH: Kartu sudah sepenuhnya menutupi teks
+          // (PENTING: sembunyikan total agar tidak bocor/melayang di section 05 papan jejak!)
+          else {
+            overlapRatio = 1;
+            titleSec.style.filter = 'blur(16px)';
+            titleSec.style.opacity = '0';
+            titleSec.style.visibility = 'hidden';
             isTitleCovered = true;
           }
         } else {
