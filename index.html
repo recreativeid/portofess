@@ -1985,7 +1985,7 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 02: DESIGN GRAFIS & VIDEO EDITOR (STICKY TITLE)  -->
     <!-- =================================================================== -->
-    <section id="chapter-multimedia" class="sticky top-16 sm:top-20 z-10 pt-10 sm:pt-14 pb-4 text-center select-none pointer-events-none transition-all duration-300">
+    <section id="chapter-multimedia" class="sticky top-16 sm:top-20 z-10 pt-10 sm:pt-14 pb-4 text-center select-none pointer-events-none will-change-transform">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="text-center space-y-2">
           <h2 id="chapterMultimediaTitle" class="chapter-gradient-title font-serif italic font-extrabold text-3xl sm:text-5xl md:text-6xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none text-center transition-transform duration-200 ease-out will-change-transform">
@@ -6193,6 +6193,7 @@
       const wrapper = document.getElementById('tabletScrollContainer');
       const card = document.getElementById('tabletDeviceCard');
       const titleSec = document.getElementById('chapter-multimedia');
+      const titleH2 = document.getElementById('chapterMultimediaTitle');
       const innerContent = document.getElementById('section04InnerContent');
       if (!wrapper || !card) return;
 
@@ -6202,7 +6203,6 @@
         const winH = window.innerHeight;
         const rect = wrapper.getBoundingClientRect();
         const cardRect = card.getBoundingClientRect();
-        const titleRect = titleSec ? titleSec.getBoundingClientRect() : null;
 
         // Progress: when top of wrapper enters at 75% viewport down to 10%
         const start = winH * 0.75;
@@ -6229,36 +6229,46 @@
 
         card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
 
-        // Physical Overlap Calculation between White Card Top Edge and Title
+        // Physical Overlap Calculation between White Card Top Edge and Title Text
         let isTitleCovered = false;
         let overlapRatio = 0;
 
-        if (titleSec && titleRect) {
-          const titleHeight = Math.max(1, titleRect.height);
-          // Berapa pixel judul yang sudah tertutup secara fisik oleh kartu putih?
-          // Saat cardRect.top masih di bawah titleRect.bottom -> coveredPixels <= 0 (0% tertutup)
-          // Saat cardRect.top sejajar titleRect.top -> coveredPixels == titleHeight (100% tertutup)
-          const coveredPixels = titleRect.bottom - cardRect.top;
-          overlapRatio = Math.max(0, Math.min(1, coveredPixels / titleHeight));
+        if (titleSec) {
+          // Ukur posisi fisik teks utama "Design Grafis & Video Editor"
+          const h2Rect = titleH2 ? titleH2.getBoundingClientRect() : titleSec.getBoundingClientRect();
+          const textTop = h2Rect.top;
+          const textBottom = h2Rect.bottom + (isMobile ? 24 : 32); // Sertakan baris subtitle
+          const textHeight = Math.max(1, textBottom - textTop);
 
-          // PERMINTAAN PENGGUNA:
-          // 1. Saat baru tiba/belum tertutup, judul HARUS JELAS & TAJAM (blur 0px, opacity 1)!
-          // 2. Judul baru mulai mem-blur halus saat kartu sudah menutupi lebih dari 50% judul.
-          // 3. Saat kartu menutupi ~70% judul (posisi screenshot), animasi masuk konten 4 detik mulai aktif!
+          // Berapa persen teks yang tertutup oleh tepi atas kartu putih?
+          if (cardRect.top < textBottom) {
+            overlapRatio = Math.max(0, Math.min(1, (textBottom - cardRect.top) / textHeight));
+          } else {
+            overlapRatio = 0;
+          }
+
+          // ATURAN EFEK SESUAI PERMINTAAN:
+          // 1. "ketika belum tertutup jangan mulai blur dulu":
+          //    Jika kartu masih di bawah teks (overlapRatio === 0), judul 100% TAJAM (blur 0px, opacity 1)!
+          // 2. "kalau sudah mau tertutup baru mulai animasi":
+          //    Saat kartu mulai menutup teks (overlapRatio > 0), efek blur aktif secara nyata dan pekat!
+          //    Opasitas dipertahankan tetap tampak jelas (tidak langsung hilang menjadi 0),
+          //    sehingga efek blur saat tertutup terlihat sangat menawan.
           let blurPx = 0;
           let titleOpacity = 1;
 
-          if (overlapRatio > 0.50) {
-            const titleFade = (overlapRatio - 0.50) / 0.50; // Rentang 0.0 -> 1.0
-            blurPx = titleFade * 14;
-            titleOpacity = Math.max(0, 1 - titleFade * 0.95);
+          if (overlapRatio > 0.05) {
+            blurPx = Math.pow(overlapRatio, 0.85) * 16;
+            titleOpacity = Math.max(0.40, 1 - overlapRatio * 0.55);
           }
 
           titleSec.style.filter = blurPx > 0.2 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
           titleSec.style.opacity = titleOpacity.toFixed(2);
           titleSec.style.transform = overlapRatio > 0 ? `translateY(${(overlapRatio * -18).toFixed(1)}px)` : 'none';
 
-          if (overlapRatio >= 0.70 || cardRect.top <= titleRect.top + 32) {
+          // Saat kartu sudah menutup ~70% judul (posisi mau tertutup penuh),
+          // animasi masuk blur konten Section 04 (durasi 4 detik) langsung aktif!
+          if (overlapRatio >= 0.70 || cardRect.top <= textTop + 24) {
             isTitleCovered = true;
           }
         } else {
@@ -6266,11 +6276,11 @@
           if (progress >= 0.75) isTitleCovered = true;
         }
 
-        // Stage 2: Inner Content Blur Entry Animation (Durasi Smooth 4 Detik)
+        // Stage 2: Inner Content Blur Entry Animation (Smooth 4 Detik)
         if (innerContent) {
           if (isTitleCovered) {
             innerContent.classList.add('is-revealed');
-          } else if (overlapRatio < 0.55) {
+          } else if (overlapRatio < 0.50) {
             // Saat scroll balik ke atas, tutup kembali saat kartu turun
             innerContent.classList.remove('is-revealed');
           }
