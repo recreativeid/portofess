@@ -548,7 +548,12 @@
                   <label class="text-xs font-bold text-slate-800 block">Foto Profil Kartu ID &amp; Polaroid</label>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <span class="text-[11px] font-semibold text-slate-600 block mb-1">Opsi A: Unggah Berkas Foto (Auto Kompres)</span>
+                      <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-slate-600">Opsi A: Unggah Berkas Foto (Auto Crop)</span>
+                        <button type="button" onclick="cropCurrentIdCardPhoto()" class="text-[11px] text-[#155293] hover:text-blue-800 font-bold flex items-center gap-1 cursor-pointer transition hover:underline" title="Buka cropper untuk memotong atau mengatur ulang framing foto">
+                          <span>✂️ Crop / Sesuaikan Foto</span>
+                        </button>
+                      </div>
                       <input id="sec01PhotoFileInput" type="file" accept="image/*" onchange="handleIdCardPhotoUpload(this)" class="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-[#155293] file:cursor-pointer cursor-pointer" />
                     </div>
                     <div>
@@ -2081,6 +2086,7 @@
             <button type="button" id="cropRatioBtn_16_10" onclick="cropperSetRatio(16/10, '16_10')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-[#155293] text-white transition cursor-pointer">16:10</button>
             <button type="button" id="cropRatioBtn_16_9" onclick="cropperSetRatio(16/9, '16_9')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">16:9</button>
             <button type="button" id="cropRatioBtn_4_5" onclick="cropperSetRatio(4/5, '4_5')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">4:5</button>
+            <button type="button" id="cropRatioBtn_9_16" onclick="cropperSetRatio(9/16, '9_16')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">9:16</button>
             <button type="button" id="cropRatioBtn_1_1" onclick="cropperSetRatio(1/1, '1_1')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">1:1</button>
             <button type="button" id="cropRatioBtn_4_3" onclick="cropperSetRatio(4/3, '4_3')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">4:3</button>
             <button type="button" id="cropRatioBtn_free" onclick="cropperSetRatio(null, 'free')" class="px-2 py-1 rounded-lg text-[11px] font-mono font-bold bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer">Bebas</button>
@@ -3121,6 +3127,7 @@
         '16_10': document.getElementById('cropRatioBtn_16_10'),
         '16_9': document.getElementById('cropRatioBtn_16_9'),
         '4_5': document.getElementById('cropRatioBtn_4_5'),
+        '9_16': document.getElementById('cropRatioBtn_9_16'),
         '1_1': document.getElementById('cropRatioBtn_1_1'),
         '4_3': document.getElementById('cropRatioBtn_4_3'),
         'free': document.getElementById('cropRatioBtn_free')
@@ -3135,6 +3142,7 @@
         if (Math.abs(ratio - (16/10)) < 0.01) targetKey = '16_10';
         else if (Math.abs(ratio - (16/9)) < 0.01) targetKey = '16_9';
         else if (Math.abs(ratio - (4/5)) < 0.01) targetKey = '4_5';
+        else if (Math.abs(ratio - (9/16)) < 0.01) targetKey = '9_16';
         else if (Math.abs(ratio - 1) < 0.01) targetKey = '1_1';
         else if (Math.abs(ratio - (4/3)) < 0.01) targetKey = '4_3';
       }
@@ -3531,18 +3539,15 @@
     }
 
     function previewFeedImageFile(input) {
-      if (input && input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          downscaleImage(e.target.result, 640, 0.80, function(compressed) {
-            tempFeedImageData = compressed;
-            document.getElementById('inpFeedUrl').value = '';
-            updateFeedPreview();
-            notifyDataSaved('Gambar feed berhasil dimuat & dioptimasi!');
-          });
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
+      if (!input || !input.files || !input.files[0]) return;
+      openImageCropper(input.files[0], 4/5, 720, 'image/jpeg', function(croppedDataUrl) {
+        tempFeedImageData = croppedDataUrl;
+        const urlInp = document.getElementById('inpFeedUrl');
+        if (urlInp) urlInp.value = '';
+        updateFeedPreview();
+        notifyDataSaved('Gambar feed berhasil dipotong & dioptimasi!');
+        input.value = '';
+      });
     }
 
     function previewFeedImageUrl(url) {
@@ -4157,18 +4162,15 @@
     }
 
     function handleThumbnailFileSelect(input) {
-      if (input && input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          downscaleImage(e.target.result, 640, 0.80, function(compressed) {
-            tempVideoThumbnailData = compressed;
-            document.getElementById('inpVideoThumbUrl').value = '';
-            updateVideoThumbnailPreview();
-            notifyDataSaved('Gambar sampul berhasil diunggah & dioptimasi!');
-          });
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
+      if (!input || !input.files || !input.files[0]) return;
+      openImageCropper(input.files[0], 9/16, 720, 'image/jpeg', function(croppedDataUrl) {
+        tempVideoThumbnailData = croppedDataUrl;
+        const urlInp = document.getElementById('inpVideoThumbUrl');
+        if (urlInp) urlInp.value = '';
+        updateVideoThumbnailPreview();
+        notifyDataSaved('Gambar sampul video berhasil dipotong & dioptimasi!');
+        input.value = '';
+      });
     }
 
     function handleThumbnailUrlInput(url) {
@@ -4416,18 +4418,15 @@
     }
 
     function handleCertFileSelect(input) {
-      if (input && input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          downscaleImage(e.target.result, 720, 0.80, function(compressed) {
-            tempCertImageData = compressed;
-            document.getElementById('inpCertImgUrl').value = '';
-            updateCertPreview();
-            notifyDataSaved('Berkas sertifikat berhasil dimuat & dioptimasi!');
-          });
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
+      if (!input || !input.files || !input.files[0]) return;
+      openImageCropper(input.files[0], 4/3, 800, 'image/jpeg', function(croppedDataUrl) {
+        tempCertImageData = croppedDataUrl;
+        const urlInp = document.getElementById('inpCertImgUrl');
+        if (urlInp) urlInp.value = '';
+        updateCertPreview();
+        notifyDataSaved('Berkas sertifikat berhasil dipotong & dioptimasi!');
+        input.value = '';
+      });
     }
 
     function handleCertUrlInput(url) {
@@ -5609,18 +5608,30 @@
     }
 
     function handleIdCardPhotoUpload(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          downscaleImage(e.target.result, 520, 0.85, function(compressed) {
-            const urlInp = document.getElementById('sec01IdCardPhotoUrl');
-            if (urlInp) urlInp.value = compressed;
-            updateIdCardLivePreview();
-            notifyDataSaved('Foto profil ID Card berhasil dimuat & dioptimasi!');
-          });
-        };
-        reader.readAsDataURL(input.files[0]);
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      // Buka modal interactive cropper universal (rasio default 1:1 / 4:5 resolusi tinggi 640px)
+      openImageCropper(file, 1, 640, 'image/jpeg', function(croppedDataUrl) {
+        const urlInp = document.getElementById('sec01IdCardPhotoUrl');
+        if (urlInp) urlInp.value = croppedDataUrl;
+        updateIdCardLivePreview();
+        notifyDataSaved('Foto profil ID Card berhasil dipotong & disimpan!');
+        input.value = '';
+      });
+    }
+
+    function cropCurrentIdCardPhoto() {
+      const urlInp = document.getElementById('sec01IdCardPhotoUrl');
+      const currentSrc = urlInp ? urlInp.value.trim() : '';
+      if (!currentSrc) {
+        alert('Belum ada foto yang dipilih. Silakan unggah foto terlebih dahulu.');
+        return;
       }
+      openImageCropper(currentSrc, 1, 640, 'image/jpeg', function(croppedDataUrl) {
+        if (urlInp) urlInp.value = croppedDataUrl;
+        updateIdCardLivePreview();
+        notifyDataSaved('Foto profil ID Card berhasil dipotong & diperbarui!');
+      });
     }
 
     function loadSec01Form() {
