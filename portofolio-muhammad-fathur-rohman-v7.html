@@ -1099,6 +1099,8 @@
   </style>
   <!-- Three.js 3D Library for Photorealistic Smartphone on Stone Podium -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- World Landmass Polygons for Dense Dot Matrix Vector Map -->
+  <script src="assets/world-land.js"></script>
   <script>
     // Auto-enter landing page after 5 seconds if visitor does not click
     var introTimer = setTimeout(function() {
@@ -1834,7 +1836,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="cinematic-blur-card text-center space-y-6">
           <div>
-            <h2 class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center">
+            <h2 id="chapterMultimediaTitle" class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center transition-transform duration-300 ease-out will-change-transform">
               Web Engineer
             </h2>
             <p class="chapter-subtitle text-xs sm:text-sm font-mono font-bold uppercase tracking-widest text-stone-500 text-center">
@@ -1959,9 +1961,24 @@
     </section>
 
     <!-- =================================================================== -->
-    <!-- SECTION 04: DESIGN PORTFOLIO & 3D SMARTPHONE SHOWCASE              -->
+    <!-- SECTION 04: 3D TABLET CONTAINER SCROLL SHOWCASE (ACETERNITY STYLE)  -->
     <!-- =================================================================== -->
-    <section id="kelola-medsos" class="py-20 sm:py-28 border-y border-stone-300/40 relative scroll-blur-section smooth-blur-container">
+    <div id="tabletScrollContainer" class="tablet-scroll-wrapper relative w-full overflow-visible py-8 sm:py-16 px-2 sm:px-6 lg:px-8 select-none" style="perspective: 1200px;">
+      
+      <!-- Electronic Tablet Chassis / Bezel Container -->
+      <div id="tabletDeviceCard" class="tablet-device-card max-w-7xl mx-auto rounded-[28px] sm:rounded-[44px] border-[6px] sm:border-[10px] md:border-[14px] border-stone-800/95 dark:border-stone-700 bg-stone-900 shadow-2xl transition-transform duration-100 ease-out p-2.5 sm:p-5 md:p-7 relative overflow-hidden"
+           style="transform-style: preserve-3d; transform-origin: center top; box-shadow: 0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003; will-change: transform;">
+        
+        <!-- Tablet Top Hardware Bezel Sensor / Camera Dot -->
+        <div class="w-16 sm:w-24 h-2 sm:h-2.5 bg-stone-950 rounded-full mx-auto mb-3 flex items-center justify-center gap-1.5 opacity-90 pointer-events-none">
+          <span class="w-1.5 h-1.5 rounded-full bg-stone-700"></span>
+          <span class="w-1 h-1 rounded-full bg-sky-900"></span>
+        </div>
+
+        <!-- Tablet Inner Display Screen -->
+        <div class="tablet-screen-display rounded-[20px] sm:rounded-[34px] overflow-hidden bg-white dark:bg-stone-950 border border-stone-200/80 dark:border-stone-800 shadow-inner">
+
+          <section id="kelola-medsos" class="py-8 sm:py-14 px-3 sm:px-6 lg:px-8 relative scroll-blur-section smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
@@ -2138,6 +2155,10 @@
 
       </div>
     </section>
+
+        </div>
+      </div>
+    </div>
 
     <!-- =================================================================== -->
     <!-- SECTION 05: 05 / PAPAN JEJAK PENGALAMAN, PENDIDIKAN & ORGANISASI    -->
@@ -2908,13 +2929,6 @@
       <div id="allPrestasiGridContainer" class="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-6"></div>
     </div>
   </section>
-
-  <!-- FLOATING CINEMATIC INTRO REPLAY (BOTTOM-RIGHT DOCKED) -->
-  <aside class="fixed bottom-5 right-5 z-40 flex items-center select-none drop-shadow-xl" aria-label="Intro Replay">
-    <button onclick="playCinematicIntro()" class="px-3 py-1.5 rounded-full bg-white/95 dark:bg-stone-900/95 text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 text-xs font-mono font-bold hover:text-crimson transition flex items-center gap-1.5 shadow-xl hover:scale-105 cursor-pointer" title="Putar Ulang Pembuka Sinematik">
-      🎬 <span>Intro</span>
-    </button>
-  </aside>
 
   <!-- FULLSCREEN ADMIN STUDIO CMS VIEW (POPPINS TYPOGRAPHY) -->
   <div id="adminModal" class="fixed inset-0 z-[100] hidden bg-slate-100 text-slate-800 overflow-y-auto admin-poppins-font">
@@ -6158,6 +6172,66 @@
       });
     }
 
+    
+    /* =================================================================== */
+    /* ACETERNITY 3D TABLET CONTAINER SCROLL CONTROLLER                    */
+    /* =================================================================== */
+    function initTabletContainerScroll() {
+      const wrapper = document.getElementById('tabletScrollContainer');
+      const card = document.getElementById('tabletDeviceCard');
+      const title = document.getElementById('chapterMultimediaTitle');
+      if (!wrapper || !card) return;
+
+      let isTicking = false;
+
+      function updateTabletScroll() {
+        const rect = wrapper.getBoundingClientRect();
+        const winH = window.innerHeight;
+
+        // When the container enters the viewport from bottom:
+        // rect.top == winH -> progress = 0 (tilted back 20deg)
+        // rect.top <= winH * 0.15 -> progress = 1 (flattened 0deg)
+        const start = winH;
+        const end = winH * 0.15;
+        const rawProgress = (start - rect.top) / (start - end);
+        const progress = Math.max(0, Math.min(1, rawProgress));
+
+        const isMobile = window.innerWidth <= 768;
+        // Tilt angle: starts at 20deg (or 14deg on mobile), flattens smoothly to 0deg
+        const maxRotate = isMobile ? 14 : 20;
+        const rotateX = maxRotate * (1 - progress);
+
+        // Scale: starts at 0.92 (or 0.88 on mobile), expands to 1.0
+        const minScale = isMobile ? 0.88 : 0.92;
+        const scale = minScale + (1.0 - minScale) * progress;
+
+        // TranslateY: lifts up smoothly as you scroll
+        const translateY = (1 - progress) * (isMobile ? 35 : 55);
+
+        card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
+
+        if (title) {
+          const titleY = progress * -25;
+          title.style.transform = `translateY(${titleY.toFixed(1)}px)`;
+        }
+
+        isTicking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!isTicking) {
+          requestAnimationFrame(updateTabletScroll);
+          isTicking = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        requestAnimationFrame(updateTabletScroll);
+      });
+
+      updateTabletScroll();
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       initBidirectionalScrollBlur();
       if (window.location.hash === '#admin') {
@@ -7649,7 +7723,8 @@
       pCanvas.width = step * 2;
       pCanvas.height = step * 2;
       const pCtx = pCanvas.getContext('2d');
-      pCtx.fillStyle = isDark ? '#64748B' : '#94A3B8';
+      const isBlue = document.body.classList.contains('blueprint-mode');
+      pCtx.fillStyle = isBlue ? '#60A5FA' : (isDark ? '#64748B' : '#94A3B8');
 
       // Staggered dense dot matrix
       pCtx.beginPath();
@@ -7678,11 +7753,12 @@
       ctx.save();
       ctx.clearRect(0, 0, W, H);
 
-      // Check dark mode
+      // Check dark & blueprint mode
+      const isBlue = document.body.classList.contains('blueprint-mode');
       const isDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
 
-      // Crisp background matching reference
-      ctx.fillStyle = isDark ? '#090d16' : '#FFFFFF';
+      // Crisp background matching reference and active theme
+      ctx.fillStyle = isBlue ? '#0F2C54' : (isDark ? '#090d16' : '#FFFFFF');
       ctx.fillRect(0, 0, W, H);
 
       // Clip strictly to real-world landmass polygons (with seamless continuous wrapping on zoom-out)
@@ -8899,6 +8975,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      initTabletContainerScroll();
       // 1. Initialize Portfolio Theme (White, Blue, or Neon)
       let initialTheme = 'white';
       try {
