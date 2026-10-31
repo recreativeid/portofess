@@ -2185,6 +2185,106 @@
   <!-- 3. JAVASCRIPT CONTROLLER (STANDALONE LOGIC WITH STORAGE SYNC) -->
   <script src="../assets/world-land.js"></script>
   <script>
+    /* =================================================================== */
+    /* HIGH-CAPACITY STORAGE ENGINE (INDEXEDDB FALLBACK & QUOTA RESCUE)     */
+    /* =================================================================== */
+    const PORTFOLIO_IDB_NAME = 'FathurPortfolioDB';
+    const PORTFOLIO_IDB_STORE = 'portfolio_kv';
+
+    function getPortfolioIdb() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) return resolve(null);
+        try {
+          const req = window.indexedDB.open(PORTFOLIO_IDB_NAME, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(PORTFOLIO_IDB_STORE)) {
+              db.createObjectStore(PORTFOLIO_IDB_STORE);
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    }
+
+    async function portfolioIdbSet(key, val) {
+      try {
+        const db = await getPortfolioIdb();
+        if (!db) return false;
+        return new Promise((resolve) => {
+          const tx = db.transaction(PORTFOLIO_IDB_STORE, 'readwrite');
+          tx.objectStore(PORTFOLIO_IDB_STORE).put(val, key);
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        });
+      } catch (e) { return false; }
+    }
+
+    async function portfolioIdbGet(key) {
+      try {
+        const db = await getPortfolioIdb();
+        if (!db) return null;
+        return new Promise((resolve) => {
+          const tx = db.transaction(PORTFOLIO_IDB_STORE, 'readonly');
+          const req = tx.objectStore(PORTFOLIO_IDB_STORE).get(key);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        });
+      } catch (e) { return null; }
+    }
+
+    // Universal Safe Storage (Never throws QuotaExceededError)
+    async function safePortfolioSave(key, data) {
+      if (window.indexedDB) {
+        await portfolioIdbSet(key, data);
+      }
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (quotaErr) {
+        console.warn('localStorage quota reached for ' + key + ', using lightweight fallback:', quotaErr);
+        try {
+          const lightweight = JSON.parse(JSON.stringify(data, (k, v) => {
+            if (typeof v === 'string' && v.startsWith('data:image/') && v.length > 2000) {
+              return '';
+            }
+            return v;
+          }));
+          lightweight.__in_indexeddb__ = true;
+          localStorage.setItem(key, JSON.stringify(lightweight));
+        } catch (e2) {
+          console.warn('localStorage completely full, data safely preserved in IndexedDB');
+        }
+      }
+    }
+
+    // Global Storage.prototype.setItem Quota Guard: Prevents any unhandled QuotaExceededError across the entire admin app!
+    (function() {
+      if (typeof Storage !== 'undefined' && Storage.prototype && Storage.prototype.setItem) {
+        const origSetItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function(key, val) {
+          try {
+            origSetItem.apply(this, arguments);
+          } catch (e) {
+            if (e && (e.name === 'QuotaExceededError' || e.code === 22 || e.number === -2147024882 || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
+              console.warn('Storage Quota Guard intercepted quota limit for: ' + key);
+              if (typeof window.portfolioIdbSet === 'function') {
+                try {
+                  const parsed = JSON.parse(val);
+                  window.portfolioIdbSet(key, parsed);
+                } catch (errP) {
+                  window.portfolioIdbSet(key, val);
+                }
+              }
+              return;
+            }
+            throw e;
+          }
+        };
+      }
+    })();
 
     /* Default Datasets */
     const DEFAULT_PROJECTS = [
@@ -5689,12 +5789,24 @@
         updateIdCardLivePreview();
         loadAdminToolsData();
         updateNewToolPreview();
+
+        if (window.indexedDB) {
+          portfolioIdbGet('fathur_portfolio_sec01_data').then(idbData => {
+            if (idbData && typeof idbData === 'object' && idbData.idCardPhotoUrl) {
+              const photoEl = document.getElementById('sec01IdCardPhotoUrl');
+              if (photoEl && (!photoEl.value || photoEl.value.length < idbData.idCardPhotoUrl.length)) {
+                photoEl.value = idbData.idCardPhotoUrl;
+                updateIdCardLivePreview();
+              }
+            }
+          }).catch(() => {});
+        }
       } catch (e) {
         console.error('Error loadSec01Form:', e);
       }
     }
 
-    function saveSec01Data() {
+    async function saveSec01Data() {
       const getVal = (id, fallback = '') => {
         const el = document.getElementById(id);
         return el ? el.value.trim() : fallback;
@@ -5751,7 +5863,7 @@
         photoUrl: photoVal
       };
 
-      localStorage.setItem('fathur_portfolio_sec01_data', JSON.stringify(data));
+      await safePortfolioSave('fathur_portfolio_sec01_data', data);
       updateIdCardLivePreview();
       notifyDataSaved('Data Tentang Saya & Kartu ID berhasil disimpan!');
     }
@@ -5819,56 +5931,7 @@
     let adminToolsData = null;
     let currentNewToolLogoBase64 = '';
 
-        /* =================================================================== */
-    /* HIGH-CAPACITY STORAGE ENGINE (INDEXEDDB FALLBACK & QUOTA RESCUE)     */
-    /* =================================================================== */
-    const PORTFOLIO_IDB_NAME = 'FathurPortfolioDB';
-    const PORTFOLIO_IDB_STORE = 'portfolio_kv';
-
-    function getPortfolioIdb() {
-      return new Promise((resolve) => {
-        if (!window.indexedDB) return resolve(null);
-        try {
-          const req = window.indexedDB.open(PORTFOLIO_IDB_NAME, 1);
-          req.onupgradeneeded = (e) => {
-            const db = e.target.result;
-            if (!db.objectStoreNames.contains(PORTFOLIO_IDB_STORE)) {
-              db.createObjectStore(PORTFOLIO_IDB_STORE);
-            }
-          };
-          req.onsuccess = (e) => resolve(e.target.result);
-          req.onerror = () => resolve(null);
-        } catch (e) {
-          resolve(null);
-        }
-      });
-    }
-
-    async function portfolioIdbSet(key, val) {
-      try {
-        const db = await getPortfolioIdb();
-        if (!db) return false;
-        return new Promise((resolve) => {
-          const tx = db.transaction(PORTFOLIO_IDB_STORE, 'readwrite');
-          tx.objectStore(PORTFOLIO_IDB_STORE).put(val, key);
-          tx.oncomplete = () => resolve(true);
-          tx.onerror = () => resolve(false);
-        });
-      } catch (e) { return false; }
-    }
-
-    async function portfolioIdbGet(key) {
-      try {
-        const db = await getPortfolioIdb();
-        if (!db) return null;
-        return new Promise((resolve) => {
-          const tx = db.transaction(PORTFOLIO_IDB_STORE, 'readonly');
-          const req = tx.objectStore(PORTFOLIO_IDB_STORE).get(key);
-          req.onsuccess = () => resolve(req.result || null);
-          req.onerror = () => resolve(null);
-        });
-      } catch (e) { return null; }
-    }
+    /* Storage engine initialized at top of script */
 
     // Helper to compress custom logo to 64x64px
     function compressLogoDataUrl(dataUrl, callback) {
@@ -6112,162 +6175,6 @@ function loadAdminToolsData() {
         </div>`;
       });
 
-      listContainer.innerHTML = html;
-    }
-
-    function saveAdminToolsData() {
-      try {
-        if (!adminToolsData) loadAdminToolsData();
-        localStorage.setItem('fathur_portfolio_tools_data', JSON.stringify(adminToolsData));
-        notifyDataSaved('Daftar logo tool & aplikasi berhasil disimpan!');
-        renderAdminToolsList();
-      } catch (e) {
-        alert('Gagal menyimpan logo: ' + e.message);
-      }
-    }
-
-    function resetAdminToolsToDefault() {
-      if (confirm('Kembalikan semua logo tool (Web, Design, Video) ke setelan bawaan pitch deck?')) {
-        adminToolsData = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA));
-        saveAdminToolsData();
-      }
-    }
-
-    function setAdminToolCategory(cat) {
-      currentToolCategory = cat;
-      document.querySelectorAll('.tool-cat-btn').forEach(b => {
-        if (b.getAttribute('data-cat') === cat) {
-          b.className = 'tool-cat-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-[#155293] text-white shadow-xs cursor-pointer';
-        } else {
-          b.className = 'tool-cat-btn px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2 bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
-        }
-      });
-      renderAdminToolsList();
-    }
-
-    function handleToolLogoFileUpload(input) {
-      if (!input || !input.files || !input.files[0]) return;
-      openImageCropper(input.files[0], 1 / 1, 200, 'image/png', function(cropped) {
-        currentNewToolLogoBase64 = cropped;
-        updateNewToolPreview();
-        input.value = '';
-      });
-    }
-
-    function updateNewToolPreview() {
-      const previewBox = document.getElementById('newToolPreviewBox');
-      if (!previewBox) return;
-      const presetKey = document.getElementById('newToolPresetSelect')?.value;
-      const nameVal = document.getElementById('newToolNameInput')?.value?.trim() || 'Tool';
-
-      let visual = '';
-      if (currentNewToolLogoBase64) {
-        visual = `<img src="${currentNewToolLogoBase64}" alt="${nameVal}" class="w-full h-full object-contain" />`;
-      } else if (presetKey && TOOL_PRESET_SVGS[presetKey]) {
-        visual = TOOL_PRESET_SVGS[presetKey];
-      } else {
-        visual = `<span class="text-xs font-mono font-bold text-slate-400">${nameVal.substring(0, 2).toUpperCase()}</span>`;
-      }
-      previewBox.innerHTML = visual;
-    }
-
-    function addNewTool() {
-      const nameInput = document.getElementById('newToolNameInput');
-      const name = nameInput ? nameInput.value.trim() : '';
-      if (!name) {
-        alert('Silakan isi nama tool / aplikasi terlebih dahulu!');
-        nameInput?.focus();
-        return;
-      }
-
-      const presetKey = document.getElementById('newToolPresetSelect')?.value;
-
-      const newTool = {
-        id: 'tool-' + Date.now(),
-        name: name,
-        presetKey: currentNewToolLogoBase64 ? '' : (presetKey || ''),
-        logo: currentNewToolLogoBase64 || ''
-      };
-
-      if (!adminToolsData) loadAdminToolsData();
-      if (!adminToolsData[currentToolCategory]) adminToolsData[currentToolCategory] = [];
-      adminToolsData[currentToolCategory].push(newTool);
-
-      saveAdminToolsData();
-
-      // Reset form
-      if (nameInput) nameInput.value = '';
-      const fileInput = document.getElementById('newToolFileInput');
-      if (fileInput) fileInput.value = '';
-      currentNewToolLogoBase64 = '';
-      updateNewToolPreview();
-    }
-
-    function deleteTool(index) {
-      if (!adminToolsData || !adminToolsData[currentToolCategory]) return;
-      const toolName = adminToolsData[currentToolCategory][index]?.name || 'Tool ini';
-      if (confirm(`Hapus logo "${toolName}" dari daftar?`)) {
-        adminToolsData[currentToolCategory].splice(index, 1);
-        saveAdminToolsData();
-      }
-    }
-
-    function renderAdminToolsList() {
-      if (!adminToolsData) loadAdminToolsData();
-
-      const cWeb = document.getElementById('countWebTools');
-      if (cWeb) cWeb.textContent = adminToolsData.webTools?.length || 0;
-      const cDes = document.getElementById('countDesignTools');
-      if (cDes) cDes.textContent = adminToolsData.designTools?.length || 0;
-      const cVid = document.getElementById('countVideoTools');
-      if (cVid) cVid.textContent = adminToolsData.videoTools?.length || 0;
-
-      const currentCatTitle = document.getElementById('currentCatTitle');
-      if (currentCatTitle) {
-        if (currentToolCategory === 'webTools') currentCatTitle.textContent = 'Program Web Tools';
-        else if (currentToolCategory === 'designTools') currentCatTitle.textContent = 'Design Tools';
-        else currentCatTitle.textContent = 'Video Edit Tools';
-      }
-
-      const listContainer = document.getElementById('adminToolsListGrid');
-      if (!listContainer) return;
-
-      const list = adminToolsData[currentToolCategory] || [];
-      if (list.length === 0) {
-        listContainer.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-slate-400 font-mono">Belum ada logo tool pada kategori ini. Gunakan formulir di atas untuk menambahkan.</div>`;
-        return;
-      }
-
-      let html = '';
-      list.forEach((tool, idx) => {
-        let visual = '';
-        if (tool.logo && tool.logo.trim() !== '') {
-          visual = `<img src="${tool.logo}" alt="${tool.name}" class="w-full h-full object-contain" />`;
-        } else if (tool.presetKey && TOOL_PRESET_SVGS[tool.presetKey]) {
-          visual = TOOL_PRESET_SVGS[tool.presetKey];
-        } else if (tool.svg && tool.svg.trim() !== '') {
-          visual = tool.svg;
-        } else {
-          visual = `<span class="text-xs font-mono font-bold text-slate-500">${(tool.name || 'T').substring(0, 2).toUpperCase()}</span>`;
-        }
-
-        html += `
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3 shadow-2xs hover:border-slate-300 transition">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-center p-2 shrink-0">
-                ${visual}
-              </div>
-              <div class="min-w-0">
-                <h5 class="text-xs font-bold text-slate-900 truncate">${tool.name}</h5>
-                <span class="text-[10px] font-mono text-slate-400">${tool.logo ? 'Upload Gambar' : (tool.presetKey || 'Preset')}</span>
-              </div>
-            </div>
-            <button type="button" onclick="deleteTool(${idx})" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer" title="Hapus logo">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-        `;
-      });
       listContainer.innerHTML = html;
     }
 

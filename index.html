@@ -6614,6 +6614,26 @@
         const s1 = JSON.parse(localStorage.getItem('fathur_portfolio_sec01_data') || '{}');
         applySection01DataToDom(s1);
 
+        // Sync Sec 01 & Tools from IndexedDB (High-Capacity Storage)
+        if (window.indexedDB) {
+          try {
+            const req = window.indexedDB.open('FathurPortfolioDB', 1);
+            req.onsuccess = function(e) {
+              const db = e.target.result;
+              if (db.objectStoreNames.contains('portfolio_kv')) {
+                const tx = db.transaction('portfolio_kv', 'readonly');
+                const store = tx.objectStore('portfolio_kv');
+                const reqSec01 = store.get('fathur_portfolio_sec01_data');
+                reqSec01.onsuccess = function() {
+                  if (reqSec01.result && typeof reqSec01.result === 'object') {
+                    applySection01DataToDom(reqSec01.result);
+                  }
+                };
+              }
+            };
+          } catch (eIdb) {}
+        }
+
         // 2. Papan Jejak (Sec 05)
         const s5 = JSON.parse(localStorage.getItem('fathur_portfolio_sec05_data') || '{}');
         if (s5.w1Company) {
