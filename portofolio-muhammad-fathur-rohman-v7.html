@@ -2006,23 +2006,8 @@
           </div>
         </div>
 
-        <!-- RIWAYAT KELOLA & PRODUKSI SOSMED BANNER & MULTI-ACCOUNT SELECTOR -->
-        <div class="mb-5 bg-white dark:bg-stone-900 p-5 sm:p-6 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5">
-          <div class="max-w-2xl">
-            <span class="text-[11px] font-mono font-bold uppercase tracking-widest text-[#155293] dark:text-sky-400 block mb-1">RIWAYAT KELOLA &amp; PRODUKSI SOSMED</span>
-            <h4 class="font-display font-extrabold text-base sm:text-lg text-ink dark:text-white leading-snug">
-              Portofolio Riwayat Kelola: <span class="text-[#155293] dark:text-sky-400">@masjid.mbm</span>, <span class="text-crimson">@halteaindonesia</span>, <span class="text-stone-700 dark:text-stone-300">@mgbookparty</span>, dll.
-            </h4>
-            <p class="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mt-1 leading-relaxed">
-              Dikelola langsung mencakup identitas visual, feed desain grafis, storytelling, video reels, hingga copywriting.
-            </p>
-          </div>
-
-          <!-- Interactive Account Selector Pills -->
-          <div class="flex items-center gap-2 flex-wrap shrink-0" id="medsosAccountPillsContainer">
-            <!-- Populated dynamically via JS: ● @halteaindonesia, ● @masjid.mbm, ● @mgbookparty -->
-          </div>
-        </div>
+        <!-- Hidden container for JS account pills compatibility -->
+        <div id="medsosAccountPillsContainer" class="hidden"></div>
 
         <!-- Section Subheader Requested by User: Muhammad Fathur Rohman - Design Portofolio & Instagram Handle -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 px-2">
@@ -6178,7 +6163,7 @@
     
     /* =================================================================== */
     /* SMOOTH 3D WHITE SHEET OVERLAP SCROLL CONTROLLER                     */
-    /* Covers "Design Grafis & Video Editor" title smoothly as it rises!  */
+    /* Covers "Design Grafis & Video Editor" title with dynamic blur!      */
     /* =================================================================== */
     function initTabletContainerScroll() {
       const wrapper = document.getElementById('tabletScrollContainer');
@@ -6193,7 +6178,7 @@
         const rect = wrapper.getBoundingClientRect();
         const winH = window.innerHeight;
 
-        // We measure progress as the top of wrapper moves from winH * 0.75 up towards top of viewport
+        // Progress: when top of wrapper enters at 75% viewport down to 10%
         const start = winH * 0.75;
         const end = winH * 0.10;
         const rawProgress = (start - rect.top) / (start - end);
@@ -6210,7 +6195,7 @@
         const scale = minScale + (1.0 - minScale) * progress;
 
         // Lift & Overlap:
-        // As you scroll down, translateY moves UP from +30px to -90px (-65px mobile),
+        // As you scroll down, translateY moves UP from +30px to -95px (-65px mobile),
         // smoothly sliding OVER the sticky "Design Grafis & Video Editor" title!
         const initialY = isMobile ? 20 : 35;
         const targetLift = isMobile ? -65 : -95;
@@ -6218,17 +6203,21 @@
 
         card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
 
-        // Parallax effect on title before it gets covered
-        if (titleH2) {
-          const titleLift = progress * -20;
-          titleH2.style.transform = `translateY(${titleLift.toFixed(1)}px)`;
-          // Subtle opacity fade as card reaches full overlap
-          if (progress > 0.85) {
-            const fade = Math.max(0, 1 - (progress - 0.85) / 0.15);
-            titleSec.style.opacity = fade.toFixed(2);
-          } else {
-            titleSec.style.opacity = '1';
+        // DYNAMIC BLUR EFFECT AS TITLE IS COVERED OR REVEALED
+        if (titleSec) {
+          let blurPx = 0;
+          let titleOpacity = 1;
+
+          // As card rises towards title (progress 0.25 -> 0.95), blur smoothly increases from 0px up to 14px
+          if (progress > 0.20) {
+            const blurFactor = Math.min(1, (progress - 0.20) / 0.70);
+            blurPx = blurFactor * 14;
+            titleOpacity = Math.max(0, 1 - blurFactor * 0.95);
           }
+
+          titleSec.style.filter = blurPx > 0.1 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
+          titleSec.style.opacity = titleOpacity.toFixed(2);
+          titleSec.style.transform = `translateY(${(progress * -25).toFixed(1)}px)`;
         }
 
         isTicking = false;
