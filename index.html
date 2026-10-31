@@ -1043,6 +1043,17 @@
       border-color: rgba(255, 255, 255, 0.14) !important;
     }
 
+    /* Section 04 White Curtain Card in Blue Mode */
+    body.blueprint-mode #tabletDeviceCard {
+      background-color: #0F325E !important;
+      border-color: rgba(255, 255, 255, 0.28) !important;
+      box-shadow: 0 -15px 45px -8px rgba(0, 0, 0, 0.45), 0 30px 70px -15px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .glass-card {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: rgba(255, 255, 255, 0.16) !important;
+    }
+
     /* Floating Section Tag Pill Glassmorphism */
     .glass-tag-pill {
       background: rgba(255, 255, 255, 0.88) !important;
@@ -1947,13 +1958,16 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 02: DESIGN GRAFIS & VIDEO EDITOR (FULL VIEWPORT) -->
     <!-- =================================================================== -->
-    <section id="chapter-multimedia" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section smooth-blur-container">
+    <!-- =================================================================== -->
+    <!-- CHAPTER TRANSITION 02: DESIGN GRAFIS & VIDEO EDITOR (STICKY TITLE)  -->
+    <!-- =================================================================== -->
+    <section id="chapter-multimedia" class="sticky top-16 sm:top-20 z-10 pt-10 sm:pt-14 pb-4 text-center select-none pointer-events-none transition-all duration-300">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div class="cinematic-blur-card text-center space-y-4">
-          <h2 class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center">
+        <div class="cinematic-blur-card text-center space-y-2">
+          <h2 id="chapterMultimediaTitle" class="chapter-gradient-title font-serif italic font-extrabold text-3xl sm:text-5xl md:text-6xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none text-center transition-transform duration-200 ease-out will-change-transform">
             Design Grafis &amp; Video Editor
           </h2>
-          <p class="chapter-subtitle text-xs sm:text-base font-mono font-bold uppercase tracking-widest text-stone-500 text-center">
+          <p class="chapter-subtitle text-xs sm:text-sm font-mono font-bold uppercase tracking-widest text-stone-500 text-center">
             Multimedia &amp; Content Creator
           </p>
         </div>
@@ -1961,25 +1975,16 @@
     </section>
 
     <!-- =================================================================== -->
-    <!-- SECTION 04: 3D TABLET CONTAINER SCROLL SHOWCASE (ACETERNITY STYLE)  -->
+    <!-- SECTION 04: WHITE CARD SHEET SHAPE OVERLAPPING TITLE (3D SCROLL)    -->
     <!-- =================================================================== -->
-    <div id="tabletScrollContainer" class="tablet-scroll-wrapper relative w-full overflow-visible py-8 sm:py-16 px-2 sm:px-6 lg:px-8 select-none" style="perspective: 1200px;">
+    <div id="tabletScrollContainer" class="tablet-scroll-wrapper relative z-20 w-full overflow-visible pb-16 px-2 sm:px-6 lg:px-8 -mt-2 sm:-mt-4" style="perspective: 1200px;">
       
-      <!-- Electronic Tablet Chassis / Bezel Container -->
-      <div id="tabletDeviceCard" class="tablet-device-card max-w-7xl mx-auto rounded-[28px] sm:rounded-[44px] border-[6px] sm:border-[10px] md:border-[14px] border-stone-800/95 dark:border-stone-700 bg-stone-900 shadow-2xl transition-transform duration-100 ease-out p-2.5 sm:p-5 md:p-7 relative overflow-hidden"
-           style="transform-style: preserve-3d; transform-origin: center top; box-shadow: 0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003; will-change: transform;">
+      <!-- Pure White Card with Surrounding Deep Drop Shadow (No Black Bezel) -->
+      <div id="tabletDeviceCard" class="tablet-device-card max-w-7xl mx-auto rounded-[28px] sm:rounded-[44px] bg-white dark:bg-stone-900 border-2 border-stone-200/90 dark:border-stone-800 transition-transform duration-100 ease-out p-4 sm:p-8 md:p-10 relative overflow-hidden"
+           style="transform-style: preserve-3d; transform-origin: center top; box-shadow: 0 -12px 35px -8px rgba(0, 0, 0, 0.10), 0 25px 60px -15px rgba(0, 0, 0, 0.14), 0 0 0 1px rgba(0, 0, 0, 0.03); will-change: transform;">
         
-        <!-- Tablet Top Hardware Bezel Sensor / Camera Dot -->
-        <div class="w-16 sm:w-24 h-2 sm:h-2.5 bg-stone-950 rounded-full mx-auto mb-3 flex items-center justify-center gap-1.5 opacity-90 pointer-events-none">
-          <span class="w-1.5 h-1.5 rounded-full bg-stone-700"></span>
-          <span class="w-1 h-1 rounded-full bg-sky-900"></span>
-        </div>
-
-        <!-- Tablet Inner Display Screen -->
-        <div class="tablet-screen-display rounded-[20px] sm:rounded-[34px] overflow-hidden bg-white dark:bg-stone-950 border border-stone-200/80 dark:border-stone-800 shadow-inner">
-
-          <section id="kelola-medsos" class="py-8 sm:py-14 px-3 sm:px-6 lg:px-8 relative scroll-blur-section smooth-blur-container">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="kelola-medsos" class="relative scroll-blur-section smooth-blur-container">
+          <div class="max-w-7xl mx-auto">
 
 
 
@@ -2153,10 +2158,8 @@
           </div>
         </div>
 
-      </div>
-    </section>
+      </section>
 
-        </div>
       </div>
     </div>
 
@@ -6174,12 +6177,14 @@
 
     
     /* =================================================================== */
-    /* ACETERNITY 3D TABLET CONTAINER SCROLL CONTROLLER                    */
+    /* SMOOTH 3D WHITE SHEET OVERLAP SCROLL CONTROLLER                     */
+    /* Covers "Design Grafis & Video Editor" title smoothly as it rises!  */
     /* =================================================================== */
     function initTabletContainerScroll() {
       const wrapper = document.getElementById('tabletScrollContainer');
       const card = document.getElementById('tabletDeviceCard');
-      const title = document.getElementById('chapterMultimediaTitle');
+      const titleSec = document.getElementById('chapter-multimedia');
+      const titleH2 = document.getElementById('chapterMultimediaTitle');
       if (!wrapper || !card) return;
 
       let isTicking = false;
@@ -6188,31 +6193,42 @@
         const rect = wrapper.getBoundingClientRect();
         const winH = window.innerHeight;
 
-        // When the container enters the viewport from bottom:
-        // rect.top == winH -> progress = 0 (tilted back 20deg)
-        // rect.top <= winH * 0.15 -> progress = 1 (flattened 0deg)
-        const start = winH;
-        const end = winH * 0.15;
+        // We measure progress as the top of wrapper moves from winH * 0.75 up towards top of viewport
+        const start = winH * 0.75;
+        const end = winH * 0.10;
         const rawProgress = (start - rect.top) / (start - end);
         const progress = Math.max(0, Math.min(1, rawProgress));
 
         const isMobile = window.innerWidth <= 768;
-        // Tilt angle: starts at 20deg (or 14deg on mobile), flattens smoothly to 0deg
-        const maxRotate = isMobile ? 14 : 20;
+
+        // 3D Tilt: Starts at 14deg (or 10deg mobile) and flattens smoothly to 0deg
+        const maxRotate = isMobile ? 10 : 14;
         const rotateX = maxRotate * (1 - progress);
 
-        // Scale: starts at 0.92 (or 0.88 on mobile), expands to 1.0
-        const minScale = isMobile ? 0.88 : 0.92;
+        // Scale: Expands from 0.96 to 1.00
+        const minScale = isMobile ? 0.94 : 0.96;
         const scale = minScale + (1.0 - minScale) * progress;
 
-        // TranslateY: lifts up smoothly as you scroll
-        const translateY = (1 - progress) * (isMobile ? 35 : 55);
+        // Lift & Overlap:
+        // As you scroll down, translateY moves UP from +30px to -90px (-65px mobile),
+        // smoothly sliding OVER the sticky "Design Grafis & Video Editor" title!
+        const initialY = isMobile ? 20 : 35;
+        const targetLift = isMobile ? -65 : -95;
+        const translateY = initialY + (targetLift - initialY) * progress;
 
         card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
 
-        if (title) {
-          const titleY = progress * -25;
-          title.style.transform = `translateY(${titleY.toFixed(1)}px)`;
+        // Parallax effect on title before it gets covered
+        if (titleH2) {
+          const titleLift = progress * -20;
+          titleH2.style.transform = `translateY(${titleLift.toFixed(1)}px)`;
+          // Subtle opacity fade as card reaches full overlap
+          if (progress > 0.85) {
+            const fade = Math.max(0, 1 - (progress - 0.85) / 0.15);
+            titleSec.style.opacity = fade.toFixed(2);
+          } else {
+            titleSec.style.opacity = '1';
+          }
         }
 
         isTicking = false;
