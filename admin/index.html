@@ -5961,14 +5961,35 @@ function loadAdminToolsData() {
       } catch (e) {
         adminToolsData = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA));
       }
+
+      if (!adminToolsData || typeof adminToolsData !== 'object') {
+        adminToolsData = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA));
+      }
+      ['webTools', 'designTools', 'videoTools'].forEach(cat => {
+        if (!Array.isArray(adminToolsData[cat]) || adminToolsData[cat].length === 0) {
+          adminToolsData[cat] = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA[cat] || []));
+        }
+      });
+
       renderAdminToolsList();
 
       // Sync from IndexedDB in background (for large datasets)
       if (window.indexedDB) {
         portfolioIdbGet('fathur_portfolio_tools_data').then(idbData => {
           if (idbData && typeof idbData === 'object') {
-            adminToolsData = idbData;
-            renderAdminToolsList();
+            let hasValid = false;
+            ['webTools', 'designTools', 'videoTools'].forEach(cat => {
+              if (Array.isArray(idbData[cat]) && idbData[cat].length > 0) hasValid = true;
+            });
+            if (hasValid) {
+              adminToolsData = idbData;
+              ['webTools', 'designTools', 'videoTools'].forEach(cat => {
+                if (!Array.isArray(adminToolsData[cat]) || adminToolsData[cat].length === 0) {
+                  adminToolsData[cat] = JSON.parse(JSON.stringify(DEFAULT_TOOLS_DATA[cat] || []));
+                }
+              });
+              renderAdminToolsList();
+            }
           }
         }).catch(() => {});
       }
@@ -6032,6 +6053,14 @@ function loadAdminToolsData() {
 
     function setAdminToolCategory(cat) {
       currentToolCategory = cat;
+      const titles = {
+        webTools: 'Program Web Tools',
+        designTools: 'Design Tools',
+        videoTools: 'Video Edit Tools'
+      };
+      const catTitleEl = document.getElementById('currentCatTitle');
+      if (catTitleEl) catTitleEl.textContent = titles[cat] || 'Tools';
+
       document.querySelectorAll('.tool-cat-btn').forEach(b => {
         if (b.getAttribute('data-cat') === cat) {
           b.className = 'tool-cat-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-[#155293] text-white shadow-xs cursor-pointer';
@@ -6139,7 +6168,7 @@ function loadAdminToolsData() {
       const cVid = document.getElementById('countVideoTools');
       if (cVid) cVid.textContent = adminToolsData.videoTools?.length || 0;
 
-      const listContainer = document.getElementById('adminToolsListContainer');
+      const listContainer = document.getElementById('adminToolsListGrid');
       if (!listContainer) return;
 
       const items = adminToolsData[currentToolCategory] || [];
