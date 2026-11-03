@@ -97,9 +97,17 @@
     /* =================================================================== */
     body.blueprint-mode {
       --bg-base: #154278;
-      --grid-major: rgba(255, 255, 255, 0.16);
-      --grid-minor: rgba(255, 255, 255, 0.06);
+      --grid-major: rgba(255, 255, 255, 0.22);
+      --grid-minor: rgba(255, 255, 255, 0.08);
       --ink: #FFFFFF;
+      background-color: var(--bg-base) !important;
+      background-image:
+        linear-gradient(to right, var(--grid-major) 1.5px, transparent 1.5px),
+        linear-gradient(to bottom, var(--grid-major) 1.5px, transparent 1.5px),
+        linear-gradient(to right, var(--grid-minor) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-minor) 1px, transparent 1px) !important;
+      background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px !important;
+      color: #FFFFFF !important;
     }
 
     /* Chapter Gradient Titles & Subtitles */
@@ -126,8 +134,19 @@
     body.blueprint-mode .chapter-skill-matrix .border-b {
       border-color: rgba(255, 255, 255, 0.18) !important;
     }
+    body.blueprint-mode .chapter-skill-matrix .text-emerald-700 {
+      color: #34D399 !important;
+    }
+    body.blueprint-mode .chapter-skill-matrix .text-purple-700 {
+      color: #C084FC !important;
+    }
+    body.blueprint-mode .chapter-skill-matrix .text-amber-700 {
+      color: #FBBF24 !important;
+    }
+    body.blueprint-mode .chapter-skill-matrix .text-sky-700 {
+      color: #60A5FA !important;
+    }
 
-    /* Section 03 Project Cards in Blue Mode */
     /* Section 03 Project Cards in Blue Mode: Crisp white tactile cards on blue grid */
     body.blueprint-mode #my-project article {
       background-color: #FFFFFF !important;
@@ -156,11 +175,121 @@
       border-color: #E2E8F0 !important;
     }
 
-    body.blueprint-mode {
-      --bg-base: #154278;
-      --grid-major: rgba(255, 255, 255, 0.16);
-      --grid-minor: rgba(255, 255, 255, 0.06);
-      --ink: #FFFFFF;
+    /* Section 03 Filter Buttons & GitHub Button in Blue Mode */
+    body.blueprint-mode #projectFilterBar .proj-filter-btn {
+      background-color: rgba(13, 38, 70, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+      color: #E2E8F0 !important;
+    }
+    body.blueprint-mode #projectFilterBar .proj-filter-btn:hover {
+      border-color: #FFFFFF !important;
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode #projectFilterBar .proj-filter-btn.bg-ink {
+      background-color: #FFFFFF !important;
+      color: #0F172A !important;
+      border-color: #FFFFFF !important;
+    }
+    body.blueprint-mode #sec03GithubBtn {
+      background-color: rgba(13, 38, 70, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+      color: #F1F5F9 !important;
+    }
+
+    /* Infinite Marquee Cards in Blue Mode */
+    body.blueprint-mode .marquee-content > div > div {
+      background-color: rgba(13, 38, 70, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.22) !important;
+    }
+    body.blueprint-mode .marquee-content .text-ink {
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode .marquee-content .text-stone-500 {
+      color: #94A3B8 !important;
+    }
+
+    /* Section 06 Filter Tabs & Badges in Blue Mode */
+    body.blueprint-mode #prestasi-nasional p.text-stone-600,
+    body.blueprint-mode #global-network p.text-stone-600,
+    body.blueprint-mode #executive-closing p.text-stone-500,
+    body.blueprint-mode #kelola-medsos p.text-stone-600 {
+      color: #E0F2FE !important;
+    }
+    body.blueprint-mode #prestasi-nasional .bg-stone-100 {
+      background-color: rgba(13, 38, 70, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    body.blueprint-mode #prestasi-nasional .cert-filter-btn {
+      color: #E2E8F0 !important;
+    }
+    body.blueprint-mode #prestasi-nasional .cert-filter-btn:hover {
+      color: #FFFFFF !important;
+      background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+    body.blueprint-mode #prestasi-nasional .cert-filter-btn.bg-white,
+    body.blueprint-mode #prestasi-nasional .cert-filter-btn.bg-slate-900 {
+      background-color: #FFFFFF !important;
+      color: #0F172A !important;
+    }
+
+    /* Global Network & Client Reach in Blue Mode */
+    body.blueprint-mode #global-network {
+      background: transparent !important;
+    }
+    body.blueprint-mode #global-network .bg-white {
+      background-color: rgba(13, 38, 70, 0.92) !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode #global-network .text-stone-700,
+    body.blueprint-mode #global-network .text-[#155293] {
+      color: #BAE6FD !important;
+    }
+    body.blueprint-mode #worldMapStageContainer {
+      background-color: #0F2C54 !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+    }
+
+    /* Section Subheaders & Handles in Section 04 */
+    body.blueprint-mode #section04TitleDisplay {
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode #section04HandleLink {
+      color: #93C5FD !important;
+    }
+    body.blueprint-mode #section04HandleLink:hover {
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode #phoneScreenLabel {
+      color: #E2E8F0 !important;
+    }
+
+    /* Bottom Action Buttons in Blue Mode (Section 02, 03, 05, 06) */
+    body.blueprint-mode #skill-kompetensi button.bg-white,
+    body.blueprint-mode #my-project button.bg-white,
+    body.blueprint-mode #papan-jejak button.bg-white,
+    body.blueprint-mode #prestasi-nasional button.bg-ink {
+      background-color: #FFFFFF !important;
+      color: #0F172A !important;
+      border-color: #FFFFFF !important;
+    }
+    body.blueprint-mode #skill-kompetensi button.bg-white:hover,
+    body.blueprint-mode #my-project button.bg-white:hover,
+    body.blueprint-mode #papan-jejak button.bg-white:hover,
+    body.blueprint-mode #prestasi-nasional button.bg-ink:hover {
+      background-color: var(--accent-color, #C62828) !important;
+      color: #FFFFFF !important;
+      border-color: var(--accent-color, #C62828) !important;
+    }
+
+    /* Section 02 Mini Stat Cards in Blue Mode */
+    body.blueprint-mode #skill-kompetensi .glass-card {
+      background: rgba(13, 38, 70, 0.88) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    body.blueprint-mode #skill-kompetensi .glass-card span.text-slate-800,
+    body.blueprint-mode #skill-kompetensi .glass-card span.text-[#155293] {
+      color: #F8FAFC !important;
     }
 
     body.dark-mode {
@@ -172,7 +301,6 @@
 
     body {
       background-color: var(--bg-base);
-      background-image: none !important;
       color: var(--ink);
       overflow-x: hidden;
       transition: background-color 0.4s ease, color 0.4s ease;
@@ -2510,7 +2638,7 @@
     <!-- =================================================================== -->
     <!-- GLOBAL NETWORK & CLIENT REACH (DOTTED WORLD MAP & FLIGHT PATHS)     -->
     <!-- =================================================================== -->
-    <section id="global-network" class="py-14 border-t border-stone-200/40 bg-stone-50/50 dark:bg-stone-950/50 transition-colors duration-300 smooth-blur-container">
+    <section id="global-network" class="py-14 border-t border-stone-200/40 transition-colors duration-300 smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5">
@@ -4534,6 +4662,7 @@
             <div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-stone-900 border border-stone-200 relative group cursor-pointer" onclick="window.location.href='project-detail.html?id=${p.id}'" title="Buka Detail Proyek ${p.title}">
               <img src="${imgSrc}" alt="${titleEsc}" data-title="${titleEsc}" data-cat="${catEsc}" data-color="${colorEsc}" onerror="this.onerror=null;this.src=makeSvgBanner(this.getAttribute('data-title'), this.getAttribute('data-cat'), this.getAttribute('data-color'));" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
               <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded bg-black/75 text-white font-mono text-[10px] font-bold">0${p.id} · ${p.category}</span>
+              ${(Array.isArray(p.gallery) && p.gallery.length > 0) ? `<span class="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur border border-white/20 text-white font-mono text-[9px] font-bold flex items-center gap-1 z-10 shadow-sm">📸 ${p.gallery.length + 1} Foto</span>` : ''}
               <div class="absolute inset-0 bg-stone-950/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <span class="px-3.5 py-1.5 rounded-lg bg-white/95 text-ink font-mono text-[11px] font-extrabold shadow-md flex items-center gap-1.5">
                   <span>Lihat Detail Proyek</span>
@@ -9344,9 +9473,14 @@
       const intro = document.getElementById('cinematicOpeningScreen');
       if (!intro) return;
 
+      // Sesuai permintaan pengguna: Masuk awal selalu di halaman paling atas (Scroll Top 0)
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+      // Transisi: TIDAK geser ke atas, melainkan dissolve dengan efek blur halus
       intro.style.pointerEvents = 'none';
-      intro.style.transition = 'opacity 0.35s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-      intro.style.transform = 'translateY(-100%)';
+      intro.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      intro.style.transform = 'none';
+      intro.style.filter = 'blur(18px)';
       intro.style.opacity = '0';
 
       try {
@@ -9355,11 +9489,13 @@
 
       setTimeout(() => {
         intro.style.display = 'none';
+        intro.style.filter = 'none';
         document.body.style.overflow = '';
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         if (typeof initBidirectionalScrollBlur === 'function') {
           initBidirectionalScrollBlur();
         }
-      }, 420);
+      }, 620);
     }
     window.dismissCinematicIntro = dismissCinematicIntro;
 
@@ -9388,9 +9524,10 @@
       intro.style.display = 'flex';
       intro.style.pointerEvents = 'auto';
       intro.style.transition = 'none';
-      intro.style.transform = 'translateY(0)';
+      intro.style.transform = 'none';
+      intro.style.filter = 'none';
       intro.style.opacity = '1';
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
       cinematicIntroTimer = setTimeout(dismissCinematicIntro, 3500);
     }

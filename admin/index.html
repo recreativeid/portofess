@@ -1048,6 +1048,41 @@
                 </div>
               </div>
 
+              <!-- Row 3.6: Unggah Gambar-Gambar Pendukung / Screenshot Tambahan (Opsional - Slider Galeri) -->
+              <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label class="text-[11px] font-bold text-slate-800 uppercase tracking-wider block">📸 Gambar Pendukung / Screenshot Tambahan (Opsional - Slider Galeri)</label>
+                    <span class="text-[10px] text-slate-500">Unggah tangkapan layar fitur web, halaman dalam, atau tampilan mobile. Pengunjung dapat menggeser (slide) foto-foto ini di halaman detail proyek.</span>
+                  </div>
+                  <button type="button" onclick="clearProjectGallery()" class="text-xs text-rose-600 hover:underline font-semibold cursor-pointer">Hapus Semua Foto</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                  <div class="sm:col-span-6">
+                    <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Unggah dari Galeri HP / PC (Auto-Crop 16:10):</label>
+                    <input id="inpProjectGalleryFile" type="file" accept="image/*" onchange="handleProjectGalleryFile(this)" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-[#155293] file:cursor-pointer" />
+                  </div>
+                  <div class="sm:col-span-6">
+                    <label class="text-[10px] font-mono font-bold text-slate-600 block mb-1">Atau Masukkan Tautan Gambar / URL:</label>
+                    <div class="flex gap-2">
+                      <input id="inpProjectGalleryUrl" type="text" placeholder="https://domain.com/screenshot-2.jpg" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono bg-white outline-none focus:border-[#155293]" />
+                      <button type="button" onclick="addProjectGalleryFromUrl()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition cursor-pointer shrink-0">
+                        + Tambah
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Preview Grid Galeri Aktif -->
+                <div class="mt-2">
+                  <span class="text-[10px] font-mono text-slate-400 block mb-1.5">Daftar Foto Tambahan yang Tersimpan:</span>
+                  <div id="projectGalleryPreviewContainer" class="p-3 rounded-xl bg-slate-50 border border-dashed border-slate-300 min-h-[70px] flex flex-wrap gap-2.5 items-center">
+                    <span class="text-xs text-slate-400 italic">Belum ada foto pendukung. (Hanya thumbnail utama yang akan ditampilkan)</span>
+                  </div>
+                </div>
+              </div>
+
               <!-- Row 4: KATALOG STACK TEKNOLOGI (MULTI-SELECT DENGAN TOMBOL '✕') -->
               <div class="p-4 rounded-xl bg-white border border-slate-200 space-y-3">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
@@ -3645,6 +3680,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           if (!p.database || !p.database.length) p.database = def.database || ['MySQL'];
           if (!p.features) p.features = def.features || (p.desc ? '• ' + p.desc : '• Fitur sistem web responsif.');
           if (p.githubUrl === undefined) p.githubUrl = def.githubUrl || '';
+          if (!p.gallery) p.gallery = def.gallery || [];
           return p;
         });
       }
@@ -6073,6 +6109,63 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       }
     }
 
+    let projectActiveGallery = [];
+
+    function handleProjectGalleryFile(input) {
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      openImageCropper(file, 16 / 10, 800, 'image/jpeg', function(croppedDataUrl) {
+        projectActiveGallery.push(croppedDataUrl);
+        renderProjectGalleryPreview();
+        input.value = '';
+      });
+    }
+
+    function addProjectGalleryFromUrl() {
+      const inp = document.getElementById('inpProjectGalleryUrl');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (!val) {
+        alert('Silakan masukkan URL gambar pendukung terlebih dahulu.');
+        return;
+      }
+      projectActiveGallery.push(val);
+      inp.value = '';
+      renderProjectGalleryPreview();
+    }
+
+    function removeProjectGalleryItem(index) {
+      if (index >= 0 && index < projectActiveGallery.length) {
+        projectActiveGallery.splice(index, 1);
+        renderProjectGalleryPreview();
+      }
+    }
+
+    function clearProjectGallery() {
+      projectActiveGallery = [];
+      const fileInp = document.getElementById('inpProjectGalleryFile');
+      const urlInp = document.getElementById('inpProjectGalleryUrl');
+      if (fileInp) fileInp.value = '';
+      if (urlInp) urlInp.value = '';
+      renderProjectGalleryPreview();
+    }
+
+    function renderProjectGalleryPreview() {
+      const container = document.getElementById('projectGalleryPreviewContainer');
+      if (!container) return;
+      if (!projectActiveGallery || projectActiveGallery.length === 0) {
+        container.innerHTML = '<span class="text-xs text-slate-400 italic">Belum ada foto pendukung. (Hanya thumbnail utama yang akan ditampilkan)</span>';
+        return;
+      }
+      container.innerHTML = projectActiveGallery.map(function(itemUrl, idx) {
+        return '<div class="relative w-24 h-16 rounded-lg overflow-hidden border border-slate-300 bg-slate-900 group shadow-xs shrink-0">' +
+          '<img src="' + itemUrl + '" alt="Screenshot ' + (idx + 1) + '" class="w-full h-full object-cover" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22><rect fill=%22%23334155%22 width=%22100%22 height=%2260%22/><text fill=%22%2394a3b8%22 x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2210%22>Rusak</text></svg>\'" />' +
+          '<span class="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-black/75 text-white text-[9px] font-mono font-bold">#' + (idx + 1) + '</span>' +
+          '<button type="button" onclick="removeProjectGalleryItem(' + idx + ')" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-[10px] flex items-center justify-center font-bold shadow-xs cursor-pointer" title="Hapus foto ini">✕</button>' +
+        '</div>';
+      }).join('');
+    }
+
     function handleProjectThumbFile(input) {
       if (!input || !input.files || !input.files[0]) return;
       const file = input.files[0];
@@ -6121,7 +6214,10 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           '<div>' +
             '<div class="flex items-center justify-between gap-2 mb-2">' +
               '<span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">' + (p.category || 'Website') + '</span>' +
-              '<span class="text-[10px] font-mono font-bold text-slate-400">#' + p.id + '</span>' +
+              '<div class="flex items-center gap-1.5">' +
+                (p.gallery && p.gallery.length > 0 ? '<span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800">📸 ' + (p.gallery.length + 1) + ' Foto</span>' : '') +
+                '<span class="text-[10px] font-mono font-bold text-slate-400">#' + p.id + '</span>' +
+              '</div>' +
             '</div>' +
             (hasImg ? 
               '<div class="aspect-[16/10] w-full rounded-lg overflow-hidden bg-slate-900 border border-slate-200 mb-2.5 relative">' +
@@ -6166,6 +6262,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           document.getElementById('inpProjectDesc').value = '';
           document.getElementById('inpProjectFeatures').value = '';
           clearProjectThumbnail();
+          clearProjectGallery();
           projectActiveTechStack = [];
           projectActiveDatabases = [];
           renderActiveTechChips();
@@ -6189,6 +6286,9 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       const imgVal = p.img || '';
       document.getElementById('inpProjectImg').value = imgVal;
       updateProjectThumbPreview(imgVal);
+
+      projectActiveGallery = (Array.isArray(p.gallery) && p.gallery.length > 0) ? p.gallery.slice() : [];
+      renderProjectGalleryPreview();
       
       projectActiveTechStack = Array.isArray(p.techStack) ? p.techStack.slice() : ['HTML5', 'CSS3', 'JavaScript'];
       projectActiveDatabases = Array.isArray(p.database) ? p.database.slice() : ['MySQL'];
@@ -6223,6 +6323,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       const techStackToSave = projectActiveTechStack.length > 0 ? projectActiveTechStack : ['HTML5', 'CSS3', 'JavaScript'];
       const dbToSave = projectActiveDatabases.length > 0 ? projectActiveDatabases : ['MySQL'];
       const featToSave = features || ('• ' + (desc || 'Website modern responsif.'));
+      const galleryToSave = projectActiveGallery.slice();
 
       if (editId) {
         const idx = currentProjects.findIndex(function(x) { return x.id == editId; });
@@ -6237,6 +6338,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           currentProjects[idx].database = dbToSave;
           currentProjects[idx].color = color;
           currentProjects[idx].img = img;
+          currentProjects[idx].gallery = galleryToSave;
         }
       } else {
         const nextId = currentProjects.length > 0 ? Math.max.apply(Math, currentProjects.map(function(x) { return x.id || 0; })) + 1 : 1;
@@ -6252,6 +6354,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           database: dbToSave,
           color: color,
           img: img,
+          gallery: galleryToSave,
           rot: 'rotate-1'
         });
       }
