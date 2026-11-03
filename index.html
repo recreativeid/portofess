@@ -1328,27 +1328,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- World Landmass Polygons for Dense Dot Matrix Vector Map -->
   <script src="assets/world-land.js"></script>
-  <script>
-    // Auto-enter landing page after 5 seconds if visitor does not click
-    var introTimer = setTimeout(function() {
-      if (typeof window.dismissCinematicIntro === 'function') {
-        window.dismissCinematicIntro();
-      }
-    }, 5000);
-
-    // If user already dismissed intro in this session, skip curtain immediately
-    try {
-      if (sessionStorage.getItem('fathur_intro_dismissed') === 'true') {
-        document.addEventListener('DOMContentLoaded', function() {
-          var intro = document.getElementById('cinematicOpeningScreen');
-          if (intro) {
-            intro.style.display = 'none';
-            intro.style.pointerEvents = 'none';
-          }
-        });
-      }
-    } catch (e) {}
-  </script>
 </head>
 <body class="antialiased selection:bg-crimson selection:text-white">
 
@@ -1356,7 +1335,7 @@
   <!-- =================================================================== -->
   <!-- CINEMATIC FILM OPENING SCREEN (HD GAMBAR 2 MATCH)                  -->
   <!-- =================================================================== -->
-  <div id="cinematicOpeningScreen" class="fixed inset-0 z-[9999] bg-[#0A0D14] flex flex-col justify-between overflow-hidden select-none transition-all duration-500 ease-out cursor-pointer" onclick="dismissCinematicIntro()">
+  <div id="cinematicOpeningScreen" class="fixed inset-0 z-[9999] bg-[#0A0D14] flex flex-col justify-between overflow-hidden select-none cursor-pointer" onclick="dismissCinematicIntro()">
     
     <!-- Cinematic Fullscreen HD Backdrop Matching Gambar 2 Exactly (Zero Double Text) -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none flex items-center justify-center">
@@ -9393,11 +9372,15 @@
     }
 
     /* =================================================================== */
-    /* CINEMATIC FILM INTRO CONTROLLER (ZERO LAG & INSTANT RESPONSE)       */
+    /* CINEMATIC FILM INTRO CONTROLLER (SMOOTH BLUR & 4S TIMER)            */
     /* =================================================================== */
     let cinematicIntroTimer = null;
+    let isIntroDismissing = false;
 
     function dismissCinematicIntro() {
+      if (isIntroDismissing) return;
+      isIntroDismissing = true;
+
       if (cinematicIntroTimer) {
         clearTimeout(cinematicIntroTimer);
         cinematicIntroTimer = null;
@@ -9408,39 +9391,37 @@
       // Sesuai permintaan pengguna: Masuk awal selalu di halaman paling atas (Scroll Top 0)
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
-      // Transisi: TIDAK geser ke atas, melainkan dissolve dengan efek blur halus
+      // Transisi blur halus 1.6 detik (tidak geser, melainkan dissolve dengan efek blur sinematik yang lembut)
       intro.style.pointerEvents = 'none';
-      intro.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-      intro.style.transform = 'none';
-      intro.style.filter = 'blur(18px)';
+      intro.style.transition = 'opacity 1.6s cubic-bezier(0.22, 1, 0.36, 1), filter 1.6s cubic-bezier(0.22, 1, 0.36, 1), transform 1.6s cubic-bezier(0.22, 1, 0.36, 1)';
+      intro.style.transform = 'scale(1.03)';
+      intro.style.filter = 'blur(28px)';
       intro.style.opacity = '0';
-
-      try {
-        sessionStorage.setItem('fathur_intro_dismissed', 'true');
-      } catch (e) {}
 
       setTimeout(() => {
         intro.style.display = 'none';
         intro.style.filter = 'none';
+        intro.style.transform = 'none';
         document.body.style.overflow = '';
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        isIntroDismissing = false;
         if (typeof initBidirectionalScrollBlur === 'function') {
           initBidirectionalScrollBlur();
         }
-      }, 620);
+      }, 1650);
     }
     window.dismissCinematicIntro = dismissCinematicIntro;
 
     window.addEventListener('keydown', (e) => {
       const intro = document.getElementById('cinematicOpeningScreen');
-      if (intro && intro.style.display !== 'none' && intro.style.pointerEvents !== 'none') {
+      if (intro && intro.style.display !== 'none' && !isIntroDismissing) {
         dismissCinematicIntro();
       }
     });
 
     window.addEventListener('wheel', (e) => {
       const intro = document.getElementById('cinematicOpeningScreen');
-      if (intro && intro.style.display !== 'none' && intro.style.pointerEvents !== 'none') {
+      if (intro && intro.style.display !== 'none' && !isIntroDismissing) {
         dismissCinematicIntro();
       }
     }, { passive: true });
@@ -9449,9 +9430,11 @@
       const intro = document.getElementById('cinematicOpeningScreen');
       if (!intro) return;
 
-      try {
-        sessionStorage.removeItem('fathur_intro_dismissed');
-      } catch (e) {}
+      isIntroDismissing = false;
+      if (cinematicIntroTimer) {
+        clearTimeout(cinematicIntroTimer);
+        cinematicIntroTimer = null;
+      }
 
       intro.style.display = 'flex';
       intro.style.pointerEvents = 'auto';
@@ -9461,7 +9444,7 @@
       intro.style.opacity = '1';
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
-      cinematicIntroTimer = setTimeout(dismissCinematicIntro, 3500);
+      cinematicIntroTimer = setTimeout(dismissCinematicIntro, 4000);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -9614,10 +9597,11 @@
       initCanvaCard3DTilt();
       setTimeout(drawAllCorkboards, 220);
 
-      // Auto dismiss intro curtain after 2.8s if not clicked
+      // Auto dismiss intro curtain setelah 4 detik jika pengunjung tidak mengklik
       const intro = document.getElementById('cinematicOpeningScreen');
       if (intro && intro.style.display !== 'none') {
-        cinematicIntroTimer = setTimeout(dismissCinematicIntro, 2800);
+        if (cinematicIntroTimer) clearTimeout(cinematicIntroTimer);
+        cinematicIntroTimer = setTimeout(dismissCinematicIntro, 4000);
       }
     });
 
