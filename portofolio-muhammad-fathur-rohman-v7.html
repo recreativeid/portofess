@@ -1132,6 +1132,35 @@
                   transform 4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+
+    /* =================================================================== */
+    /* TOGGLE STATE: DISABLE ALL SCROLL BLUR ON DEMAND (.no-scroll-blur)   */
+    /* =================================================================== */
+    body.no-scroll-blur .smooth-blur-container,
+    body.no-scroll-blur .scroll-blur-section,
+    body.no-scroll-blur .smooth-blur-reveal,
+    body.no-scroll-blur .smooth-blur-container.scroll-blur-out,
+    body.no-scroll-blur .scroll-blur-section.scroll-blur-out,
+    body.no-scroll-blur .smooth-blur-reveal.scroll-blur-out {
+      filter: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+      transition: none !important;
+    }
+
+    body.no-scroll-blur #section04InnerContent,
+    body.no-scroll-blur #section04InnerContent.is-revealed {
+      filter: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+      transition: none !important;
+    }
+
+    body.no-scroll-blur #chapter-multimedia {
+      filter: none !important;
+    }
   </style>
   <!-- Three.js 3D Library for Photorealistic Smartphone on Stone Podium -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -1201,13 +1230,23 @@
         <a href="#executive-closing" id="navItemSec07" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">07 Profil Eksekutif</a>
       </nav>
 
-      <!-- Single Theme Palette Button on Right (Klik Muncul Pilihan Warna & Mode) -->
-      <div class="relative shrink-0">
-        <button id="themePaletteBtn" onclick="toggleThemeDropdown()" class="px-3 py-1.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white/95 dark:bg-stone-900/95 text-stone-800 dark:text-white text-xs font-bold shadow-xs hover:border-crimson hover:text-crimson transition flex items-center gap-1.5 cursor-pointer" title="Pilih Tema &amp; Warna Aksen">
-          <span id="themeBtnDot" class="w-2.5 h-2.5 rounded-full bg-crimson inline-block shadow-xs"></span>
-          <span>Tema</span>
-          <svg class="w-3 h-3 text-stone-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+      <!-- Controls on Right: Toggle Blur Animation & Theme Palette -->
+      <div class="flex items-center gap-2 shrink-0">
+        
+        <!-- Tombol Matikan / Hidupkan Animasi Scroll Blur -->
+        <button id="toggleScrollBlurBtn" type="button" onclick="toggleScrollBlurAnimation()" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white/95 dark:bg-stone-900/95 text-stone-800 dark:text-white text-xs font-bold shadow-xs hover:border-[#155293] hover:text-[#155293] transition flex items-center gap-1.5 cursor-pointer" title="Matikan atau Aktifkan Animasi Scroll Blur">
+          <span id="scrollBlurDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse inline-block shadow-xs"></span>
+          <span id="scrollBlurBtnLabel" class="hidden xs:inline">Blur: ON</span>
+          <span class="xs:hidden">Blur</span>
         </button>
+
+        <!-- Single Theme Palette Button on Right (Klik Muncul Pilihan Warna & Mode) -->
+        <div class="relative shrink-0">
+          <button id="themePaletteBtn" onclick="toggleThemeDropdown()" class="px-3 py-1.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white/95 dark:bg-stone-900/95 text-stone-800 dark:text-white text-xs font-bold shadow-xs hover:border-crimson hover:text-crimson transition flex items-center gap-1.5 cursor-pointer" title="Pilih Tema &amp; Warna Aksen">
+            <span id="themeBtnDot" class="w-2.5 h-2.5 rounded-full bg-crimson inline-block shadow-xs"></span>
+            <span>Tema</span>
+            <svg class="w-3 h-3 text-stone-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+          </button>
 
         <!-- Theme Popover Dropdown -->
         <div id="themePaletteMenu" class="hidden absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 shadow-2xl p-3.5 z-50 space-y-3 select-none">
@@ -6169,9 +6208,97 @@
 
     
     /* =================================================================== */
+    /* TOGGLE SCROLL BLUR ANIMATION (ON / OFF SWITCH & TOAST)              */
+    /* =================================================================== */
+    let isScrollBlurEnabled = localStorage.getItem('fathur_portfolio_scroll_blur_active') !== 'false';
+
+    function showPortfolioToast(message) {
+      let toast = document.getElementById('portfolioToastPill');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'portfolioToastPill';
+        toast.className = 'fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-2xl bg-stone-900/95 text-white border border-stone-700/80 shadow-2xl text-xs font-bold font-mono tracking-wide flex items-center gap-2 backdrop-blur-md transition-all duration-300 pointer-events-none transform translate-y-4 opacity-0';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = message;
+      toast.classList.remove('translate-y-4', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toast._timeout);
+      toast._timeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-4', 'opacity-0');
+      }, 2200);
+    }
+
+    function applyScrollBlurState(enabled, showToast = false) {
+      isScrollBlurEnabled = enabled;
+      try {
+        localStorage.setItem('fathur_portfolio_scroll_blur_active', enabled ? 'true' : 'false');
+      } catch (e) {}
+
+      const dot = document.getElementById('scrollBlurDot');
+      const label = document.getElementById('scrollBlurBtnLabel');
+      const btn = document.getElementById('toggleScrollBlurBtn');
+
+      if (enabled) {
+        document.body.classList.remove('no-scroll-blur');
+        if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse inline-block shadow-xs';
+        if (label) label.textContent = 'Blur: ON';
+        if (btn) {
+          btn.title = 'Animasi scroll blur AKTIF. Klik untuk mematikan.';
+          btn.classList.remove('opacity-75');
+        }
+        initBidirectionalScrollBlur();
+        if (showToast) showPortfolioToast('✨ Animasi scroll blur diaktifkan');
+      } else {
+        document.body.classList.add('no-scroll-blur');
+        if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-stone-400 inline-block shadow-xs';
+        if (label) label.textContent = 'Blur: OFF';
+        if (btn) {
+          btn.title = 'Animasi scroll blur NONAKTIF (Tampilan Jernih). Klik untuk mengaktifkan.';
+          btn.classList.add('opacity-75');
+        }
+        if (window.blurScrollObserver) {
+          window.blurScrollObserver.disconnect();
+        }
+        document.querySelectorAll('.smooth-blur-container, .scroll-blur-section, .smooth-blur-reveal').forEach((el) => {
+          el.classList.remove('scroll-blur-out');
+          el.classList.add('scroll-blur-in');
+          el.style.filter = 'none';
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          el.style.pointerEvents = 'auto';
+        });
+        const titleSec = document.getElementById('chapter-multimedia');
+        if (titleSec) titleSec.style.filter = 'none';
+        const innerContent = document.getElementById('section04InnerContent');
+        if (innerContent) {
+          innerContent.classList.add('is-revealed');
+          innerContent.style.filter = 'none';
+          innerContent.style.opacity = '1';
+          innerContent.style.transform = 'none';
+          innerContent.style.pointerEvents = 'auto';
+        }
+        if (showToast) showPortfolioToast('🚫 Animasi scroll blur dimatikan (Jernih)');
+      }
+    }
+
+    function toggleScrollBlurAnimation() {
+      applyScrollBlurState(!isScrollBlurEnabled, true);
+    }
+
+    /* =================================================================== */
     /* 3-SECOND BIDIRECTIONAL SCROLL BLUR OBSERVER                         */
     /* =================================================================== */
     function initBidirectionalScrollBlur() {
+      if (!isScrollBlurEnabled) {
+        document.querySelectorAll('.smooth-blur-container, .scroll-blur-section, .smooth-blur-reveal').forEach((el) => {
+          el.classList.remove('scroll-blur-out');
+          el.classList.add('scroll-blur-in');
+        });
+        return;
+      }
       const selector = '.smooth-blur-container, .scroll-blur-section, .smooth-blur-reveal';
       const elements = document.querySelectorAll(selector);
       if (!elements || !elements.length) return;
@@ -6280,7 +6407,7 @@
             const blurPx = Math.pow(overlapRatio, 0.75) * 16;
             const titleOpacity = Math.max(0.30, 1 - overlapRatio * 0.70);
 
-            titleSec.style.filter = blurPx > 0.2 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
+            titleSec.style.filter = isScrollBlurEnabled ? (blurPx > 0.2 ? `blur(${blurPx.toFixed(1)}px)` : 'none') : 'none';
             titleSec.style.opacity = titleOpacity.toFixed(2);
             titleSec.style.visibility = 'visible';
             titleSec.style.transform = `translateY(${(overlapRatio * -18).toFixed(1)}px)`;
@@ -6296,7 +6423,7 @@
           // (PENTING: sembunyikan total agar tidak bocor/melayang di section 05 papan jejak!)
           else {
             overlapRatio = 1;
-            titleSec.style.filter = 'blur(16px)';
+            titleSec.style.filter = isScrollBlurEnabled ? 'blur(16px)' : 'none';
             titleSec.style.opacity = '0';
             titleSec.style.visibility = 'hidden';
             isTitleCovered = true;
@@ -9252,6 +9379,7 @@
     }
 
     syncLandingPageDataFromCloud();
+    applyScrollBlurState(isScrollBlurEnabled, false);
 
       renderHeroCategorizedTools();
       updateDynamicWebsiteCounters();
