@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Muhammad Fathur Rohman — Interactive 3D Tactile & Editorial Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -4128,6 +4129,61 @@
 
   <script>
     /* =================================================================== */
+    /* SUPABASE CLOUD DATABASE CLIENT & REAL-TIME SYNC ENGINE              */
+    /* =================================================================== */
+    const SUPABASE_CONFIG_STORAGE_KEY = 'fathur_portfolio_supabase_config';
+    const SYNC_BROADCAST_CHANNEL_NAME = 'fathur_portfolio_sync';
+
+    const PortfolioCloudDB = {
+      client: null,
+      isConfigured: false,
+
+      getConfig() {
+        try {
+          const raw = localStorage.getItem(SUPABASE_CONFIG_STORAGE_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return { url: '', anonKey: '' };
+      },
+
+      init() {
+        const conf = this.getConfig();
+        if (conf.url && conf.anonKey) {
+          if (window.supabase && typeof window.supabase.createClient === 'function') {
+            try {
+              this.client = window.supabase.createClient(conf.url, conf.anonKey, {
+                auth: { persistSession: false }
+              });
+              this.isConfigured = true;
+              return true;
+            } catch (err) {
+              console.warn('Failed to initialize Supabase client:', err);
+            }
+          }
+        }
+        this.isConfigured = false;
+        this.client = null;
+        return false;
+      },
+
+      async get(key) {
+        if (!this.client && !this.init()) return null;
+        try {
+          const { data, error } = await this.client
+            .from('portfolio_store')
+            .select('value')
+            .eq('key', key)
+            .maybeSingle();
+
+          if (error || !data) return null;
+          return data.value;
+        } catch (e) {
+          return null;
+        }
+      }
+    };
+
+    /* =================================================================== */
     /* 14 PROYEK WEBSITE (6 DITAMPILKAN DI LANDING PAGE, SEMUA DI FULL VIEW) */
     /* =================================================================== */
     let websiteProjects = [
@@ -4321,23 +4377,7 @@
       if (storedProj) {
         const parsed = JSON.parse(storedProj);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          websiteProjects = parsed.map(p => {
-            const def = defaultWebsiteProjects.find(d => d.id === p.id) || {};
-            return {
-              id: p.id,
-              title: p.title || def.title || 'Proyek Website',
-              category: p.category || def.category || 'Website Bisnis',
-              url: p.url || def.url || '',
-              githubUrl: p.githubUrl || def.githubUrl || '',
-              desc: p.desc || def.desc || '',
-              color: p.color || def.color || '#155293',
-              rot: p.rot || def.rot || '',
-              img: p.img || def.img || '',
-              techStack: (p.techStack && p.techStack.length) ? p.techStack : (def.techStack || ['HTML5', 'CSS3', 'JavaScript']),
-              database: (p.database && p.database.length) ? p.database : (def.database || ['MySQL']),
-              features: p.features || def.features || ('• ' + (p.desc || 'Sistem aplikasi web modern.'))
-            };
-          });
+          websiteProjects = parsed;
         }
       }
     } catch (e) {}
@@ -9102,6 +9142,117 @@
       window.addEventListener('hashchange', checkAdminRoute);
       applySavedInlineTextEdits();
       applyAllSavedSectionDataToDom();
+
+    /* =================================================================== */
+    /* REAL-TIME BROADCAST & STORAGE EVENT SYNC (AUTO-UPDATE LANDING PAGE) */
+    /* =================================================================== */
+    if (typeof BroadcastChannel !== 'undefined') {
+      const syncChannel = new BroadcastChannel('fathur_portfolio_sync');
+      syncChannel.onmessage = function(e) {
+        const msg = e.data;
+        if (!msg) return;
+
+        if (msg.key === 'fathur_portfolio_website_projects' || msg.type === 'PORTFOLIO_FULL_SYNC') {
+          if (msg.data && Array.isArray(msg.data)) {
+            websiteProjects = msg.data;
+          } else {
+            try {
+              const raw = localStorage.getItem('fathur_portfolio_website_projects');
+              if (raw) websiteProjects = JSON.parse(raw);
+            } catch(err){}
+          }
+          updateDynamicWebsiteCounters();
+          renderProjects('all');
+        } else if (msg.key === 'fathur_portfolio_sec01_data') {
+          if (msg.data) applySection01DataToDom(msg.data);
+        } else if (msg.key === 'fathur_portfolio_tools_data') {
+          renderHeroCategorizedTools();
+        }
+      };
+    }
+
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'fathur_portfolio_website_projects') {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            websiteProjects = parsed;
+            updateDynamicWebsiteCounters();
+            renderProjects('all');
+          }
+        } catch (err) {}
+      } else if (e.key === 'fathur_portfolio_tools_data') {
+        renderHeroCategorizedTools();
+      } else if (e.key === 'fathur_portfolio_sec01_data') {
+        try { applySection01DataToDom(JSON.parse(e.newValue)); } catch (err) {}
+      }
+    });
+
+    // Cloud Supabase & IndexedDB Async Sync on Page Load
+    async function syncLandingPageDataFromCloud() {
+      // 1. IndexedDB sync
+      if (window.indexedDB) {
+        try {
+          const req = window.indexedDB.open('FathurPortfolioDB', 1);
+          req.onsuccess = function(e) {
+            const db = e.target.result;
+            if (db.objectStoreNames.contains('portfolio_kv')) {
+              const tx = db.transaction('portfolio_kv', 'readonly');
+              const store = tx.objectStore('portfolio_kv');
+
+              // Sync projects from IndexedDB
+              const pReq = store.get('fathur_portfolio_website_projects');
+              pReq.onsuccess = function() {
+                if (Array.isArray(pReq.result) && pReq.result.length > 0) {
+                  websiteProjects = pReq.result;
+                  updateDynamicWebsiteCounters();
+                  renderProjects('all');
+                }
+              };
+
+              // Sync sec01 from IndexedDB
+              const s1Req = store.get('fathur_portfolio_sec01_data');
+              s1Req.onsuccess = function() {
+                if (s1Req.result) applySection01DataToDom(s1Req.result);
+              };
+
+              // Sync tools from IndexedDB
+              const tReq = store.get('fathur_portfolio_tools_data');
+              tReq.onsuccess = function() {
+                if (tReq.result) renderHeroCategorizedTools();
+              };
+            }
+          };
+        } catch (eIdb) {}
+      }
+
+      // 2. Supabase Cloud Sync (if configured)
+      if (PortfolioCloudDB.init()) {
+        try {
+          const cloudProjects = await PortfolioCloudDB.get('fathur_portfolio_website_projects');
+          if (Array.isArray(cloudProjects) && cloudProjects.length > 0) {
+            websiteProjects = cloudProjects;
+            updateDynamicWebsiteCounters();
+            renderProjects('all');
+          }
+
+          const cloudTools = await PortfolioCloudDB.get('fathur_portfolio_tools_data');
+          if (cloudTools && typeof cloudTools === 'object') {
+            renderHeroCategorizedTools();
+          }
+
+          const cloudSec01 = await PortfolioCloudDB.get('fathur_portfolio_sec01_data');
+          if (cloudSec01 && typeof cloudSec01 === 'object') {
+            applySection01DataToDom(cloudSec01);
+          }
+        } catch (errCloud) {
+          console.warn('Supabase fetch error in landing page:', errCloud);
+        }
+      }
+    }
+
+    syncLandingPageDataFromCloud();
+
       renderHeroCategorizedTools();
       updateDynamicWebsiteCounters();
       renderProjects('all');

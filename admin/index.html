@@ -7,6 +7,7 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <!-- Google Fonts: Poppins & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -130,7 +131,26 @@
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <div class="hidden md:flex items-center gap-2 text-xs font-mono text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+        <!-- Live Auto-Save Status Badge -->
+        <div id="adminAutoSaveIndicator" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-medium shadow-2xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="adminAutoSaveText">Auto-Save Aktif</span>
+        </div>
+
+        <!-- Supabase Cloud Status Quick Pill -->
+        <button type="button" onclick="switchAdminTab('supabase')" title="Buka Pengaturan Database Supabase" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shrink-0 shadow-2xs">
+          <span id="adminSupabaseStatusDot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+          <span id="adminSupabaseStatusLabel" class="hidden xs:inline">Supabase Cloud</span>
+        </button>
+
+        <!-- Manual Save All Button -->
+        <button type="button" id="manualGlobalSaveBtn" onclick="handleManualGlobalSave()" title="Simpan seluruh data portofolio ke Cloud Supabase & Browser" class="px-3 sm:px-4 py-1.5 rounded-xl bg-[#155293] hover:bg-[#0f3d6e] text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-xs shrink-0">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span class="hidden sm:inline">Simpan Semua</span>
+          <span class="sm:hidden">Simpan</span>
+        </button>
+
+        <div class="hidden xl:flex items-center gap-2 text-xs font-mono text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
           <span>Pengguna:</span>
           <span class="font-bold text-slate-800">admin</span>
         </div>
@@ -290,6 +310,13 @@
             <span id="navBadgeRoutes" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">10 Rute</span>
           </button>
 
+          <button onclick="switchAdminTab('supabase')" data-tab="supabase" id="navBtn-supabase" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+              <span class="font-bold">Database Supabase</span>
+            </div>
+            <span id="sidebarSupabasePill" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Cloud</span>
+          </button>
           <button onclick="switchAdminTab('backup')" data-tab="backup" id="navBtn-backup" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
             <div class="flex items-center gap-2.5">
               <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -1974,6 +2001,129 @@
         </div>
 
         <!-- ============================================================== -->
+        <!-- TAB SUPABASE: DATABASE CLOUD & AUTO-SAVE SYNC                  -->
+        <!-- ============================================================== -->
+        <div id="tabContent-supabase" class="admin-tab-pane hidden space-y-6">
+          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold uppercase tracking-wide">Cloud Database</span>
+                  <span id="supabaseViewStatusBadge" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-mono font-bold">Memeriksa...</span>
+                </div>
+                <h3 class="font-display font-extrabold text-xl text-slate-900">Database Supabase (PostgreSQL &amp; Cloud Sync)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Hubungkan portofolio ke database Supabase agar konten (14 proyek, foto, tools, bio) otomatis tersimpan permanen dan tersinkron ke landing page secara instan di semua perangkat.</p>
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="uploadAllLocalToSupabase()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  <span>Unggah 14 Proyek ke Supabase</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Configuration Form -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-4">
+                <h4 class="font-display font-bold text-sm text-slate-900 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                  <span>Konfigurasi Kredensial Supabase</span>
+                </h4>
+                
+                <div class="space-y-1.5">
+                  <label class="text-xs font-semibold text-slate-700 block">Supabase Project URL</label>
+                  <input id="inputSupabaseUrl" type="url" placeholder="https://xyzprojectname.supabase.co" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none focus:ring-2 focus:ring-[#155293]" />
+                  <p class="text-[10px] text-slate-400">Dapatkan di dashboard Supabase: <b>Project Settings → API → Project URL</b></p>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-xs font-semibold text-slate-700 block">Supabase Anon Public API Key</label>
+                  <input id="inputSupabaseAnonKey" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none focus:ring-2 focus:ring-[#155293]" />
+                  <p class="text-[10px] text-slate-400">Dapatkan di dashboard Supabase: <b>Project Settings → API → Project API Keys → anon / public</b></p>
+                </div>
+
+                <div class="pt-2 flex items-center gap-2.5 flex-wrap">
+                  <button type="button" onclick="saveAndTestSupabaseConfig()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Simpan &amp; Tes Koneksi</span>
+                  </button>
+                  <button type="button" onclick="clearSupabaseConfig()" class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                    Hapus
+                  </button>
+                </div>
+
+                <div id="supabaseConnectionAlert" class="hidden p-3 rounded-xl text-xs font-medium border"></div>
+              </div>
+
+              <!-- SQL Table Setup Instructions -->
+              <div class="p-5 rounded-2xl border border-slate-200 bg-slate-50 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-display font-bold text-sm text-slate-900 flex items-center gap-2">
+                      <span class="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-mono">1</span>
+                      <span>Setup Tabel di Supabase (Cukup 1x)</span>
+                    </h4>
+                    <button type="button" onclick="copySupabaseSql()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:border-slate-400 text-slate-700 text-[11px] font-bold shadow-2xs cursor-pointer flex items-center gap-1">
+                      <span id="copySqlBtnText">📋 Salin SQL</span>
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-slate-600 mb-2">Buka menu <b>SQL Editor</b> di dashboard Supabase Anda, buat New Query, tempel kode berikut dan klik <b>Run</b>:</p>
+                  <pre id="supabaseSqlCodeBlock" class="p-3 rounded-xl bg-slate-900 text-emerald-300 font-mono text-[10px] leading-relaxed overflow-x-auto max-h-48 border border-slate-800">-- 1. Buat tabel penyimpan portofolio
+create table if not exists portfolio_store (
+  key text primary key,
+  value jsonb,
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- 2. Aktifkan Row Level Security
+alter table portfolio_store enable row level security;
+
+-- 3. Kebijakan akses publik (baca & simpan portofolio)
+drop policy if exists "Public Access" on portfolio_store;
+create policy "Public Access" on portfolio_store for all using (true) with check (true);</pre>
+                </div>
+
+                <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] space-y-1">
+                  <div class="font-bold flex items-center gap-1.5">
+                    <span>💡 Menjamin Konten Anda Tetap Aman:</span>
+                  </div>
+                  <p>Semua 14 proyek yang saat ini sedang Anda buat tersimpan aman di browser Anda. Klik tombol <b>"Unggah 14 Proyek ke Supabase"</b> di atas untuk menyalinnya ke cloud kapan saja.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Sync Operations -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                <h5 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Auto-Save Otomatis</span>
+                </h5>
+                <p class="text-[11px] text-slate-500">Setiap kali Anda menambah/mengubah proyek atau konten, sistem otomatis menyimpan ke Supabase &amp; browser.</p>
+              </div>
+
+              <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                <h5 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                  <span>Sinkronisasi Real-Time</span>
+                </h5>
+                <p class="text-[11px] text-slate-500">Perubahan di admin langsung terupdate ke tab landing page tanpa perlu refresh halaman.</p>
+              </div>
+
+              <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                <h5 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                  <span>Cadangan Offline JSON</span>
+                </h5>
+                <p class="text-[11px] text-slate-500">Anda dapat mengunduh seluruh data dalam format .json kapan saja sebagai arsip lokal.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ============================================================== -->
         <!-- TAB 11: CADANGAN & RESET                                       -->
         <!-- ============================================================== -->
         <div id="tabContent-backup" class="admin-tab-pane hidden space-y-6">
@@ -2285,6 +2435,571 @@
         };
       }
     })();
+
+    /* =================================================================== */
+    /* SUPABASE CLOUD DATABASE & AUTO-SAVE ENGINE                          */
+    /* =================================================================== */
+    const SUPABASE_CONFIG_STORAGE_KEY = 'fathur_portfolio_supabase_config';
+    const SYNC_BROADCAST_CHANNEL_NAME = 'fathur_portfolio_sync';
+
+    // Global BroadcastChannel for instant zero-reload cross-tab sync
+    const portfolioSyncChannel = (typeof BroadcastChannel !== 'undefined') 
+      ? new BroadcastChannel(SYNC_BROADCAST_CHANNEL_NAME) 
+      : null;
+
+    const PortfolioCloudDB = {
+      url: '',
+      anonKey: '',
+      client: null,
+      isConfigured: false,
+      isConnected: false,
+
+      getConfig() {
+        try {
+          const raw = localStorage.getItem(SUPABASE_CONFIG_STORAGE_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        return { url: '', anonKey: '' };
+      },
+
+      saveConfig(url, anonKey) {
+        const conf = {
+          url: (url || '').trim().replace(/\/+$/, ''),
+          anonKey: (anonKey || '').trim()
+        };
+        try {
+          localStorage.setItem(SUPABASE_CONFIG_STORAGE_KEY, JSON.stringify(conf));
+          if (window.portfolioIdbSet) portfolioIdbSet(SUPABASE_CONFIG_STORAGE_KEY, conf);
+        } catch (e) {}
+        this.init();
+        return conf;
+      },
+
+      clearConfig() {
+        localStorage.removeItem(SUPABASE_CONFIG_STORAGE_KEY);
+        if (window.portfolioIdbSet) portfolioIdbSet(SUPABASE_CONFIG_STORAGE_KEY, null);
+        this.url = '';
+        this.anonKey = '';
+        this.client = null;
+        this.isConfigured = false;
+        this.isConnected = false;
+        this.updateUiBadges(false);
+      },
+
+      init() {
+        const conf = this.getConfig();
+        if (conf.url && conf.anonKey) {
+          this.url = conf.url;
+          this.anonKey = conf.anonKey;
+          if (window.supabase && typeof window.supabase.createClient === 'function') {
+            try {
+              this.client = window.supabase.createClient(this.url, this.anonKey, {
+                auth: { persistSession: false }
+              });
+              this.isConfigured = true;
+              this.updateUiBadges(true);
+              return true;
+            } catch (err) {
+              console.warn('Failed to initialize Supabase client:', err);
+            }
+          }
+        }
+        this.isConfigured = false;
+        this.client = null;
+        this.updateUiBadges(false);
+        return false;
+      },
+
+      updateUiBadges(connected) {
+        const dot = document.getElementById('adminSupabaseStatusDot');
+        const label = document.getElementById('adminSupabaseStatusLabel');
+        const viewBadge = document.getElementById('supabaseViewStatusBadge');
+        const sidePill = document.getElementById('sidebarSupabasePill');
+
+        if (connected) {
+          if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+          if (label) label.textContent = 'Supabase Online';
+          if (viewBadge) {
+            viewBadge.textContent = '🟢 Terhubung (Auto-Save Aktif)';
+            viewBadge.className = 'px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold';
+          }
+          if (sidePill) {
+            sidePill.textContent = 'Online';
+            sidePill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800';
+          }
+        } else {
+          if (dot) dot.className = 'w-2 h-2 rounded-full bg-slate-400';
+          if (label) label.textContent = 'Supabase Cloud';
+          if (viewBadge) {
+            viewBadge.textContent = '⚪ Mode Offline / Lokal';
+            viewBadge.className = 'px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-mono font-bold';
+          }
+          if (sidePill) {
+            sidePill.textContent = 'Offline';
+            sidePill.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500';
+          }
+        }
+      },
+
+      async testConnection() {
+        if (!this.init()) {
+          return { success: false, message: 'URL atau Anon Key Supabase belum diisi atau SDK Supabase belum termuat.' };
+        }
+        try {
+          const { data, error } = await this.client
+            .from('portfolio_store')
+            .select('key')
+            .limit(1);
+
+          if (error) {
+            if (error.code === '42P01' || (error.message && error.message.includes('relation "portfolio_store" does not exist'))) {
+              return {
+                success: false,
+                needTable: true,
+                message: 'Tabel "portfolio_store" belum dibuat di database Supabase Anda. Silakan salin & jalankan kode SQL di panel kanan (SQL Editor).'
+              };
+            }
+            throw error;
+          }
+          this.isConnected = true;
+          this.updateUiBadges(true);
+          return { success: true, message: 'Koneksi ke Database Supabase BERHASIL! Seluruh perubahan akan otomatis disinkronkan ke Cloud.' };
+        } catch (err) {
+          this.isConnected = false;
+          this.updateUiBadges(false);
+          return { success: false, message: 'Gagal terhubung ke Supabase: ' + (err.message || err) };
+        }
+      },
+
+      async get(key) {
+        if (!this.client && !this.init()) return null;
+        try {
+          const { data, error } = await this.client
+            .from('portfolio_store')
+            .select('value')
+            .eq('key', key)
+            .maybeSingle();
+
+          if (error || !data) return null;
+          return data.value;
+        } catch (e) {
+          return null;
+        }
+      },
+
+      async getAll() {
+        if (!this.client && !this.init()) return {};
+        try {
+          const { data, error } = await this.client
+            .from('portfolio_store')
+            .select('key, value');
+
+          if (error || !data) return {};
+          const result = {};
+          data.forEach(row => {
+            if (row.key) result[row.key] = row.value;
+          });
+          return result;
+        } catch (e) {
+          return {};
+        }
+      },
+
+      async set(key, value) {
+        if (!this.client && !this.init()) return false;
+        try {
+          const { error } = await this.client
+            .from('portfolio_store')
+            .upsert({
+              key: key,
+              value: value,
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'key' });
+
+          if (error) {
+            console.warn('Supabase upsert warn on ' + key + ':', error);
+            return false;
+          }
+          return true;
+        } catch (e) {
+          console.warn('Supabase set error on ' + key + ':', e);
+          return false;
+        }
+      },
+
+      async setAll(recordsMap) {
+        if (!this.client && !this.init()) return false;
+        try {
+          const payload = Object.keys(recordsMap).map(k => ({
+            key: k,
+            value: recordsMap[k],
+            updated_at: new Date().toISOString()
+          }));
+          const { error } = await this.client
+            .from('portfolio_store')
+            .upsert(payload, { onConflict: 'key' });
+
+          if (error) throw error;
+          return true;
+        } catch (e) {
+          console.warn('Supabase setAll error:', e);
+          return false;
+        }
+      }
+    };
+
+    // Universal Save Engine (Saves to IndexedDB + localStorage + Supabase + Real-Time BroadcastChannel)
+    async function executeUniversalSave(key, data, options = {}) {
+      const silent = options.silent === true;
+      const label = options.label || 'Data';
+
+      // 1. IndexedDB (High-Capacity, virtually unlimited)
+      if (window.portfolioIdbSet) {
+        await portfolioIdbSet(key, data);
+      }
+
+      // 2. LocalStorage (For instant synchronous startup)
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (quotaErr) {
+        console.warn('localStorage quota reached for ' + key + ', using lightweight fallback:', quotaErr);
+        try {
+          const lightweight = JSON.parse(JSON.stringify(data, (k, v) => {
+            if (typeof v === 'string' && v.startsWith('data:image/') && v.length > 2000) {
+              return '';
+            }
+            return v;
+          }));
+          lightweight.__in_indexeddb__ = true;
+          localStorage.setItem(key, JSON.stringify(lightweight));
+        } catch (e2) {}
+      }
+
+      // 3. Supabase Cloud Database (If configured)
+      let cloudSaved = false;
+      if (PortfolioCloudDB.isConfigured) {
+        cloudSaved = await PortfolioCloudDB.set(key, data);
+      }
+
+      // 4. Cross-tab Real-Time Broadcast (Instantly updates Landing Page!)
+      if (portfolioSyncChannel) {
+        try {
+          portfolioSyncChannel.postMessage({
+            type: 'PORTFOLIO_DATA_UPDATED',
+            key: key,
+            data: data,
+            timestamp: Date.now()
+          });
+        } catch (eBc) {}
+      }
+
+      // 5. Update Auto-Save status badge
+      updateAutoSaveStatusBadge(cloudSaved);
+
+      if (!silent) {
+        const cloudMsg = cloudSaved ? ' (Tersimpan di Cloud Supabase & Browser)' : ' (Tersimpan di Browser)';
+        notifyDataSaved(`${label} berhasil disimpan!${cloudMsg}`);
+      }
+
+      return true;
+    }
+
+    function updateAutoSaveStatusBadge(cloudSaved) {
+      const badge = document.getElementById('adminAutoSaveIndicator');
+      const text = document.getElementById('adminAutoSaveText');
+      if (badge && text) {
+        text.textContent = cloudSaved ? 'Tersimpan (Cloud & Lokal) ✓' : 'Tersimpan Otomatis ✓';
+        badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-mono font-medium shadow-2xs';
+      }
+    }
+
+    let globalAutoSaveTimer = null;
+    function queueAutoSave(key, getDataFn, label = 'perubahan') {
+      const badge = document.getElementById('adminAutoSaveIndicator');
+      const text = document.getElementById('adminAutoSaveText');
+      if (badge && text) {
+        text.textContent = 'Menyimpan...';
+        badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 text-xs font-mono font-medium shadow-2xs';
+      }
+
+      clearTimeout(globalAutoSaveTimer);
+      globalAutoSaveTimer = setTimeout(async () => {
+        try {
+          const data = typeof getDataFn === 'function' ? getDataFn() : getDataFn;
+          await executeUniversalSave(key, data, { silent: true, label: label });
+          updateAutoSaveStatusBadge(PortfolioCloudDB.isConfigured);
+        } catch (e) {
+          console.warn('Auto-save error:', e);
+        }
+      }, 900);
+    }
+
+    /* Helper form data extractors for auto-save & full sync */
+    function getSec01FormData() {
+      const getVal = (id, fallback = '') => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : fallback;
+      };
+      const photoVal = getVal('sec01IdCardPhotoUrl', DEFAULT_SEC01_DATA.idCardPhotoUrl);
+      const fullNameVal = getVal('sec01FullName', DEFAULT_SEC01_DATA.fullName);
+
+      return {
+        brandName: getVal('sec01BrandName', DEFAULT_SEC01_DATA.brandName),
+        brandSlogan: getVal('sec01BrandSlogan', DEFAULT_SEC01_DATA.brandSlogan),
+        idCardBadgeFront: getVal('sec01IdCardBadgeFront', DEFAULT_SEC01_DATA.idCardBadgeFront),
+        idCardTitleFront: getVal('sec01IdCardTitleFront', DEFAULT_SEC01_DATA.idCardTitleFront),
+        idCardStatusBadge: getVal('sec01IdCardStatusBadge', DEFAULT_SEC01_DATA.idCardStatusBadge),
+        idCardPhotoUrl: photoVal,
+        idCardPhotoSublabel: getVal('sec01IdCardPhotoSublabel', DEFAULT_SEC01_DATA.idCardPhotoSublabel),
+        idCardNameFront: getVal('sec01IdCardNameFront', DEFAULT_SEC01_DATA.idCardNameFront),
+        idCardRoleFront: getVal('sec01IdCardRoleFront', DEFAULT_SEC01_DATA.idCardRoleFront),
+        idCardLocationFront: getVal('sec01IdCardLocationFront', DEFAULT_SEC01_DATA.idCardLocationFront),
+        idCardBarcodeFront: getVal('sec01IdCardBarcodeFront', DEFAULT_SEC01_DATA.idCardBarcodeFront),
+        idCardBadgeBack: getVal('sec01IdCardBadgeBack', DEFAULT_SEC01_DATA.idCardBadgeBack),
+        idCardYearBack: getVal('sec01IdCardYearBack', DEFAULT_SEC01_DATA.idCardYearBack),
+        idCardTaglineBack: getVal('sec01IdCardTaglineBack', DEFAULT_SEC01_DATA.idCardTaglineBack),
+        idCardBioBack: getVal('sec01IdCardBioBack', DEFAULT_SEC01_DATA.idCardBioBack),
+        idCardFooterLeft: getVal('sec01IdCardFooterLeft', DEFAULT_SEC01_DATA.idCardFooterLeft),
+        idCardFooterRight: getVal('sec01IdCardFooterRight', DEFAULT_SEC01_DATA.idCardFooterRight),
+        fullName: fullNameVal,
+        name: fullNameVal,
+        headline: getVal('sec01Headline', DEFAULT_SEC01_DATA.headline),
+        roleLine1: getVal('sec01RoleLine1', DEFAULT_SEC01_DATA.roleLine1),
+        roleLine2: getVal('sec01RoleLine2', DEFAULT_SEC01_DATA.roleLine2),
+        bioP1: getVal('sec01BioP1', DEFAULT_SEC01_DATA.bioP1),
+        bioP2: getVal('sec01BioP2', DEFAULT_SEC01_DATA.bioP2),
+        bio: getVal('sec01BioP1', DEFAULT_SEC01_DATA.bio),
+        fullBio: getVal('sec01BioP1', DEFAULT_SEC01_DATA.fullBio),
+        statYears: getVal('sec01StatYears', DEFAULT_SEC01_DATA.statYears),
+        statYearsLabel: getVal('sec01StatYearsLabel', DEFAULT_SEC01_DATA.statYearsLabel),
+        statCerts: getVal('sec01StatCerts', DEFAULT_SEC01_DATA.statCerts),
+        statCertsLabel: getVal('sec01StatCertsLabel', DEFAULT_SEC01_DATA.statCertsLabel),
+        statProjects: getVal('sec01StatProjects', DEFAULT_SEC01_DATA.statProjects),
+        statProjectsLabel: getVal('sec01StatProjectsLabel', DEFAULT_SEC01_DATA.statProjectsLabel),
+        statPredicate: getVal('sec01StatPredicate', DEFAULT_SEC01_DATA.statPredicate),
+        statPredicateLabel: getVal('sec01StatPredicateLabel', DEFAULT_SEC01_DATA.statPredicateLabel),
+        whatsapp: getVal('sec01Whatsapp', DEFAULT_SEC01_DATA.whatsapp),
+        email: getVal('sec01Email', DEFAULT_SEC01_DATA.email),
+        instagram: getVal('sec01Instagram', DEFAULT_SEC01_DATA.instagram),
+        location: getVal('sec01Location', DEFAULT_SEC01_DATA.location),
+        linkedin: getVal('sec01Linkedin', DEFAULT_SEC01_DATA.linkedin),
+        photoUrl: photoVal
+      };
+    }
+
+    function getSec02FormData() {
+      return {
+        pillar1Title: (document.getElementById('skillPillar1Title')?.value || '').trim(),
+        pillar1Desc: (document.getElementById('skillPillar1Desc')?.value || '').trim(),
+        pillar2Title: (document.getElementById('skillPillar2Title')?.value || '').trim(),
+        pillar2Desc: (document.getElementById('skillPillar2Desc')?.value || '').trim(),
+        pillar3Title: (document.getElementById('skillPillar3Title')?.value || '').trim(),
+        pillar3Desc: (document.getElementById('skillPillar3Desc')?.value || '').trim()
+      };
+    }
+
+    function getSec05FormData() {
+      return {
+        w1Company: (document.getElementById('pjWork1Company')?.value || '').trim(),
+        w1Role: (document.getElementById('pjWork1Role')?.value || '').trim(),
+        w1Desc: (document.getElementById('pjWork1Desc')?.value || '').trim(),
+        w2Company: (document.getElementById('pjWork2Company')?.value || '').trim(),
+        w2Role: (document.getElementById('pjWork2Role')?.value || '').trim(),
+        eduCollege: (document.getElementById('pjEduCollege')?.value || '').trim(),
+        eduMajor: (document.getElementById('pjEduMajor')?.value || '').trim(),
+        eduGpa: (document.getElementById('pjEduGpa')?.value || '').trim(),
+        eduPeriod: (document.getElementById('pjEduPeriod')?.value || '').trim(),
+        org1Name: (document.getElementById('pjOrg1Name')?.value || '').trim(),
+        org1Role: (document.getElementById('pjOrg1Role')?.value || '').trim(),
+        org2Name: (document.getElementById('pjOrg2Name')?.value || '').trim(),
+        org2Role: (document.getElementById('pjOrg2Role')?.value || '').trim()
+      };
+    }
+
+    function getSec07FormData() {
+      const chk = document.getElementById('sec07Enabled');
+      return {
+        enabled: chk ? chk.checked : true,
+        cardImgUrl: (document.getElementById('sec07CardImgUrl')?.value || 'assets/canva-card-white.jpg').trim(),
+        title: (document.getElementById('sec07Title')?.value || '').trim(),
+        status: (document.getElementById('sec07Status')?.value || '').trim(),
+        quote: (document.getElementById('sec07Quote')?.value || '').trim(),
+        github: (document.getElementById('sec07Github')?.value || '').trim(),
+        instagram: (document.getElementById('sec07Instagram')?.value || '').trim(),
+        linkedin: (document.getElementById('sec07Linkedin')?.value || '').trim(),
+        whatsapp: (document.getElementById('sec07Whatsapp')?.value || '').trim(),
+        email: (document.getElementById('sec07Email')?.value || '').trim()
+      };
+    }
+
+    /* Supabase UI Management Handlers */
+    function loadSupabaseConfigForm() {
+      const conf = PortfolioCloudDB.getConfig();
+      const inpUrl = document.getElementById('inputSupabaseUrl');
+      const inpKey = document.getElementById('inputSupabaseAnonKey');
+      if (inpUrl) inpUrl.value = conf.url || '';
+      if (inpKey) inpKey.value = conf.anonKey || '';
+
+      if (conf.url && conf.anonKey) {
+        PortfolioCloudDB.testConnection().then(res => {
+          showSupabaseAlert(res.message, res.success ? 'success' : (res.needTable ? 'warning' : 'error'));
+        });
+      } else {
+        PortfolioCloudDB.updateUiBadges(false);
+      }
+    }
+
+    async function saveAndTestSupabaseConfig() {
+      const url = (document.getElementById('inputSupabaseUrl')?.value || '').trim();
+      const key = (document.getElementById('inputSupabaseAnonKey')?.value || '').trim();
+
+      if (!url || !key) {
+        showSupabaseAlert('Mohon isi Supabase Project URL dan Anon Key!', 'error');
+        return;
+      }
+
+      PortfolioCloudDB.saveConfig(url, key);
+      showSupabaseAlert('Sedang menguji koneksi ke Supabase...', 'info');
+
+      const res = await PortfolioCloudDB.testConnection();
+      if (res.success) {
+        showSupabaseAlert('✓ ' + res.message, 'success');
+        notifyDataSaved('Koneksi Supabase aktif! Seluruh auto-save otomatis ke Cloud.');
+      } else {
+        showSupabaseAlert('✕ ' + res.message, res.needTable ? 'warning' : 'error');
+      }
+    }
+
+    function clearSupabaseConfig() {
+      if (confirm('Hapus konfigurasi Supabase dari browser ini? Data lokal di browser tetap tersimpan.')) {
+        PortfolioCloudDB.clearConfig();
+        const inpUrl = document.getElementById('inputSupabaseUrl');
+        const inpKey = document.getElementById('inputSupabaseAnonKey');
+        if (inpUrl) inpUrl.value = '';
+        if (inpKey) inpKey.value = '';
+        showSupabaseAlert('Konfigurasi Supabase telah dihapus. Sistem kembali ke mode lokal.', 'info');
+        notifyDataSaved('Konfigurasi Supabase dihapus.');
+      }
+    }
+
+    function showSupabaseAlert(msg, type = 'info') {
+      const box = document.getElementById('supabaseConnectionAlert');
+      if (!box) return;
+      box.classList.remove('hidden');
+      if (type === 'success') {
+        box.className = 'p-3.5 rounded-xl text-xs font-medium border bg-emerald-50 text-emerald-900 border-emerald-300';
+      } else if (type === 'warning') {
+        box.className = 'p-3.5 rounded-xl text-xs font-medium border bg-amber-50 text-amber-900 border-amber-300';
+      } else if (type === 'error') {
+        box.className = 'p-3.5 rounded-xl text-xs font-medium border bg-rose-50 text-rose-900 border-rose-300';
+      } else {
+        box.className = 'p-3.5 rounded-xl text-xs font-medium border bg-sky-50 text-sky-900 border-sky-300';
+      }
+      box.textContent = msg;
+    }
+
+    function copySupabaseSql() {
+      const code = document.getElementById('supabaseSqlCodeBlock')?.textContent || '';
+      if (!code) return;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copySqlBtnText');
+        if (btn) btn.textContent = '✓ Tersalin!';
+        setTimeout(() => { if (btn) btn.textContent = '📋 Salin SQL'; }, 2000);
+        notifyDataSaved('Kode SQL Supabase disalin ke clipboard!');
+      }).catch(() => {
+        alert('Gagal menyalin otomatis. Silakan salin teks SQL secara manual.');
+      });
+    }
+
+    async function uploadAllLocalToSupabase() {
+      if (!PortfolioCloudDB.init()) {
+        alert('Supabase belum terhubung! Silakan isi URL & Anon Key di formulir di bawah ini lalu klik "Simpan & Tes Koneksi".');
+        switchAdminTab('supabase');
+        return;
+      }
+
+      if (!confirm('Unggah seluruh 14 proyek website dan seluruh data portofolio dari browser ke Cloud Supabase sekarang?')) {
+        return;
+      }
+
+      showSupabaseAlert('Sedang mengunggah seluruh data portofolio ke Cloud Supabase...', 'info');
+
+      const payload = {
+        fathur_portfolio_website_projects: currentProjects,
+        fathur_portfolio_tools_data: adminToolsData,
+        fathur_portfolio_sec01_data: getSec01FormData(),
+        fathur_portfolio_sec02_data: getSec02FormData(),
+        fathur_portfolio_sec05_data: getSec05FormData(),
+        fathur_portfolio_sec07_data: getSec07FormData(),
+        fathur_portfolio_certificates: currentCerts,
+        fathur_portfolio_cms_data_multi: currentMedsosData,
+        fathur_portfolio_world_map_routes: currentRoutes
+      };
+
+      const success = await PortfolioCloudDB.setAll(payload);
+      if (success) {
+        showSupabaseAlert(`✓ Sukses! Seluruh ${(currentProjects || []).length} proyek website dan semua data portofolio Anda berhasil diunggah & tersimpan permanen di Cloud Supabase.`, 'success');
+        notifyDataSaved('Semua konten berhasil diunggah ke Supabase Cloud!');
+        if (portfolioSyncChannel) {
+          portfolioSyncChannel.postMessage({ type: 'PORTFOLIO_FULL_SYNC', timestamp: Date.now() });
+        }
+      } else {
+        showSupabaseAlert('✕ Gagal mengunggah ke Supabase. Pastikan tabel "portfolio_store" sudah dibuat dengan menjalankan kode SQL di panel kanan.', 'error');
+      }
+    }
+
+    async function handleManualGlobalSave() {
+      const btn = document.getElementById('manualGlobalSaveBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span><span class="hidden sm:inline">Menyimpan...</span>`;
+      }
+
+      const payload = {
+        fathur_portfolio_website_projects: currentProjects,
+        fathur_portfolio_tools_data: adminToolsData,
+        fathur_portfolio_sec01_data: getSec01FormData(),
+        fathur_portfolio_sec02_data: getSec02FormData(),
+        fathur_portfolio_sec05_data: getSec05FormData(),
+        fathur_portfolio_sec07_data: getSec07FormData(),
+        fathur_portfolio_certificates: currentCerts,
+        fathur_portfolio_cms_data_multi: currentMedsosData,
+        fathur_portfolio_world_map_routes: currentRoutes
+      };
+
+      // 1. Save all to IndexedDB & localStorage
+      for (const [k, v] of Object.entries(payload)) {
+        if (v) {
+          if (window.portfolioIdbSet) await portfolioIdbSet(k, v);
+          try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+        }
+      }
+
+      // 2. Save all to Supabase if configured
+      let cloudMsg = '';
+      if (PortfolioCloudDB.isConfigured) {
+        const success = await PortfolioCloudDB.setAll(payload);
+        cloudMsg = success ? ' & Cloud Database Supabase!' : ' (Gagal koneksi Cloud Supabase)';
+      }
+
+      // 3. Broadcast to all open tabs (Landing page!)
+      if (portfolioSyncChannel) {
+        try {
+          portfolioSyncChannel.postMessage({ type: 'PORTFOLIO_FULL_SYNC', timestamp: Date.now() });
+        } catch (e) {}
+      }
+
+      notifyDataSaved('Semua data portofolio berhasil disimpan ke Browser' + cloudMsg);
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="hidden sm:inline">Tersimpan!</span>`;
+        setTimeout(() => {
+          btn.innerHTML = `<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg><span class="hidden sm:inline">Simpan Semua</span><span class="sm:hidden">Simpan</span>`;
+        }, 2000);
+      }
+    }
+
 
     /* Default Datasets */
     const DEFAULT_PROJECTS = [
@@ -2859,6 +3574,54 @@
       document.getElementById('adminDashboardApp').classList.add('hidden');
     }
 
+    
+    function setupFormAutoSaveListeners() {
+      // Auto-save for Section 01 (Tentang Saya & ID Card)
+      const sec01Form = document.getElementById('tabContent-tentang');
+      if (sec01Form && !sec01Form._hasAutoSave) {
+        sec01Form._hasAutoSave = true;
+        sec01Form.addEventListener('input', function(e) {
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) {
+            updateIdCardLivePreview();
+            queueAutoSave('fathur_portfolio_sec01_data', getSec01FormData, 'Tentang Saya');
+          }
+        });
+      }
+
+      // Auto-save for Section 02 (Skill & Kompetensi)
+      const sec02Form = document.getElementById('tabContent-skill');
+      if (sec02Form && !sec02Form._hasAutoSave) {
+        sec02Form._hasAutoSave = true;
+        sec02Form.addEventListener('input', function(e) {
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+            queueAutoSave('fathur_portfolio_sec02_data', getSec02FormData, 'Skill');
+          }
+        });
+      }
+
+      // Auto-save for Section 05 (Papan Jejak)
+      const sec05Form = document.getElementById('tabContent-jejak');
+      if (sec05Form && !sec05Form._hasAutoSave) {
+        sec05Form._hasAutoSave = true;
+        sec05Form.addEventListener('input', function(e) {
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+            queueAutoSave('fathur_portfolio_sec05_data', getSec05FormData, 'Papan Jejak');
+          }
+        });
+      }
+
+      // Auto-save for Section 07 (Profil Eksekutif)
+      const sec07Form = document.getElementById('tabContent-eksekutif');
+      if (sec07Form && !sec07Form._hasAutoSave) {
+        sec07Form._hasAutoSave = true;
+        sec07Form.addEventListener('input', function(e) {
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) {
+            queueAutoSave('fathur_portfolio_sec07_data', getSec07FormData, 'Profil Eksekutif');
+          }
+        });
+      }
+    }
+
     function showDashboard() {
       document.getElementById('adminLoginScreen').classList.add('hidden');
       document.getElementById('adminDashboardApp').classList.remove('hidden');
@@ -2936,6 +3699,30 @@
       loadSec01Form();
       loadSec02Form();
       loadSec07Form();
+
+      // Cloud & IDB sync for projects to guarantee user 14 projects are never lost
+      if (window.portfolioIdbGet) {
+        portfolioIdbGet('fathur_portfolio_website_projects').then(idbProj => {
+          if (Array.isArray(idbProj) && idbProj.length > 0) {
+            currentProjects = idbProj;
+            renderProjectsCards();
+            renderOverviewStats();
+          }
+        }).catch(() => {});
+      }
+
+      if (PortfolioCloudDB.init()) {
+        PortfolioCloudDB.get('fathur_portfolio_website_projects').then(cloudProj => {
+          if (Array.isArray(cloudProj) && cloudProj.length > 0) {
+            currentProjects = cloudProj;
+            renderProjectsCards();
+            renderOverviewStats();
+          }
+        }).catch(() => {});
+      }
+
+      loadSupabaseConfigForm();
+      setupFormAutoSaveListeners();
     }
 
     function refreshAllViews() {
@@ -2992,6 +3779,8 @@
         loadSec07Form();
       } else if (tabKey === 'network') {
         renderRoutesTable();
+      } else if (tabKey === 'supabase') {
+        loadSupabaseConfigForm();
       }
     }
 
@@ -5409,16 +6198,15 @@
       toggleProjectForm(true);
     }
 
-    function deleteProjectItem(id) {
+    async function deleteProjectItem(id) {
       if (!confirm('Hapus proyek website ini dari portofolio?')) return;
       currentProjects = currentProjects.filter(function(x) { return x.id !== id; });
-      localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
+      await executeUniversalSave('fathur_portfolio_website_projects', currentProjects, { label: 'Proyek Website' });
       renderProjectsCards();
       renderOverviewStats();
-      notifyDataSaved('Proyek berhasil dihapus.');
     }
 
-    function saveProjectRecord() {
+    async function saveProjectRecord() {
       const editId = document.getElementById('projectEditId').value;
       const title = document.getElementById('inpProjectTitle').value.trim();
       const cat = document.getElementById('inpProjectCategory').value;
@@ -5468,38 +6256,10 @@
         });
       }
 
-      try {
-        localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
-        renderProjectsCards();
-        renderOverviewStats();
-        toggleProjectForm(false);
-        notifyDataSaved('Proyek website berhasil disimpan!');
-      } catch (err) {
-        console.warn('LocalStorage quota warning in saveProjectRecord, optimizing...', err);
-        // Safeguard: Compress legacy oversized base64 images in currentProjects
-        currentProjects.forEach(p => {
-          if (p.img && p.img.startsWith('data:image') && p.img.length > 80000) {
-            // Downscale to 500px jpeg
-            const canvas = document.createElement('canvas');
-            canvas.width = 480;
-            canvas.height = 300;
-            const ctx = canvas.getContext('2d');
-            const im = new Image();
-            im.src = p.img;
-            ctx.drawImage(im, 0, 0, 480, 300);
-            p.img = canvas.toDataURL('image/jpeg', 0.70);
-          }
-        });
-        try {
-          localStorage.setItem('fathur_portfolio_website_projects', JSON.stringify(currentProjects));
-          renderProjectsCards();
-          renderOverviewStats();
-          toggleProjectForm(false);
-          notifyDataSaved('Proyek berhasil disimpan (dengan kompresi otomatis)!');
-        } catch (e2) {
-          alert('Penyimpanan lokal browser penuh. Gunakan tombol crop gambar untuk memperkecil ukuran sampul proyek.');
-        }
-      }
+      await executeUniversalSave('fathur_portfolio_website_projects', currentProjects, { label: 'Proyek Website' });
+      renderProjectsCards();
+      renderOverviewStats();
+      toggleProjectForm(false);
     }
 
     /* Routes Logic */
