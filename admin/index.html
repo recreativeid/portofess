@@ -930,6 +930,20 @@
                   <textarea id="founderMbpDesc" rows="3" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white">Mendirikan komunitas ruang baca terbuka di Magelang, gerakan membaca mingguan di ruang terbuka publik.</textarea>
                 </div>
               </div>
+
+              <!-- Shortcut to Section 02 Certificate Recap -->
+              <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-base">📊</span>
+                  <div>
+                    <h5 class="text-xs font-bold text-[#155293]">Rekapitulasi 8 Kotak Prestasi Section 02 (20+ Sertifikat &amp; Penghargaan)</h5>
+                    <p class="text-[11px] text-slate-500">Kelola angka, label, atau aktifkan hitung otomatis yang terhubung langsung dengan 22 sertifikat resmi.</p>
+                  </div>
+                </div>
+                <button type="button" onclick="switchAdminTab('prestasi')" class="px-4 py-2 rounded-xl bg-[#155293] hover:bg-[#0f3d6e] text-white text-xs font-bold transition shadow-xs cursor-pointer shrink-0">
+                  Buka Kelola Rekapitulasi Prestasi ↗
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1723,6 +1737,43 @@
               </button>
             </div>
 
+            <!-- KELOLA REKAPITULASI PRESTASI SECTION 02 (8 KOTAK RINGKASAN RESMI) -->
+            <div class="p-5 sm:p-6 rounded-2xl bg-white border-2 border-slate-200 shadow-sm space-y-4">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2.5 py-0.5 rounded-lg bg-red-100 text-red-800 text-[10px] font-mono font-bold uppercase tracking-wider">SECTION 02 REKAPITULASI</span>
+                  <div>
+                    <h4 class="font-display font-bold text-sm text-slate-900">Kelola 8 Kotak Rekapitulasi Resmi Section 02</h4>
+                    <p class="text-[11px] text-slate-500">Sesuaikan angka dan label pada kotak rekapitulasi Section 02, atau aktifkan mode hitung otomatis dari koleksi sertifikat.</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="resetAdminCertRecapToDefault()" class="px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                    Reset Default
+                  </button>
+                  <button type="button" onclick="saveAdminCertRecap(true)" class="px-4 py-1.5 rounded-xl bg-[#155293] hover:bg-[#0f3d6e] text-white text-xs font-bold transition shadow-xs cursor-pointer">
+                    Simpan Rekapitulasi
+                  </button>
+                </div>
+              </div>
+
+              <!-- Auto-Calculate Toggle Option -->
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <input type="checkbox" id="chkAutoCalculateRecap" onchange="toggleAutoCalculateRecap(this.checked)" class="w-4 h-4 rounded text-[#155293] cursor-pointer" />
+                  <label for="chkAutoCalculateRecap" class="text-xs font-bold text-slate-800 cursor-pointer">
+                    Hitung Otomatis dari Koleksi Sertifikat (Auto-Calculate Dynamic Counter)
+                  </label>
+                </div>
+                <span class="text-[11px] text-slate-500">Saat aktif, angka (10x, 4x, dll) akan otomatis disinkronkan saat menambah/mengedit sertifikat.</span>
+              </div>
+
+              <!-- 8 Recap Cards Grid -->
+              <div id="adminCertRecapGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <!-- Rendered dynamically by renderAdminCertRecap() -->
+              </div>
+            </div>
+
             <!-- Filter & Search Bar -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
               <div class="flex items-center gap-1.5 flex-wrap">
@@ -1787,11 +1838,17 @@
                   </select>
                 </div>
                 <div>
-                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Warna Aksen</label>
-                  <div class="flex items-center gap-2">
-                    <input id="inpCertColor" type="color" value="#155293" class="w-10 h-8 rounded-lg border border-slate-300 cursor-pointer p-0.5" />
-                    <span class="text-xs text-slate-500">Warna kartu</span>
-                  </div>
+                  <label class="text-[11px] font-bold text-[#155293] block mb-1">🔗 Hubungkan ke Kotak Rekapitulasi Section 02</label>
+                  <select id="inpCertRecapTag" class="w-full px-3 py-2 rounded-xl border border-blue-300 text-xs font-semibold bg-white outline-none text-[#155293]">
+                    <option value="kejuaraan_desain">Sertifikat Kejuaraan Desain</option>
+                    <option value="kompetisi_internasional">Kompetisi Internasional</option>
+                    <option value="media_creative">Sertifikat Media Creative</option>
+                    <option value="internship_web">Internship Web Developer</option>
+                    <option value="pekerjaan_multimedia">Pekerjaan Multimedia</option>
+                    <option value="narasumber_mkt">Narasumber Digital Mkt</option>
+                    <option value="narasumber_video">Narasumber Video Konten</option>
+                    <option value="lainnya">Lainnya / Umum</option>
+                  </select>
                 </div>
               </div>
 
@@ -1800,12 +1857,19 @@
                 <textarea id="inpCertDesc" rows="2" placeholder="Prestasi kompetisi tingkat nasional dalam desain poster visual..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white outline-none"></textarea>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                <div class="sm:col-span-1">
+                  <label class="text-[11px] font-bold text-slate-700 block mb-1">Warna Aksen</label>
+                  <div class="flex items-center gap-2">
+                    <input id="inpCertColor" type="color" value="#155293" class="w-10 h-8 rounded-lg border border-slate-300 cursor-pointer p-0.5" />
+                    <span class="text-xs text-slate-500">Warna kartu</span>
+                  </div>
+                </div>
+                <div class="sm:col-span-1">
                   <label class="text-[11px] font-bold text-slate-700 block mb-1">Unggah Berkas Gambar Sertifikat</label>
                   <input id="inpCertFile" type="file" accept="image/*" onchange="handleCertFileSelect(this)" class="w-full text-xs text-slate-500 pt-1" />
                 </div>
-                <div>
+                <div class="sm:col-span-1">
                   <label class="text-[11px] font-bold text-slate-700 block mb-1">Atau Path / URL Berkas Gambar</label>
                   <input id="inpCertImgUrl" type="text" placeholder="assets/certificates/..." oninput="handleCertUrlInput(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none" />
                 </div>
@@ -1814,7 +1878,7 @@
               <!-- Live Preview -->
               <div id="certPreviewContainer" class="p-3 bg-white rounded-xl border border-slate-200 flex items-center gap-4">
                 <div class="w-20 h-14 rounded-lg bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200">
-                  <img id="certPreviewImg" src="" class="w-full h-full object-cover hidden" />
+                  <img id="certPreviewImg" src="" class="w-full h-full object-cover hidden" onerror="this.onerror=null;this.src='../assets/canva-card-white.jpg';" />
                   <span id="certPreviewFallback" class="text-[10px] font-mono text-slate-400">Preview</span>
                 </div>
                 <div>
@@ -2421,9 +2485,25 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       } catch (e) { return null; }
     }
 
+    // Expose helpers globally
+    window.portfolioIdbSet = portfolioIdbSet;
+    window.portfolioIdbGet = portfolioIdbGet;
+
+    // Helper to format asset paths for admin subfolder (resolves relative 'assets/...' to '../assets/...')
+    function formatAdminAssetUrl(url) {
+      if (!url || typeof url !== 'string') return '';
+      const u = url.trim();
+      if (!u) return '';
+      if (u.startsWith('data:') || u.startsWith('blob:') || u.startsWith('http://') || u.startsWith('https://') || u.startsWith('../') || u.startsWith('/')) {
+        return u;
+      }
+      return '../' + u;
+    }
+    window.formatAdminAssetUrl = formatAdminAssetUrl;
+
     // Universal Safe Storage (Never throws QuotaExceededError)
     async function safePortfolioSave(key, data) {
-      if (window.indexedDB) {
+      if (window.portfolioIdbSet) {
         await portfolioIdbSet(key, data);
       }
       try {
@@ -2432,7 +2512,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         console.warn('localStorage quota reached for ' + key + ', using lightweight fallback:', quotaErr);
         try {
           const lightweight = JSON.parse(JSON.stringify(data, (k, v) => {
-            if (typeof v === 'string' && v.startsWith('data:image/') && v.length > 2000) {
+            if (typeof v === 'string' && (v.startsWith('data:image/') || v.length > 2000)) {
               return '';
             }
             return v;
@@ -2451,18 +2531,36 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         const origSetItem = Storage.prototype.setItem;
         Storage.prototype.setItem = function(key, val) {
           try {
-            origSetItem.apply(this, arguments);
+            return origSetItem.apply(this, arguments);
           } catch (e) {
-            if (e && (e.name === 'QuotaExceededError' || e.code === 22 || e.number === -2147024882 || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
-              console.warn('Storage Quota Guard intercepted quota limit for: ' + key);
-              if (typeof window.portfolioIdbSet === 'function') {
+            const isQuota = e && (
+              e.name === 'QuotaExceededError' ||
+              e.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+              e.code === 22 ||
+              e.code === 1014 ||
+              e.number === -2147024882
+            );
+            if (isQuota) {
+              console.warn('[Storage Quota Guard] Quota exceeded for: ' + key + '. Rescuing to IndexedDB.');
+              if (typeof portfolioIdbSet === 'function') {
                 try {
                   const parsed = JSON.parse(val);
-                  window.portfolioIdbSet(key, parsed);
+                  portfolioIdbSet(key, parsed);
                 } catch (errP) {
-                  window.portfolioIdbSet(key, val);
+                  portfolioIdbSet(key, val);
                 }
               }
+              try {
+                const parsed = JSON.parse(val);
+                const lightweight = JSON.parse(JSON.stringify(parsed, (k, v) => {
+                  if (typeof v === 'string' && (v.startsWith('data:image/') || v.length > 2000)) {
+                    return '';
+                  }
+                  return v;
+                }));
+                lightweight.__in_idb__ = true;
+                origSetItem.call(this, key, JSON.stringify(lightweight));
+              } catch (eClean) {}
               return;
             }
             throw e;
@@ -2967,6 +3065,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         fathur_portfolio_sec05_data: getSec05FormData(),
         fathur_portfolio_sec07_data: getSec07FormData(),
         fathur_portfolio_certificates: currentCerts,
+        fathur_portfolio_cert_recap: currentCertRecapConfig,
         fathur_portfolio_cms_data_multi: currentMedsosData,
         fathur_portfolio_world_map_routes: currentRoutes
       };
@@ -2998,6 +3097,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         fathur_portfolio_sec05_data: getSec05FormData(),
         fathur_portfolio_sec07_data: getSec07FormData(),
         fathur_portfolio_certificates: currentCerts,
+        fathur_portfolio_cert_recap: currentCertRecapConfig,
         fathur_portfolio_cms_data_multi: currentMedsosData,
         fathur_portfolio_world_map_routes: currentRoutes
       };
@@ -3306,6 +3406,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Semarak Pandu Hizbul Wathan UNIMMA · Jan 2025',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914115319-2026-09-14prestasi_akd115305.jpg',
         desc: 'Juara 1 Kompetisi Desain Poster Nasional tingkat perguruan tinggi se-Indonesia.',
         color: '#991B1B'
@@ -3316,6 +3417,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Universitas Mercu Buana Yogyakarta · Jan 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914115507-2026-09-14prestasi_akd115352.jpg',
         desc: 'Juara 1 Lomba Desain Poster Komunikasi Visual Mercomfest 2024.',
         color: '#155293'
@@ -3326,6 +3428,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: '3rd ASEAN International Student Competition (AISC) · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Internasional',
+        recapTag: 'kompetisi_internasional',
         img: 'assets/certificates/20260914115727-2026-09-14prestasi_akd115649.png',
         desc: 'Penghargaan Emas tingkat internasional delegasi mahasiswa se-ASEAN dalam inovasi digital.',
         color: '#D97706'
@@ -3336,6 +3439,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Universitas Diponegoro (UNDIP) Semarang · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914115928-2026-09-14prestasi_akd115757.jpg',
         desc: 'Juara 1 Lomba Poster Nasional Bidang Inovasi Teknologi & Lingkungan.',
         color: '#0F766E'
@@ -3346,6 +3450,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Consortium Universiti Kuala Lumpur (UniKL) & AISC · 2023',
         category: 'Kejuaraan & Kompetisi',
         level: 'Internasional',
+        recapTag: 'kompetisi_internasional',
         img: 'assets/certificates/20260914120316-2026-09-14prestasi_akd120306.jpeg',
         desc: 'Penghargaan kategori Profit-Oriented Inovasi Layanan Digital Terpuji se-ASEAN.',
         color: '#7C3AED'
@@ -3356,6 +3461,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: '3rd ASEAN International Student Competition · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Internasional',
+        recapTag: 'kompetisi_internasional',
         img: 'assets/certificates/20260914120801-2026-09-14prestasi_akd120539.jpeg',
         desc: 'Penghargaan apresiasi Kapten Tim Inovasi Terinspiratif dalam ajang kompetisi regional.',
         color: '#2563EB'
@@ -3366,6 +3472,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Universitas Ahmad Dahlan (UAD) Yogyakarta · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914121155-2026-09-14prestasi_akd121139.jpeg',
         desc: 'Juara 1 Cabang Lomba Desain Grafis & Media Informasi Pekan Olahraga & Seni Nasional.',
         color: '#059669'
@@ -3376,6 +3483,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'ASEAN Consortium for Higher Education & Technology · 2023',
         category: 'Kejuaraan & Kompetisi',
         level: 'Internasional',
+        recapTag: 'kompetisi_internasional',
         img: 'assets/certificates/20260914122710-2026-09-14prestasi_akd121503.jpg',
         desc: 'Penghargaan khusus presentasi karya kreatif dan UI/UX Pitching tingkat regional.',
         color: '#DC2626'
@@ -3386,6 +3494,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Universitas Sriwijaya (UNSRI) Palembang · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914123001-2026-09-14prestasi_akd122827.jpeg',
         desc: 'Juara 2 Lomba Desain Poster Nasional Festival Kebudayaan & Teknologi.',
         color: '#EA580C'
@@ -3396,6 +3505,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Panitia Milad Universitas Muhammadiyah Magelang · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914123254-2026-09-14prestasi_akd123127.jpeg',
         desc: 'Juara 1 Sayembara Karya Desain Kreatif & Publikasi Kampus.',
         color: '#155293'
@@ -3406,6 +3516,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'AISC International Student Committee · 2023',
         category: 'Kejuaraan & Kompetisi',
         level: 'Internasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914123522-2026-09-14prestasi_akd123316.jpeg',
         desc: 'Finalis Terpilih Kategori Business Technology Inovasi se-Asia Tenggara.',
         color: '#4F46E5'
@@ -3416,6 +3527,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Badan Pembina Olahraga & Seni Mahasiswa Indonesia · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914123644-2026-09-14prestasi_akd123545.jpeg',
         desc: 'Peringkat 2 Medali Perak Lomba Desain Media Komunikasi Visual Mahasiswa.',
         color: '#475569'
@@ -3426,6 +3538,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Fakultas Teknik Informatika UNIMMA · 2024',
         category: 'Kejuaraan & Kompetisi',
         level: 'Nasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914123751-2026-09-14prestasi_akd123747.jpeg',
         desc: 'Juara 1 Lomba Media Visual & Desain Interaktif Dies Natalis Fakultas.',
         color: '#0891B2'
@@ -3436,6 +3549,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'AISC Research & Innovation Consortium · 2023',
         category: 'Kejuaraan & Kompetisi',
         level: 'Internasional',
+        recapTag: 'kejuaraan_desain',
         img: 'assets/certificates/20260914124246-2026-09-14prestasi_akd124115.jpeg',
         desc: 'Apresiasi karya riset visual digital dan portofolio interaktif tingkat internasional.',
         color: '#9333EA'
@@ -3446,6 +3560,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Cisco Networking Academy · 2024',
         category: 'Program Pelatihan & Sertifikasi',
         level: 'Internasional',
+        recapTag: 'media_creative',
         img: 'assets/certificates/20260914130042-2026-09-14prestasi_akd125840.jpeg',
         desc: 'Sertifikasi kompetensi internasional jaringan komputer, routing, switching, dan IP addressing.',
         color: '#0284C7'
@@ -3456,6 +3571,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'UPT Komputer Universitas Muhammadiyah Magelang · 2024',
         category: 'Program Pelatihan & Sertifikasi',
         level: 'Nasional',
+        recapTag: 'media_creative',
         img: 'assets/certificates/20260914130240-2026-09-14prestasi_akd130209.jpeg',
         desc: 'Predikat Kelulusan Nilai A dalam uji kompetensi pemrosesan data dan teknologi komputer.',
         color: '#0D9488'
@@ -3466,6 +3582,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Language Center UNIMMA · 2024',
         category: 'Program Pelatihan & Sertifikasi',
         level: 'Nasional',
+        recapTag: 'media_creative',
         img: 'assets/certificates/20260914130553-2026-09-14prestasi_akd130545.jpeg',
         desc: 'Sertifikasi kelulusan kemampuan komunikasi bahasa Inggris akademik dan profesional.',
         color: '#6366F1'
@@ -3476,6 +3593,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'PT Herbal Indo Utama (HIU Group) · 2024',
         category: 'Job Career & Internship (Magang)',
         level: 'Nasional',
+        recapTag: 'internship_web',
         img: 'assets/certificates/20260914131125-2026-09-14prestasi_akd131027.jpeg',
         desc: 'Praktik kerja industri dan pengembangan web & media digital di industri manufaktur herbal.',
         color: '#166534'
@@ -3486,6 +3604,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'PT Nusantara Ekso Teknologi (vlint.app) · 2024',
         category: 'Job Career & Internship (Magang)',
         level: 'Nasional',
+        recapTag: 'pekerjaan_multimedia',
         img: 'assets/certificates/20260914141756-2026-09-14prestasi_akd141704.jpeg',
         desc: 'Magang profesional pengembangan video promosi kreatif dan desain UI/UX aplikasi digital.',
         color: '#1E293B'
@@ -3496,6 +3615,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Yayasan ICMA Indonesia · 2024',
         category: 'Job Career & Internship (Magang)',
         level: 'Nasional',
+        recapTag: 'pekerjaan_multimedia',
         img: 'assets/certificates/20260914142022-2026-09-14prestasi_akd141941.jpeg',
         desc: 'Dedikasi pengelolaan konten media komunikasi visual dan edukasi publik terpadu.',
         color: '#B45309'
@@ -3506,6 +3626,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Fakultas Keguruan dan Ilmu Pendidikan (FKIP) UNIMMA · 2025',
         category: 'Professional Speaker (Narasumber)',
         level: 'Nasional',
+        recapTag: 'narasumber_video',
         img: 'assets/certificates/20260914145701-2026-09-14prestasi_akd145603.jpg',
         desc: 'Pemateri utama workshop teknologi pembuatan video edukasi dan editing multimedia untuk akademisi.',
         color: '#BE123C'
@@ -3516,11 +3637,26 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         org: 'Prodi Bimbingan dan Konseling (BK) FKIP UNIMMA · Aug 2025',
         category: 'Professional Speaker (Narasumber)',
         level: 'Nasional',
+        recapTag: 'narasumber_mkt',
         img: 'assets/certificates/20260916093833-2026-09-16prestasi_akd093816.jpeg',
         desc: 'Pemateri kehormatan strategi branding media sosial, content visual design, dan personal branding.',
         color: '#047857'
       }
     ];
+
+    const DEFAULT_CERT_RECAP = {
+      autoCalculate: true,
+      items: [
+        { tag: 'kejuaraan_desain', count: '10x', label: 'Sertifikat Kejuaraan Desain', colorClass: 'text-crimson', countColor: 'text-crimson' },
+        { tag: 'kompetisi_internasional', count: '4x', label: 'Kompetisi Internasional', colorClass: 'text-crimson', countColor: 'text-crimson' },
+        { tag: 'media_creative', count: '2x', label: 'Sertifikat Media Creative', colorClass: 'text-crimson', countColor: 'text-crimson' },
+        { tag: 'internship_web', count: '1x', label: 'Internship Web Developer', colorClass: 'text-[#155293]', countColor: 'text-[#155293]' },
+        { tag: 'pekerjaan_multimedia', count: '1x', label: 'Pekerjaan Multimedia', colorClass: 'text-[#155293]', countColor: 'text-[#155293]' },
+        { tag: 'narasumber_mkt', count: '1x', label: 'Narasumber Digital Mkt', colorClass: 'text-amber-700', countColor: 'text-amber-700' },
+        { tag: 'narasumber_video', count: '1x', label: 'Narasumber Video Konten', colorClass: 'text-amber-700', countColor: 'text-amber-700' },
+        { tag: 'total', count: '20+', label: 'Total Prestasi Terverifikasi', colorClass: 'text-[#155293]', countColor: 'text-[#155293]', isHighlight: true }
+      ]
+    };
 
     const DEFAULT_ROUTES = [
       { id: 'r1', start: { lat: -7.4706, lng: 110.2178 }, end: { lat: -6.2088, lng: 106.8456, label: 'Jakarta' }, client: 'PT Fintek Sinergi & Creative Agency' },
@@ -3723,6 +3859,18 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         currentCerts = JSON.parse(JSON.stringify(DEFAULT_CERTIFICATES));
         localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
       }
+      // Populate missing recapTag if data loaded from older session
+      if (Array.isArray(currentCerts)) {
+        currentCerts.forEach(function(c) {
+          if (!c.recapTag) {
+            const def = DEFAULT_CERTIFICATES.find(function(d) { return d.id === c.id; });
+            c.recapTag = def ? def.recapTag : 'kejuaraan_desain';
+          }
+        });
+      }
+
+      // 3.1 Certificate Recap (Section 02 8 Boxes)
+      loadAdminCertRecap();
 
       // 4. Routes
       try {
@@ -3745,6 +3893,17 @@ create policy "Public Access" on portfolio_store for all using (true) with check
             renderOverviewStats();
           }
         }).catch(() => {});
+
+        portfolioIdbGet('fathur_portfolio_certificates').then(idbCerts => {
+          if (Array.isArray(idbCerts) && idbCerts.length > 0) {
+            currentCerts = idbCerts;
+            renderCertsCards();
+            renderOverviewStats();
+            if (currentCertRecapConfig && currentCertRecapConfig.autoCalculate) {
+              syncAdminCertRecapWithCerts(false);
+            }
+          }
+        }).catch(() => {});
       }
 
       if (PortfolioCloudDB.init()) {
@@ -3753,6 +3912,13 @@ create policy "Public Access" on portfolio_store for all using (true) with check
             currentProjects = cloudProj;
             renderProjectsCards();
             renderOverviewStats();
+          }
+        }).catch(() => {});
+
+        PortfolioCloudDB.get('fathur_portfolio_cert_recap').then(cloudRecap => {
+          if (cloudRecap && Array.isArray(cloudRecap.items)) {
+            currentCertRecapConfig = cloudRecap;
+            renderAdminCertRecap();
           }
         }).catch(() => {});
       }
@@ -3770,6 +3936,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       renderVideosCards();
       renderPapanJejakView();
       renderCertsCards();
+      renderAdminCertRecap();
       renderRoutesTable();
     }
 
@@ -5255,8 +5422,22 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           ? '<span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-mono font-bold">Internasional</span>'
           : '<span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold">Nasional</span>';
 
-        const imgDisplay = c.img
-          ? '<img src="' + c.img + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + c.title + '" />'
+        const recapNames = {
+          kejuaraan_desain: 'Kejuaraan Desain',
+          kompetisi_internasional: 'Kompetisi Internasional',
+          media_creative: 'Media Creative',
+          internship_web: 'Internship Web',
+          pekerjaan_multimedia: 'Multimedia',
+          narasumber_mkt: 'Narasumber Mkt',
+          narasumber_video: 'Narasumber Video',
+          lainnya: 'Lainnya'
+        };
+        const recapLabel = recapNames[c.recapTag] || 'Rekapitulasi Sec 02';
+        const recapBadge = '<span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-700 border border-stone-300 text-[9px] font-mono font-bold truncate max-w-[120px]" title="Terhubung ke Box: ' + recapLabel + '">🔗 ' + recapLabel + '</span>';
+
+        const formattedImg = formatAdminAssetUrl(c.img);
+        const imgDisplay = formattedImg
+          ? '<img src="' + formattedImg + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + c.title + '" onerror="this.onerror=null;this.src=\'../assets/canva-card-white.jpg\';" />'
           : '<div class="w-full h-full flex flex-col items-center justify-center p-3 text-center text-slate-400 text-xs font-mono bg-slate-100">Pratinjau Berkas</div>';
 
         return '<div class="group rounded-2xl border border-slate-200 bg-white p-3.5 hover:border-slate-400 hover:shadow-sm transition flex flex-col justify-between space-y-3">' +
@@ -5264,10 +5445,13 @@ create policy "Public Access" on portfolio_store for all using (true) with check
             '<div class="aspect-[16/10] rounded-xl bg-slate-100 overflow-hidden relative shadow-inner">' +
               imgDisplay +
               '<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-sm text-white font-mono text-[9px] font-bold">#' + (i+1) + '</span>' +
-              '<div class="absolute top-2 right-2">' + levelBadge + '</div>' +
+              '<div class="absolute top-2 right-2 flex items-center gap-1">' + levelBadge + '</div>' +
             '</div>' +
             '<div class="pt-2.5">' +
-              '<span class="text-[10px] font-mono uppercase text-slate-400 font-bold block truncate">' + (c.category || 'Prestasi & Lisensi') + '</span>' +
+              '<div class="flex items-center justify-between gap-1 mb-1">' +
+                '<span class="text-[10px] font-mono uppercase text-slate-400 font-bold block truncate">' + (c.category || 'Prestasi & Lisensi') + '</span>' +
+                recapBadge +
+              '</div>' +
               '<h5 class="text-xs font-bold text-slate-900 line-clamp-2 mt-0.5 group-hover:text-[#155293] transition" title="' + c.title + '">' + c.title + '</h5>' +
               '<p class="text-[11px] font-mono text-slate-500 mt-1 truncate">' + (c.org || '-') + '</p>' +
               (c.desc ? '<p class="text-[11px] text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">' + c.desc + '</p>' : '') +
@@ -5309,6 +5493,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         document.getElementById('inpCertOrg').value = '';
         document.getElementById('inpCertCategory').value = 'Kejuaraan & Kompetisi';
         document.getElementById('inpCertLevel').value = 'Nasional';
+        document.getElementById('inpCertRecapTag').value = 'kejuaraan_desain';
         document.getElementById('inpCertDesc').value = '';
         document.getElementById('inpCertColor').value = '#155293';
         document.getElementById('inpCertFile').value = '';
@@ -5333,6 +5518,8 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       document.getElementById('inpCertOrg').value = c.org || '';
       document.getElementById('inpCertCategory').value = c.category || 'Kejuaraan & Kompetisi';
       document.getElementById('inpCertLevel').value = c.level || 'Nasional';
+      const recapSelect = document.getElementById('inpCertRecapTag');
+      if (recapSelect) recapSelect.value = c.recapTag || 'kejuaraan_desain';
       document.getElementById('inpCertDesc').value = c.desc || '';
       document.getElementById('inpCertColor').value = c.color || '#155293';
       document.getElementById('inpCertImgUrl').value = c.img && !c.img.startsWith('data:') ? c.img : '';
@@ -5360,29 +5547,34 @@ create policy "Public Access" on portfolio_store for all using (true) with check
     }
 
     function updateCertPreview() {
-      const title = document.getElementById('inpCertTitle').value.trim() || 'Judul Sertifikat';
-      const org = document.getElementById('inpCertOrg').value.trim() || 'Lembaga Penerbit';
+      const title = document.getElementById('inpCertTitle')?.value?.trim() || 'Judul Sertifikat';
+      const org = document.getElementById('inpCertOrg')?.value?.trim() || 'Lembaga Penerbit';
       const imgEl = document.getElementById('certPreviewImg');
       const fallback = document.getElementById('certPreviewFallback');
 
-      document.getElementById('certPreviewTitle').textContent = title;
-      document.getElementById('certPreviewOrg').textContent = org;
+      const titleEl = document.getElementById('certPreviewTitle');
+      const orgEl = document.getElementById('certPreviewOrg');
+      if (titleEl) titleEl.textContent = title;
+      if (orgEl) orgEl.textContent = org;
 
-      if (tempCertImageData) {
-        imgEl.src = tempCertImageData;
+      const src = tempCertImageData || document.getElementById('inpCertImgUrl')?.value?.trim() || '';
+      if (src && imgEl) {
+        imgEl.src = formatAdminAssetUrl(src);
         imgEl.classList.remove('hidden');
-        fallback.classList.add('hidden');
-      } else {
+        if (fallback) fallback.classList.add('hidden');
+      } else if (imgEl) {
+        imgEl.src = '';
         imgEl.classList.add('hidden');
-        fallback.classList.remove('hidden');
+        if (fallback) fallback.classList.remove('hidden');
       }
     }
 
-    function saveCertRecord() {
+    async function saveCertRecord() {
       const title = document.getElementById('inpCertTitle').value.trim();
       const org = document.getElementById('inpCertOrg').value.trim();
       const category = document.getElementById('inpCertCategory').value;
       const level = document.getElementById('inpCertLevel').value;
+      const recapTag = document.getElementById('inpCertRecapTag')?.value || 'kejuaraan_desain';
       const desc = document.getElementById('inpCertDesc').value.trim();
       const color = document.getElementById('inpCertColor').value;
       const img = tempCertImageData || document.getElementById('inpCertImgUrl').value.trim();
@@ -5405,6 +5597,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
             org: org,
             category: category,
             level: level,
+            recapTag: recapTag,
             desc: desc,
             color: color,
             img: img
@@ -5417,6 +5610,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           org: org,
           category: category,
           level: level,
+          recapTag: recapTag,
           desc: desc,
           color: color,
           img: img
@@ -5424,10 +5618,12 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         currentCerts.unshift(newCert);
       }
 
-      try {
-        localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
-      } catch (e) {
-        console.warn('Storage quota for certificates:', e);
+      // Universal Persistent Save (IndexedDB + LocalStorage with Quota Guard + Supabase + Broadcast)
+      await executeUniversalSave('fathur_portfolio_certificates', currentCerts, { label: 'Sertifikat & Prestasi' });
+
+      // Automatically sync and recalculate Section 02 Recap if autoCalculate is active
+      if (currentCertRecapConfig && currentCertRecapConfig.autoCalculate) {
+        syncAdminCertRecapWithCerts();
       }
 
       // 1. Render ulang UI langsung
@@ -5437,24 +5633,147 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       // 2. Tutup form edit
       toggleCertForm(false);
 
-      // 3. Notifikasi sukses non-blocking
+      // 3. Notifikasi sukses
       if (isEdit) {
-        notifyDataSaved('✓ Sertifikat "' + title + '" berhasil diperbarui!');
+        notifyDataSaved('✓ Sertifikat "' + title + '" berhasil diperbarui dan disinkronkan ke Rekapitulasi Section 02!');
       } else {
-        notifyDataSaved('✓ Sertifikat baru berhasil ditambahkan!');
+        notifyDataSaved('✓ Sertifikat baru berhasil ditambahkan dan otomatis terhubung ke Rekapitulasi Section 02!');
       }
     }
 
-    function deleteCertRecord(id) {
+    async function deleteCertRecord(id) {
       const idx = currentCerts.findIndex(function(c) { return c.id === id; });
       if (idx === -1) return;
       if (!confirm('Apakah Anda yakin ingin menghapus sertifikat "' + currentCerts[idx].title + '"?')) return;
 
       currentCerts.splice(idx, 1);
-      localStorage.setItem('fathur_portfolio_certificates', JSON.stringify(currentCerts));
+      await executeUniversalSave('fathur_portfolio_certificates', currentCerts, { label: 'Sertifikat & Prestasi' });
+
+      if (currentCertRecapConfig && currentCertRecapConfig.autoCalculate) {
+        syncAdminCertRecapWithCerts();
+      }
+
       renderCertsCards();
       renderOverviewStats();
       notifyDataSaved('Sertifikat berhasil dihapus.');
+    }
+
+    /* ============================================================== */
+    /* 3.1 SECTION 02 CERTIFICATE RECAP CONTROLLER (8 BOXES)          */
+    /* ============================================================== */
+    let currentCertRecapConfig = JSON.parse(JSON.stringify(DEFAULT_CERT_RECAP));
+
+    function loadAdminCertRecap() {
+      try {
+        const raw = localStorage.getItem('fathur_portfolio_cert_recap');
+        if (raw) currentCertRecapConfig = JSON.parse(raw);
+      } catch (e) {}
+
+      if (!currentCertRecapConfig || !Array.isArray(currentCertRecapConfig.items)) {
+        currentCertRecapConfig = JSON.parse(JSON.stringify(DEFAULT_CERT_RECAP));
+      }
+
+      // Sync from IndexedDB in background
+      if (window.portfolioIdbGet) {
+        portfolioIdbGet('fathur_portfolio_cert_recap').then(idbData => {
+          if (idbData && Array.isArray(idbData.items)) {
+            currentCertRecapConfig = idbData;
+            renderAdminCertRecap();
+          }
+        }).catch(() => {});
+      }
+
+      if (currentCertRecapConfig.autoCalculate) {
+        syncAdminCertRecapWithCerts(false);
+      } else {
+        renderAdminCertRecap();
+      }
+    }
+
+    function renderAdminCertRecap() {
+      const grid = document.getElementById('adminCertRecapGrid');
+      const chk = document.getElementById('chkAutoCalculateRecap');
+      if (chk) chk.checked = !!currentCertRecapConfig.autoCalculate;
+      if (!grid) return;
+
+      grid.innerHTML = currentCertRecapConfig.items.map(function(item, idx) {
+        const isAuto = !!currentCertRecapConfig.autoCalculate;
+        const linkedCount = currentCerts.filter(c => c.recapTag === item.tag).length;
+        const isHighlight = item.isHighlight || item.tag === 'total';
+        const cardBg = isHighlight ? 'bg-amber-50/70 border-amber-300' : 'bg-slate-50 border-slate-200';
+        const badgeColor = isHighlight ? 'bg-amber-200 text-amber-900' : 'bg-white text-slate-800';
+
+        return '<div class="p-3.5 rounded-xl border ' + cardBg + ' flex flex-col justify-between space-y-2.5 shadow-2xs">' +
+          '<div class="flex items-center justify-between">' +
+            '<span class="text-[10px] font-mono uppercase font-bold text-slate-500">Box #' + (idx + 1) + '</span>' +
+            '<span class="px-2 py-0.5 rounded-md ' + badgeColor + ' text-[10px] font-mono font-bold shadow-2xs">' + linkedCount + ' Terhubung</span>' +
+          '</div>' +
+          '<div class="space-y-1.5">' +
+            '<div class="flex items-center gap-2">' +
+              '<input type="text" id="recapCountInput_' + idx + '" value="' + item.count + '" ' + (isAuto ? 'disabled' : '') + ' onchange="updateRecapField(' + idx + ', \'count\', this.value)" class="w-16 px-2 py-1 rounded-lg border border-slate-300 text-xs font-black text-center ' + (isAuto ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : 'bg-white text-slate-900') + ' outline-none" title="' + (isAuto ? 'Dihitung otomatis dari sertifikat' : 'Ubah angka secara manual') + '" />' +
+              '<input type="text" id="recapLabelInput_' + idx + '" value="' + item.label + '" onchange="updateRecapField(' + idx + ', \'label\', this.value)" class="flex-1 px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-900 outline-none" placeholder="Label kotak..." />' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function updateRecapField(idx, field, val) {
+      if (!currentCertRecapConfig || !currentCertRecapConfig.items[idx]) return;
+      currentCertRecapConfig.items[idx][field] = val.trim();
+    }
+
+    function toggleAutoCalculateRecap(enabled) {
+      currentCertRecapConfig.autoCalculate = enabled;
+      if (enabled) {
+        syncAdminCertRecapWithCerts(true);
+      } else {
+        renderAdminCertRecap();
+        saveAdminCertRecap(false);
+      }
+    }
+
+    function syncAdminCertRecapWithCerts(doSave = true) {
+      if (!currentCertRecapConfig || !Array.isArray(currentCertRecapConfig.items)) return;
+
+      currentCertRecapConfig.items.forEach(function(item) {
+        if (item.tag === 'total') {
+          item.count = currentCerts.length >= 20 ? (currentCerts.length + '+') : (currentCerts.length + 'x');
+        } else {
+          const matchCount = currentCerts.filter(function(c) {
+            if (c.recapTag) return c.recapTag === item.tag;
+            if (item.tag === 'kejuaraan_desain') return c.category === 'Kejuaraan & Kompetisi' && (c.level || '').toLowerCase() !== 'internasional';
+            if (item.tag === 'kompetisi_internasional') return (c.level || '').toLowerCase() === 'internasional';
+            if (item.tag === 'media_creative') return c.category === 'Program Pelatihan & Sertifikasi';
+            if (item.tag === 'internship_web') return (c.title || '').toLowerCase().includes('web') || (c.desc || '').toLowerCase().includes('web');
+            if (item.tag === 'pekerjaan_multimedia') return (c.title || '').toLowerCase().includes('multimedia') || (c.category || '').includes('Job');
+            if (item.tag === 'narasumber_mkt') return (c.title || '').toLowerCase().includes('marketing') || (c.title || '').toLowerCase().includes('mkt');
+            if (item.tag === 'narasumber_video') return (c.title || '').toLowerCase().includes('video');
+            return false;
+          }).length;
+          item.count = matchCount + 'x';
+        }
+      });
+
+      renderAdminCertRecap();
+      if (doSave) {
+        saveAdminCertRecap(false);
+      }
+    }
+
+    async function saveAdminCertRecap(showToast = true) {
+      await executeUniversalSave('fathur_portfolio_cert_recap', currentCertRecapConfig, { label: 'Rekapitulasi Prestasi Section 02' });
+      renderAdminCertRecap();
+      if (showToast) {
+        notifyDataSaved('Pengaturan Rekapitulasi Section 02 berhasil disimpan!');
+      }
+    }
+
+    function resetAdminCertRecapToDefault() {
+      if (confirm('Kembalikan setelan 8 kotak rekapitulasi Section 02 ke setelan awal resmi?')) {
+        currentCertRecapConfig = JSON.parse(JSON.stringify(DEFAULT_CERT_RECAP));
+        saveAdminCertRecap(true);
+      }
     }
 
     /* ============================================================== */
@@ -6796,16 +7115,17 @@ create policy "Public Access" on portfolio_store for all using (true) with check
 
     /* Storage engine initialized at top of script */
 
-    // Helper to compress custom logo to 64x64px
+    // Helper to compress custom logo to 48x48px (retina-sharp for 24px icon, ~1KB)
     function compressLogoDataUrl(dataUrl, callback) {
-      if (!dataUrl || dataUrl.length < 4000) return callback(dataUrl);
+      if (!dataUrl) return callback('');
       const img = new Image();
       img.onload = function() {
         const canvas = document.createElement('canvas');
-        canvas.width = 64;
-        canvas.height = 64;
+        canvas.width = 48;
+        canvas.height = 48;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, 64, 64);
+        ctx.clearRect(0, 0, 48, 48);
+        ctx.drawImage(img, 0, 0, 48, 48);
         const compressed = canvas.toDataURL('image/png');
         callback(compressed || dataUrl);
       };
@@ -6872,39 +7192,9 @@ function loadAdminToolsData() {
         }
       });
 
-      // Always save full copy to IndexedDB (virtually unlimited quota)
-      await portfolioIdbSet('fathur_portfolio_tools_data', adminToolsData);
-
-      // Attempt to save to localStorage
-      try {
-        localStorage.setItem('fathur_portfolio_tools_data', JSON.stringify(adminToolsData));
-        notifyDataSaved('Daftar logo tool & aplikasi berhasil disimpan!');
-        renderAdminToolsList();
-      } catch (e) {
-        console.warn('LocalStorage quota reached, optimizing payload for high-capacity storage:', e);
-        // Quota exceeded: compress and save lightweight version to localStorage
-        try {
-          const lightweight = JSON.parse(JSON.stringify(adminToolsData));
-          ['webTools', 'designTools', 'videoTools'].forEach(cat => {
-            if (Array.isArray(lightweight[cat])) {
-              lightweight[cat].forEach(item => {
-                if (item.logo && item.logo.length > 2000) {
-                  // Keep only essential info in localStorage; IndexedDB holds the full version
-                  item.logo = ''; 
-                }
-              });
-            }
-          });
-          lightweight.__saved_idb__ = true;
-          localStorage.setItem('fathur_portfolio_tools_data', JSON.stringify(lightweight));
-          notifyDataSaved('Daftar logo tool berhasil disimpan (Tersimpan aman di IndexedDB)!');
-          renderAdminToolsList();
-        } catch (e2) {
-          // If localStorage is completely full from other keys, IndexedDB still has it!
-          notifyDataSaved('Daftar logo tool berhasil disimpan di penyimpanan aman!');
-          renderAdminToolsList();
-        }
-      }
+      // Execute Universal Save (IndexedDB + LocalStorage with quota protection + Supabase + Broadcast)
+      await executeUniversalSave('fathur_portfolio_tools_data', adminToolsData, { label: 'Logo Tool & Aplikasi' });
+      renderAdminToolsList();
     }
 
     function resetAdminToolsToDefault() {
