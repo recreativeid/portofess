@@ -2,7 +2,29 @@
 <html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta id="portfolioViewportMeta" name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    /* PRE-RENDER VIEWPORT SCALING FOR MOBILE (MODE MINIATUR PC) */
+    (function() {
+      try {
+        var savedMode = localStorage.getItem('fathur_portfolio_view_mode') || 'desktop';
+        var sw = window.screen.width;
+        var sh = window.screen.height;
+        var isMobile = (Math.min(sw, sh) < 1200) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        if (savedMode === 'desktop' && isMobile) {
+          var targetW = 1240;
+          var curW = (Math.abs(window.orientation || 0) === 90) ? Math.max(sw, sh) : Math.min(sw, sh);
+          if (!curW || curW > targetW || curW <= 0) curW = sw || 390;
+          var scale = Math.min(1, curW / targetW).toFixed(4);
+          var meta = document.getElementById('portfolioViewportMeta');
+          if (meta) {
+            meta.setAttribute('content', 'width=' + targetW + ', initial-scale=' + scale + ', minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes');
+          }
+          document.documentElement.classList.add('mode-miniatur-pc');
+        }
+      } catch(e) {}
+    })();
+  </script>
   <title>Muhammad Fathur Rohman — Interactive 3D Tactile & Editorial Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -40,6 +62,16 @@
       --grid-major: rgba(27, 79, 140, 0.09);
       --grid-minor: rgba(27, 79, 140, 0.04);
       --ink: #171717;
+    }
+
+    /* MODE MINIATUR PC PRECISE DESKTOP SCALING ON MOBILE */
+    html.mode-miniatur-pc body,
+    body.miniatur-pc-active {
+      min-width: 1240px !important;
+      width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-text-size-adjust: 100% !important;
+      text-size-adjust: 100% !important;
     }
 
     @keyframes cinematicBlurReveal {
@@ -1230,9 +1262,16 @@
         <a href="#executive-closing" id="navItemSec07" onclick="switchPageView('mainLandingView')" class="hover:text-crimson transition-colors">07 Profil Eksekutif</a>
       </nav>
 
-      <!-- Controls on Right: Toggle Blur Animation & Theme Palette -->
+      <!-- Controls on Right: View Mode Toggle, Blur Animation Toggle & Theme Palette -->
       <div class="flex items-center gap-2 shrink-0">
         
+        <!-- Tombol Ubah Mode Tampilan (💻 Mode PC Miniatur vs 📱 Mode HP Responsif) -->
+        <button id="toggleViewModeBtn" type="button" onclick="togglePortfolioViewMode()" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white/95 dark:bg-stone-900/95 text-stone-800 dark:text-white text-xs font-bold shadow-xs hover:border-[#155293] hover:text-[#155293] transition flex items-center gap-1.5 cursor-pointer" title="Ubah Mode Tampilan: Mode PC (Miniatur Desktop) atau Mode HP (Responsif)">
+          <span id="viewModeIcon">💻</span>
+          <span id="viewModeLabel" class="hidden xs:inline">Mode PC</span>
+          <span class="xs:hidden">PC</span>
+        </button>
+
         <!-- Tombol Matikan / Hidupkan Animasi Scroll Blur -->
         <button id="toggleScrollBlurBtn" type="button" onclick="toggleScrollBlurAnimation()" class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white/95 dark:bg-stone-900/95 text-stone-800 dark:text-white text-xs font-bold shadow-xs hover:border-[#155293] hover:text-[#155293] transition flex items-center gap-1.5 cursor-pointer" title="Matikan atau Aktifkan Animasi Scroll Blur">
           <span id="scrollBlurDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse inline-block shadow-xs"></span>
@@ -1271,6 +1310,18 @@
               <button type="button" onclick="setAccentColor('#7C3AED')" class="w-6 h-6 rounded-full bg-[#7C3AED] border-2 border-white dark:border-stone-800 shadow-xs hover:scale-125 transition cursor-pointer" title="Purple"></button>
               <button type="button" onclick="setAccentColor('#0F172A')" class="w-6 h-6 rounded-full bg-[#0F172A] border-2 border-white dark:border-stone-800 shadow-xs hover:scale-125 transition cursor-pointer" title="Dark Slate"></button>
             </div>
+          </div>
+          <div class="pt-2 border-t border-stone-100 dark:border-stone-800">
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 block mb-1.5">Tata Letak di Layar HP:</span>
+            <div class="grid grid-cols-2 gap-2 text-[11px] font-bold">
+              <button id="btnViewDesktop" type="button" onclick="setPortfolioViewMode('desktop')" class="px-2 py-2 rounded-xl border border-[#155293] bg-blue-50 text-[#155293] text-center transition cursor-pointer shadow-xs flex items-center justify-center gap-1">
+                <span>💻</span> <span>Mode PC</span>
+              </button>
+              <button id="btnViewMobile" type="button" onclick="setPortfolioViewMode('mobile')" class="px-2 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-800 text-center transition cursor-pointer shadow-xs flex items-center justify-center gap-1">
+                <span>📱</span> <span>Mode HP</span>
+              </button>
+            </div>
+            <span class="text-[9.5px] text-stone-400 dark:text-stone-500 block mt-1.5 leading-tight">Mode PC mempertahankan tata letak &amp; kolom persis desktop saat dibuka di layar HP (bisa di-zoom).</span>
           </div>
         </div>
       </div>
@@ -6289,6 +6340,106 @@
     }
 
     /* =================================================================== */
+    /* MODE MINIATUR PC & RESPONSIVE VIEWPORT ENGINE                       */
+    /* =================================================================== */
+    let currentPortfolioViewMode = 'desktop';
+
+    function applyPortfolioViewMode(mode, showToast = false) {
+      const meta = document.getElementById('portfolioViewportMeta') || document.querySelector('meta[name="viewport"]');
+      if (!meta) return;
+      if (!meta.id) meta.id = 'portfolioViewportMeta';
+
+      currentPortfolioViewMode = (mode === 'mobile') ? 'mobile' : 'desktop';
+      try {
+        localStorage.setItem('fathur_portfolio_view_mode', currentPortfolioViewMode);
+      } catch (e) {}
+
+      const btnIcon = document.getElementById('viewModeIcon');
+      const btnLabel = document.getElementById('viewModeLabel');
+      const btnDesktop = document.getElementById('btnViewDesktop');
+      const btnMobile = document.getElementById('btnViewMobile');
+
+      const targetW = 1240;
+      const sw = window.screen.width;
+      const sh = window.screen.height;
+      const isMobile = (Math.min(sw, sh) < 1200) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+      if (currentPortfolioViewMode === 'desktop') {
+        document.documentElement.classList.add('mode-miniatur-pc');
+        document.body.classList.add('miniatur-pc-active');
+
+        if (isMobile) {
+          let curW = (Math.abs(window.orientation || 0) === 90) ? Math.max(sw, sh) : Math.min(sw, sh);
+          if (!curW || curW > targetW || curW <= 0) curW = sw || 390;
+          const scale = Math.min(1, curW / targetW).toFixed(4);
+          meta.setAttribute('content', `width=${targetW}, initial-scale=${scale}, minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes`);
+        } else {
+          meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
+        }
+
+        if (btnIcon) btnIcon.textContent = '💻';
+        if (btnLabel) btnLabel.textContent = 'Mode PC';
+        if (btnDesktop) {
+          btnDesktop.className = 'px-2 py-2 rounded-xl border border-[#155293] bg-blue-50 text-[#155293] text-center transition cursor-pointer shadow-xs flex items-center justify-center gap-1';
+        }
+        if (btnMobile) {
+          btnMobile.className = 'px-2 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-800 text-center transition cursor-pointer shadow-xs flex items-center justify-center gap-1';
+        }
+
+        if (showToast) showPortfolioToast('💻 Mode Miniatur PC aktif: Tatanan persis desktop & bisa di-zoom.');
+      } else {
+        document.documentElement.classList.remove('mode-miniatur-pc');
+        document.body.classList.remove('miniatur-pc-active');
+        meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
+
+        if (btnIcon) btnIcon.textContent = '📱';
+        if (btnLabel) btnLabel.textContent = 'Mode HP';
+        if (btnDesktop) {
+          btnDesktop.className = 'px-2 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-800 text-center transition cursor-pointer shadow-xs flex items-center justify-center gap-1';
+        }
+        if (btnMobile) {
+          btnMobile.className = 'px-2 py-2 rounded-xl border border-[#155293] bg-blue-50 text-[#155293] text-center transition cursor-pointer shadow-xs flex items-center justify-center gap-1';
+        }
+
+        if (showToast) showPortfolioToast('📱 Mode Responsif HP aktif.');
+      }
+    }
+
+    function togglePortfolioViewMode() {
+      applyPortfolioViewMode(currentPortfolioViewMode === 'desktop' ? 'mobile' : 'desktop', true);
+    }
+
+    function setPortfolioViewMode(mode) {
+      applyPortfolioViewMode(mode, true);
+      const menu = document.getElementById('themePaletteMenu');
+      if (menu) menu.classList.add('hidden');
+    }
+
+    // Auto update scale on resize / orientation flip
+    let viewResizeTimer = null;
+    window.addEventListener('resize', () => {
+      if (currentPortfolioViewMode === 'desktop') {
+        clearTimeout(viewResizeTimer);
+        viewResizeTimer = setTimeout(() => {
+          applyPortfolioViewMode('desktop', false);
+        }, 150);
+      }
+    });
+    window.addEventListener('orientationchange', () => {
+      if (currentPortfolioViewMode === 'desktop') {
+        setTimeout(() => {
+          applyPortfolioViewMode('desktop', false);
+        }, 200);
+      }
+    });
+
+    // Boot view mode state on startup
+    try {
+      const savedView = localStorage.getItem('fathur_portfolio_view_mode') || 'desktop';
+      applyPortfolioViewMode(savedView, false);
+    } catch (e) {}
+
+    /* =================================================================== */
     /* 3-SECOND BIDIRECTIONAL SCROLL BLUR OBSERVER                         */
     /* =================================================================== */
     function initBidirectionalScrollBlur() {
@@ -6462,6 +6613,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       initBidirectionalScrollBlur();
+      applyPortfolioViewMode(currentPortfolioViewMode, false);
       if (window.location.hash === '#admin') {
         openSecretAdminModal();
       }
