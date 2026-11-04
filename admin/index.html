@@ -296,6 +296,14 @@
             </div>
             <span class="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600">Kontak</span>
           </button>
+
+          <button onclick="switchAdminTab('cv')" data-tab="cv" id="navBtn-cv" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span class="font-bold">Kelola CV (ATS)</span>
+            </div>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">Auto</span>
+          </button>
         </div>
 
         <!-- Navigation Group 3: JARINGAN & SISTEM -->
@@ -2003,6 +2011,199 @@
         </div>
 
         <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- TAB: KELOLA & PRATINJAU CV / RESUME PROFESIONAL (ATS-FRIENDLY) -->
+        <!-- ============================================================== -->
+        <div id="tabContent-cv" class="admin-tab-pane hidden space-y-6">
+          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                  <h3 class="font-display font-extrabold text-lg text-slate-900">Kelola &amp; Pratinjau Curriculum Vitae (ATS-Friendly)</h3>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Dihitung otomatis secara live dari database proyek web, sertifikat, medsos, dan peta rute. Dapat disesuaikan sewaktu-waktu.</p>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <button type="button" onclick="resetAdminCvDefaults()" class="px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition cursor-pointer">
+                  🔄 Reset Standar ATS
+                </button>
+                <button type="button" onclick="previewAdminCvPrint()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                  <span>Uji Cetak / PDF</span>
+                </button>
+                <button type="button" onclick="saveAdminCvCustomData()" class="px-5 py-2 rounded-xl bg-[#155293] hover:bg-blue-800 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  <span>Simpan Perubahan CV</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Auto-Recap Indicator Strip -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#155293] block mb-2">
+                ● STATUS REKAPITULASI LIVE OTOMATIS (TERHUBUNG KE SISTEM):
+              </span>
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <div id="adminCvStatProjects" class="text-base font-black text-[#155293]">14+</div>
+                  <div class="text-[10px] font-bold text-slate-700">Proyek Web</div>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <div id="adminCvStatCerts" class="text-base font-black text-amber-600">22+</div>
+                  <div class="text-[10px] font-bold text-slate-700">Sertifikat Resmi</div>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <div id="adminCvStatFeeds" class="text-base font-black text-rose-600">40+</div>
+                  <div class="text-[10px] font-bold text-slate-700">Desain Portofolio</div>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <div id="adminCvStatVideos" class="text-base font-black text-purple-600">16+</div>
+                  <div class="text-[10px] font-bold text-slate-700">Video &amp; Reels</div>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <div id="adminCvStatRoutes" class="text-base font-black text-sky-600">10+</div>
+                  <div class="text-[10px] font-bold text-slate-700">Rute Klien</div>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-200">
+                  <div class="text-base font-black text-emerald-600">3.76</div>
+                  <div class="text-[10px] font-bold text-slate-700">IPK Cum Laude</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Two Column: Editor vs Live Preview -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              <!-- LEFT COLUMN (FORM CONTROLS): 5 COLS -->
+              <div class="lg:col-span-5 space-y-4">
+                <div>
+                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Headline &amp; Jabatan Target:</label>
+                  <input id="adminCvInpHeadline" type="text" oninput="updateAdminCvLivePreview()" placeholder="Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold outline-none focus:border-[#155293]" />
+                </div>
+
+                <div>
+                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Status Ketersediaan Rekrutmen:</label>
+                  <input id="adminCvInpStatus" type="text" oninput="updateAdminCvLivePreview()" placeholder="Siap Bekerja Segera · Full-Time / Kontrak / Remote Ready" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold outline-none focus:border-[#155293]" />
+                </div>
+
+                <div>
+                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Ringkasan Profesional (ATS Executive Summary):</label>
+                  <textarea id="adminCvInpSummary" rows="6" oninput="updateAdminCvLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-[#155293] leading-relaxed" placeholder="Tuliskan ringkasan profesional Anda..."></textarea>
+                  <p class="text-[10px] text-slate-400 mt-1">Gunakan kata kunci teknis (React, Next.js, Laravel, Supabase, UI/UX, Cum Laude) agar lolos screening ATS HRD secara optimal.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Email Resmi:</label>
+                    <input id="adminCvInpEmail" type="email" oninput="updateAdminCvLivePreview()" placeholder="hyungkun.co@gmail.com" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">WhatsApp Personal:</label>
+                    <input id="adminCvInpPhone" type="text" oninput="updateAdminCvLivePreview()" placeholder="+62 895-3931-81822" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Domisili &amp; Lokasi Kerja:</label>
+                  <input id="adminCvInpLocation" type="text" oninput="updateAdminCvLivePreview()" placeholder="Magelang, Jawa Tengah (Siap Relokasi &amp; Remote)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-[#155293]" />
+                </div>
+              </div>
+
+              <!-- RIGHT COLUMN (LIVE ATS CV PREVIEW): 7 COLS -->
+              <div class="lg:col-span-7 bg-slate-100 p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-inner">
+                <div class="flex items-center justify-between mb-3 text-xs">
+                  <span class="font-bold text-slate-700 font-display">Pratinjau Langsung (A4 Paper Rendering)</span>
+                  <span class="text-[10px] font-mono text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-bold">Live Synchronized</span>
+                </div>
+
+                <!-- Scaled Paper Preview Container -->
+                <div id="adminCvPreviewCard" class="bg-white text-slate-800 rounded-xl p-5 sm:p-6 shadow-md border border-slate-200 text-xs space-y-4 max-h-[600px] overflow-y-auto font-sans leading-relaxed">
+                  <!-- Header -->
+                  <div class="border-b border-slate-800 pb-3 flex justify-between items-start gap-3">
+                    <div>
+                      <h4 class="font-black text-slate-900 text-base uppercase tracking-tight">MUHAMMAD FATHUR ROHMAN, S.Kom</h4>
+                      <p id="adminCvPrevHeadline" class="text-xs font-bold text-[#155293] mt-0.5">Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist</p>
+                      <div class="mt-1">
+                        <span id="adminCvPrevStatus" class="inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-mono font-bold">Siap Bekerja Segera · Full-Time / Kontrak / Remote</span>
+                      </div>
+                    </div>
+                    <div class="text-[9px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200 shrink-0">
+                      <div>✉️ <span id="adminCvPrevEmail" class="font-semibold text-blue-700">hyungkun.co@gmail.com</span></div>
+                      <div>📱 <span id="adminCvPrevPhone" class="font-semibold text-emerald-700">+62 895-3931-81822</span></div>
+                      <div>📍 <span id="adminCvPrevLoc" class="font-semibold">Magelang, Jawa Tengah</span></div>
+                    </div>
+                  </div>
+
+                  <!-- Metrics -->
+                  <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-center grid grid-cols-3 sm:grid-cols-6 gap-1.5 text-[9px]">
+                    <div class="bg-white p-1 rounded border border-slate-200">
+                      <div id="adminCvPrevMetricProj" class="font-black text-[#155293] text-xs">14+</div>
+                      <div class="text-slate-600 font-bold">Proyek Web</div>
+                    </div>
+                    <div class="bg-white p-1 rounded border border-slate-200">
+                      <div id="adminCvPrevMetricCert" class="font-black text-amber-600 text-xs">22+</div>
+                      <div class="text-slate-600 font-bold">Sertifikat</div>
+                    </div>
+                    <div class="bg-white p-1 rounded border border-slate-200">
+                      <div id="adminCvPrevMetricFeed" class="font-black text-rose-600 text-xs">40+</div>
+                      <div class="text-slate-600 font-bold">Desain</div>
+                    </div>
+                    <div class="bg-white p-1 rounded border border-slate-200">
+                      <div id="adminCvPrevMetricVid" class="font-black text-purple-600 text-xs">16+</div>
+                      <div class="text-slate-600 font-bold">Video</div>
+                    </div>
+                    <div class="bg-white p-1 rounded border border-slate-200">
+                      <div id="adminCvPrevMetricRoute" class="font-black text-sky-600 text-xs">10+</div>
+                      <div class="text-slate-600 font-bold">Rute Klien</div>
+                    </div>
+                    <div class="bg-white p-1 rounded border border-slate-200">
+                      <div class="font-black text-emerald-600 text-xs">3.76</div>
+                      <div class="text-slate-600 font-bold">Cum Laude</div>
+                    </div>
+                  </div>
+
+                  <!-- Summary -->
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">🎯 Ringkasan Profesional:</span>
+                    <p id="adminCvPrevSummary" class="text-[11px] text-slate-700 leading-relaxed text-justify">
+                      Lulusan Sarjana Teknik Informatika (S.Kom) dari Universitas Muhammadiyah Magelang dengan predikat Cum Laude (IPK 3.76)...
+                    </p>
+                  </div>
+
+                  <!-- Tech Stack -->
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">⚡ Kompetensi Teknis:</span>
+                    <p class="text-[10px] text-slate-600 leading-relaxed">
+                      React.js, Next.js, TypeScript, PHP (Laravel), PostgreSQL, Supabase, MySQL, Tailwind CSS, Figma UI/UX, Adobe Photoshop/Illustrator, Git/GitHub.
+                    </p>
+                  </div>
+
+                  <!-- Experience -->
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">💼 Pengalaman Unggulan:</span>
+                    <div class="text-[10px] space-y-1 text-slate-700">
+                      <div><strong>Lead Fullstack Developer &amp; Founder</strong> — Solveta Digital (2023–Sekarang)</div>
+                      <div><strong>Web Developer &amp; IT Support Intern</strong> — BBPMP Jawa Tengah (2024)</div>
+                      <div><strong>Kepala Divisi Media Kreatif</strong> — IMM &amp; BEM Fakultas UNIMMA (2022–2024)</div>
+                    </div>
+                  </div>
+
+                  <!-- Education -->
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">🎓 Pendidikan:</span>
+                    <div class="text-[10px] text-slate-700 flex justify-between">
+                      <span><strong>S1 Teknik Informatika (S.Kom)</strong> — Universitas Muhammadiyah Magelang</span>
+                      <span class="font-bold text-emerald-700">IPK 3.76 (Cum Laude)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <!-- TAB 10: JARINGAN GLOBAL & RUTE KLIEN                           -->
         <!-- ============================================================== -->
         <div id="tabContent-network" class="admin-tab-pane hidden space-y-6">
@@ -3924,6 +4125,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       }
 
       loadSupabaseConfigForm();
+      initAdminCvManager();
       setupFormAutoSaveListeners();
     }
 
@@ -7589,6 +7791,178 @@ function loadAdminToolsData() {
         }
       }, 3000);
     }
-  </script>
+  
+    /* =================================================================== */
+    /* CV / RESUME ATS MANAGEMENT & LIVE SYNC ENGINE                       */
+    /* =================================================================== */
+    const DEFAULT_CV_DATA = {
+      headline: 'Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist',
+      status: 'Siap Bekerja Segera · Full-Time / Kontrak / Remote Ready',
+      summary: 'Lulusan Sarjana Teknik Informatika (S.Kom) dari Universitas Muhammadiyah Magelang dengan predikat Cum Laude (IPK 3.76). Berpengalaman lebih dari 3 tahun dalam merancang dan mengembangkan aplikasi web fullstack berskala modern (React, Next.js, PHP, Laravel, Tailwind CSS, PostgreSQL, Supabase, MySQL) serta spesialisasi desain antarmuka (UI/UX) dan multimedia kreatif. Memiliki rekam jejak terverifikasi memenangkan kejuaraan bergengsi tingkat nasional dan internasional, termasuk Juara 1 AI System Challenge (AISC) dan UI/UX Design Competition. Terbiasa memimpin tim teknis, memecahkan masalah arsitektur sistem yang kompleks, dan mengoptimalkan performa web hingga 99% Core Web Vitals. Siap berkontribusi maksimal untuk posisi Fullstack Web Developer, Frontend Engineer, maupun Digital Creative Lead.',
+      email: 'hyungkun.co@gmail.com',
+      phone: '+62 895-3931-81822',
+      location: 'Magelang, Jawa Tengah (Siap Relokasi & Remote)'
+    };
+
+    function getAdminCvDynamicMetrics() {
+      const totalProjects = (currentProjects && Array.isArray(currentProjects)) ? currentProjects.length : 14;
+      const totalCertificates = (currentCertificates && Array.isArray(currentCertificates)) ? currentCertificates.length : 22;
+      let totalFeeds = 0;
+      let totalVideos = 0;
+      if (currentCmsData && currentCmsData.accounts) {
+        Object.values(currentCmsData.accounts).forEach(acc => {
+          if (acc && acc.feeds && Array.isArray(acc.feeds)) totalFeeds += acc.feeds.length;
+          if (acc && acc.videos && Array.isArray(acc.videos)) totalVideos += acc.videos.length;
+        });
+      }
+      if (totalFeeds === 0) totalFeeds = 40;
+      if (totalVideos === 0) totalVideos = 16;
+      const totalRoutes = (currentRoutes && Array.isArray(currentRoutes)) ? currentRoutes.length : 10;
+      return { totalProjects, totalCertificates, totalFeeds, totalVideos, totalRoutes };
+    }
+
+    function initAdminCvManager() {
+      let custom = {};
+      try {
+        const stored = localStorage.getItem('fathur_portfolio_cv_custom_v1');
+        if (stored) custom = JSON.parse(stored);
+      } catch (e) {}
+
+      const merged = { ...DEFAULT_CV_DATA, ...custom };
+
+      const inpH = document.getElementById('adminCvInpHeadline');
+      if (inpH) inpH.value = merged.headline;
+      const inpSt = document.getElementById('adminCvInpStatus');
+      if (inpSt) inpSt.value = merged.status;
+      const inpSm = document.getElementById('adminCvInpSummary');
+      if (inpSm) inpSm.value = merged.summary;
+      const inpEm = document.getElementById('adminCvInpEmail');
+      if (inpEm) inpEm.value = merged.email;
+      const inpPh = document.getElementById('adminCvInpPhone');
+      if (inpPh) inpPh.value = merged.phone;
+      const inpLoc = document.getElementById('adminCvInpLocation');
+      if (inpLoc) inpLoc.value = merged.location;
+
+      updateAdminCvLivePreview();
+    }
+
+    function updateAdminCvLivePreview() {
+      const metrics = getAdminCvDynamicMetrics();
+
+      // Update counters in strip & preview
+      const statP = document.getElementById('adminCvStatProjects');
+      if (statP) statP.textContent = metrics.totalProjects + '+';
+      const prevP = document.getElementById('adminCvPrevMetricProj');
+      if (prevP) prevP.textContent = metrics.totalProjects + '+';
+
+      const statC = document.getElementById('adminCvStatCerts');
+      if (statC) statC.textContent = metrics.totalCertificates + '+';
+      const prevC = document.getElementById('adminCvPrevMetricCert');
+      if (prevC) prevC.textContent = metrics.totalCertificates + '+';
+
+      const statF = document.getElementById('adminCvStatFeeds');
+      if (statF) statF.textContent = metrics.totalFeeds + '+';
+      const prevF = document.getElementById('adminCvPrevMetricFeed');
+      if (prevF) prevF.textContent = metrics.totalFeeds + '+';
+
+      const statV = document.getElementById('adminCvStatVideos');
+      if (statV) statV.textContent = metrics.totalVideos + '+';
+      const prevV = document.getElementById('adminCvPrevMetricVid');
+      if (prevV) prevV.textContent = metrics.totalVideos + '+';
+
+      const statR = document.getElementById('adminCvStatRoutes');
+      if (statR) statR.textContent = metrics.totalRoutes + '+';
+      const prevR = document.getElementById('adminCvPrevMetricRoute');
+      if (prevR) prevR.textContent = metrics.totalRoutes + '+';
+
+      // Live text updates
+      const inpH = document.getElementById('adminCvInpHeadline');
+      const prevH = document.getElementById('adminCvPrevHeadline');
+      if (inpH && prevH) prevH.textContent = inpH.value || DEFAULT_CV_DATA.headline;
+
+      const inpSt = document.getElementById('adminCvInpStatus');
+      const prevSt = document.getElementById('adminCvPrevStatus');
+      if (inpSt && prevSt) prevSt.textContent = inpSt.value || DEFAULT_CV_DATA.status;
+
+      const inpSm = document.getElementById('adminCvInpSummary');
+      const prevSm = document.getElementById('adminCvPrevSummary');
+      if (inpSm && prevSm) prevSm.textContent = inpSm.value || DEFAULT_CV_DATA.summary;
+
+      const inpEm = document.getElementById('adminCvInpEmail');
+      const prevEm = document.getElementById('adminCvPrevEmail');
+      if (inpEm && prevEm) prevEm.textContent = inpEm.value || DEFAULT_CV_DATA.email;
+
+      const inpPh = document.getElementById('adminCvInpPhone');
+      const prevPh = document.getElementById('adminCvPrevPhone');
+      if (inpPh && prevPh) prevPh.textContent = inpPh.value || DEFAULT_CV_DATA.phone;
+
+      const inpLoc = document.getElementById('adminCvInpLocation');
+      const prevLoc = document.getElementById('adminCvPrevLoc');
+      if (inpLoc && prevLoc) prevLoc.textContent = inpLoc.value || DEFAULT_CV_DATA.location;
+    }
+
+    function saveAdminCvCustomData() {
+      const custom = {
+        headline: document.getElementById('adminCvInpHeadline')?.value || DEFAULT_CV_DATA.headline,
+        status: document.getElementById('adminCvInpStatus')?.value || DEFAULT_CV_DATA.status,
+        summary: document.getElementById('adminCvInpSummary')?.value || DEFAULT_CV_DATA.summary,
+        email: document.getElementById('adminCvInpEmail')?.value || DEFAULT_CV_DATA.email,
+        phone: document.getElementById('adminCvInpPhone')?.value || DEFAULT_CV_DATA.phone,
+        location: document.getElementById('adminCvInpLocation')?.value || DEFAULT_CV_DATA.location,
+        updatedAt: new Date().toISOString()
+      };
+
+      saveDataWithQuotaGuard('fathur_portfolio_cv_custom_v1', JSON.stringify(custom)).then(() => {
+        if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.set) {
+          PortfolioCloudDB.set('fathur_portfolio_cv_custom_v1', custom).catch(() => {});
+        }
+        updateAdminCvLivePreview();
+        showAdminToast('Pengaturan CV ATS berhasil disimpan & disinkronkan!', 'success');
+      }).catch(err => {
+        showAdminToast('Gagal menyimpan CV: ' + err.message, 'error');
+      });
+    }
+
+    function resetAdminCvDefaults() {
+      if (!confirm('Apakah Anda yakin ingin mereset konten CV ke format standar ATS rekomendasi?')) return;
+      document.getElementById('adminCvInpHeadline').value = DEFAULT_CV_DATA.headline;
+      document.getElementById('adminCvInpStatus').value = DEFAULT_CV_DATA.status;
+      document.getElementById('adminCvInpSummary').value = DEFAULT_CV_DATA.summary;
+      document.getElementById('adminCvInpEmail').value = DEFAULT_CV_DATA.email;
+      document.getElementById('adminCvInpPhone').value = DEFAULT_CV_DATA.phone;
+      document.getElementById('adminCvInpLocation').value = DEFAULT_CV_DATA.location;
+      updateAdminCvLivePreview();
+      saveAdminCvCustomData();
+    }
+
+    function previewAdminCvPrint() {
+      const card = document.getElementById('adminCvPreviewCard');
+      if (!card) return;
+      const printWindow = window.open('', '_blank', 'width=900,height=1000');
+      if (!printWindow) {
+        alert('Izinkan pop-up peramban untuk melihat pratinjau cetak PDF.');
+        return;
+      }
+      const closeScript = '<' + '/script>';
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Curriculum Vitae - Muhammad Fathur Rohman, S.Kom</title>
+          <` + `script src="https://cdn.tailwindcss.com"></script` + `>
+          <style>
+            @page { size: A4 portrait; margin: 12mm 15mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; background: #fff; color: #1e293b; padding: 20px; }
+          </style>
+        </head>
+        <body onload="window.print()">
+          ${card.outerHTML}
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+
+</script>
 
 </html>

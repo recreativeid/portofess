@@ -1323,6 +1323,55 @@
     body.no-scroll-blur #chapter-multimedia {
       filter: none !important;
     }
+
+    /* =================================================================== */
+    /* ATS-GRADE RESUME / CV PRINT STYLING (A4 PORTRAIT)                   */
+    /* =================================================================== */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #cvPreviewModal,
+      #cvPrintContainer,
+      #cvPrintContainer * {
+        visibility: visible !important;
+      }
+      #cvPreviewModal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+        z-index: 999999 !important;
+      }
+      #cvModalStickyBar {
+        display: none !important;
+      }
+      #cvPrintContainer {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 12mm 15mm;
+      }
+    }
   </style>
   <!-- Three.js 3D Library for Photorealistic Smartphone on Stone Podium -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -2034,13 +2083,23 @@
     <!-- SECTION 03: 03 / MY PROJECT (14 WEBSITE) (SINGLE HEADER TAG ONLY)   -->
     <!-- =================================================================== -->
     <!-- =================================================================== -->
-    <!-- CHAPTER TRANSITION 01: WEB ENGINEER (FULL VIEWPORT SCROLL EXPERIENCE) -->
+    <!-- CHAPTER TRANSITION 01: WEB ENGINEER (MINIMALIST COMPACT DIVIDER)   -->
     <!-- =================================================================== -->
-    <section id="chapter-web-engineer" class="min-h-screen py-32 sm:py-40 flex flex-col justify-center items-center text-center my-20 sm:my-32 relative select-none scroll-blur-section smooth-blur-container">
+    <section id="chapter-web-engineer" class="pt-8 pb-10 sm:pt-12 sm:pb-14 my-3 sm:my-5 flex flex-col justify-center items-center text-center relative select-none scroll-blur-section smooth-blur-container">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div class="cinematic-blur-card text-center space-y-6">
+        <!-- Minimalist Divider Line (Top) -->
+        <div class="w-full flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div class="h-px bg-gradient-to-r from-transparent via-stone-300 dark:via-stone-700 to-stone-200 dark:to-stone-800 flex-1 max-w-xs sm:max-w-sm"></div>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800/90 border border-stone-200 dark:border-stone-700 text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase text-stone-600 dark:text-stone-300 shadow-2xs">
+            <span class="w-2 h-2 rounded-full bg-[#155293] dark:bg-sky-400"></span>
+            <span>Spesialisasi Web Engineer &amp; Core Tech</span>
+          </div>
+          <div class="h-px bg-gradient-to-l from-transparent via-stone-300 dark:via-stone-700 to-stone-200 dark:to-stone-800 flex-1 max-w-xs sm:max-w-sm"></div>
+        </div>
+
+        <div class="cinematic-blur-card text-center space-y-5">
           <div>
-            <h2 id="chapterWebEngineerTitle" class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-3 text-center transition-transform duration-300 ease-out will-change-transform">
+            <h2 id="chapterWebEngineerTitle" class="chapter-gradient-title font-serif italic font-extrabold text-4xl sm:text-6xl md:text-7xl bg-gradient-to-r from-stone-950 via-stone-800 to-stone-500 bg-clip-text text-transparent tracking-tight leading-none mb-2 text-center transition-transform duration-300 ease-out will-change-transform">
               Web Engineer
             </h2>
             <p class="chapter-subtitle text-xs sm:text-sm font-mono font-bold uppercase tracking-widest text-stone-500 text-center">
@@ -2098,13 +2157,20 @@
             </div>
           </div>
         </div>
+
+        <!-- Minimalist Divider Line (Bottom) -->
+        <div class="w-full flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
+          <div class="h-px bg-gradient-to-r from-transparent via-stone-300 dark:via-stone-700 to-transparent flex-1 max-w-md"></div>
+          <span class="text-[9px] font-mono tracking-widest uppercase text-stone-400 dark:text-stone-500 font-semibold">Web Development Portfolio</span>
+          <div class="h-px bg-gradient-to-l from-transparent via-stone-300 dark:via-stone-700 to-transparent flex-1 max-w-md"></div>
+        </div>
       </div>
     </section>
 
     <!-- =================================================================== -->
     <!-- SECTION 03: 03 / MY PROJECT (14 WEBSITE)                           -->
     <!-- =================================================================== -->
-    <section id="my-project" class="py-20 sm:py-28 scroll-blur-section smooth-blur-container">
+    <section id="my-project" class="pt-8 sm:pt-10 pb-20 sm:pb-28 scroll-blur-section smooth-blur-container">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
@@ -4254,36 +4320,291 @@
     </div>
   </div>
 
-  <!-- CV / RESUME REQUEST MODAL (LEAD GENERATOR FOR HR / RECRUITER) -->
-  <div id="cvRequestModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeCvRequestModal()">
-    <div class="bg-white dark:bg-stone-900 rounded-3xl max-w-md w-full p-6 sm:p-7 border border-stone-200 dark:border-stone-800 shadow-2xl relative select-none" onclick="event.stopPropagation()">
-      <button onclick="closeCvRequestModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 dark:hover:text-white p-1 text-sm font-bold cursor-pointer">✕</button>
-      
-      <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-[#155293] dark:text-sky-400 flex items-center justify-center text-2xl mb-4 shadow-xs">
-        📄
+  <!-- =================================================================== -->
+  <!-- ATS-FRIENDLY PROFESSIONAL CV / RESUME PREVIEW & DOWNLOAD MODAL      -->
+  <!-- =================================================================== -->
+  <div id="cvPreviewModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex flex-col items-center justify-start p-2 sm:p-4 overflow-y-auto" onclick="closeCvPreviewModal()">
+    
+    <!-- STICKY TOP ACTION & CONTROL BAR -->
+    <div id="cvModalStickyBar" class="sticky top-2 z-50 w-full max-w-4xl bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border border-slate-200 dark:border-stone-800 rounded-2xl shadow-xl p-3 sm:px-5 sm:py-3.5 mb-3 flex flex-wrap items-center justify-between gap-2.5 transition select-none" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2.5">
+        <span class="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-sky-300 flex items-center justify-center font-bold text-base shrink-0">📄</span>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight">Curriculum Vitae &amp; Resume Resmi</h3>
+            <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 text-[10px] font-mono font-bold">ATS Ready</span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-stone-400 hidden sm:block">Muhammad Fathur Rohman, S.Kom (Cum Laude 3.76) · Live Auto-Updated</p>
+        </div>
       </div>
 
-      <h3 class="font-display font-extrabold text-xl text-ink dark:text-white leading-tight">
-        Curriculum Vitae (PDF)
-      </h3>
-      <p class="text-xs sm:text-[13px] text-stone-600 dark:text-stone-300 mt-2 leading-relaxed">
-        Draf resmi CV &amp; Resume <strong>Muhammad Fathur Rohman, S.Kom</strong> (Fresh Graduate S1 Informatika - Cum Laude) siap dikirimkan langsung ke meja HRD / Recruiter.
-      </p>
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 flex-wrap ml-auto">
+        <!-- Button: Unduh PDF / Cetak -->
+        <button type="button" onclick="printCvDocument()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-[#155293] hover:bg-blue-800 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Cetak atau Simpan sebagai PDF">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Unduh PDF / Cetak</span>
+        </button>
 
-      <div class="mt-5 space-y-2.5">
-        <a id="btnModalRequestCvWa" href="https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20portofolio%20Anda%20dan%20ingin%20meminta%20berkas%20CV%20/%20Resume%20resmi%20(PDF)%20terbaru." target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
-          <span>💬 Minta CV via WhatsApp Langsung</span>
-          <span>↗</span>
+        <!-- Button: WhatsApp Rekrutmen / Diskusi -->
+        <a id="btnCvModalWa" href="https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20dan%20CV%20Anda%20di%20portofolio.%20Saya%20ingin%20mendiskusikan%20peluang%20kerja%20/%20projek%20/%20kolaborasi%20profesional." target="_blank" rel="noopener noreferrer" class="px-3 sm:px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Hubungi personal via WhatsApp untuk tawaran kerja / kerjasama">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
+          <span class="hidden md:inline">WhatsApp Kerja &amp; Bisnis</span>
+          <span class="md:hidden">WhatsApp</span>
         </a>
-        <a id="btnModalRequestCvEmail" href="mailto:hyungkun.co@gmail.com?subject=Permintaan%20Berkas%20CV%20Muhammad%20Fathur%20Rohman&amp;body=Halo%20Fathur,%20kami%20tertarik%20melihat%20portofolio%20Anda%20dan%20ingin%20meminta%20berkas%20CV%20(PDF)%20resmi%20terbaru." class="w-full py-2.5 px-4 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 text-stone-800 dark:text-stone-200 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer">
-          <span>✉️ Kirim Permintaan via Email</span>
-          <span>↗</span>
+
+        <!-- Button: Email Resmi Kerjasama -->
+        <a id="btnCvModalEmail" href="mailto:hyungkun.co@gmail.com?subject=Tawaran%20Peluang%20Kerja%20%26%20Kolaborasi%20Profesional%20-%20Muhammad%20Fathur%20Rohman&amp;body=Halo%20Muhammad%20Fathur%20Rohman,%0A%0ASaya%20telah%20meninjau%20portofolio%20dan%20CV%20resmi%20Anda.%20Kami%20sangat%20tertarik%20dengan%20keahlian%20dan%20pengalaman%20Anda.%0A%0AKami%20ingin%20mengundang%20Anda%20untuk%20mendiskusikan%20peluang%20karir%20/%20projek%20kerjasama%20di%20perusahaan%20kami.%0A%0ATerima%20kasih." class="px-3 sm:px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Kirim email resmi tawaran kerja atau partnership">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span class="hidden md:inline">Email Resmi</span>
+          <span class="md:hidden">Email</span>
         </a>
+
+        <!-- Close Button -->
+        <button type="button" onclick="closeCvPreviewModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-rose-500 hover:text-white text-slate-700 font-extrabold text-sm flex items-center justify-center transition cursor-pointer" title="Tutup Pratinjau">✕</button>
+      </div>
+    </div>
+
+    <!-- CV PAPER CONTAINER (OPTIMIZED FOR HIGH DEFINITION PREVIEW & A4 PRINT) -->
+    <div id="cvPrintContainer" class="w-full max-w-4xl bg-white text-slate-800 rounded-3xl shadow-2xl p-6 sm:p-10 border border-slate-200 font-sans text-left leading-relaxed relative my-2" onclick="event.stopPropagation()">
+      <!-- HEADER CANDIDATE -->
+      <div class="border-b-2 border-slate-800 pb-5 mb-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-display uppercase">
+            Muhammad Fathur Rohman, S.Kom
+          </h1>
+          <p id="cvCandidateHeadline" class="text-sm sm:text-base font-bold text-[#155293] mt-1 tracking-wide">
+            Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist
+          </p>
+          <div class="flex items-center gap-2 mt-2 flex-wrap">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold inline-flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="cvCandidateStatus">Siap Bekerja Segera · Full-Time / Kontrak / Remote Ready</span>
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-mono text-[11px] font-bold">
+              🎓 Cum Laude (IPK 3.76)
+            </span>
+          </div>
+        </div>
+
+        <!-- Contacts Info Grid -->
+        <div class="text-xs space-y-1.5 text-slate-600 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 shrink-0 md:min-w-[260px]">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-700">✉️ Email:</span>
+            <a id="cvCandidateEmail" href="mailto:hyungkun.co@gmail.com" class="font-semibold text-blue-700 hover:underline">hyungkun.co@gmail.com</a>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-700">📱 WhatsApp:</span>
+            <a id="cvCandidatePhone" href="https://wa.me/62895393181822" target="_blank" class="font-semibold text-emerald-700 hover:underline">+62 895-3931-81822</a>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-700">📍 Lokasi:</span>
+            <span id="cvCandidateLocation" class="font-semibold text-slate-800">Magelang, Jawa Tengah (Siap Relokasi)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-700">🌐 Portofolio:</span>
+            <a href="https://recreativeid.github.io/portofess/" target="_blank" class="font-semibold text-blue-700 hover:underline">recreativeid.github.io/portofess/</a>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-700">💻 GitHub:</span>
+            <a href="https://github.com/recreativeid" target="_blank" class="font-semibold text-blue-700 hover:underline">github.com/recreativeid</a>
+          </div>
+        </div>
       </div>
 
-      <p class="text-[10px] font-mono text-stone-400 text-center mt-4">
-        🟢 Open to Work · Full-Time, Kontrak, &amp; Relokasi / Remote Ready
-      </p>
+      <!-- DYNAMIC METRICS STRIP (AUTO-RECAP LIVE PORTFOLIO) -->
+      <div class="mb-6 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#155293]">
+            REKAPITULASI RESMI &amp; PENCAPAIAN PORTOFOLIO LIVE
+          </span>
+          <span class="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+            ● Real-Time Calculated
+          </span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div id="cvMetricProjects" class="text-xl sm:text-2xl font-black text-[#155293]">14+</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Proyek Web</div>
+            <div class="text-[9px] text-slate-500">Live &amp; Enterprise</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div id="cvMetricCerts" class="text-xl sm:text-2xl font-black text-amber-600">22+</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Sertifikasi &amp; Prestasi</div>
+            <div class="text-[9px] text-slate-500">Nasional &amp; Juara</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div id="cvMetricFeeds" class="text-xl sm:text-2xl font-black text-rose-600">40+</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Karya Desain</div>
+            <div class="text-[9px] text-slate-500">UI/UX &amp; Branding</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div id="cvMetricVideos" class="text-xl sm:text-2xl font-black text-purple-600">16+</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Video &amp; Reels</div>
+            <div class="text-[9px] text-slate-500">Creative Motion</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div id="cvMetricRoutes" class="text-xl sm:text-2xl font-black text-sky-600">10+</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Rute Klien</div>
+            <div class="text-[9px] text-slate-500">Global &amp; Domestik</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+            <div class="text-xl sm:text-2xl font-black text-emerald-600">3.76</div>
+            <div class="text-[11px] font-bold text-slate-700 mt-0.5">IPK Cum Laude</div>
+            <div class="text-[9px] text-slate-500">S1 Teknik Informatika</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RINGKASAN PROFESIONAL (ATS-FRIENDLY EXECUTIVE SUMMARY) -->
+      <div class="mb-6">
+        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2 flex items-center gap-1.5">
+          <span>🎯</span>
+          <span>Ringkasan Profesional &amp; Nilai Tambah</span>
+        </h2>
+        <p id="cvCandidateSummary" class="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify">
+          Lulusan Sarjana Teknik Informatika (S.Kom) dari Universitas Muhammadiyah Magelang dengan predikat Cum Laude (IPK 3.76). Berpengalaman lebih dari 3 tahun dalam merancang dan mengembangkan aplikasi web fullstack berskala modern (React, Next.js, PHP, Laravel, Tailwind CSS, PostgreSQL, Supabase, MySQL) serta spesialisasi desain antarmuka (UI/UX) dan multimedia kreatif. Memiliki rekam jejak terverifikasi memenangkan kejuaraan bergengsi tingkat nasional dan internasional, termasuk Juara 1 AI System Challenge (AISC) dan UI/UX Design Competition. Terbiasa memimpin tim teknis, memecahkan masalah arsitektur sistem yang kompleks, dan mengoptimalkan performa web hingga 99% Core Web Vitals. Siap berkontribusi maksimal untuk posisi Fullstack Web Developer, Frontend Engineer, maupun Digital Creative Lead.
+        </p>
+      </div>
+
+      <!-- KEAHLIAN UTAMA & TECH STACK -->
+      <div class="mb-6">
+        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2.5 flex items-center gap-1.5">
+          <span>⚡</span>
+          <span>Kompetensi Teknis &amp; Alat Kerja</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block mb-1">Pengembangan Web (Frontend &amp; UI):</span>
+            <p class="text-slate-600 leading-normal">
+              React.js, Next.js, JavaScript (ES6+), TypeScript, HTML5, CSS3, Tailwind CSS, Bootstrap 5, Vite, Responsive Design, State Management, Core Web Vitals.
+            </p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block mb-1">Backend &amp; Arsitektur Data:</span>
+            <p class="text-slate-600 leading-normal">
+              PHP (Laravel, Native), Node.js, RESTful API Development, PostgreSQL, Supabase, MySQL, IndexedDB, Firebase, JSON Architecture, Auth &amp; Session.
+            </p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block mb-1">Desain Antarmuka &amp; Multimedia:</span>
+            <p class="text-slate-600 leading-normal">
+              Figma (Wireframing, High-Fidelity UI/UX &amp; Prototyping), Adobe Photoshop, Illustrator, Premiere Pro, Canva Pro, Brand Identity, Motion Design.
+            </p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block mb-1">DevOps, Workflow &amp; AI:</span>
+            <p class="text-slate-600 leading-normal">
+              Git / GitHub, CI/CD Pipeline, XAMPP, cPanel, Cloudflare, Postman, AI Assisted Engineering (Antigravity / Cursor), Problem Solving.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENGALAMAN KERJA & JEJAK KARIER -->
+      <div class="mb-6">
+        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-3 flex items-center gap-1.5">
+          <span>💼</span>
+          <span>Pengalaman Kerja &amp; Rekam Jejak Proyek</span>
+        </h2>
+        <div class="space-y-3.5 text-xs">
+          <!-- Item 1 -->
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-slate-900">
+              <span class="text-sm font-display text-[#155293]">Lead Fullstack Developer &amp; Tech Specialist</span>
+              <span class="text-[11px] font-mono text-slate-500">2023 – Sekarang | Magelang / Remote</span>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-600 mb-1">Solveta Digital &amp; Recreative Studio (Creative Agency)</div>
+            <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed">
+              <li>Merancang dan mendevelop 14+ platform web interaktif, company profile, dashboard CRM, dan portal edukasi modern.</li>
+              <li>Mengimplementasikan arsitektur database Supabase/PostgreSQL dengan auto-sync data engine dan perlindungan kuota IndexedDB.</li>
+              <li>Mengoptimalkan performa frontend dan responsive mobile layout yang identik 100% dengan pengalaman desktop.</li>
+            </ul>
+          </div>
+
+          <!-- Item 2 -->
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-slate-900">
+              <span class="text-sm font-display text-[#155293]">Web Developer &amp; IT Support Intern</span>
+              <span class="text-[11px] font-mono text-slate-500">2024 | Semarang, Jawa Tengah</span>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-600 mb-1">Balai Besar Penjaminan Mutu Pendidikan (BBPMP) Provinsi Jawa Tengah</div>
+            <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed">
+              <li>Membantu digitalisasi dan pemeliharaan sistem informasi mutu pendidikan berbasis web instansi pemerintah.</li>
+              <li>Mendukung troubleshooting infrastruktur jaringan lokal dan konfigurasi server basis data internal.</li>
+            </ul>
+          </div>
+
+          <!-- Item 3 -->
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-slate-900">
+              <span class="text-sm font-display text-[#155293]">Kepala Divisi Media Kreatif &amp; Multimedia</span>
+              <span class="text-[11px] font-mono text-slate-500">2022 – 2024 | Magelang</span>
+            </div>
+            <div class="text-[11px] font-semibold text-slate-600 mb-1">Ikatan Mahasiswa Muhammadiyah (IMM) &amp; BEM Fakultas UNIMMA</div>
+            <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed">
+              <li>Memimpin tim kreatif dalam perancangan aset grafis, publikasi resmi media sosial, dan video promosi event berskala regional.</li>
+              <li>Menghasilkan puluhan aset branding dan dokumenter sinematik yang meningkatkan engagement audiens secara signifikan.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRESTASI & KEJUARAAN UNGGULAN -->
+      <div class="mb-6">
+        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2.5 flex items-center gap-1.5">
+          <span>🏆</span>
+          <span>Prestasi Terverifikasi &amp; Kejuaraan Resmi</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block">🥇 Juara 1 — AI System Challenge (AISC)</span>
+            <span class="text-[11px] text-slate-600">Inovasi Arsitektur Web &amp; Sistem Cerdas Berkelanjutan.</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block">🥇 Juara 1 — UI/UX Design Competition UNIMMA</span>
+            <span class="text-[11px] text-slate-600">Perancangan Antarmuka Aplikasi Digital Ramah Pengguna.</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block">🥈 Juara 2 — National UI/UX Design Mercomfest</span>
+            <span class="text-[11px] text-slate-600">Kompetisi Desain Pengalaman Pengguna Tingkat Nasional.</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="font-bold text-slate-900 block">📜 Cisco Certified Network Associate (CCNA)</span>
+            <span class="text-[11px] text-slate-600">Sertifikasi Internasional Jaringan &amp; Infrastruktur Cisco.</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 sm:col-span-2">
+            <span class="font-bold text-slate-900 block">🎤 Narasumber &amp; Mentor Pelatihan Digital Creative</span>
+            <span class="text-[11px] text-slate-600">Pemateri workshop desain grafis, pembuatan konten video, dan teknik pengoptimalan portofolio digital.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENDIDIKAN FORMAL -->
+      <div class="mb-4">
+        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2 flex items-center gap-1.5">
+          <span>🎓</span>
+          <span>Pendidikan Formal</span>
+        </h2>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs">
+          <div>
+            <h3 class="font-display font-bold text-sm text-slate-900">Universitas Muhammadiyah Magelang (UNIMMA)</h3>
+            <p class="text-slate-600 font-semibold">Sarjana Komputer (S.Kom) — Program Studi S1 Teknik Informatika</p>
+          </div>
+          <div class="sm:text-right mt-1 sm:mt-0 font-mono text-xs">
+            <span class="font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-block">
+              IPK: 3.76 / 4.00 (Cum Laude)
+            </span>
+            <div class="text-[11px] text-slate-500 mt-0.5">2021 – 2025</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER NOTE -->
+      <div class="border-t border-slate-200 pt-3 text-[10px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+        <span>© 2026 Muhammad Fathur Rohman, S.Kom · Dihasilkan otomatis &amp; terverifikasi live.</span>
+        <span>Portofolio: <a href="https://recreativeid.github.io/portofess/" target="_blank" class="text-blue-600 underline">recreativeid.github.io/portofess/</a></span>
+      </div>
     </div>
   </div>
 
@@ -5141,24 +5462,119 @@
       document.body.style.overflow = '';
     }
 
+    function getCvDynamicMetrics() {
+      // 1. Total Web Projects
+      let totalProjects = (typeof websiteProjects !== 'undefined' && Array.isArray(websiteProjects)) ? websiteProjects.length : 14;
+      // 2. Total Certificates & Achievements
+      let totalCertificates = (typeof certificatesData !== 'undefined' && Array.isArray(certificatesData)) ? certificatesData.length : 22;
+      // 3. Total Design Feeds
+      let totalFeeds = 0;
+      if (typeof cmsData !== 'undefined' && cmsData && cmsData.accounts) {
+        Object.values(cmsData.accounts).forEach(acc => {
+          if (acc && acc.feeds && Array.isArray(acc.feeds)) totalFeeds += acc.feeds.length;
+        });
+      }
+      if (totalFeeds === 0) totalFeeds = 40;
+      // 4. Total Videos / Reels
+      let totalVideos = 0;
+      if (typeof cmsData !== 'undefined' && cmsData && cmsData.accounts) {
+        Object.values(cmsData.accounts).forEach(acc => {
+          if (acc && acc.videos && Array.isArray(acc.videos)) totalVideos += acc.videos.length;
+        });
+      }
+      if (totalVideos === 0) totalVideos = 16;
+      // 5. Total Routes
+      let totalRoutes = (typeof worldMapRoutes !== 'undefined' && Array.isArray(worldMapRoutes)) ? worldMapRoutes.length : 10;
+      return { totalProjects, totalCertificates, totalFeeds, totalVideos, totalRoutes };
+    }
+
+    function renderDynamicCvModal() {
+      const metrics = getCvDynamicMetrics();
+      const elProjects = document.getElementById('cvMetricProjects');
+      if (elProjects) elProjects.textContent = metrics.totalProjects + '+';
+      const elCerts = document.getElementById('cvMetricCerts');
+      if (elCerts) elCerts.textContent = metrics.totalCertificates + '+';
+      const elFeeds = document.getElementById('cvMetricFeeds');
+      if (elFeeds) elFeeds.textContent = metrics.totalFeeds + '+';
+      const elVideos = document.getElementById('cvMetricVideos');
+      if (elVideos) elVideos.textContent = metrics.totalVideos + '+';
+      const elRoutes = document.getElementById('cvMetricRoutes');
+      if (elRoutes) elRoutes.textContent = metrics.totalRoutes + '+';
+
+      // Load custom overrides from Admin
+      try {
+        const custom = JSON.parse(localStorage.getItem('fathur_portfolio_cv_custom_v1') || '{}');
+        if (custom.headline) {
+          const el = document.getElementById('cvCandidateHeadline');
+          if (el) el.textContent = custom.headline;
+        }
+        if (custom.summary) {
+          const el = document.getElementById('cvCandidateSummary');
+          if (el) el.textContent = custom.summary;
+        }
+        if (custom.status) {
+          const el = document.getElementById('cvCandidateStatus');
+          if (el) el.textContent = custom.status;
+        }
+        if (custom.location) {
+          const el = document.getElementById('cvCandidateLocation');
+          if (el) el.textContent = custom.location;
+        }
+        if (custom.phone) {
+          const el = document.getElementById('cvCandidatePhone');
+          if (el) {
+            el.textContent = custom.phone;
+            const clean = custom.phone.replace(/[^0-9]/g, '');
+            el.href = `https://wa.me/${clean}`;
+          }
+          const btnWa = document.getElementById('btnCvModalWa');
+          if (btnWa) {
+            const clean = custom.phone.replace(/[^0-9]/g, '');
+            btnWa.href = `https://wa.me/${clean}?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20dan%20CV%20Anda%20di%20portofolio.%20Saya%20ingin%20mendiskusikan%20peluang%20kerja%20/%20projek%20/%20kolaborasi%20profesional.`;
+          }
+        }
+        if (custom.email) {
+          const el = document.getElementById('cvCandidateEmail');
+          if (el) {
+            el.textContent = custom.email;
+            el.href = `mailto:${custom.email}`;
+          }
+          const btnEmail = document.getElementById('btnCvModalEmail');
+          if (btnEmail) {
+            btnEmail.href = `mailto:${custom.email}?subject=Tawaran%20Peluang%20Kerja%20%26%20Kolaborasi%20Profesional%20-%20Muhammad%20Fathur%20Rohman&body=Halo%20Muhammad%20Fathur%20Rohman,%0A%0ASaya%20telah%20meninjau%20portofolio%20dan%20CV%20resmi%20Anda.%20Kami%20sangat%20tertarik%20dengan%20keahlian%20dan%20pengalaman%20Anda.%0A%0AKami%20ingin%20mengundang%20Anda%20untuk%20mendiskusikan%20peluang%20karir%20/%20projek%20kerjasama%20di%20perusahaan%20kami.%0A%0ATerima%20kasih.`;
+          }
+        }
+      } catch (e) {}
+    }
+
     function handleCvDownloadClick() {
-      const s7 = JSON.parse(localStorage.getItem('fathur_portfolio_sec07_data') || '{}');
-      if (s7.cvLink && s7.cvLink.trim() && s7.cvLink.trim() !== '#') {
-        window.open(s7.cvLink.trim(), '_blank');
-      } else {
-        openCvRequestModal();
+      openCvPreviewModal();
+    }
+
+    function openCvPreviewModal() {
+      renderDynamicCvModal();
+      const modal = document.getElementById('cvPreviewModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
       }
     }
 
-    function openCvRequestModal() {
-      const modal = document.getElementById('cvRequestModal');
-      if (modal) modal.classList.remove('hidden');
+    function closeCvPreviewModal() {
+      const modal = document.getElementById('cvPreviewModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
     }
 
-    function closeCvRequestModal() {
-      const modal = document.getElementById('cvRequestModal');
-      if (modal) modal.classList.add('hidden');
+    function printCvDocument() {
+      window.print();
     }
+
+    // Aliases for backward compatibility
+    function openCvRequestModal() { openCvPreviewModal(); }
+    function closeCvRequestModal() { closeCvPreviewModal(); }
 
     /* =================================================================== */
     /* CONTENT RENDERING: MULTI-ACCOUNT SOSMED SHOWCASE                    */
@@ -8283,27 +8699,27 @@
 
     /* Map Viewport State */
     function getOptimalGlobalZoom() {
-      if (!mapCanvasWidth || !mapCanvasHeight) return 0.80;
-      const fitByW = (mapCanvasWidth * 0.78) / mapCanvasWidth;
-      const fitByH = (mapCanvasHeight * 0.78) / 480;
-      return Math.max(0.50, Math.min(0.85, Math.min(fitByW, fitByH)));
+      if (!mapCanvasWidth || !mapCanvasHeight) return 0.72;
+      const fitByW = (mapCanvasWidth * 0.90) / mapCanvasWidth;
+      const fitByH = (mapCanvasHeight * 0.90) / 480;
+      return Math.max(0.65, Math.min(0.80, Math.min(fitByW, fitByH)));
     }
 
-    let mapZoom = 0.80; // Default full global view showing all continents & destinations
-    let mapCenter = { lat: 15.0, lng: 18.0 }; // Centered so Americas (left) and Asia/Pacific (right) fit fully
-    const MIN_ZOOM = 0.35; // Allows smooth and unrestricted zoom-out to view full world map
-    const MAX_ZOOM = 14.0;
+    let mapZoom = 1.85; // Initial zoom cleanly framing Magelang HQ and regional clients
+    let mapCenter = { lat: -3.5, lng: 114.0 }; // Initial center framing Java, Indonesia, and regional clients
+    const MIN_ZOOM = 0.65; // Zoom out limit shows full single world cleanly without repetition or excessive shrinking
+    const MAX_ZOOM = 6.5;
     let mapCanvasWidth = 800;
     let mapCanvasHeight = 400;
     let isMapDragging = false;
     let mapDragStartX = 0;
     let mapDragStartY = 0;
-    let mapCenterStart = { lat: 15.0, lng: 18.0 };
+    let mapCenterStart = { lat: -3.5, lng: 114.0 };
     let hasPanned = false;
     let selectedMapDotId = null;
     let isMapPickMode = false;
     let onPointPickedCallback = null;
-    let activePreset = 'global';
+    let activePreset = 'indonesia';
     let mapEngineInitialized = false;
 
     function latLngToScreen(lat, lng) {
@@ -8397,9 +8813,9 @@
       ctx.fillStyle = isBlue ? '#0F2C54' : (isDark ? '#090d16' : '#FFFFFF');
       ctx.fillRect(0, 0, W, H);
 
-      // Clip strictly to real-world landmass polygons (with seamless continuous wrapping on zoom-out)
+      // Clip strictly to real-world landmass polygons (single world, no triple duplication)
       if (typeof window.WORLD_LAND_POLYGONS !== 'undefined') {
-        const wrapOffsets = (mapZoom <= 1.45) ? [-1, 0, 1] : [0];
+        const wrapOffsets = [0];
         ctx.beginPath();
         for (const wrap of wrapOffsets) {
           const worldPxOffset = wrap * mapCanvasWidth * mapZoom;
@@ -8671,7 +9087,7 @@
     }
 
     function resetWorldMapZoom() {
-      animateMapTo({ lat: 15.0, lng: 18.0 }, getOptimalGlobalZoom());
+      animateMapTo({ lat: -3.5, lng: 114.0 }, 1.85);
     }
 
     function focusMapPreset(type) {
@@ -8692,11 +9108,11 @@
       }
 
       if (type === 'indonesia') {
-        animateMapTo({ lat: -2.2, lng: 118.0 }, 3.2);
+        animateMapTo({ lat: -3.5, lng: 114.0 }, 1.85);
       } else if (type === 'hq') {
-        animateMapTo({ lat: -7.4706, lng: 110.2178 }, 5.5);
+        animateMapTo({ lat: -7.4706, lng: 110.2178 }, 4.5);
       } else if (type === 'asia') {
-        animateMapTo({ lat: 10.0, lng: 115.0 }, 2.1);
+        animateMapTo({ lat: 10.0, lng: 115.0 }, 1.7);
       } else if (type === 'global') {
         animateMapTo({ lat: 15.0, lng: 18.0 }, getOptimalGlobalZoom());
       }
@@ -9217,6 +9633,7 @@
         textEdits: JSON.parse(localStorage.getItem('fathur_portfolio_manual_text_edits') || '{}')
       };
 
+      
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bundle, null, 2));
       const dl = document.createElement('a');
       dl.setAttribute("href", dataStr);
