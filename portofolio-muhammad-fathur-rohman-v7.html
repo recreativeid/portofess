@@ -124,29 +124,32 @@
       color: #BAE6FD !important;
     }
 
-    /* Chapter 4-Column Skill Matrix in Blue Mode */
+    /* Chapter 4-Column Skill Matrix: Shape remains crisp white, text black/dark */
     body.blueprint-mode .chapter-skill-matrix {
-      background-color: rgba(13, 38, 70, 0.94) !important;
-      border-color: rgba(255, 255, 255, 0.22) !important;
-      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.5) !important;
+      background-color: #FFFFFF !important;
+      border-color: #E2E8F0 !important;
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.14) !important;
     }
     body.blueprint-mode .chapter-skill-matrix .matrix-item {
-      color: #F1F5F9 !important;
+      color: #1E293B !important;
     }
     body.blueprint-mode .chapter-skill-matrix .border-b {
-      border-color: rgba(255, 255, 255, 0.18) !important;
+      border-color: #E2E8F0 !important;
+    }
+    body.blueprint-mode .chapter-skill-matrix .text-[#155293] {
+      color: #155293 !important;
     }
     body.blueprint-mode .chapter-skill-matrix .text-emerald-700 {
-      color: #34D399 !important;
+      color: #047857 !important;
     }
     body.blueprint-mode .chapter-skill-matrix .text-purple-700 {
-      color: #C084FC !important;
+      color: #7E22CE !important;
     }
     body.blueprint-mode .chapter-skill-matrix .text-amber-700 {
-      color: #FBBF24 !important;
+      color: #B45309 !important;
     }
     body.blueprint-mode .chapter-skill-matrix .text-sky-700 {
-      color: #60A5FA !important;
+      color: #0284C7 !important;
     }
 
     /* Section 03 Project Cards in Blue Mode: Crisp white tactile cards on blue grid */
@@ -198,16 +201,31 @@
       color: #F1F5F9 !important;
     }
 
-    /* Infinite Marquee Cards in Blue Mode */
+    /* Infinite Moving Logo Cloud Marquee in Blue Mode: Shape remains white, text black */
+    body.blueprint-mode .animate-logo-marquee .rounded-2xl,
+    body.blueprint-mode .animate-logo-marquee > div > div,
     body.blueprint-mode .marquee-content > div > div {
-      background-color: rgba(13, 38, 70, 0.92) !important;
-      border-color: rgba(255, 255, 255, 0.22) !important;
+      background-color: #FFFFFF !important;
+      border-color: #E2E8F0 !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     }
-    body.blueprint-mode .marquee-content .text-ink {
-      color: #FFFFFF !important;
+    body.blueprint-mode .animate-logo-marquee .text-ink,
+    body.blueprint-mode .animate-logo-marquee h4,
+    body.blueprint-mode .animate-logo-marquee h5,
+    body.blueprint-mode .animate-logo-marquee span.font-bold,
+    body.blueprint-mode .animate-logo-marquee span.block,
+    body.blueprint-mode .marquee-content .text-ink,
+    body.blueprint-mode .marquee-content h4,
+    body.blueprint-mode .marquee-content h5,
+    body.blueprint-mode .marquee-content span.font-bold {
+      color: #0F172A !important;
     }
-    body.blueprint-mode .marquee-content .text-stone-500 {
-      color: #94A3B8 !important;
+    body.blueprint-mode .animate-logo-marquee .text-stone-500,
+    body.blueprint-mode .animate-logo-marquee p,
+    body.blueprint-mode .animate-logo-marquee span.font-mono,
+    body.blueprint-mode .marquee-content .text-stone-500,
+    body.blueprint-mode .marquee-content p {
+      color: #64748B !important;
     }
 
     /* Section 06 Filter Tabs & Badges in Blue Mode */
@@ -284,14 +302,135 @@
       border-color: var(--accent-color, #C62828) !important;
     }
 
-    /* Section 02 Mini Stat Cards in Blue Mode */
-    body.blueprint-mode #skill-kompetensi .glass-card {
-      background: rgba(13, 38, 70, 0.88) !important;
-      border-color: rgba(255, 255, 255, 0.2) !important;
+    /* =================================================================== */
+    /* SECTION 02 & GENERAL SHAPES: SHAPE TETAP PUTIH, TULISAN HITAM       */
+    /* =================================================================== */
+    #certRecapGridContainer > div,
+    body.blueprint-mode #certRecapGridContainer > div,
+    .cert-recap-box,
+    body.blueprint-mode .cert-recap-box {
+      background-color: #FFFFFF !important;
+      background: #FFFFFF !important;
+      border-color: #E2E8F0 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
     }
-    body.blueprint-mode #skill-kompetensi .glass-card span.text-slate-800,
-    body.blueprint-mode #skill-kompetensi .glass-card span.text-[#155293] {
-      color: #F8FAFC !important;
+    #certRecapGridContainer > div:hover,
+    body.blueprint-mode #certRecapGridContainer > div:hover,
+    .cert-recap-box:hover,
+    body.blueprint-mode .cert-recap-box:hover {
+      border-color: #155293 !important;
+      background-color: #F8FAFC !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1) !important;
+    }
+    #certRecapGridContainer > div span:last-child,
+    body.blueprint-mode #certRecapGridContainer > div span:last-child,
+    .cert-recap-box span:last-child,
+    body.blueprint-mode .cert-recap-box span:last-child {
+      color: #0F172A !important;
+    }
+    #certRecapGridContainer > div span:first-child,
+    body.blueprint-mode #certRecapGridContainer > div span:first-child,
+    .cert-recap-box span:first-child,
+    body.blueprint-mode .cert-recap-box span:first-child {
+      background-color: #F1F5F9 !important;
+      border-color: #E2E8F0 !important;
+    }
+    #certRecapGridContainer > div.border-amber-300,
+    body.blueprint-mode #certRecapGridContainer > div.border-amber-300 {
+      background-color: #FFFDF5 !important;
+      border-color: #FCD34D !important;
+    }
+    #certRecapGridContainer > div.border-amber-300 span:last-child,
+    body.blueprint-mode #certRecapGridContainer > div.border-amber-300 span:last-child {
+      color: #155293 !important;
+    }
+
+    /* Section 02 White Cards in Blue Mode: All shapes remain crisp white */
+    body.blueprint-mode #skill-kompetensi .bg-white {
+      background-color: #FFFFFF !important;
+      border-color: #E2E8F0 !important;
+      color: #0F172A !important;
+    }
+    body.blueprint-mode #skill-kompetensi .bg-white h3,
+    body.blueprint-mode #skill-kompetensi .bg-white h4,
+    body.blueprint-mode #skill-kompetensi .bg-white .text-ink,
+    body.blueprint-mode #skill-kompetensi .bg-white span.text-slate-800 {
+      color: #0F172A !important;
+    }
+    body.blueprint-mode #skill-kompetensi .bg-white p.text-stone-600 {
+      color: #475569 !important;
+    }
+
+    /* =================================================================== */
+    /* EXCEPTION: DESIGN GRAFIS & VIDEO EDITOR CHAPTER & SECTION 04 HEADER */
+    /* Typography on dark blue containers REMAINS CRISP PURE WHITE         */
+    /* =================================================================== */
+    #chapter-multimedia #chapterMultimediaTitle,
+    body.blueprint-mode #chapter-multimedia #chapterMultimediaTitle {
+      background-image: linear-gradient(to right, #FFFFFF, #F0F9FF, #BAE6FD) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      -webkit-text-fill-color: transparent !important;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
+    }
+    #chapter-multimedia .chapter-subtitle,
+    body.blueprint-mode #chapter-multimedia .chapter-subtitle {
+      color: #E0F2FE !important;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    /* Section 04 Dark Shell Header: All typography remains pure white */
+    body.blueprint-mode #tabletDeviceCard {
+      background-color: #0F325E !important;
+      border-color: rgba(255, 255, 255, 0.28) !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .glass-tag-pill {
+      background: rgba(14, 42, 77, 0.90) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .glass-tag-pill span {
+      color: #FFFFFF !important;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+    }
+    body.blueprint-mode #tabletDeviceCard #section04TitleDisplay {
+      color: #FFFFFF !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+    }
+    body.blueprint-mode #tabletDeviceCard #section04HandleLink,
+    body.blueprint-mode #tabletDeviceCard #section04HandleLink span {
+      color: #FFFFFF !important;
+    }
+    body.blueprint-mode #tabletDeviceCard #section04HandleLink:hover,
+    body.blueprint-mode #tabletDeviceCard #section04HandleLink:hover span {
+      color: #93C5FD !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .glass-card span.text-stone-500 {
+      color: #E2E8F0 !important;
+    }
+    body.blueprint-mode #tabletDeviceCard p.text-stone-600,
+    body.blueprint-mode #tabletDeviceCard .text-stone-600 {
+      color: #CBD5E1 !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .text-stone-700 {
+      color: #E2E8F0 !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .text-stone-500 {
+      color: #94A3B8 !important;
+    }
+
+    /* Tactile White cards inside Section 04 (phone showcase container & video cards) */
+    body.blueprint-mode #tabletDeviceCard .bg-white {
+      background-color: #FFFFFF !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .bg-white .text-ink,
+    body.blueprint-mode #tabletDeviceCard .bg-white h4,
+    body.blueprint-mode #tabletDeviceCard .bg-white h5 {
+      color: #0F172A !important;
+    }
+    body.blueprint-mode #tabletDeviceCard .bg-white p.text-stone-500,
+    body.blueprint-mode #tabletDeviceCard .bg-white .text-stone-500 {
+      color: #64748B !important;
     }
 
     body.dark-mode {
@@ -2030,35 +2169,35 @@
               <span class="text-xs font-mono font-bold text-stone-500">REKAPITULASI RESMI</span>
             </div>
             <div id="certRecapGridContainer" class="grid grid-cols-2 gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold text-ink">
-              <div onclick="onRecapItemClick('kejuaraan_desain')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('kejuaraan_desain')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-crimson font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">10x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Sertifikat Kejuaraan Desain</span>
               </div>
-              <div onclick="onRecapItemClick('kompetisi_internasional')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('kompetisi_internasional')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-crimson font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">4x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Kompetisi Internasional</span>
               </div>
-              <div onclick="onRecapItemClick('media_creative')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('media_creative')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-crimson font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">2x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Sertifikat Media Creative</span>
               </div>
-              <div onclick="onRecapItemClick('internship_web')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('internship_web')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-[#155293] font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">1x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Internship Web Developer</span>
               </div>
-              <div onclick="onRecapItemClick('pekerjaan_multimedia')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('pekerjaan_multimedia')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-[#155293] font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">1x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Pekerjaan Multimedia</span>
               </div>
-              <div onclick="onRecapItemClick('narasumber_mkt')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('narasumber_mkt')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-amber-700 font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">1x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Narasumber Digital Mkt</span>
               </div>
-              <div onclick="onRecapItemClick('narasumber_video')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
+              <div onclick="onRecapItemClick('narasumber_video')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border border-stone-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">
                 <span class="text-amber-700 font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-stone-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-stone-200 group-hover:scale-105 transition-transform">1x</span>
                 <span class="text-[10px] sm:text-xs font-bold text-slate-800 leading-tight group-hover:text-[#155293] transition-colors">Narasumber Video Konten</span>
               </div>
-              <div onclick="onRecapItemClick('total')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border border-amber-300 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293] transition-all duration-200 cursor-pointer group" title="Klik untuk melihat seluruh 22 sertifikat di Section 06">
+              <div onclick="onRecapItemClick('total')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-[#FFFDF5] p-2.5 sm:p-3.5 rounded-xl border border-amber-300 shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293] transition-all duration-200 cursor-pointer group" title="Klik untuk melihat seluruh 22 sertifikat di Section 06">
                 <span class="text-[#155293] font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap bg-amber-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border border-amber-300 group-hover:scale-105 transition-transform">20+</span>
                 <span class="text-[10px] sm:text-xs text-[#155293] leading-tight font-extrabold group-hover:text-[#0f3d6e] transition-colors">Total Prestasi Terverifikasi</span>
               </div>
@@ -6120,7 +6259,7 @@
         const bgBadgeClass = isHighlight ? 'bg-amber-100 text-[#155293] border-amber-300' : 'bg-stone-100 border-stone-200 ' + (item.countColor || 'text-crimson');
         const labelColor = isHighlight ? 'text-[#155293] font-extrabold' : 'text-slate-800 font-bold';
 
-        return '<div onclick="onRecapItemClick(\'' + item.tag + '\')" class="flex items-center gap-2 sm:gap-3 glass-card smooth-blur-container p-2.5 sm:p-3.5 rounded-xl border ' + borderClass + ' shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">' +
+        return '<div onclick="onRecapItemClick(\'' + item.tag + '\')" class="flex items-center gap-2 sm:gap-3 cert-recap-box bg-white p-2.5 sm:p-3.5 rounded-xl border ' + borderClass + ' shadow-sm hover:-translate-y-0.5 hover:shadow-md hover:border-[#155293]/60 transition-all duration-200 cursor-pointer group" title="Klik untuk melihat sertifikat terkait di Section 06">' +
           '<span class="' + bgBadgeClass + ' font-black text-xs sm:text-sm flex-shrink-0 whitespace-nowrap px-1.5 sm:px-2 py-0.5 sm:py-1 rounded shadow-xs border group-hover:scale-105 transition-transform duration-200">' + item.count + '</span>' +
           '<span class="text-[10px] sm:text-xs ' + labelColor + ' leading-tight group-hover:text-[#155293] transition-colors">' + item.label + '</span>' +
         '</div>';
