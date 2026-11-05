@@ -2503,10 +2503,10 @@
           <!-- Video Grid Container: 3 Reels (9:16) di atas, 3 Landscape (16:9) di bawah -->
           <div class="space-y-8">
             <!-- BARIS 1: 3 REELS 9:16 -->
-            <div>
+            <div id="featuredReelsSectionWrapper">
               <div class="flex items-center justify-between mb-3.5">
                 <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-1 rounded-lg bg-crimson text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● 3 REELS (9:16)</span>
+                  <span id="featuredReelsBadge" class="px-2.5 py-1 rounded-lg bg-crimson text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● REELS (9:16)</span>
                   <span class="text-xs font-bold text-stone-700">Video Reels / Vertikal (Instagram &amp; TikTok)</span>
                 </div>
                 <span class="text-[11px] font-mono text-stone-500 hidden sm:inline">Rasio 9:16</span>
@@ -2515,10 +2515,10 @@
             </div>
 
             <!-- BARIS 2: 3 LANSKAP 16:9 DI BAWAHNYA -->
-            <div class="pt-6 border-t border-stone-200">
+            <div id="featuredLandscapeSectionWrapper" class="pt-6 border-t border-stone-200">
               <div class="flex items-center justify-between mb-3.5">
                 <div class="flex items-center gap-2">
-                  <span class="px-2.5 py-1 rounded-lg bg-[#155293] text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● 3 LANSKAP (16:9)</span>
+                  <span id="featuredLandscapeBadge" class="px-2.5 py-1 rounded-lg bg-[#155293] text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● LANSKAP (16:9)</span>
                   <span class="text-xs font-bold text-stone-700">Video Dokumentasi / Lanskap (YouTube &amp; Commercial)</span>
                 </div>
                 <span class="text-[11px] font-mono text-stone-500 hidden sm:inline">Rasio 16:9</span>
@@ -4987,14 +4987,7 @@
         logoImg: '',
         phoneScreenImg: 'assets/mbm/phone-screen-mbm.svg',
         sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
-        designs: [
-          { id: 'mbm_d1', title: 'Kajian Rutin Spesial Pemuda', subtitle: 'Flyer Digital & Feed Instagram', bg: '#0F766E', img: 'assets/mbm/poster-kajian-rutin.svg' },
-          { id: 'mbm_d2', title: 'Semarak Ramadhan Berkah', subtitle: 'Poster Agenda & Jadwal Imsakiyah', bg: '#1E3A8A', img: 'assets/mbm/poster-semarak-ramadhan.svg' },
-          { id: 'mbm_d3', title: 'Jumat Berkah Berbagi', subtitle: 'Dokumentasi & Ajakan Donasi', bg: '#047857', img: 'assets/mbm/poster-jumat-berkah.svg' },
-          { id: 'mbm_d4', title: 'Kutipan Motivasi & Hadits', subtitle: 'Konten Edukasi Spiritual MBM', bg: '#B45309', img: 'assets/mbm/poster-hadits-motivasi.svg' },
-          { id: 'mbm_d5', title: 'Peringatan Hari Besar Islam', subtitle: 'Materi Publikasi & Ucapan Resmi', bg: '#155293', img: 'assets/mbm/poster-peringatan-phbi.svg' },
-          { id: 'mbm_d6', title: 'Layanan Sosial & Posko Umat', subtitle: 'Infografis Program Masjid', bg: '#4338CA', img: 'assets/mbm/poster-posko-umat.svg' }
-        ],
+        designs: [],
         videos: [
           { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '', thumbnail: 'assets/mbm/reel-aftermovie-pengajian.svg' },
           { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
@@ -5047,8 +5040,10 @@
               if (!existing) {
                 parsed.accounts.push(JSON.parse(JSON.stringify(defAcc)));
               } else {
-                // Ensure designs are properly loaded
-                if (!existing.designs || existing.designs.length === 0 || !existing.designs[0].img) {
+                // Ensure designs are properly loaded (except masjid_mbm which is explicitly empty)
+                if (existing.id === 'masjid_mbm') {
+                  existing.designs = [];
+                } else if (!Array.isArray(existing.designs) || existing.designs.length === 0 || !existing.designs[0].img) {
                   existing.designs = JSON.parse(JSON.stringify(defAcc.designs));
                 }
                 // Ensure videos are properly loaded
@@ -5358,68 +5353,92 @@
         screenLabel.textContent = 'Layar: @' + acc.handle;
       }
 
-      // 2. Render 6 Desain Grafis Cards on Left Column (Guaranteed Fallback to Default)
+      // 2. Render Desain Grafis on Left Column
       const featuredDesignGrid = document.getElementById('featuredDesignGrid');
       if (featuredDesignGrid) {
-        const rawDesigns = (acc.designs && acc.designs.length > 0) ? acc.designs : defaultAcc.designs;
+        // If acc is masjid_mbm, it's explicitly empty as requested by user
+        const rawDesigns = (acc.id === 'masjid_mbm') ? [] : ((acc.designs && acc.designs.length > 0) ? acc.designs : (defaultAcc.designs || []));
         const top6Designs = rawDesigns.slice(0, 6);
 
-        featuredDesignGrid.innerHTML = top6Designs.map((d, idx) => {
-          const src = getDesignPosterUrl(d, acc, idx);
-          const numStr = '#0' + (idx + 1);
-          const safeTitle = (d.title || ('Karya ' + numStr)).replace(/'/g, "\\'");
-          const safeSubtitle = (d.subtitle || 'Desain Grafis').replace(/'/g, "\\'");
-
-          return `
-            <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${safeTitle}', 'Desain Grafis (@${acc.handle})', '${safeSubtitle}', '${src}')">
-              <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
-                <img src="${src}" alt="${safeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">KARYA ${numStr}</span>
-              </div>
-              <div class="p-3 bg-white">
-                <span class="text-[10px] font-mono uppercase text-crimson font-extrabold block">🎨 Desain Grafis</span>
-                <h4 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${safeTitle}">${d.title || ('Karya ' + numStr)}</h4>
-                <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle || 'Desain Grafis'}</p>
-                <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
-                  <button onclick="event.stopPropagation(); setPhoneScreen('${src}', '${safeTitle}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
-                    <span>📲 Ke Layar HP</span>
-                  </button>
-                  <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
-                </div>
-              </div>
+        if (top6Designs.length === 0) {
+          // Clean empty state for accounts with 0 designs (MBM)
+          featuredDesignGrid.innerHTML = `
+            <div class="col-span-2 sm:col-span-3 py-16 px-6 rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 text-center flex flex-col items-center justify-center space-y-2 select-none">
+              <div class="w-12 h-12 rounded-2xl bg-white border border-stone-200 text-stone-400 flex items-center justify-center text-xl shadow-xs">🎨</div>
+              <p class="text-xs font-mono font-bold text-stone-600 uppercase tracking-wider">Belum Ada Karya Desain Grafis</p>
+              <p class="text-[11px] text-stone-400 max-w-sm">Koleksi desain feed dan poster untuk @${acc.handle} belum diunggah.</p>
             </div>
           `;
-        }).join('');
+        } else {
+          featuredDesignGrid.innerHTML = top6Designs.map((d, idx) => {
+            const src = getDesignPosterUrl(d, acc, idx);
+            const numStr = '#0' + (idx + 1);
+            const safeTitle = (d.title || ('Karya ' + numStr)).replace(/'/g, "\\'");
+            const safeSubtitle = (d.subtitle || 'Desain Grafis').replace(/'/g, "\\'");
 
-        featuredDesignGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
+            return `
+              <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${safeTitle}', 'Desain Grafis (@${acc.handle})', '${safeSubtitle}', '${src}')">
+                <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
+                  <img src="${src}" alt="${safeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">KARYA ${numStr}</span>
+                </div>
+                <div class="p-3 bg-white">
+                  <span class="text-[10px] font-mono uppercase text-crimson font-extrabold block">🎨 Desain Grafis</span>
+                  <h4 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${safeTitle}">${d.title || ('Karya ' + numStr)}</h4>
+                  <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle || 'Desain Grafis'}</p>
+                  <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
+                    <button onclick="event.stopPropagation(); setPhoneScreen('${src}', '${safeTitle}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
+                      <span>📲 Ke Layar HP</span>
+                    </button>
+                    <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          featuredDesignGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
+        }
       }
 
-      // 3. Render 3 Video Reels (9:16) & 3 Video Lanskap (16:9) on Landing Section (Guaranteed Fallback)
+      // 3. Render Video Reels (9:16) & Video Lanskap (16:9) STRICTLY SEPARATE - NO FORCED PADDING!
       const reelsGrid = document.getElementById('featuredReelsGrid');
       const landscapeGrid = document.getElementById('featuredLandscapeGrid');
-      const allVideos = (acc.videos && acc.videos.length > 0) ? acc.videos : defaultAcc.videos;
+      const reelsWrapper = document.getElementById('featuredReelsSectionWrapper');
+      const landscapeWrapper = document.getElementById('featuredLandscapeSectionWrapper');
+      const reelsBadge = document.getElementById('featuredReelsBadge');
+      const landscapeBadge = document.getElementById('featuredLandscapeBadge');
 
-      // Filter 9:16 (reels) and 16:9 (landscape)
+      const allVideos = (acc.videos && acc.videos.length > 0) ? acc.videos : (defaultAcc.videos || []);
+
+      // Filter strictly by ratio
       const reelsList = allVideos.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
       const landscapeList = allVideos.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9');
 
-      const top3Reels = reelsList.slice(0, 3);
-      while (top3Reels.length < 3 && allVideos[top3Reels.length]) {
-        top3Reels.push(allVideos[top3Reels.length]);
-      }
-      const top3Landscape = landscapeList.slice(0, 3);
-      while (top3Landscape.length < 3 && allVideos[3 + top3Landscape.length]) {
-        top3Landscape.push(allVideos[3 + top3Landscape.length]);
-      }
-
+      // Reels Row: ONLY reels 9:16 (Max 3, no landscape padding!)
       if (reelsGrid) {
-        reelsGrid.innerHTML = top3Reels.map((v, idx) => buildVideoCard(v, idx, true, acc.handle, acc)).join('');
-        reelsGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
+        if (reelsList.length > 0) {
+          if (reelsWrapper) reelsWrapper.classList.remove('hidden');
+          if (reelsBadge) reelsBadge.textContent = '● ' + reelsList.length + ' REELS (9:16)';
+          reelsGrid.innerHTML = reelsList.slice(0, 3).map((v, idx) => buildVideoCard(v, idx, true, acc.handle, acc)).join('');
+          reelsGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
+        } else {
+          if (reelsWrapper) reelsWrapper.classList.add('hidden');
+          reelsGrid.innerHTML = '';
+        }
       }
 
+      // Landscape Row: ONLY landscape 16:9 (Max 3, no reels padding!)
       if (landscapeGrid) {
-        landscapeGrid.innerHTML = top3Landscape.map((v, idx) => buildVideoCard(v, idx, false, acc.handle, acc)).join('');
-        landscapeGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
+        if (landscapeList.length > 0) {
+          if (landscapeWrapper) landscapeWrapper.classList.remove('hidden');
+          if (landscapeBadge) landscapeBadge.textContent = '● ' + landscapeList.length + ' LANSKAP (16:9)';
+          landscapeGrid.innerHTML = landscapeList.slice(0, 3).map((v, idx) => buildVideoCard(v, idx, false, acc.handle, acc)).join('');
+          landscapeGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
+        } else {
+          if (landscapeWrapper) landscapeWrapper.classList.add('hidden');
+          landscapeGrid.innerHTML = '';
+        }
       }
 
       // 4. Render All Managed Accounts in Full View 04 (#allMedsosListContainer) - UNIFIED LAYOUT MATCHING USER IMAGE!
@@ -5432,11 +5451,13 @@
 
         allMedsosContainer.innerHTML = sortedAccounts.map((account) => {
           const defAccount = defaultMedsosAccounts.find(a => a.id === account.id) || account;
-          const accDesigns = (account.designs && account.designs.length > 0) ? account.designs : defAccount.designs;
-          const accVids = (account.videos && account.videos.length > 0) ? account.videos : defAccount.videos;
+          // For masjid_mbm, strictly empty designs as requested
+          const accDesigns = (account.id === 'masjid_mbm') ? [] : ((account.designs && account.designs.length > 0) ? account.designs : (defAccount.designs || []));
+          const accVids = (account.videos && account.videos.length > 0) ? account.videos : (defAccount.videos || []);
 
-          const accReels = accVids.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16').slice(0, 3);
-          const accLandscape = accVids.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9').slice(0, 3);
+          // Strictly separate reels and landscape
+          const accReels = accVids.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
+          const accLandscape = accVids.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9');
 
           const phoneSrc = account.phoneScreenImg || defAccount.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
 
@@ -5470,42 +5491,50 @@
               <!-- Top Row: Left 6 Design Posters & Right Vertical Phone Mockup (Matching User Reference) -->
               <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
                 
-                <!-- Left 8 Cols: 6 Graphic Design Grid -->
+                <!-- Left 8 Cols: Graphic Design Grid or Clean Empty State -->
                 <div class="lg:col-span-8 space-y-4">
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                       <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${account.badgeColor || '#155293'}"></span>
                       <h4 class="font-display font-extrabold text-sm sm:text-base text-ink">🎨 Koleksi Desain Grafis (${accDesigns.length} Karya)</h4>
                     </div>
-                    <span class="text-[11px] font-mono text-stone-500">Klik untuk Pratinjau / Ke HP</span>
+                    <span class="text-[11px] font-mono text-stone-500">${accDesigns.length > 0 ? 'Klik untuk Pratinjau / Ke HP' : 'Belum Ada Konten'}</span>
                   </div>
 
-                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
-                    ${accDesigns.slice(0, 6).map((d, dIdx) => {
-                      const s = getDesignPosterUrl(d, account, dIdx);
-                      const safeDTitle = (d.title || ('Karya #' + (dIdx + 1))).replace(/'/g, "\\'");
-                      const safeDSubtitle = (d.subtitle || 'Desain Grafis').replace(/'/g, "\\'");
+                  ${accDesigns.length === 0 ? `
+                    <div class="py-14 px-6 rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 text-center flex flex-col items-center justify-center space-y-2 select-none">
+                      <div class="w-12 h-12 rounded-2xl bg-white border border-stone-200 text-stone-400 flex items-center justify-center text-xl shadow-xs">🎨</div>
+                      <p class="text-xs font-mono font-bold text-stone-600 uppercase tracking-wider">Belum Ada Karya Desain Grafis</p>
+                      <p class="text-[11px] text-stone-400 max-w-sm">Koleksi desain feed dan poster untuk @${account.handle} belum diunggah.</p>
+                    </div>
+                  ` : `
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                      ${accDesigns.slice(0, 6).map((d, dIdx) => {
+                        const s = getDesignPosterUrl(d, account, dIdx);
+                        const safeDTitle = (d.title || ('Karya #' + (dIdx + 1))).replace(/'/g, "\\'");
+                        const safeDSubtitle = (d.subtitle || 'Desain Grafis').replace(/'/g, "\\'");
 
-                      return `
-                        <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${safeDTitle}', 'Desain Grafis (@${account.handle})', '${safeDSubtitle}', '${s}')">
-                          <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
-                            <img src="${s}" alt="${safeDTitle}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                            <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">#0${dIdx + 1}</span>
-                          </div>
-                          <div class="p-3 bg-white">
-                            <h5 class="font-display font-extrabold text-xs text-ink truncate" title="${safeDTitle}">${d.title}</h5>
-                            <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
-                            <div class="mt-2 pt-2 border-t border-stone-100 flex items-center justify-between">
-                              <button onclick="event.stopPropagation(); setAllMedsosPhoneScreen('${account.id}', '${s}', '${safeDTitle}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
-                                <span>📲 Layar HP</span>
-                              </button>
-                              <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
+                        return `
+                          <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${safeDTitle}', 'Desain Grafis (@${account.handle})', '${safeDSubtitle}', '${s}')">
+                            <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
+                              <img src="${s}" alt="${safeDTitle}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                              <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">#0${dIdx + 1}</span>
+                            </div>
+                            <div class="p-3 bg-white">
+                              <h5 class="font-display font-extrabold text-xs text-ink truncate" title="${safeDTitle}">${d.title}</h5>
+                              <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
+                              <div class="mt-2 pt-2 border-t border-stone-100 flex items-center justify-between">
+                                <button onclick="event.stopPropagation(); setAllMedsosPhoneScreen('${account.id}', '${s}', '${safeDTitle}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
+                                  <span>📲 Layar HP</span>
+                                </button>
+                                <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      `;
-                    }).join('')}
-                  </div>
+                        `;
+                      }).join('')}
+                    </div>
+                  `}
                 </div>
 
                 <!-- Right 4 Cols: 3D Smartphone Realistic Mockup for this Account -->
@@ -5552,42 +5581,46 @@
 
               </div>
 
-              <!-- Bottom Row: Video Content (Reels 9:16 & Lanskap 16:9) -->
-              <div class="pt-6 border-t border-stone-200 space-y-6">
-                <!-- Sub-row: Reels 9:16 -->
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <span class="px-2 py-0.5 rounded bg-rose-600 text-white font-mono text-[10px] font-black uppercase tracking-wider">
-                        🎬 Video Reels Instagram 9:16 (${accReels.length} Video)
-                      </span>
-                    </div>
-                    <span class="text-[11px] font-mono text-stone-500">Rasio 9:16</span>
-                  </div>
-
-                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
-                    ${accReels.map((v, vIdx) => buildVideoCard(v, vIdx, true, account.handle, account)).join('')}
-                  </div>
-                </div>
-
-                <!-- Sub-row: Lanskap 16:9 -->
-                ${accLandscape.length > 0 ? `
-                  <div class="space-y-3 pt-4 border-t border-stone-100">
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center gap-2">
-                        <span class="px-2 py-0.5 rounded bg-blue-700 text-white font-mono text-[10px] font-black uppercase tracking-wider">
-                          📹 Video Dokumentasi / Lanskap 16:9 (${accLandscape.length} Video)
-                        </span>
+              <!-- Bottom Row: Video Content (Reels 9:16 & Lanskap 16:9 - STRICTLY SEPARATED) -->
+              ${(accReels.length > 0 || accLandscape.length > 0) ? `
+                <div class="pt-6 border-t border-stone-200 space-y-6">
+                  <!-- Sub-row: Reels 9:16 (ONLY Reels) -->
+                  ${accReels.length > 0 ? `
+                    <div class="space-y-3">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                          <span class="px-2 py-0.5 rounded bg-rose-600 text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                            🎬 Video Reels Instagram 9:16 (${accReels.length} Video)
+                          </span>
+                        </div>
+                        <span class="text-[11px] font-mono text-stone-500">Rasio 9:16</span>
                       </div>
-                      <span class="text-[11px] font-mono text-stone-500">Rasio 16:9</span>
-                    </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
-                      ${accLandscape.map((v, vIdx) => buildVideoCard(v, vIdx, false, account.handle, account)).join('')}
+                      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                        ${accReels.map((v, vIdx) => buildVideoCard(v, vIdx, true, account.handle, account)).join('')}
+                      </div>
                     </div>
-                  </div>
-                ` : ''}
-              </div>
+                  ` : ''}
+
+                  <!-- Sub-row: Lanskap 16:9 (ONLY Lanskap) -->
+                  ${accLandscape.length > 0 ? `
+                    <div class="space-y-3 pt-4 border-t border-stone-100">
+                      <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                          <span class="px-2 py-0.5 rounded bg-blue-700 text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                            📹 Video Dokumentasi / Lanskap 16:9 (${accLandscape.length} Video)
+                          </span>
+                        </div>
+                        <span class="text-[11px] font-mono text-stone-500">Rasio 16:9</span>
+                      </div>
+
+                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                        ${accLandscape.map((v, vIdx) => buildVideoCard(v, vIdx, false, account.handle, account)).join('')}
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+              ` : ''}
 
             </div>
           `;
@@ -5599,7 +5632,8 @@
       // 5. Update Total Badges
       const countBadge = document.getElementById('medsosCountBadge');
       if (countBadge) {
-        const total = (acc.designs || []).length + (acc.videos || []).length;
+        const rawDesignsCount = (acc.id === 'masjid_mbm') ? 0 : ((acc.designs || []).length);
+        const total = rawDesignsCount + (acc.videos || []).length;
         countBadge.textContent = total + ' Karya Terpilih';
       }
     }
