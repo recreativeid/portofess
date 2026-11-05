@@ -5103,6 +5103,18 @@
       if (video.thumbnail && typeof video.thumbnail === 'string' && video.thumbnail.trim()) {
         return video.thumbnail.trim();
       }
+      // Auto-extract official cover from video URL (YouTube & Instagram)
+      if (video.videoUrl && typeof video.videoUrl === 'string') {
+        const u = video.videoUrl.trim();
+        const ytMatch = u.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/|live\/))([\w-]{11})/i);
+        if (ytMatch && ytMatch[1]) {
+          return 'https://img.youtube.com/vi/' + ytMatch[1] + '/hqdefault.jpg';
+        }
+        const igMatch = u.match(/(?:instagram\.com\/(?:reel|p)\/)([\w-]+)/i);
+        if (igMatch && igMatch[1]) {
+          return 'https://www.instagram.com/reel/' + igMatch[1] + '/media/?size=l';
+        }
+      }
       return makeSvgBanner(video.title || 'Video Konten', (isReel ? 'Reels 9:16 · ' : 'Lanskap 16:9 · ') + (video.duration || '0:45'), account.badgeColor || '#155293');
     }
 

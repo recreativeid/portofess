@@ -1707,12 +1707,27 @@
                     <span class="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">▶</span>
                     <div>
                       <span class="font-bold text-slate-900 block">Video YouTube / Shorts Terdeteksi!</span>
-                      <span class="text-[11px] text-slate-600">Thumbnail resmi kualitas tinggi otomatis tersedia dari YouTube.</span>
+                      <span class="text-[11px] text-slate-600">Thumbnail sampul resmi kualitas tinggi otomatis tersedia dari YouTube.</span>
                     </div>
                   </div>
                   <button type="button" onclick="applyYoutubeThumbnailAsCover()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer">
                     <span>✨</span>
                     <span>Gunakan Thumbnail YouTube</span>
+                  </button>
+                </div>
+
+                <!-- Helper Instagram Reels Cover Auto-Detected Box -->
+                <div id="igThumbnailHelperBox" class="hidden p-3.5 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">📸</span>
+                    <div>
+                      <span class="font-bold text-slate-900 block">Instagram Reels Terdeteksi!</span>
+                      <span class="text-[11px] text-slate-600">Cover awal resmi Instagram Reels siap otomatis dijadikan sampul kartu portofolio.</span>
+                    </div>
+                  </div>
+                  <button type="button" onclick="applyInstagramCoverThumbnail()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer">
+                    <span>✨</span>
+                    <span>Gunakan Cover Instagram Reels</span>
                   </button>
                 </div>
 
@@ -1739,23 +1754,36 @@
 
                     <!-- Scrubber Slider & Frame Capture (Active for direct HTML5 video / upload) -->
                     <div id="videoScrubberControls" class="space-y-3">
-                      <div class="space-y-1">
-                        <input id="videoScrubRange" type="range" min="0" max="100" step="0.1" value="0" oninput="onVideoScrub(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-400" />
+                      <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-xs">
+                          <span class="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
+                            <span>🎞️ Geser Detik Sampul:</span>
+                            <span id="videoCurrentTimeDisplay" class="font-mono text-sky-400 font-bold bg-slate-800 px-2 py-0.5 rounded">00:00 / 00:00</span>
+                          </span>
+                          <span class="text-[10px] text-slate-400 font-mono">Bisa geser bebas</span>
+                        </div>
+                        <input id="videoScrubRange" type="range" min="0" max="100" step="0.1" value="0" oninput="onVideoScrub(this.value)" onchange="onVideoScrubEnd(this.value)" class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-400" />
                         <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
                           <span>00:00</span>
-                          <span>Geser untuk memilih detik snapshot</span>
+                          <span>Geser ke detik mana pun untuk memilih sampul</span>
                           <span id="videoDurationLabel">00:00</span>
                         </div>
                       </div>
 
-                      <!-- Action Buttons for Video Frame -->
-                      <div class="flex items-center gap-2 pt-1 flex-wrap">
-                        <button type="button" onclick="captureFrameFromVideo()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow">
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                          <span>📸 Ambil Frame Detik Ini Sebagai Sampul</span>
-                        </button>
-                        <button type="button" onclick="togglePlayCaptureVideo()" id="btnPlayCaptureVideo" class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold cursor-pointer text-center">
-                          ▶ Putar Video
+                      <!-- Quick Seek Navigation Buttons -->
+                      <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" onclick="seekAbsolute(0)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-200 cursor-pointer transition">⏮ 0s (Awal)</button>
+                        <button type="button" onclick="seekRelative(-1)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-200 cursor-pointer transition">◀ -1s</button>
+                        <button type="button" onclick="seekRelative(1)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-200 cursor-pointer transition">+1s ▶</button>
+                        <button type="button" onclick="seekRelative(5)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-200 cursor-pointer transition">+5s ⏩</button>
+                        <button type="button" onclick="togglePlayCaptureVideo()" id="btnPlayCaptureVideo" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-sky-400 cursor-pointer transition">▶ Putar / Jeda</button>
+                      </div>
+
+                      <!-- Big Main Action Button for Video Frame Capture -->
+                      <div class="pt-1">
+                        <button type="button" onclick="captureFrameFromVideo()" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-400 hover:to-blue-400 text-slate-950 text-xs font-black transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
+                          <svg class="w-4 h-4 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                          <span id="btnCaptureText">📸 AMBIL FRAME DETIK INI SEBAGAI SAMPUL</span>
                         </button>
                       </div>
                     </div>
@@ -1763,10 +1791,20 @@
 
                   <!-- Right: Custom Upload Option & Live Thumbnail Preview -->
                   <div class="lg:col-span-5 space-y-3">
-                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                      <label class="text-[11px] font-bold text-slate-700 block">Atau Unggah Berkas Sampul Manual (Galeri HP / PC)</label>
-                      <input id="inpVideoThumbFile" type="file" accept="image/*" onchange="handleThumbnailFileSelect(this)" class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white hover:file:bg-[#155293] file:cursor-pointer" />
-                      <input id="inpVideoThumbUrl" type="text" placeholder="Atau tempel URL gambar thumbnail..." oninput="handleThumbnailUrlInput(this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono bg-white outline-none mt-1" />
+                    <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+                      <div class="flex items-center justify-between">
+                        <label class="text-[11px] font-bold text-slate-800 block">🖼️ Opsi: Unggah Sampul Manual (Galeri HP / Gambar)</label>
+                        <span class="text-[10px] font-mono text-slate-500">JPG, PNG, WEBP</span>
+                      </div>
+                      <div onclick="document.getElementById('inpVideoThumbFile').click()" class="border-2 border-dashed border-slate-300 hover:border-[#155293] bg-white hover:bg-sky-50/40 rounded-xl p-3.5 text-center cursor-pointer transition group">
+                        <p class="text-xs font-bold text-slate-700 group-hover:text-[#155293]">Pilih Berkas Gambar dari Galeri HP / PC</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Otomatis dipotong sesuai format video (9:16 Reels / 16:9 Lanskap)</p>
+                      </div>
+                      <input id="inpVideoThumbFile" type="file" accept="image/*" onchange="handleThumbnailFileSelect(this)" class="hidden" />
+                      <div class="pt-1">
+                        <label class="text-[10px] font-mono uppercase font-bold text-slate-500 block mb-1">Atau Tempel Tautan URL Gambar Sampul:</label>
+                        <input id="inpVideoThumbUrl" type="text" placeholder="https://.../thumbnail.jpg" oninput="handleThumbnailUrlInput(this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-mono bg-white outline-none focus:border-[#155293]" />
+                      </div>
                     </div>
 
                     <!-- Preview Card -->
@@ -5552,8 +5590,16 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           ? '<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono text-[10px] font-bold">9:16 Reels</span>'
           : '<span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-mono text-[10px] font-bold">16:9 Lanskap</span>';
 
-        const thumbDisplay = v.thumbnail
-          ? '<img src="' + v.thumbnail + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + v.title + '" />'
+        let effectiveThumb = v.thumbnail;
+        if (!effectiveThumb && v.videoUrl) {
+          const ytM = v.videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/|live\/))([\w-]{11})/i);
+          if (ytM && ytM[1]) effectiveThumb = 'https://img.youtube.com/vi/' + ytM[1] + '/hqdefault.jpg';
+          const igM = v.videoUrl.match(/(?:instagram\.com\/(?:reel|p)\/)([\w-]+)/i);
+          if (igM && igM[1]) effectiveThumb = 'https://www.instagram.com/reel/' + igM[1] + '/media/?size=l';
+        }
+
+        const thumbDisplay = effectiveThumb
+          ? '<img src="' + effectiveThumb + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + v.title + '" />'
           : '<div class="w-full h-full bg-slate-900 flex flex-col items-center justify-center p-3 text-center text-white">' +
               '<div class="w-10 h-10 rounded-full bg-sky-500/80 flex items-center justify-center mb-1"><span class="ml-0.5">▶</span></div>' +
               '<span class="text-[10px] font-mono text-slate-400">Pratinjau Default</span>' +
@@ -5620,13 +5666,72 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       handleVideoUrlChange(val);
     }
 
+    let currentInstagramThumbUrl = '';
+
     function applyYoutubeThumbnailAsCover() {
       if (!currentYoutubeThumbUrl) return;
       tempVideoThumbnailData = currentYoutubeThumbUrl;
       const thumbUrlInp = document.getElementById('inpVideoThumbUrl');
       if (thumbUrlInp) thumbUrlInp.value = currentYoutubeThumbUrl;
       updateVideoThumbnailPreview();
-      notifyDataSaved('Thumbnail YouTube berhasil dipasang sebagai gambar sampul!');
+      notifyDataSaved('✓ Thumbnail YouTube resmi berhasil dipasang sebagai sampul!');
+    }
+
+    function applyInstagramCoverThumbnail() {
+      if (!currentInstagramThumbUrl) return;
+      tempVideoThumbnailData = currentInstagramThumbUrl;
+      const thumbUrlInp = document.getElementById('inpVideoThumbUrl');
+      if (thumbUrlInp) thumbUrlInp.value = currentInstagramThumbUrl;
+      updateVideoThumbnailPreview();
+      notifyDataSaved('✓ Cover awal Instagram Reels berhasil dipasang sebagai sampul!');
+    }
+
+    function seekAbsolute(sec) {
+      const player = document.getElementById('videoCapturePlayer');
+      if (!player) return;
+      player.currentTime = Math.max(0, Math.min(sec, player.duration || 100));
+      onVideoScrub(player.currentTime);
+      setTimeout(captureFrameFromVideoSilently, 100);
+    }
+
+    function seekRelative(delta) {
+      const player = document.getElementById('videoCapturePlayer');
+      if (!player) return;
+      const nextTime = Math.max(0, Math.min((player.currentTime || 0) + delta, player.duration || 100));
+      player.currentTime = nextTime;
+      onVideoScrub(nextTime);
+      setTimeout(captureFrameFromVideoSilently, 100);
+    }
+
+    function onVideoScrubEnd(val) {
+      onVideoScrub(val);
+      setTimeout(captureFrameFromVideoSilently, 80);
+    }
+
+    function captureFrameFromVideoSilently() {
+      const player = document.getElementById('videoCapturePlayer');
+      if (!player || !player.videoWidth || player.videoWidth === 0) return;
+      try {
+        let targetW = player.videoWidth;
+        let targetH = player.videoHeight;
+        const maxDim = 640;
+        if (targetW > maxDim || targetH > maxDim) {
+          if (targetW > targetH) {
+            targetH = Math.round((targetH * maxDim) / targetW);
+            targetW = maxDim;
+          } else {
+            targetW = Math.round((targetW * maxDim) / targetH);
+            targetH = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = targetW;
+        canvas.height = targetH;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(player, 0, 0, targetW, targetH);
+        tempVideoThumbnailData = canvas.toDataURL('image/jpeg', 0.85);
+        updateVideoThumbnailPreview();
+      } catch (err) {}
     }
 
     function toggleVideoForm(show) {
@@ -5647,6 +5752,9 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         currentYoutubeThumbUrl = '';
         const ytBox = document.getElementById('ytThumbnailHelperBox');
         if (ytBox) ytBox.classList.add('hidden');
+        const igBox = document.getElementById('igThumbnailHelperBox');
+        if (igBox) igBox.classList.add('hidden');
+        currentInstagramThumbUrl = '';
         setVideoSourceMode('url');
         updateVideoThumbnailPreview();
         initCaptureVideoPlayer('');
@@ -5837,6 +5945,11 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       if (igMatch && igMatch[1]) {
         const igId = igMatch[1];
         const igEmbedSrc = url.includes('/p/') ? `https://www.instagram.com/p/${igId}/embed/` : `https://www.instagram.com/reel/${igId}/embed/`;
+        currentInstagramThumbUrl = `https://www.instagram.com/reel/${igId}/media/?size=l`;
+        const igBox = document.getElementById('igThumbnailHelperBox');
+        if (igBox) igBox.classList.remove('hidden');
+
+        if (ratioSelect) ratioSelect.value = '9/16';
         updateVideoRatioPreview();
         if (player) { player.pause(); player.classList.add('hidden'); }
         if (notice) notice.classList.add('hidden');
@@ -5851,7 +5964,14 @@ create policy "Public Access" on portfolio_store for all using (true) with check
             </div>
           `;
         }
+        // Auto apply Instagram cover if no thumbnail yet
+        if (!tempVideoThumbnailData && !document.getElementById('inpVideoThumbUrl').value) {
+          applyInstagramCoverThumbnail();
+        }
         return;
+      } else {
+        const igBox = document.getElementById('igThumbnailHelperBox');
+        if (igBox) igBox.classList.add('hidden');
       }
 
       // 4. TikTok
