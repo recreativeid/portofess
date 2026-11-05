@@ -4496,6 +4496,9 @@
         <!-- Action Buttons -->
         <div class="flex items-center gap-2 flex-wrap ml-auto">
           <!-- Button: Unduh PDF -->
+          <button id="btnCvModalOpenTab" type="button" onclick="openLandingCvInNewTab()" class="px-3 sm:px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Buka Dokumen PDF di Layar Penuh">
+            <span>👁️ Buka Full</span>
+          </button>
           <button id="btnCvModalDownloadPdf" type="button" onclick="downloadUploadedCvPdf()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Unduh Berkas PDF Asli">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             <span>Unduh PDF</span>
@@ -5433,9 +5436,36 @@
     }
 
     /* =================================================================== */
-    /* RESMI: CURRICULUM VITAE (PDF) FILE VIEWER & DIRECT DOWNLOAD         */
+    /* RESMI: CURRICULUM VITAE (PDF) FILE VIEWER & DIRECT DOWNLOAD (ROBUST)*/
     /* =================================================================== */
     let landingCvFileData = null;
+    let _landingCvActiveBlobUrl = null;
+
+    function getLandingCvSafeViewUrl(rawUrl) {
+      if (!rawUrl) return '';
+      if (rawUrl.startsWith('data:application/pdf;base64,') || rawUrl.startsWith('data:application/pdf;') || rawUrl.startsWith('data:application/octet-stream;base64,')) {
+        try {
+          const parts = rawUrl.split(';base64,');
+          const base64Data = parts[1] || parts[0];
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'application/pdf' });
+          if (_landingCvActiveBlobUrl) {
+            try { URL.revokeObjectURL(_landingCvActiveBlobUrl); } catch (eRev) {}
+          }
+          _landingCvActiveBlobUrl = URL.createObjectURL(blob);
+          return _landingCvActiveBlobUrl;
+        } catch (err) {
+          console.warn('Error converting base64 to blob URL on landing:', err);
+          return rawUrl;
+        }
+      }
+      return rawUrl;
+    }
 
     function loadLandingCvFile() {
       // 1. Check from localStorage
@@ -5454,29 +5484,31 @@
         }
       } catch (e) {}
 
-      // 2. Check from IndexedDB if not found yet
+      // 2. Check from IndexedDB FathurPortfolioDB (portfolio_kv)
       if (!landingCvFileData || !landingCvFileData.fileUrl) {
-        try {
-          const idbReq = indexedDB.open('fathur_portfolio_db', 1);
-          idbReq.onsuccess = function(e) {
-            const db = e.target.result;
-            if (db.objectStoreNames.contains('keyval')) {
-              const tx = db.transaction('keyval', 'readonly');
-              const req = tx.objectStore('keyval').get('fathur_portfolio_cv_file');
-              req.onsuccess = function() {
-                if (req.result && (req.result.fileUrl || req.result.url)) {
-                  landingCvFileData = {
-                    fileUrl: req.result.fileUrl || req.result.url,
-                    fileName: req.result.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
-                    fileSize: req.result.fileSize || 'PDF Dokumen',
-                    uploadedAt: req.result.uploadedAt || new Date().toISOString()
-                  };
-                  renderLandingCvModalDom();
-                }
-              };
-            }
-          };
-        } catch (eIdb) {}
+        if (window.indexedDB) {
+          try {
+            const req = window.indexedDB.open('FathurPortfolioDB', 1);
+            req.onsuccess = function(e) {
+              const db = e.target.result;
+              if (db.objectStoreNames.contains('portfolio_kv')) {
+                const tx = db.transaction('portfolio_kv', 'readonly');
+                const getReq = tx.objectStore('portfolio_kv').get('fathur_portfolio_cv_file');
+                getReq.onsuccess = function() {
+                  if (getReq.result && (getReq.result.fileUrl || getReq.result.url)) {
+                    landingCvFileData = {
+                      fileUrl: getReq.result.fileUrl || getReq.result.url,
+                      fileName: getReq.result.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
+                      fileSize: getReq.result.fileSize || 'PDF Dokumen',
+                      uploadedAt: getReq.result.uploadedAt || new Date().toISOString()
+                    };
+                    renderLandingCvModalDom();
+                  }
+                };
+              }
+            };
+          } catch (eIdb) {}
+        }
       }
 
       renderLandingCvModalDom();
@@ -5488,11 +5520,13 @@
       const badgeEl = document.getElementById('cvModalFileBadge');
       const subEl = document.getElementById('cvModalSubTitle');
       const btnDl = document.getElementById('btnCvModalDownloadPdf');
+      const btnOpen = document.getElementById('btnCvModalOpenTab');
 
       if (landingCvFileData && landingCvFileData.fileUrl) {
+        const viewableUrl = getLandingCvSafeViewUrl(landingCvFileData.fileUrl);
         if (iframeEl) {
-          if (iframeEl.src !== landingCvFileData.fileUrl) {
-            iframeEl.src = landingCvFileData.fileUrl;
+          if (iframeEl.src !== viewableUrl) {
+            iframeEl.src = viewableUrl;
           }
           iframeEl.classList.remove('hidden');
         }
@@ -5504,6 +5538,7 @@
           subEl.textContent = (landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf') + ' · Siap Bekerja & Kolaborasi';
         }
         if (btnDl) btnDl.removeAttribute('disabled');
+        if (btnOpen) btnOpen.removeAttribute('disabled');
       } else {
         if (iframeEl) {
           iframeEl.src = '';
@@ -5513,19 +5548,29 @@
         if (badgeEl) badgeEl.textContent = 'Menunggu Berkas';
         if (subEl) subEl.textContent = 'Muhammad Fathur Rohman, S.Kom · Siap Bekerja & Kolaborasi';
         if (btnDl) btnDl.setAttribute('disabled', 'true');
+        if (btnOpen) btnOpen.setAttribute('disabled', 'true');
+      }
+    }
+
+    function openLandingCvInNewTab() {
+      if (landingCvFileData && landingCvFileData.fileUrl) {
+        const viewableUrl = getLandingCvSafeViewUrl(landingCvFileData.fileUrl);
+        window.open(viewableUrl, '_blank');
+      } else {
+        window.open('https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20Anda%20dan%20ingin%20meminta%20salinan%20CV%20PDF%20resmi%20Anda.', '_blank');
       }
     }
 
     function downloadUploadedCvPdf() {
       if (landingCvFileData && landingCvFileData.fileUrl) {
+        const viewableUrl = getLandingCvSafeViewUrl(landingCvFileData.fileUrl);
         const a = document.createElement('a');
-        a.href = landingCvFileData.fileUrl;
+        a.href = viewableUrl;
         a.download = landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
       } else {
-        // Fallback jika belum upload: arahkan hubungi WhatsApp langsung
         window.open('https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20Anda%20dan%20ingin%20meminta%20salinan%20CV%20PDF%20resmi%20Anda.', '_blank');
       }
     }
@@ -5557,6 +5602,7 @@
     function openCvRequestModal() { openCvPreviewModal(); }
     function closeCvRequestModal() { closeCvPreviewModal(); }
 
+    
     /* =================================================================== */
     /* CONTENT RENDERING: MULTI-ACCOUNT SOSMED SHOWCASE                    */
     /* =================================================================== */

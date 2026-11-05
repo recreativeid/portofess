@@ -2134,7 +2134,15 @@
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
                     <span class="font-display font-bold text-xs">Pratinjau Interaktif Dokumen PDF</span>
                   </div>
-                  <span id="adminCvViewerStatus" class="text-[10px] font-mono text-slate-400">Menunggu Berkas</span>
+                  <div class="flex items-center gap-2">
+                    <span id="adminCvViewerStatus" class="text-[10px] font-mono text-slate-400">Menunggu Berkas</span>
+                    <button id="btnAdminCvOpenTab" type="button" onclick="openAdminCvInNewTab()" disabled class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono font-bold transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer flex items-center gap-1">
+                      <span>👁️ Buka Full</span>
+                    </button>
+                    <button id="btnAdminCvDownloadTop" type="button" onclick="downloadAdminCvFile()" disabled class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-mono font-bold transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer flex items-center gap-1">
+                      <span>📥 Unduh</span>
+                    </button>
+                  </div>
                 </div>
 
                 <!-- PDF Frame or Empty Placeholder -->
@@ -4148,6 +4156,8 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         renderRoutesTable();
       } else if (tabKey === 'supabase') {
         loadSupabaseConfigForm();
+      } else if (tabKey === 'cv') {
+        initAdminCvManager();
       }
     }
 
@@ -7784,7 +7794,7 @@ function loadAdminToolsData() {
     }
 
     /* =================================================================== */
-    /* CV / RESUME PDF FILE UPLOAD & PREVIEW MANAGEMENT                    */
+    /* CV / RESUME PDF FILE UPLOAD & PREVIEW MANAGEMENT (ROBUST ENGINE)    */
     /* =================================================================== */
     let currentCvFileData = {
       fileUrl: '',
@@ -7792,9 +7802,42 @@ function loadAdminToolsData() {
       fileSize: '',
       uploadedAt: ''
     };
+    let _adminCvActiveBlobUrl = null;
 
-    function initAdminCvManager() {
-      // 1. Try reading from localStorage
+    function showAdminToast(msg, type) {
+      if (typeof notifyDataSaved === 'function') {
+        notifyDataSaved(msg, type);
+      }
+    }
+
+    function getCvSafeViewUrl(rawUrl) {
+      if (!rawUrl) return '';
+      if (rawUrl.startsWith('data:application/pdf;base64,') || rawUrl.startsWith('data:application/pdf;') || rawUrl.startsWith('data:application/octet-stream;base64,')) {
+        try {
+          const parts = rawUrl.split(';base64,');
+          const base64Data = parts[1] || parts[0];
+          const byteCharacters = atob(base64Data);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'application/pdf' });
+          if (_adminCvActiveBlobUrl) {
+            try { URL.revokeObjectURL(_adminCvActiveBlobUrl); } catch (eRev) {}
+          }
+          _adminCvActiveBlobUrl = URL.createObjectURL(blob);
+          return _adminCvActiveBlobUrl;
+        } catch (err) {
+          console.warn('Error converting base64 to blob URL:', err);
+          return rawUrl;
+        }
+      }
+      return rawUrl;
+    }
+
+    async function initAdminCvManager() {
+      // 1. Check localStorage
       try {
         const raw = localStorage.getItem('fathur_portfolio_cv_file');
         if (raw) {
@@ -7806,32 +7849,26 @@ function loadAdminToolsData() {
               fileSize: parsed.fileSize || parsed.size || 'PDF Dokumen',
               uploadedAt: parsed.uploadedAt || new Date().toISOString()
             };
+            renderAdminCvDomState();
           }
         }
       } catch (e) {}
 
-      // 2. Fallback check from IndexedDB
-      try {
-        const idbReq = indexedDB.open('fathur_portfolio_db', 1);
-        idbReq.onsuccess = function(e) {
-          const db = e.target.result;
-          if (db.objectStoreNames.contains('keyval')) {
-            const tx = db.transaction('keyval', 'readonly');
-            const req = tx.objectStore('keyval').get('fathur_portfolio_cv_file');
-            req.onsuccess = function() {
-              if (req.result && (req.result.fileUrl || req.result.url)) {
-                currentCvFileData = {
-                  fileUrl: req.result.fileUrl || req.result.url,
-                  fileName: req.result.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
-                  fileSize: req.result.fileSize || 'PDF Dokumen',
-                  uploadedAt: req.result.uploadedAt || new Date().toISOString()
-                };
-                renderAdminCvDomState();
-              }
+      // 2. High-capacity check from IndexedDB
+      if (typeof portfolioIdbGet === 'function') {
+        try {
+          const idbCv = await portfolioIdbGet('fathur_portfolio_cv_file');
+          if (idbCv && (idbCv.fileUrl || idbCv.url)) {
+            currentCvFileData = {
+              fileUrl: idbCv.fileUrl || idbCv.url,
+              fileName: idbCv.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
+              fileSize: idbCv.fileSize || 'PDF Dokumen',
+              uploadedAt: idbCv.uploadedAt || new Date().toISOString()
             };
+            renderAdminCvDomState();
           }
-        };
-      } catch (eIdb) {}
+        } catch (eIdb) {}
+      }
 
       // 3. Fallback check from Supabase Cloud
       if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.get) {
@@ -7861,6 +7898,8 @@ function loadAdminToolsData() {
       const emptyEl = document.getElementById('adminCvEmptyPlaceholder');
       const btnDl = document.getElementById('btnAdminCvDownload');
       const btnDel = document.getElementById('btnAdminCvDelete');
+      const btnOpenTop = document.getElementById('btnAdminCvOpenTab');
+      const btnDlTop = document.getElementById('btnAdminCvDownloadTop');
       const urlInp = document.getElementById('adminCvCloudUrlInput');
 
       const hasFile = !!(currentCvFileData && currentCvFileData.fileUrl);
@@ -7877,19 +7916,24 @@ function loadAdminToolsData() {
           }
         }
         if (badgeEl) {
-          badgeEl.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800';
+          badgeEl.className = 'text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs';
           badgeEl.textContent = '● Berkas Aktif Siap Digunakan';
         }
         if (viewerStatus) viewerStatus.textContent = currentCvFileData.fileName || 'Pratinjau Aktif';
 
         if (iframeEl) {
-          iframeEl.src = currentCvFileData.fileUrl;
+          const viewableUrl = getCvSafeViewUrl(currentCvFileData.fileUrl);
+          if (iframeEl.src !== viewableUrl) {
+            iframeEl.src = viewableUrl;
+          }
           iframeEl.classList.remove('hidden');
         }
         if (emptyEl) emptyEl.classList.add('hidden');
 
         if (btnDl) btnDl.removeAttribute('disabled');
         if (btnDel) btnDel.removeAttribute('disabled');
+        if (btnOpenTop) btnOpenTop.removeAttribute('disabled');
+        if (btnDlTop) btnDlTop.removeAttribute('disabled');
 
         if (urlInp && currentCvFileData.fileUrl.startsWith('http')) {
           urlInp.value = currentCvFileData.fileUrl;
@@ -7899,7 +7943,7 @@ function loadAdminToolsData() {
         if (sizeEl) sizeEl.textContent = '-';
         if (timeEl) timeEl.textContent = '-';
         if (badgeEl) {
-          badgeEl.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800';
+          badgeEl.className = 'text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs';
           badgeEl.textContent = 'Belum Ada Berkas';
         }
         if (viewerStatus) viewerStatus.textContent = 'Menunggu Berkas';
@@ -7912,27 +7956,33 @@ function loadAdminToolsData() {
 
         if (btnDl) btnDl.setAttribute('disabled', 'true');
         if (btnDel) btnDel.setAttribute('disabled', 'true');
+        if (btnOpenTop) btnOpenTop.setAttribute('disabled', 'true');
+        if (btnDlTop) btnDlTop.setAttribute('disabled', 'true');
       }
     }
 
     function triggerAdminCvFilePicker() {
       const fileInp = document.getElementById('adminCvFileInput');
-      if (fileInp) fileInp.click();
+      if (fileInp) {
+        fileInp.value = ''; // Reset so same file selection triggers onchange
+        fileInp.click();
+      }
     }
 
     function handleAdminCvFileUpload(input) {
       if (!input || !input.files || input.files.length === 0) return;
       const file = input.files[0];
-      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-        showAdminToast('Mohon pilih berkas dengan format PDF asli (.pdf)', 'error');
-        input.value = '';
+      
+      const isPdf = (file.type && file.type.includes('pdf')) || file.name.toLowerCase().endsWith('.pdf');
+      if (!isPdf) {
+        notifyDataSaved('Mohon pilih berkas dengan format PDF asli (.pdf)', 'error');
+        if (input.value !== undefined) input.value = '';
         return;
       }
 
-      // Check file size (warn if > 15MB)
-      if (file.size > 15 * 1024 * 1024) {
-        showAdminToast('Ukuran berkas melebihi 15MB. Mohon kompres berkas PDF terlebih dahulu.', 'error');
-        input.value = '';
+      if (file.size > 25 * 1024 * 1024) {
+        notifyDataSaved('Ukuran berkas melebihi 25MB. Mohon kompres berkas PDF terlebih dahulu.', 'error');
+        if (input.value !== undefined) input.value = '';
         return;
       }
 
@@ -7940,24 +7990,30 @@ function loadAdminToolsData() {
         ? (file.size / (1024 * 1024)).toFixed(2) + ' MB'
         : Math.round(file.size / 1024) + ' KB';
 
-      showAdminToast('Membaca berkas PDF...', 'info');
+      notifyDataSaved('Sedang memproses & membaca berkas: ' + file.name + ' (' + formattedSize + ')...');
 
       const reader = new FileReader();
-      reader.onload = function(e) {
-        currentCvFileData = {
-          fileUrl: e.target.result,
-          fileName: file.name,
-          fileSize: formattedSize,
-          uploadedAt: new Date().toISOString()
-        };
-        renderAdminCvDomState();
-        showAdminToast('Berkas PDF berhasil dimuat! Klik "Simpan ke Database & Cloud" untuk menerapkan.', 'success');
+      reader.onload = async function(e) {
+        try {
+          currentCvFileData = {
+            fileUrl: e.target.result,
+            fileName: file.name,
+            fileSize: formattedSize,
+            uploadedAt: new Date().toISOString()
+          };
+          renderAdminCvDomState();
+          
+          // Auto-save immediately upon upload!
+          await saveAdminCvFile(true);
+        } catch (readErr) {
+          console.error('Error processing PDF file:', readErr);
+          notifyDataSaved('Gagal memproses berkas PDF: ' + readErr.message, 'error');
+        }
       };
       reader.onerror = function() {
-        showAdminToast('Gagal membaca berkas PDF dari komputer/HP.', 'error');
+        notifyDataSaved('Gagal membaca berkas PDF dari komputer/HP.', 'error');
       };
       reader.readAsDataURL(file);
-      input.value = '';
     }
 
     function handleAdminCvDragOver(e) {
@@ -7987,15 +8043,15 @@ function loadAdminToolsData() {
       }
     }
 
-    function applyAdminCvFromUrl() {
+    async function applyAdminCvFromUrl() {
       const urlInp = document.getElementById('adminCvCloudUrlInput');
       if (!urlInp || !urlInp.value.trim()) {
-        showAdminToast('Silakan masukkan tautan URL berkas PDF yang valid.', 'error');
+        notifyDataSaved('Silakan masukkan tautan URL berkas PDF yang valid.', 'error');
         return;
       }
       const url = urlInp.value.trim();
       if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('data:application/pdf')) {
-        showAdminToast('URL harus diawali dengan http:// atau https://', 'error');
+        notifyDataSaved('URL harus diawali dengan http:// atau https://', 'error');
         return;
       }
 
@@ -8015,42 +8071,43 @@ function loadAdminToolsData() {
         uploadedAt: new Date().toISOString()
       };
       renderAdminCvDomState();
-      showAdminToast('Tautan PDF berhasil dipasang! Klik "Simpan ke Database & Cloud" untuk menerapkan.', 'success');
+      await saveAdminCvFile(false);
     }
 
-    function saveAdminCvFile() {
+    async function saveAdminCvFile(isAuto = false) {
       if (!currentCvFileData || !currentCvFileData.fileUrl) {
-        showAdminToast('Belum ada berkas PDF yang dipilih untuk disimpan.', 'error');
+        notifyDataSaved('Belum ada berkas PDF yang dipilih untuk disimpan.', 'error');
         return;
       }
 
       currentCvFileData.uploadedAt = new Date().toISOString();
 
-      showAdminToast('Menyimpan berkas CV PDF...', 'info');
-
-      saveDataWithQuotaGuard('fathur_portfolio_cv_file', JSON.stringify(currentCvFileData)).then(() => {
-        // Broadcast change to other tabs & landing page
-        if (typeof adminSyncChannel !== 'undefined' && adminSyncChannel && adminSyncChannel.postMessage) {
-          adminSyncChannel.postMessage({
-            type: 'UPDATE',
-            key: 'fathur_portfolio_cv_file',
-            data: currentCvFileData
+      try {
+        if (typeof executeUniversalSave === 'function') {
+          await executeUniversalSave('fathur_portfolio_cv_file', currentCvFileData, {
+            label: 'Berkas CV PDF',
+            silent: isAuto
           });
-        }
-
-        // Save to Supabase Cloud
-        if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.set) {
-          PortfolioCloudDB.set('fathur_portfolio_cv_file', currentCvFileData).catch(() => {});
+        } else {
+          localStorage.setItem('fathur_portfolio_cv_file', JSON.stringify(currentCvFileData));
+          if (typeof portfolioIdbSet === 'function') {
+            await portfolioIdbSet('fathur_portfolio_cv_file', currentCvFileData);
+          }
         }
 
         renderAdminCvDomState();
-        showAdminToast('Berkas CV PDF resmi berhasil disimpan & disinkronkan ke Landing Page!', 'success');
-      }).catch(err => {
-        showAdminToast('Gagal menyimpan berkas: ' + err.message, 'error');
-      });
+        if (isAuto) {
+          notifyDataSaved('✓ Berkas CV PDF (' + (currentCvFileData.fileName || 'PDF') + ') berhasil diunggah & tersimpan otomatis!');
+        } else {
+          notifyDataSaved('✓ Berkas CV PDF resmi berhasil disimpan & disinkronkan ke Landing Page!');
+        }
+      } catch (err) {
+        console.error('Error saving CV file:', err);
+        notifyDataSaved('Gagal menyimpan berkas: ' + err.message, 'error');
+      }
     }
 
-    function deleteAdminCvFile() {
+    async function deleteAdminCvFile() {
       if (!confirm('Apakah Anda yakin ingin menghapus berkas CV PDF ini? Landing page akan kembali ke tampilan kontak langsung.')) {
         return;
       }
@@ -8062,51 +8119,62 @@ function loadAdminToolsData() {
         uploadedAt: ''
       };
 
+      if (_adminCvActiveBlobUrl) {
+        try { URL.revokeObjectURL(_adminCvActiveBlobUrl); } catch (eRev) {}
+        _adminCvActiveBlobUrl = null;
+      }
+
       try {
         localStorage.removeItem('fathur_portfolio_cv_file');
       } catch (e) {}
 
-      try {
-        const idbReq = indexedDB.open('fathur_portfolio_db', 1);
-        idbReq.onsuccess = function(e) {
-          const db = e.target.result;
-          if (db.objectStoreNames.contains('keyval')) {
-            const tx = db.transaction('keyval', 'readwrite');
-            tx.objectStore('keyval').delete('fathur_portfolio_cv_file');
-          }
-        };
-      } catch (eIdb) {}
+      if (typeof portfolioIdbSet === 'function') {
+        await portfolioIdbSet('fathur_portfolio_cv_file', null);
+      }
 
       if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.set) {
         PortfolioCloudDB.set('fathur_portfolio_cv_file', null).catch(() => {});
       }
 
-      if (typeof adminSyncChannel !== 'undefined' && adminSyncChannel && adminSyncChannel.postMessage) {
-        adminSyncChannel.postMessage({
-          type: 'DELETE',
-          key: 'fathur_portfolio_cv_file',
-          data: null
-        });
+      if (portfolioSyncChannel) {
+        try {
+          portfolioSyncChannel.postMessage({
+            type: 'PORTFOLIO_DATA_UPDATED',
+            key: 'fathur_portfolio_cv_file',
+            data: null,
+            timestamp: Date.now()
+          });
+        } catch (eBc) {}
       }
 
       renderAdminCvDomState();
-      showAdminToast('Berkas CV PDF berhasil dihapus.', 'info');
+      notifyDataSaved('Berkas CV PDF berhasil dihapus.');
+    }
+
+    function openAdminCvInNewTab() {
+      if (!currentCvFileData || !currentCvFileData.fileUrl) {
+        notifyDataSaved('Tidak ada berkas PDF untuk dibuka.', 'error');
+        return;
+      }
+      const viewableUrl = getCvSafeViewUrl(currentCvFileData.fileUrl);
+      window.open(viewableUrl, '_blank');
     }
 
     function downloadAdminCvFile() {
       if (!currentCvFileData || !currentCvFileData.fileUrl) {
-        showAdminToast('Tidak ada berkas PDF untuk diunduh.', 'error');
+        notifyDataSaved('Tidak ada berkas PDF untuk diunduh.', 'error');
         return;
       }
 
+      const viewableUrl = getCvSafeViewUrl(currentCvFileData.fileUrl);
       const a = document.createElement('a');
-      a.href = currentCvFileData.fileUrl;
+      a.href = viewableUrl;
       a.download = currentCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     }
-
+  
 </script>
 
 </html>
