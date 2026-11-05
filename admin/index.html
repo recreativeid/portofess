@@ -300,9 +300,9 @@
           <button onclick="switchAdminTab('cv')" data-tab="cv" id="navBtn-cv" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
             <div class="flex items-center gap-2.5">
               <svg class="w-4 h-4 text-rose-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              <span class="font-bold">Kelola CV (ATS)</span>
+              <span class="font-bold">Unggah CV / Resume (PDF)</span>
             </div>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">Auto</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">PDF</span>
           </button>
         </div>
 
@@ -2012,191 +2012,153 @@
 
         <!-- ============================================================== -->
         <!-- ============================================================== -->
-        <!-- TAB: KELOLA & PRATINJAU CV / RESUME PROFESIONAL (ATS-FRIENDLY) -->
+        <!-- TAB: UNGGAH & KELOLA BERKAS CV / RESUME (PDF)               -->
         <!-- ============================================================== -->
         <div id="tabContent-cv" class="admin-tab-pane hidden space-y-6">
-          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
+            
+            <!-- Header Tab -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
               <div>
                 <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
-                  <h3 class="font-display font-extrabold text-lg text-slate-900">Kelola &amp; Pratinjau Curriculum Vitae (ATS-Friendly)</h3>
+                  <span class="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></span>
+                  <h3 class="font-display font-extrabold text-xl text-slate-900">Unggah &amp; Kelola Berkas CV / Resume (PDF)</h3>
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">Dihitung otomatis secara live dari database proyek web, sertifikat, medsos, dan peta rute. Dapat disesuaikan sewaktu-waktu.</p>
+                <p class="text-xs text-slate-500 mt-1">
+                  Unggah berkas CV format PDF resmi Anda. Berkas ini tampil langsung dalam pratinjau interaktif di Landing Page dan siap diunduh oleh HRD &amp; calon mitra bisnis.
+                </p>
               </div>
+
               <div class="flex items-center gap-2 flex-wrap">
-                <button type="button" onclick="resetAdminCvDefaults()" class="px-3.5 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition cursor-pointer">
-                  🔄 Reset Standar ATS
+                <button type="button" onclick="triggerAdminCvFilePicker()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition shadow-xs flex items-center gap-2 cursor-pointer">
+                  <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                  <span>Pilih Berkas PDF</span>
                 </button>
-                <button type="button" onclick="previewAdminCvPrint()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                  <span>Uji Cetak / PDF</span>
-                </button>
-                <button type="button" onclick="saveAdminCvCustomData()" class="px-5 py-2 rounded-xl bg-[#155293] hover:bg-blue-800 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                  <span>Simpan Perubahan CV</span>
+                <button type="button" onclick="saveAdminCvFile()" class="px-5 py-2.5 rounded-xl bg-[#155293] hover:bg-blue-800 text-white text-xs font-bold transition shadow-xs flex items-center gap-2 cursor-pointer">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  <span>Simpan ke Database &amp; Cloud</span>
                 </button>
               </div>
             </div>
 
-            <!-- Auto-Recap Indicator Strip -->
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
-              <span class="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#155293] block mb-2">
-                ● STATUS REKAPITULASI LIVE OTOMATIS (TERHUBUNG KE SISTEM):
-              </span>
-              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
-                <div class="bg-white p-2 rounded-lg border border-slate-200">
-                  <div id="adminCvStatProjects" class="text-base font-black text-[#155293]">14+</div>
-                  <div class="text-[10px] font-bold text-slate-700">Proyek Web</div>
-                </div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200">
-                  <div id="adminCvStatCerts" class="text-base font-black text-amber-600">22+</div>
-                  <div class="text-[10px] font-bold text-slate-700">Sertifikat Resmi</div>
-                </div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200">
-                  <div id="adminCvStatFeeds" class="text-base font-black text-rose-600">40+</div>
-                  <div class="text-[10px] font-bold text-slate-700">Desain Portofolio</div>
-                </div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200">
-                  <div id="adminCvStatVideos" class="text-base font-black text-purple-600">16+</div>
-                  <div class="text-[10px] font-bold text-slate-700">Video &amp; Reels</div>
-                </div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200">
-                  <div id="adminCvStatRoutes" class="text-base font-black text-sky-600">10+</div>
-                  <div class="text-[10px] font-bold text-slate-700">Rute Klien</div>
-                </div>
-                <div class="bg-white p-2 rounded-lg border border-slate-200">
-                  <div class="text-base font-black text-emerald-600">3.76</div>
-                  <div class="text-[10px] font-bold text-slate-700">IPK Cum Laude</div>
-                </div>
-              </div>
-            </div>
+            <!-- Hidden File Input for PDF -->
+            <input id="adminCvFileInput" type="file" accept="application/pdf" class="hidden" onchange="handleAdminCvFileUpload(this)" />
 
-            <!-- Two Column: Editor vs Live Preview -->
+            <!-- Two-Column Layout: Upload Controls & Live PDF Stage -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
-              <!-- LEFT COLUMN (FORM CONTROLS): 5 COLS -->
-              <div class="lg:col-span-5 space-y-4">
-                <div>
-                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Headline &amp; Jabatan Target:</label>
-                  <input id="adminCvInpHeadline" type="text" oninput="updateAdminCvLivePreview()" placeholder="Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold outline-none focus:border-[#155293]" />
-                </div>
-
-                <div>
-                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Status Ketersediaan Rekrutmen:</label>
-                  <input id="adminCvInpStatus" type="text" oninput="updateAdminCvLivePreview()" placeholder="Siap Bekerja Segera · Full-Time / Kontrak / Remote Ready" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold outline-none focus:border-[#155293]" />
-                </div>
-
-                <div>
-                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Ringkasan Profesional (ATS Executive Summary):</label>
-                  <textarea id="adminCvInpSummary" rows="6" oninput="updateAdminCvLivePreview()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-[#155293] leading-relaxed" placeholder="Tuliskan ringkasan profesional Anda..."></textarea>
-                  <p class="text-[10px] text-slate-400 mt-1">Gunakan kata kunci teknis (React, Next.js, Laravel, Supabase, UI/UX, Cum Laude) agar lolos screening ATS HRD secara optimal.</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Email Resmi:</label>
-                    <input id="adminCvInpEmail" type="email" oninput="updateAdminCvLivePreview()" placeholder="hyungkun.co@gmail.com" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+              <!-- LEFT COLUMN: CONTROLS & METADATA (5 COLS) -->
+              <div class="lg:col-span-5 space-y-5">
+                
+                <!-- Drag & Drop Zone -->
+                <div id="adminCvDropZone" onclick="triggerAdminCvFilePicker()" ondragover="handleAdminCvDragOver(event)" ondragleave="handleAdminCvDragLeave(event)" ondrop="handleAdminCvDrop(event)" class="border-2 border-dashed border-slate-300 hover:border-[#155293] bg-slate-50 hover:bg-blue-50/40 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition group">
+                  <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-xs">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                   </div>
-                  <div>
-                    <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">WhatsApp Personal:</label>
-                    <input id="adminCvInpPhone" type="text" oninput="updateAdminCvLivePreview()" placeholder="+62 895-3931-81822" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                  <h4 class="font-display font-extrabold text-sm text-slate-800">Klik atau Tarik Berkas PDF ke Sini</h4>
+                  <p class="text-xs text-slate-500 mt-1">Mendukung format berkas .PDF asli (dari Canva, Word, Illustrator, atau ATS)</p>
+                  <span class="inline-block mt-3 px-3 py-1 rounded-full bg-white border border-slate-200 text-[10px] font-mono font-bold text-slate-600 group-hover:border-[#155293] group-hover:text-[#155293] transition">
+                    Maksimal 15 MB (Optimal &lt; 5 MB)
+                  </span>
+                </div>
+
+                <!-- Alternative: PDF URL Input -->
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                  <label class="text-[10px] font-mono uppercase font-bold text-slate-600 block">
+                    Atau Masukkan Tautan Cloud / URL PDF Eksternal:
+                  </label>
+                  <div class="flex items-center gap-2">
+                    <input id="adminCvCloudUrlInput" type="url" placeholder="https://domain.com/CV-Muhammad-Fathur-Rohman.pdf" class="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono outline-none focus:border-[#155293]" />
+                    <button type="button" onclick="applyAdminCvFromUrl()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition shrink-0 cursor-pointer">
+                      Terapkan URL
+                    </button>
+                  </div>
+                  <p class="text-[10px] text-slate-400">Gunakan jika berkas PDF Anda di-host di Cloud Storage, Supabase Storage, atau CDN.</p>
+                </div>
+
+                <!-- Active File Card & Metadata -->
+                <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <span class="text-[10px] font-mono uppercase font-extrabold text-[#155293]">
+                      ● INFORMASI BERKAS AKTIF
+                    </span>
+                    <span id="adminCvSyncBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
+                      Belum Ada Berkas
+                    </span>
+                  </div>
+
+                  <div class="space-y-2 text-xs">
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-500 font-medium">Nama Berkas:</span>
+                      <span id="adminCvFileNameDisplay" class="font-bold text-slate-800 truncate max-w-[200px] text-right font-mono text-[11px]">-</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-500 font-medium">Ukuran Berkas:</span>
+                      <span id="adminCvFileSizeDisplay" class="font-bold text-slate-800 font-mono text-[11px]">-</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-500 font-medium">Diperbarui Pada:</span>
+                      <span id="adminCvUploadedAtDisplay" class="font-bold text-slate-700 font-mono text-[11px]">-</span>
+                    </div>
+                  </div>
+
+                  <!-- File Action Buttons -->
+                  <div class="pt-2 border-t border-slate-100 flex items-center gap-2">
+                    <button id="btnAdminCvDownload" type="button" onclick="downloadAdminCvFile()" disabled class="flex-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-700 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+                      <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                      <span>Unduh File</span>
+                    </button>
+                    <button id="btnAdminCvDelete" type="button" onclick="deleteAdminCvFile()" disabled class="px-3.5 py-2 rounded-xl border border-rose-200 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-40 disabled:pointer-events-none text-rose-600 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      <span>Hapus</span>
+                    </button>
                   </div>
                 </div>
 
-                <div>
-                  <label class="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1">Domisili &amp; Lokasi Kerja:</label>
-                  <input id="adminCvInpLocation" type="text" oninput="updateAdminCvLivePreview()" placeholder="Magelang, Jawa Tengah (Siap Relokasi &amp; Remote)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none focus:border-[#155293]" />
+                <!-- Recruitment Direct Actions Guide -->
+                <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-900 space-y-1.5">
+                  <div class="font-extrabold flex items-center gap-1.5 text-blue-950">
+                    <span>💡 Integrasi Kontak Rekrutmen:</span>
+                  </div>
+                  <p class="text-[11px] text-blue-800 leading-relaxed">
+                    Pengunjung atau HRD yang membuka pratinjau berkas ini di Landing Page juga akan disajikan tombol pintas direct contact ke WhatsApp Anda (<strong>0895393181822</strong>) dan Email resmi (<strong>hyungkun.co@gmail.com</strong>) untuk menawarkan pekerjaan atau kolaborasi bisnis.
+                  </p>
                 </div>
+
               </div>
 
-              <!-- RIGHT COLUMN (LIVE ATS CV PREVIEW): 7 COLS -->
-              <div class="lg:col-span-7 bg-slate-100 p-3 sm:p-5 rounded-2xl border border-slate-200 shadow-inner">
-                <div class="flex items-center justify-between mb-3 text-xs">
-                  <span class="font-bold text-slate-700 font-display">Pratinjau Langsung (A4 Paper Rendering)</span>
-                  <span class="text-[10px] font-mono text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-bold">Live Synchronized</span>
+              <!-- RIGHT COLUMN: INTERACTIVE PDF VIEWER STAGE (7 COLS) -->
+              <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-3 sm:p-4 border border-slate-800 shadow-xl space-y-3">
+                <div class="flex items-center justify-between px-2 pt-1 text-white">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                    <span class="font-display font-bold text-xs">Pratinjau Interaktif Dokumen PDF</span>
+                  </div>
+                  <span id="adminCvViewerStatus" class="text-[10px] font-mono text-slate-400">Menunggu Berkas</span>
                 </div>
 
-                <!-- Scaled Paper Preview Container -->
-                <div id="adminCvPreviewCard" class="bg-white text-slate-800 rounded-xl p-5 sm:p-6 shadow-md border border-slate-200 text-xs space-y-4 max-h-[600px] overflow-y-auto font-sans leading-relaxed">
-                  <!-- Header -->
-                  <div class="border-b border-slate-800 pb-3 flex justify-between items-start gap-3">
+                <!-- PDF Frame or Empty Placeholder -->
+                <div class="relative w-full h-[620px] rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center border border-white/10">
+                  
+                  <!-- Empty State -->
+                  <div id="adminCvEmptyPlaceholder" class="p-8 text-center text-slate-400 space-y-3 flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-rose-400">
+                      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
                     <div>
-                      <h4 class="font-black text-slate-900 text-base uppercase tracking-tight">MUHAMMAD FATHUR ROHMAN, S.Kom</h4>
-                      <p id="adminCvPrevHeadline" class="text-xs font-bold text-[#155293] mt-0.5">Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist</p>
-                      <div class="mt-1">
-                        <span id="adminCvPrevStatus" class="inline-block px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-mono font-bold">Siap Bekerja Segera · Full-Time / Kontrak / Remote</span>
-                      </div>
+                      <h4 class="font-bold text-white text-sm">Belum Ada Berkas PDF yang Diunggah</h4>
+                      <p class="text-xs text-slate-400 mt-1 max-w-sm">
+                        Silakan klik tombol "Pilih Berkas PDF" atau seret dokumen CV Anda ke kotak di sebelah kiri untuk melihat pratinjau live.
+                      </p>
                     </div>
-                    <div class="text-[9px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200 shrink-0">
-                      <div>✉️ <span id="adminCvPrevEmail" class="font-semibold text-blue-700">hyungkun.co@gmail.com</span></div>
-                      <div>📱 <span id="adminCvPrevPhone" class="font-semibold text-emerald-700">+62 895-3931-81822</span></div>
-                      <div>📍 <span id="adminCvPrevLoc" class="font-semibold">Magelang, Jawa Tengah</span></div>
-                    </div>
+                    <button type="button" onclick="triggerAdminCvFilePicker()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition cursor-pointer">
+                      Pilih Berkas PDF Sekarang
+                    </button>
                   </div>
 
-                  <!-- Metrics -->
-                  <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-center grid grid-cols-3 sm:grid-cols-6 gap-1.5 text-[9px]">
-                    <div class="bg-white p-1 rounded border border-slate-200">
-                      <div id="adminCvPrevMetricProj" class="font-black text-[#155293] text-xs">14+</div>
-                      <div class="text-slate-600 font-bold">Proyek Web</div>
-                    </div>
-                    <div class="bg-white p-1 rounded border border-slate-200">
-                      <div id="adminCvPrevMetricCert" class="font-black text-amber-600 text-xs">22+</div>
-                      <div class="text-slate-600 font-bold">Sertifikat</div>
-                    </div>
-                    <div class="bg-white p-1 rounded border border-slate-200">
-                      <div id="adminCvPrevMetricFeed" class="font-black text-rose-600 text-xs">40+</div>
-                      <div class="text-slate-600 font-bold">Desain</div>
-                    </div>
-                    <div class="bg-white p-1 rounded border border-slate-200">
-                      <div id="adminCvPrevMetricVid" class="font-black text-purple-600 text-xs">16+</div>
-                      <div class="text-slate-600 font-bold">Video</div>
-                    </div>
-                    <div class="bg-white p-1 rounded border border-slate-200">
-                      <div id="adminCvPrevMetricRoute" class="font-black text-sky-600 text-xs">10+</div>
-                      <div class="text-slate-600 font-bold">Rute Klien</div>
-                    </div>
-                    <div class="bg-white p-1 rounded border border-slate-200">
-                      <div class="font-black text-emerald-600 text-xs">3.76</div>
-                      <div class="text-slate-600 font-bold">Cum Laude</div>
-                    </div>
-                  </div>
+                  <!-- PDF iFrame -->
+                  <iframe id="adminCvPdfFrame" src="" class="w-full h-full border-0 hidden bg-white" title="Pratinjau Berkas CV PDF"></iframe>
 
-                  <!-- Summary -->
-                  <div>
-                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">🎯 Ringkasan Profesional:</span>
-                    <p id="adminCvPrevSummary" class="text-[11px] text-slate-700 leading-relaxed text-justify">
-                      Lulusan Sarjana Teknik Informatika (S.Kom) dari Universitas Muhammadiyah Magelang dengan predikat Cum Laude (IPK 3.76)...
-                    </p>
-                  </div>
-
-                  <!-- Tech Stack -->
-                  <div>
-                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">⚡ Kompetensi Teknis:</span>
-                    <p class="text-[10px] text-slate-600 leading-relaxed">
-                      React.js, Next.js, TypeScript, PHP (Laravel), PostgreSQL, Supabase, MySQL, Tailwind CSS, Figma UI/UX, Adobe Photoshop/Illustrator, Git/GitHub.
-                    </p>
-                  </div>
-
-                  <!-- Experience -->
-                  <div>
-                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">💼 Pengalaman Unggulan:</span>
-                    <div class="text-[10px] space-y-1 text-slate-700">
-                      <div><strong>Lead Fullstack Developer &amp; Founder</strong> — Solveta Digital (2023–Sekarang)</div>
-                      <div><strong>Web Developer &amp; IT Support Intern</strong> — BBPMP Jawa Tengah (2024)</div>
-                      <div><strong>Kepala Divisi Media Kreatif</strong> — IMM &amp; BEM Fakultas UNIMMA (2022–2024)</div>
-                    </div>
-                  </div>
-
-                  <!-- Education -->
-                  <div>
-                    <span class="text-[10px] font-mono uppercase font-bold text-slate-800 border-b border-slate-200 block pb-0.5 mb-1">🎓 Pendidikan:</span>
-                    <div class="text-[10px] text-slate-700 flex justify-between">
-                      <span><strong>S1 Teknik Informatika (S.Kom)</strong> — Universitas Muhammadiyah Magelang</span>
-                      <span class="font-bold text-emerald-700">IPK 3.76 (Cum Laude)</span>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -7821,146 +7783,328 @@ function loadAdminToolsData() {
       return { totalProjects, totalCertificates, totalFeeds, totalVideos, totalRoutes };
     }
 
+    /* =================================================================== */
+    /* CV / RESUME PDF FILE UPLOAD & PREVIEW MANAGEMENT                    */
+    /* =================================================================== */
+    let currentCvFileData = {
+      fileUrl: '',
+      fileName: '',
+      fileSize: '',
+      uploadedAt: ''
+    };
+
     function initAdminCvManager() {
-      let custom = {};
+      // 1. Try reading from localStorage
       try {
-        const stored = localStorage.getItem('fathur_portfolio_cv_custom_v1');
-        if (stored) custom = JSON.parse(stored);
+        const raw = localStorage.getItem('fathur_portfolio_cv_file');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && (parsed.fileUrl || parsed.url)) {
+            currentCvFileData = {
+              fileUrl: parsed.fileUrl || parsed.url || '',
+              fileName: parsed.fileName || parsed.name || 'CV-Muhammad-Fathur-Rohman.pdf',
+              fileSize: parsed.fileSize || parsed.size || 'PDF Dokumen',
+              uploadedAt: parsed.uploadedAt || new Date().toISOString()
+            };
+          }
+        }
       } catch (e) {}
 
-      const merged = { ...DEFAULT_CV_DATA, ...custom };
+      // 2. Fallback check from IndexedDB
+      try {
+        const idbReq = indexedDB.open('fathur_portfolio_db', 1);
+        idbReq.onsuccess = function(e) {
+          const db = e.target.result;
+          if (db.objectStoreNames.contains('keyval')) {
+            const tx = db.transaction('keyval', 'readonly');
+            const req = tx.objectStore('keyval').get('fathur_portfolio_cv_file');
+            req.onsuccess = function() {
+              if (req.result && (req.result.fileUrl || req.result.url)) {
+                currentCvFileData = {
+                  fileUrl: req.result.fileUrl || req.result.url,
+                  fileName: req.result.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
+                  fileSize: req.result.fileSize || 'PDF Dokumen',
+                  uploadedAt: req.result.uploadedAt || new Date().toISOString()
+                };
+                renderAdminCvDomState();
+              }
+            };
+          }
+        };
+      } catch (eIdb) {}
 
-      const inpH = document.getElementById('adminCvInpHeadline');
-      if (inpH) inpH.value = merged.headline;
-      const inpSt = document.getElementById('adminCvInpStatus');
-      if (inpSt) inpSt.value = merged.status;
-      const inpSm = document.getElementById('adminCvInpSummary');
-      if (inpSm) inpSm.value = merged.summary;
-      const inpEm = document.getElementById('adminCvInpEmail');
-      if (inpEm) inpEm.value = merged.email;
-      const inpPh = document.getElementById('adminCvInpPhone');
-      if (inpPh) inpPh.value = merged.phone;
-      const inpLoc = document.getElementById('adminCvInpLocation');
-      if (inpLoc) inpLoc.value = merged.location;
+      // 3. Fallback check from Supabase Cloud
+      if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.get) {
+        PortfolioCloudDB.get('fathur_portfolio_cv_file').then(cloudCv => {
+          if (cloudCv && (cloudCv.fileUrl || cloudCv.url)) {
+            currentCvFileData = {
+              fileUrl: cloudCv.fileUrl || cloudCv.url,
+              fileName: cloudCv.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
+              fileSize: cloudCv.fileSize || 'PDF Dokumen',
+              uploadedAt: cloudCv.uploadedAt || new Date().toISOString()
+            };
+            renderAdminCvDomState();
+          }
+        }).catch(() => {});
+      }
 
-      updateAdminCvLivePreview();
+      renderAdminCvDomState();
     }
 
-    function updateAdminCvLivePreview() {
-      const metrics = getAdminCvDynamicMetrics();
+    function renderAdminCvDomState() {
+      const nameEl = document.getElementById('adminCvFileNameDisplay');
+      const sizeEl = document.getElementById('adminCvFileSizeDisplay');
+      const timeEl = document.getElementById('adminCvUploadedAtDisplay');
+      const badgeEl = document.getElementById('adminCvSyncBadge');
+      const viewerStatus = document.getElementById('adminCvViewerStatus');
+      const iframeEl = document.getElementById('adminCvPdfFrame');
+      const emptyEl = document.getElementById('adminCvEmptyPlaceholder');
+      const btnDl = document.getElementById('btnAdminCvDownload');
+      const btnDel = document.getElementById('btnAdminCvDelete');
+      const urlInp = document.getElementById('adminCvCloudUrlInput');
 
-      // Update counters in strip & preview
-      const statP = document.getElementById('adminCvStatProjects');
-      if (statP) statP.textContent = metrics.totalProjects + '+';
-      const prevP = document.getElementById('adminCvPrevMetricProj');
-      if (prevP) prevP.textContent = metrics.totalProjects + '+';
+      const hasFile = !!(currentCvFileData && currentCvFileData.fileUrl);
 
-      const statC = document.getElementById('adminCvStatCerts');
-      if (statC) statC.textContent = metrics.totalCertificates + '+';
-      const prevC = document.getElementById('adminCvPrevMetricCert');
-      if (prevC) prevC.textContent = metrics.totalCertificates + '+';
-
-      const statF = document.getElementById('adminCvStatFeeds');
-      if (statF) statF.textContent = metrics.totalFeeds + '+';
-      const prevF = document.getElementById('adminCvPrevMetricFeed');
-      if (prevF) prevF.textContent = metrics.totalFeeds + '+';
-
-      const statV = document.getElementById('adminCvStatVideos');
-      if (statV) statV.textContent = metrics.totalVideos + '+';
-      const prevV = document.getElementById('adminCvPrevMetricVid');
-      if (prevV) prevV.textContent = metrics.totalVideos + '+';
-
-      const statR = document.getElementById('adminCvStatRoutes');
-      if (statR) statR.textContent = metrics.totalRoutes + '+';
-      const prevR = document.getElementById('adminCvPrevMetricRoute');
-      if (prevR) prevR.textContent = metrics.totalRoutes + '+';
-
-      // Live text updates
-      const inpH = document.getElementById('adminCvInpHeadline');
-      const prevH = document.getElementById('adminCvPrevHeadline');
-      if (inpH && prevH) prevH.textContent = inpH.value || DEFAULT_CV_DATA.headline;
-
-      const inpSt = document.getElementById('adminCvInpStatus');
-      const prevSt = document.getElementById('adminCvPrevStatus');
-      if (inpSt && prevSt) prevSt.textContent = inpSt.value || DEFAULT_CV_DATA.status;
-
-      const inpSm = document.getElementById('adminCvInpSummary');
-      const prevSm = document.getElementById('adminCvPrevSummary');
-      if (inpSm && prevSm) prevSm.textContent = inpSm.value || DEFAULT_CV_DATA.summary;
-
-      const inpEm = document.getElementById('adminCvInpEmail');
-      const prevEm = document.getElementById('adminCvPrevEmail');
-      if (inpEm && prevEm) prevEm.textContent = inpEm.value || DEFAULT_CV_DATA.email;
-
-      const inpPh = document.getElementById('adminCvInpPhone');
-      const prevPh = document.getElementById('adminCvPrevPhone');
-      if (inpPh && prevPh) prevPh.textContent = inpPh.value || DEFAULT_CV_DATA.phone;
-
-      const inpLoc = document.getElementById('adminCvInpLocation');
-      const prevLoc = document.getElementById('adminCvPrevLoc');
-      if (inpLoc && prevLoc) prevLoc.textContent = inpLoc.value || DEFAULT_CV_DATA.location;
-    }
-
-    function saveAdminCvCustomData() {
-      const custom = {
-        headline: document.getElementById('adminCvInpHeadline')?.value || DEFAULT_CV_DATA.headline,
-        status: document.getElementById('adminCvInpStatus')?.value || DEFAULT_CV_DATA.status,
-        summary: document.getElementById('adminCvInpSummary')?.value || DEFAULT_CV_DATA.summary,
-        email: document.getElementById('adminCvInpEmail')?.value || DEFAULT_CV_DATA.email,
-        phone: document.getElementById('adminCvInpPhone')?.value || DEFAULT_CV_DATA.phone,
-        location: document.getElementById('adminCvInpLocation')?.value || DEFAULT_CV_DATA.location,
-        updatedAt: new Date().toISOString()
-      };
-
-      saveDataWithQuotaGuard('fathur_portfolio_cv_custom_v1', JSON.stringify(custom)).then(() => {
-        if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.set) {
-          PortfolioCloudDB.set('fathur_portfolio_cv_custom_v1', custom).catch(() => {});
+      if (hasFile) {
+        if (nameEl) nameEl.textContent = currentCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
+        if (sizeEl) sizeEl.textContent = currentCvFileData.fileSize || 'Dokumen PDF';
+        if (timeEl) {
+          try {
+            const d = new Date(currentCvFileData.uploadedAt);
+            timeEl.textContent = isNaN(d.getTime()) ? currentCvFileData.uploadedAt : d.toLocaleString('id-ID');
+          } catch (e) {
+            timeEl.textContent = currentCvFileData.uploadedAt || '-';
+          }
         }
-        updateAdminCvLivePreview();
-        showAdminToast('Pengaturan CV ATS berhasil disimpan & disinkronkan!', 'success');
+        if (badgeEl) {
+          badgeEl.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800';
+          badgeEl.textContent = '● Berkas Aktif Siap Digunakan';
+        }
+        if (viewerStatus) viewerStatus.textContent = currentCvFileData.fileName || 'Pratinjau Aktif';
+
+        if (iframeEl) {
+          iframeEl.src = currentCvFileData.fileUrl;
+          iframeEl.classList.remove('hidden');
+        }
+        if (emptyEl) emptyEl.classList.add('hidden');
+
+        if (btnDl) btnDl.removeAttribute('disabled');
+        if (btnDel) btnDel.removeAttribute('disabled');
+
+        if (urlInp && currentCvFileData.fileUrl.startsWith('http')) {
+          urlInp.value = currentCvFileData.fileUrl;
+        }
+      } else {
+        if (nameEl) nameEl.textContent = '-';
+        if (sizeEl) sizeEl.textContent = '-';
+        if (timeEl) timeEl.textContent = '-';
+        if (badgeEl) {
+          badgeEl.className = 'text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800';
+          badgeEl.textContent = 'Belum Ada Berkas';
+        }
+        if (viewerStatus) viewerStatus.textContent = 'Menunggu Berkas';
+
+        if (iframeEl) {
+          iframeEl.src = '';
+          iframeEl.classList.add('hidden');
+        }
+        if (emptyEl) emptyEl.classList.remove('hidden');
+
+        if (btnDl) btnDl.setAttribute('disabled', 'true');
+        if (btnDel) btnDel.setAttribute('disabled', 'true');
+      }
+    }
+
+    function triggerAdminCvFilePicker() {
+      const fileInp = document.getElementById('adminCvFileInput');
+      if (fileInp) fileInp.click();
+    }
+
+    function handleAdminCvFileUpload(input) {
+      if (!input || !input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        showAdminToast('Mohon pilih berkas dengan format PDF asli (.pdf)', 'error');
+        input.value = '';
+        return;
+      }
+
+      // Check file size (warn if > 15MB)
+      if (file.size > 15 * 1024 * 1024) {
+        showAdminToast('Ukuran berkas melebihi 15MB. Mohon kompres berkas PDF terlebih dahulu.', 'error');
+        input.value = '';
+        return;
+      }
+
+      const formattedSize = file.size > 1024 * 1024
+        ? (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+        : Math.round(file.size / 1024) + ' KB';
+
+      showAdminToast('Membaca berkas PDF...', 'info');
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentCvFileData = {
+          fileUrl: e.target.result,
+          fileName: file.name,
+          fileSize: formattedSize,
+          uploadedAt: new Date().toISOString()
+        };
+        renderAdminCvDomState();
+        showAdminToast('Berkas PDF berhasil dimuat! Klik "Simpan ke Database & Cloud" untuk menerapkan.', 'success');
+      };
+      reader.onerror = function() {
+        showAdminToast('Gagal membaca berkas PDF dari komputer/HP.', 'error');
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
+    }
+
+    function handleAdminCvDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const zone = document.getElementById('adminCvDropZone');
+      if (zone) zone.classList.add('border-[#155293]', 'bg-blue-50/70');
+    }
+
+    function handleAdminCvDragLeave(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const zone = document.getElementById('adminCvDropZone');
+      if (zone) zone.classList.remove('border-[#155293]', 'bg-blue-50/70');
+    }
+
+    function handleAdminCvDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const zone = document.getElementById('adminCvDropZone');
+      if (zone) zone.classList.remove('border-[#155293]', 'bg-blue-50/70');
+
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        const dummyInp = { files: [file] };
+        handleAdminCvFileUpload(dummyInp);
+      }
+    }
+
+    function applyAdminCvFromUrl() {
+      const urlInp = document.getElementById('adminCvCloudUrlInput');
+      if (!urlInp || !urlInp.value.trim()) {
+        showAdminToast('Silakan masukkan tautan URL berkas PDF yang valid.', 'error');
+        return;
+      }
+      const url = urlInp.value.trim();
+      if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('data:application/pdf')) {
+        showAdminToast('URL harus diawali dengan http:// atau https://', 'error');
+        return;
+      }
+
+      let inferredName = 'CV-Muhammad-Fathur-Rohman.pdf';
+      try {
+        const pathname = new URL(url).pathname;
+        const segment = pathname.split('/').pop();
+        if (segment && segment.toLowerCase().endsWith('.pdf')) {
+          inferredName = decodeURIComponent(segment);
+        }
+      } catch (e) {}
+
+      currentCvFileData = {
+        fileUrl: url,
+        fileName: inferredName,
+        fileSize: 'Cloud URL',
+        uploadedAt: new Date().toISOString()
+      };
+      renderAdminCvDomState();
+      showAdminToast('Tautan PDF berhasil dipasang! Klik "Simpan ke Database & Cloud" untuk menerapkan.', 'success');
+    }
+
+    function saveAdminCvFile() {
+      if (!currentCvFileData || !currentCvFileData.fileUrl) {
+        showAdminToast('Belum ada berkas PDF yang dipilih untuk disimpan.', 'error');
+        return;
+      }
+
+      currentCvFileData.uploadedAt = new Date().toISOString();
+
+      showAdminToast('Menyimpan berkas CV PDF...', 'info');
+
+      saveDataWithQuotaGuard('fathur_portfolio_cv_file', JSON.stringify(currentCvFileData)).then(() => {
+        // Broadcast change to other tabs & landing page
+        if (typeof adminSyncChannel !== 'undefined' && adminSyncChannel && adminSyncChannel.postMessage) {
+          adminSyncChannel.postMessage({
+            type: 'UPDATE',
+            key: 'fathur_portfolio_cv_file',
+            data: currentCvFileData
+          });
+        }
+
+        // Save to Supabase Cloud
+        if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.set) {
+          PortfolioCloudDB.set('fathur_portfolio_cv_file', currentCvFileData).catch(() => {});
+        }
+
+        renderAdminCvDomState();
+        showAdminToast('Berkas CV PDF resmi berhasil disimpan & disinkronkan ke Landing Page!', 'success');
       }).catch(err => {
-        showAdminToast('Gagal menyimpan CV: ' + err.message, 'error');
+        showAdminToast('Gagal menyimpan berkas: ' + err.message, 'error');
       });
     }
 
-    function resetAdminCvDefaults() {
-      if (!confirm('Apakah Anda yakin ingin mereset konten CV ke format standar ATS rekomendasi?')) return;
-      document.getElementById('adminCvInpHeadline').value = DEFAULT_CV_DATA.headline;
-      document.getElementById('adminCvInpStatus').value = DEFAULT_CV_DATA.status;
-      document.getElementById('adminCvInpSummary').value = DEFAULT_CV_DATA.summary;
-      document.getElementById('adminCvInpEmail').value = DEFAULT_CV_DATA.email;
-      document.getElementById('adminCvInpPhone').value = DEFAULT_CV_DATA.phone;
-      document.getElementById('adminCvInpLocation').value = DEFAULT_CV_DATA.location;
-      updateAdminCvLivePreview();
-      saveAdminCvCustomData();
-    }
-
-    function previewAdminCvPrint() {
-      const card = document.getElementById('adminCvPreviewCard');
-      if (!card) return;
-      const printWindow = window.open('', '_blank', 'width=900,height=1000');
-      if (!printWindow) {
-        alert('Izinkan pop-up peramban untuk melihat pratinjau cetak PDF.');
+    function deleteAdminCvFile() {
+      if (!confirm('Apakah Anda yakin ingin menghapus berkas CV PDF ini? Landing page akan kembali ke tampilan kontak langsung.')) {
         return;
       }
-      const closeScript = '<' + '/script>';
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Curriculum Vitae - Muhammad Fathur Rohman, S.Kom</title>
-          <` + `script src="https://cdn.tailwindcss.com"></script` + `>
-          <style>
-            @page { size: A4 portrait; margin: 12mm 15mm; }
-            body { font-family: system-ui, -apple-system, sans-serif; background: #fff; color: #1e293b; padding: 20px; }
-          </style>
-        </head>
-        <body onload="window.print()">
-          ${card.outerHTML}
-        </body>
-        </html>
-      `);
-      printWindow.document.close();
+
+      currentCvFileData = {
+        fileUrl: '',
+        fileName: '',
+        fileSize: '',
+        uploadedAt: ''
+      };
+
+      try {
+        localStorage.removeItem('fathur_portfolio_cv_file');
+      } catch (e) {}
+
+      try {
+        const idbReq = indexedDB.open('fathur_portfolio_db', 1);
+        idbReq.onsuccess = function(e) {
+          const db = e.target.result;
+          if (db.objectStoreNames.contains('keyval')) {
+            const tx = db.transaction('keyval', 'readwrite');
+            tx.objectStore('keyval').delete('fathur_portfolio_cv_file');
+          }
+        };
+      } catch (eIdb) {}
+
+      if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.set) {
+        PortfolioCloudDB.set('fathur_portfolio_cv_file', null).catch(() => {});
+      }
+
+      if (typeof adminSyncChannel !== 'undefined' && adminSyncChannel && adminSyncChannel.postMessage) {
+        adminSyncChannel.postMessage({
+          type: 'DELETE',
+          key: 'fathur_portfolio_cv_file',
+          data: null
+        });
+      }
+
+      renderAdminCvDomState();
+      showAdminToast('Berkas CV PDF berhasil dihapus.', 'info');
+    }
+
+    function downloadAdminCvFile() {
+      if (!currentCvFileData || !currentCvFileData.fileUrl) {
+        showAdminToast('Tidak ada berkas PDF untuk diunduh.', 'error');
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = currentCvFileData.fileUrl;
+      a.download = currentCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
 
 </script>

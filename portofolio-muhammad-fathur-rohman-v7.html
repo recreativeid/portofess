@@ -202,6 +202,12 @@
     }
 
     /* Infinite Moving Logo Cloud Marquee in Blue Mode: Shape remains white, text black */
+    body.blueprint-mode .logo-marquee-section,
+    body.blueprint-mode section:has(.animate-logo-marquee) {
+      background-color: transparent !important;
+      background: transparent !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+    }
     body.blueprint-mode .animate-logo-marquee .rounded-2xl,
     body.blueprint-mode .animate-logo-marquee > div > div,
     body.blueprint-mode .marquee-content > div > div {
@@ -481,15 +487,20 @@
       color: #F8FAFC !important;
     }
     body.blueprint-mode .adaptive-white-card {
-      background-color: #0F325E;
-      border-color: rgba(255, 255, 255, 0.24);
-      color: #FFFFFF;
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22), 0 20px 45px rgba(0, 0, 0, 0.4);
+      background-color: #FFFFFF !important;
+      background: #FFFFFF !important;
+      border-color: #FFFFFF !important;
+      color: #0F172A !important;
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.28), 0 24px 50px rgba(0, 0, 0, 0.35) !important;
     }
     body.blueprint-mode .adaptive-white-card h3,
     body.blueprint-mode .adaptive-white-card h2,
     body.blueprint-mode .adaptive-white-card h4 {
-      color: #FFFFFF !important;
+      color: #0F172A !important;
+    }
+    body.blueprint-mode .adaptive-white-card p,
+    body.blueprint-mode .adaptive-white-card span {
+      color: #334155 !important;
     }
     body.dark-mode .board-theme-work,
     body.dark-mode .board-theme-edu,
@@ -1904,7 +1915,7 @@
     <!-- LOGO CLOUDS: DIPERCAYA OLEH BERBAGAI BISNIS & INSTITUSI             -->
     <!--              (NEXUS UI / 21ST.DEV STYLE INFINITE MARQUEE)           -->
     <!-- =================================================================== -->
-    <section class="py-10 border-y border-stone-200/80 bg-stone-50/60 dark:bg-stone-950/60 backdrop-blur-sm overflow-hidden select-none transition-colors duration-300">
+    <section class="logo-marquee-section py-10 border-y border-stone-200/80 bg-stone-50/60 dark:bg-stone-950/60 backdrop-blur-sm overflow-hidden select-none transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
         <span class="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.22em] text-[#155293] dark:text-sky-400 font-extrabold block">
           REPUTASI &amp; KOLABORASI MITRA
@@ -2208,7 +2219,7 @@
         </div>
 
         <!-- Bottom Action Button for Section 02 -->
-        <div class="mt-8 flex justify-center text-center">
+        <div class="mt-6 flex justify-center text-center">
           <button onclick="switchPageView('fullSkillsView')" class="px-6 py-3 rounded-2xl bg-white border-2 border-stone-300 hover:border-crimson text-xs sm:text-sm font-extrabold text-ink hover:text-crimson shadow-md transition flex items-center justify-center gap-2">
             <span>Lihat Selengkapnya Skill &amp; Kompetensi ↗</span>
             <span>↗</span>
@@ -2224,10 +2235,10 @@
     <!-- =================================================================== -->
     <!-- CHAPTER TRANSITION 01: WEB ENGINEER (MINIMALIST COMPACT DIVIDER)   -->
     <!-- =================================================================== -->
-    <section id="chapter-web-engineer" class="pt-8 pb-10 sm:pt-12 sm:pb-14 my-3 sm:my-5 flex flex-col justify-center items-center text-center relative select-none scroll-blur-section smooth-blur-container">
+    <section id="chapter-web-engineer" class="pt-5 pb-7 sm:pt-7 sm:pb-9 my-1 sm:my-2 flex flex-col justify-center items-center text-center relative select-none scroll-blur-section smooth-blur-container">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <!-- Minimalist Divider Line (Top) -->
-        <div class="w-full flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div class="w-full flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-5">
           <div class="h-px bg-gradient-to-r from-transparent via-stone-300 dark:via-stone-700 to-stone-200 dark:to-stone-800 flex-1 max-w-xs sm:max-w-sm"></div>
           <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800/90 border border-stone-200 dark:border-stone-700 text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase text-stone-600 dark:text-stone-300 shadow-2xs">
             <span class="w-2 h-2 rounded-full bg-[#155293] dark:bg-sky-400"></span>
@@ -4460,290 +4471,84 @@
   </div>
 
   <!-- =================================================================== -->
-  <!-- ATS-FRIENDLY PROFESSIONAL CV / RESUME PREVIEW & DOWNLOAD MODAL      -->
   <!-- =================================================================== -->
-  <div id="cvPreviewModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex flex-col items-center justify-start p-2 sm:p-4 overflow-y-auto" onclick="closeCvPreviewModal()">
+  <!-- RESMI: MODAL PRATINJAU DOKUMEN CV / RESUME (PDF VIEWER & UNDUH)     -->
+  <!-- =================================================================== -->
+  <div id="cvPreviewModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-2 sm:p-4 overflow-hidden" onclick="closeCvPreviewModal()">
     
-    <!-- STICKY TOP ACTION & CONTROL BAR -->
-    <div id="cvModalStickyBar" class="sticky top-2 z-50 w-full max-w-4xl bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border border-slate-200 dark:border-stone-800 rounded-2xl shadow-xl p-3 sm:px-5 sm:py-3.5 mb-3 flex flex-wrap items-center justify-between gap-2.5 transition select-none" onclick="event.stopPropagation()">
-      <div class="flex items-center gap-2.5">
-        <span class="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-sky-300 flex items-center justify-center font-bold text-base shrink-0">📄</span>
-        <div>
-          <div class="flex items-center gap-2">
-            <h3 class="font-display font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight">Curriculum Vitae &amp; Resume Resmi</h3>
-            <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 text-[10px] font-mono font-bold">ATS Ready</span>
+    <div class="w-full max-w-5xl h-[92vh] sm:h-[88vh] bg-white dark:bg-stone-900 rounded-3xl shadow-2xl border border-stone-200 dark:border-stone-800 flex flex-col overflow-hidden relative" onclick="event.stopPropagation()">
+      
+      <!-- TOP ACTION BAR -->
+      <div id="cvModalTopBar" class="px-4 py-3 sm:px-6 sm:py-3.5 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-2.5 border-b border-white/10 shrink-0 select-none">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold text-sm shrink-0">
+            📄
           </div>
-          <p class="text-[11px] text-slate-500 dark:text-stone-400 hidden sm:block">Muhammad Fathur Rohman, S.Kom (Cum Laude 3.76) · Live Auto-Updated</p>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2 flex-wrap ml-auto">
-        <!-- Button: Unduh PDF / Cetak -->
-        <button type="button" onclick="printCvDocument()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-[#155293] hover:bg-blue-800 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Cetak atau Simpan sebagai PDF">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          <span>Unduh PDF / Cetak</span>
-        </button>
-
-        <!-- Button: WhatsApp Rekrutmen / Diskusi -->
-        <a id="btnCvModalWa" href="https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20dan%20CV%20Anda%20di%20portofolio.%20Saya%20ingin%20mendiskusikan%20peluang%20kerja%20/%20projek%20/%20kolaborasi%20profesional." target="_blank" rel="noopener noreferrer" class="px-3 sm:px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Hubungi personal via WhatsApp untuk tawaran kerja / kerjasama">
-          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
-          <span class="hidden md:inline">WhatsApp Kerja &amp; Bisnis</span>
-          <span class="md:hidden">WhatsApp</span>
-        </a>
-
-        <!-- Button: Email Resmi Kerjasama -->
-        <a id="btnCvModalEmail" href="mailto:hyungkun.co@gmail.com?subject=Tawaran%20Peluang%20Kerja%20%26%20Kolaborasi%20Profesional%20-%20Muhammad%20Fathur%20Rohman&amp;body=Halo%20Muhammad%20Fathur%20Rohman,%0A%0ASaya%20telah%20meninjau%20portofolio%20dan%20CV%20resmi%20Anda.%20Kami%20sangat%20tertarik%20dengan%20keahlian%20dan%20pengalaman%20Anda.%0A%0AKami%20ingin%20mengundang%20Anda%20untuk%20mendiskusikan%20peluang%20karir%20/%20projek%20kerjasama%20di%20perusahaan%20kami.%0A%0ATerima%20kasih." class="px-3 sm:px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Kirim email resmi tawaran kerja atau partnership">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          <span class="hidden md:inline">Email Resmi</span>
-          <span class="md:hidden">Email</span>
-        </a>
-
-        <!-- Close Button -->
-        <button type="button" onclick="closeCvPreviewModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-rose-500 hover:text-white text-slate-700 font-extrabold text-sm flex items-center justify-center transition cursor-pointer" title="Tutup Pratinjau">✕</button>
-      </div>
-    </div>
-
-    <!-- CV PAPER CONTAINER (OPTIMIZED FOR HIGH DEFINITION PREVIEW & A4 PRINT) -->
-    <div id="cvPrintContainer" class="w-full max-w-4xl bg-white text-slate-800 rounded-3xl shadow-2xl p-6 sm:p-10 border border-slate-200 font-sans text-left leading-relaxed relative my-2" onclick="event.stopPropagation()">
-      <!-- HEADER CANDIDATE -->
-      <div class="border-b-2 border-slate-800 pb-5 mb-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-        <div>
-          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-display uppercase">
-            Muhammad Fathur Rohman, S.Kom
-          </h1>
-          <p id="cvCandidateHeadline" class="text-sm sm:text-base font-bold text-[#155293] mt-1 tracking-wide">
-            Fullstack Web Developer · UI/UX Designer · Creative Multimedia Specialist
-          </p>
-          <div class="flex items-center gap-2 mt-2 flex-wrap">
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono text-[11px] font-bold inline-flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="cvCandidateStatus">Siap Bekerja Segera · Full-Time / Kontrak / Remote Ready</span>
-            </span>
-            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-mono text-[11px] font-bold">
-              🎓 Cum Laude (IPK 3.76)
-            </span>
-          </div>
-        </div>
-
-        <!-- Contacts Info Grid -->
-        <div class="text-xs space-y-1.5 text-slate-600 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 shrink-0 md:min-w-[260px]">
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-700">✉️ Email:</span>
-            <a id="cvCandidateEmail" href="mailto:hyungkun.co@gmail.com" class="font-semibold text-blue-700 hover:underline">hyungkun.co@gmail.com</a>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-700">📱 WhatsApp:</span>
-            <a id="cvCandidatePhone" href="https://wa.me/62895393181822" target="_blank" class="font-semibold text-emerald-700 hover:underline">+62 895-3931-81822</a>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-700">📍 Lokasi:</span>
-            <span id="cvCandidateLocation" class="font-semibold text-slate-800">Magelang, Jawa Tengah (Siap Relokasi)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-700">🌐 Portofolio:</span>
-            <a href="https://recreativeid.github.io/portofess/" target="_blank" class="font-semibold text-blue-700 hover:underline">recreativeid.github.io/portofess/</a>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold text-slate-700">💻 GitHub:</span>
-            <a href="https://github.com/recreativeid" target="_blank" class="font-semibold text-blue-700 hover:underline">github.com/recreativeid</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- DYNAMIC METRICS STRIP (AUTO-RECAP LIVE PORTFOLIO) -->
-      <div class="mb-6 bg-slate-50 border border-slate-200 rounded-2xl p-4">
-        <div class="flex items-center justify-between mb-2.5">
-          <span class="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#155293]">
-            REKAPITULASI RESMI &amp; PENCAPAIAN PORTOFOLIO LIVE
-          </span>
-          <span class="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-            ● Real-Time Calculated
-          </span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-center">
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-            <div id="cvMetricProjects" class="text-xl sm:text-2xl font-black text-[#155293]">14+</div>
-            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Proyek Web</div>
-            <div class="text-[9px] text-slate-500">Live &amp; Enterprise</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-            <div id="cvMetricCerts" class="text-xl sm:text-2xl font-black text-amber-600">22+</div>
-            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Sertifikasi &amp; Prestasi</div>
-            <div class="text-[9px] text-slate-500">Nasional &amp; Juara</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-            <div id="cvMetricFeeds" class="text-xl sm:text-2xl font-black text-rose-600">40+</div>
-            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Karya Desain</div>
-            <div class="text-[9px] text-slate-500">UI/UX &amp; Branding</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-            <div id="cvMetricVideos" class="text-xl sm:text-2xl font-black text-purple-600">16+</div>
-            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Video &amp; Reels</div>
-            <div class="text-[9px] text-slate-500">Creative Motion</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-            <div id="cvMetricRoutes" class="text-xl sm:text-2xl font-black text-sky-600">10+</div>
-            <div class="text-[11px] font-bold text-slate-700 mt-0.5">Rute Klien</div>
-            <div class="text-[9px] text-slate-500">Global &amp; Domestik</div>
-          </div>
-          <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
-            <div class="text-xl sm:text-2xl font-black text-emerald-600">3.76</div>
-            <div class="text-[11px] font-bold text-slate-700 mt-0.5">IPK Cum Laude</div>
-            <div class="text-[9px] text-slate-500">S1 Teknik Informatika</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RINGKASAN PROFESIONAL (ATS-FRIENDLY EXECUTIVE SUMMARY) -->
-      <div class="mb-6">
-        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2 flex items-center gap-1.5">
-          <span>🎯</span>
-          <span>Ringkasan Profesional &amp; Nilai Tambah</span>
-        </h2>
-        <p id="cvCandidateSummary" class="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify">
-          Lulusan Sarjana Teknik Informatika (S.Kom) dari Universitas Muhammadiyah Magelang dengan predikat Cum Laude (IPK 3.76). Berpengalaman lebih dari 3 tahun dalam merancang dan mengembangkan aplikasi web fullstack berskala modern (React, Next.js, PHP, Laravel, Tailwind CSS, PostgreSQL, Supabase, MySQL) serta spesialisasi desain antarmuka (UI/UX) dan multimedia kreatif. Memiliki rekam jejak terverifikasi memenangkan kejuaraan bergengsi tingkat nasional dan internasional, termasuk Juara 1 AI System Challenge (AISC) dan UI/UX Design Competition. Terbiasa memimpin tim teknis, memecahkan masalah arsitektur sistem yang kompleks, dan mengoptimalkan performa web hingga 99% Core Web Vitals. Siap berkontribusi maksimal untuk posisi Fullstack Web Developer, Frontend Engineer, maupun Digital Creative Lead.
-        </p>
-      </div>
-
-      <!-- KEAHLIAN UTAMA & TECH STACK -->
-      <div class="mb-6">
-        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2.5 flex items-center gap-1.5">
-          <span>⚡</span>
-          <span>Kompetensi Teknis &amp; Alat Kerja</span>
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block mb-1">Pengembangan Web (Frontend &amp; UI):</span>
-            <p class="text-slate-600 leading-normal">
-              React.js, Next.js, JavaScript (ES6+), TypeScript, HTML5, CSS3, Tailwind CSS, Bootstrap 5, Vite, Responsive Design, State Management, Core Web Vitals.
-            </p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block mb-1">Backend &amp; Arsitektur Data:</span>
-            <p class="text-slate-600 leading-normal">
-              PHP (Laravel, Native), Node.js, RESTful API Development, PostgreSQL, Supabase, MySQL, IndexedDB, Firebase, JSON Architecture, Auth &amp; Session.
-            </p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block mb-1">Desain Antarmuka &amp; Multimedia:</span>
-            <p class="text-slate-600 leading-normal">
-              Figma (Wireframing, High-Fidelity UI/UX &amp; Prototyping), Adobe Photoshop, Illustrator, Premiere Pro, Canva Pro, Brand Identity, Motion Design.
-            </p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block mb-1">DevOps, Workflow &amp; AI:</span>
-            <p class="text-slate-600 leading-normal">
-              Git / GitHub, CI/CD Pipeline, XAMPP, cPanel, Cloudflare, Postman, AI Assisted Engineering (Antigravity / Cursor), Problem Solving.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- PENGALAMAN KERJA & JEJAK KARIER -->
-      <div class="mb-6">
-        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-3 flex items-center gap-1.5">
-          <span>💼</span>
-          <span>Pengalaman Kerja &amp; Rekam Jejak Proyek</span>
-        </h2>
-        <div class="space-y-3.5 text-xs">
-          <!-- Item 1 -->
           <div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-slate-900">
-              <span class="text-sm font-display text-[#155293]">Lead Fullstack Developer &amp; Tech Specialist</span>
-              <span class="text-[11px] font-mono text-slate-500">2023 – Sekarang | Magelang / Remote</span>
+            <div class="flex items-center gap-2">
+              <h3 class="font-display font-extrabold text-xs sm:text-sm text-white leading-tight">Curriculum Vitae &amp; Resume Resmi</h3>
+              <span id="cvModalFileBadge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold">PDF Terverifikasi</span>
             </div>
-            <div class="text-[11px] font-semibold text-slate-600 mb-1">Solveta Digital &amp; Recreative Studio (Creative Agency)</div>
-            <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed">
-              <li>Merancang dan mendevelop 14+ platform web interaktif, company profile, dashboard CRM, dan portal edukasi modern.</li>
-              <li>Mengimplementasikan arsitektur database Supabase/PostgreSQL dengan auto-sync data engine dan perlindungan kuota IndexedDB.</li>
-              <li>Mengoptimalkan performa frontend dan responsive mobile layout yang identik 100% dengan pengalaman desktop.</li>
-            </ul>
+            <p id="cvModalSubTitle" class="text-[11px] text-slate-400 hidden sm:block">Muhammad Fathur Rohman, S.Kom · Siap Bekerja &amp; Kolaborasi Bisnis</p>
           </div>
+        </div>
 
-          <!-- Item 2 -->
-          <div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-slate-900">
-              <span class="text-sm font-display text-[#155293]">Web Developer &amp; IT Support Intern</span>
-              <span class="text-[11px] font-mono text-slate-500">2024 | Semarang, Jawa Tengah</span>
-            </div>
-            <div class="text-[11px] font-semibold text-slate-600 mb-1">Balai Besar Penjaminan Mutu Pendidikan (BBPMP) Provinsi Jawa Tengah</div>
-            <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed">
-              <li>Membantu digitalisasi dan pemeliharaan sistem informasi mutu pendidikan berbasis web instansi pemerintah.</li>
-              <li>Mendukung troubleshooting infrastruktur jaringan lokal dan konfigurasi server basis data internal.</li>
-            </ul>
-          </div>
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2 flex-wrap ml-auto">
+          <!-- Button: Unduh PDF -->
+          <button id="btnCvModalDownloadPdf" type="button" onclick="downloadUploadedCvPdf()" class="px-3.5 sm:px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Unduh Berkas PDF Asli">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Unduh PDF</span>
+          </button>
 
-          <!-- Item 3 -->
-          <div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-slate-900">
-              <span class="text-sm font-display text-[#155293]">Kepala Divisi Media Kreatif &amp; Multimedia</span>
-              <span class="text-[11px] font-mono text-slate-500">2022 – 2024 | Magelang</span>
-            </div>
-            <div class="text-[11px] font-semibold text-slate-600 mb-1">Ikatan Mahasiswa Muhammadiyah (IMM) &amp; BEM Fakultas UNIMMA</div>
-            <ul class="list-disc list-inside text-slate-700 space-y-0.5 leading-relaxed">
-              <li>Memimpin tim kreatif dalam perancangan aset grafis, publikasi resmi media sosial, dan video promosi event berskala regional.</li>
-              <li>Menghasilkan puluhan aset branding dan dokumenter sinematik yang meningkatkan engagement audiens secara signifikan.</li>
-            </ul>
-          </div>
+          <!-- Button: WhatsApp Kerja & Bisnis -->
+          <a id="btnCvModalWa" href="https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20dan%20CV%20Anda%20di%20portofolio.%20Saya%20ingin%20mendiskusikan%20peluang%20kerja%20/%20projek%20/%20kolaborasi%20profesional." target="_blank" rel="noopener noreferrer" class="px-3 sm:px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Hubungi personal via WhatsApp untuk penawaran kerja / kerjasama">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
+            <span class="hidden sm:inline">WhatsApp Kerja &amp; Bisnis</span>
+            <span class="sm:hidden">WhatsApp</span>
+          </a>
+
+          <!-- Button: Email Resmi Kerjasama -->
+          <a id="btnCvModalEmail" href="mailto:hyungkun.co@gmail.com?subject=Tawaran%20Peluang%20Kerja%20%26%20Kolaborasi%20Profesional%20-%20Muhammad%20Fathur%20Rohman&amp;body=Halo%20Muhammad%20Fathur%20Rohman,%0A%0ASaya%20telah%20meninjau%20portofolio%20dan%20CV%20resmi%20Anda.%20Kami%20sangat%20tertarik%20dengan%20keahlian%20dan%20pengalaman%20Anda.%0A%0AKami%20ingin%20mengundang%20Anda%20untuk%20mendiskusikan%20peluang%20karir%20/%20projek%20kerjasama%20di%20perusahaan%20kami.%0A%0ATerima%20kasih." class="px-3 sm:px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer" title="Kirim email penawaran kerja / partnership">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span class="hidden sm:inline">Email Resmi</span>
+            <span class="sm:hidden">Email</span>
+          </a>
+
+          <!-- Close Button -->
+          <button type="button" onclick="closeCvPreviewModal()" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-rose-500 hover:text-white text-white font-extrabold text-sm flex items-center justify-center transition cursor-pointer" title="Tutup Pratinjau">✕</button>
         </div>
       </div>
 
-      <!-- PRESTASI & KEJUARAAN UNGGULAN -->
-      <div class="mb-6">
-        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2.5 flex items-center gap-1.5">
-          <span>🏆</span>
-          <span>Prestasi Terverifikasi &amp; Kejuaraan Resmi</span>
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
-          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block">🥇 Juara 1 — AI System Challenge (AISC)</span>
-            <span class="text-[11px] text-slate-600">Inovasi Arsitektur Web &amp; Sistem Cerdas Berkelanjutan.</span>
+      <!-- MAIN VIEWER BODY -->
+      <div class="flex-1 w-full relative bg-slate-950 overflow-hidden flex items-center justify-center">
+        
+        <!-- Fallback Placeholder (Tampil jika belum ada file PDF yang diunggah) -->
+        <div id="cvModalEmptyPlaceholder" class="p-6 sm:p-10 text-center text-slate-300 max-w-lg space-y-4">
+          <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-rose-400 mx-auto">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block">🥇 Juara 1 — UI/UX Design Competition UNIMMA</span>
-            <span class="text-[11px] text-slate-600">Perancangan Antarmuka Aplikasi Digital Ramah Pengguna.</span>
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block">🥈 Juara 2 — National UI/UX Design Mercomfest</span>
-            <span class="text-[11px] text-slate-600">Kompetisi Desain Pengalaman Pengguna Tingkat Nasional.</span>
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-            <span class="font-bold text-slate-900 block">📜 Cisco Certified Network Associate (CCNA)</span>
-            <span class="text-[11px] text-slate-600">Sertifikasi Internasional Jaringan &amp; Infrastruktur Cisco.</span>
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 sm:col-span-2">
-            <span class="font-bold text-slate-900 block">🎤 Narasumber &amp; Mentor Pelatihan Digital Creative</span>
-            <span class="text-[11px] text-slate-600">Pemateri workshop desain grafis, pembuatan konten video, dan teknik pengoptimalan portofolio digital.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- PENDIDIKAN FORMAL -->
-      <div class="mb-4">
-        <h2 class="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2 flex items-center gap-1.5">
-          <span>🎓</span>
-          <span>Pendidikan Formal</span>
-        </h2>
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs">
           <div>
-            <h3 class="font-display font-bold text-sm text-slate-900">Universitas Muhammadiyah Magelang (UNIMMA)</h3>
-            <p class="text-slate-600 font-semibold">Sarjana Komputer (S.Kom) — Program Studi S1 Teknik Informatika</p>
+            <h4 class="font-display font-extrabold text-white text-lg">Berkas CV Sedang Dipersiapkan</h4>
+            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+              Berkas PDF Curriculum Vitae resmi sedang dalam proses pembaruan oleh Muhammad Fathur Rohman. Anda dapat langsung mengunduh profil atau menghubungi kami melalui WhatsApp atau Email untuk mendapatkan salinan CV terbaru.
+            </p>
           </div>
-          <div class="sm:text-right mt-1 sm:mt-0 font-mono text-xs">
-            <span class="font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-block">
-              IPK: 3.76 / 4.00 (Cum Laude)
-            </span>
-            <div class="text-[11px] text-slate-500 mt-0.5">2021 – 2025</div>
+          <div class="flex items-center justify-center gap-3 pt-2">
+            <a href="https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20ingin%20meminta%20salinan%20CV%20/%20Resume%20terbaru%20Anda." target="_blank" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-2">
+              <span>💬 Hubungi via WhatsApp</span>
+            </a>
+            <a href="mailto:hyungkun.co@gmail.com?subject=Permintaan%20CV%20Terbaru%20-%20Muhammad%20Fathur%20Rohman" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition flex items-center gap-2">
+              <span>✉️ Kirim Email</span>
+            </a>
           </div>
         </div>
+
+        <!-- PDF Embedded Viewer Frame -->
+        <iframe id="cvModalPdfFrame" src="" class="w-full h-full border-0 hidden bg-white" title="Pratinjau Berkas CV PDF"></iframe>
+
       </div>
 
-      <!-- FOOTER NOTE -->
-      <div class="border-t border-slate-200 pt-3 text-[10px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-        <span>© 2026 Muhammad Fathur Rohman, S.Kom · Dihasilkan otomatis &amp; terverifikasi live.</span>
-        <span>Portofolio: <a href="https://recreativeid.github.io/portofess/" target="_blank" class="text-blue-600 underline">recreativeid.github.io/portofess/</a></span>
-      </div>
     </div>
   </div>
 
@@ -5627,63 +5432,102 @@
       return { totalProjects, totalCertificates, totalFeeds, totalVideos, totalRoutes };
     }
 
-    function renderDynamicCvModal() {
-      const metrics = getCvDynamicMetrics();
-      const elProjects = document.getElementById('cvMetricProjects');
-      if (elProjects) elProjects.textContent = metrics.totalProjects + '+';
-      const elCerts = document.getElementById('cvMetricCerts');
-      if (elCerts) elCerts.textContent = metrics.totalCertificates + '+';
-      const elFeeds = document.getElementById('cvMetricFeeds');
-      if (elFeeds) elFeeds.textContent = metrics.totalFeeds + '+';
-      const elVideos = document.getElementById('cvMetricVideos');
-      if (elVideos) elVideos.textContent = metrics.totalVideos + '+';
-      const elRoutes = document.getElementById('cvMetricRoutes');
-      if (elRoutes) elRoutes.textContent = metrics.totalRoutes + '+';
+    /* =================================================================== */
+    /* RESMI: CURRICULUM VITAE (PDF) FILE VIEWER & DIRECT DOWNLOAD         */
+    /* =================================================================== */
+    let landingCvFileData = null;
 
-      // Load custom overrides from Admin
+    function loadLandingCvFile() {
+      // 1. Check from localStorage
       try {
-        const custom = JSON.parse(localStorage.getItem('fathur_portfolio_cv_custom_v1') || '{}');
-        if (custom.headline) {
-          const el = document.getElementById('cvCandidateHeadline');
-          if (el) el.textContent = custom.headline;
-        }
-        if (custom.summary) {
-          const el = document.getElementById('cvCandidateSummary');
-          if (el) el.textContent = custom.summary;
-        }
-        if (custom.status) {
-          const el = document.getElementById('cvCandidateStatus');
-          if (el) el.textContent = custom.status;
-        }
-        if (custom.location) {
-          const el = document.getElementById('cvCandidateLocation');
-          if (el) el.textContent = custom.location;
-        }
-        if (custom.phone) {
-          const el = document.getElementById('cvCandidatePhone');
-          if (el) {
-            el.textContent = custom.phone;
-            const clean = custom.phone.replace(/[^0-9]/g, '');
-            el.href = `https://wa.me/${clean}`;
-          }
-          const btnWa = document.getElementById('btnCvModalWa');
-          if (btnWa) {
-            const clean = custom.phone.replace(/[^0-9]/g, '');
-            btnWa.href = `https://wa.me/${clean}?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20dan%20CV%20Anda%20di%20portofolio.%20Saya%20ingin%20mendiskusikan%20peluang%20kerja%20/%20projek%20/%20kolaborasi%20profesional.`;
-          }
-        }
-        if (custom.email) {
-          const el = document.getElementById('cvCandidateEmail');
-          if (el) {
-            el.textContent = custom.email;
-            el.href = `mailto:${custom.email}`;
-          }
-          const btnEmail = document.getElementById('btnCvModalEmail');
-          if (btnEmail) {
-            btnEmail.href = `mailto:${custom.email}?subject=Tawaran%20Peluang%20Kerja%20%26%20Kolaborasi%20Profesional%20-%20Muhammad%20Fathur%20Rohman&body=Halo%20Muhammad%20Fathur%20Rohman,%0A%0ASaya%20telah%20meninjau%20portofolio%20dan%20CV%20resmi%20Anda.%20Kami%20sangat%20tertarik%20dengan%20keahlian%20dan%20pengalaman%20Anda.%0A%0AKami%20ingin%20mengundang%20Anda%20untuk%20mendiskusikan%20peluang%20karir%20/%20projek%20kerjasama%20di%20perusahaan%20kami.%0A%0ATerima%20kasih.`;
+        const raw = localStorage.getItem('fathur_portfolio_cv_file');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && (parsed.fileUrl || parsed.url)) {
+            landingCvFileData = {
+              fileUrl: parsed.fileUrl || parsed.url,
+              fileName: parsed.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
+              fileSize: parsed.fileSize || 'PDF Dokumen',
+              uploadedAt: parsed.uploadedAt || new Date().toISOString()
+            };
           }
         }
       } catch (e) {}
+
+      // 2. Check from IndexedDB if not found yet
+      if (!landingCvFileData || !landingCvFileData.fileUrl) {
+        try {
+          const idbReq = indexedDB.open('fathur_portfolio_db', 1);
+          idbReq.onsuccess = function(e) {
+            const db = e.target.result;
+            if (db.objectStoreNames.contains('keyval')) {
+              const tx = db.transaction('keyval', 'readonly');
+              const req = tx.objectStore('keyval').get('fathur_portfolio_cv_file');
+              req.onsuccess = function() {
+                if (req.result && (req.result.fileUrl || req.result.url)) {
+                  landingCvFileData = {
+                    fileUrl: req.result.fileUrl || req.result.url,
+                    fileName: req.result.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
+                    fileSize: req.result.fileSize || 'PDF Dokumen',
+                    uploadedAt: req.result.uploadedAt || new Date().toISOString()
+                  };
+                  renderLandingCvModalDom();
+                }
+              };
+            }
+          };
+        } catch (eIdb) {}
+      }
+
+      renderLandingCvModalDom();
+    }
+
+    function renderLandingCvModalDom() {
+      const iframeEl = document.getElementById('cvModalPdfFrame');
+      const emptyEl = document.getElementById('cvModalEmptyPlaceholder');
+      const badgeEl = document.getElementById('cvModalFileBadge');
+      const subEl = document.getElementById('cvModalSubTitle');
+      const btnDl = document.getElementById('btnCvModalDownloadPdf');
+
+      if (landingCvFileData && landingCvFileData.fileUrl) {
+        if (iframeEl) {
+          if (iframeEl.src !== landingCvFileData.fileUrl) {
+            iframeEl.src = landingCvFileData.fileUrl;
+          }
+          iframeEl.classList.remove('hidden');
+        }
+        if (emptyEl) emptyEl.classList.add('hidden');
+        if (badgeEl) {
+          badgeEl.textContent = 'PDF Terverifikasi · ' + (landingCvFileData.fileSize || 'Resmi');
+        }
+        if (subEl) {
+          subEl.textContent = (landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf') + ' · Siap Bekerja & Kolaborasi';
+        }
+        if (btnDl) btnDl.removeAttribute('disabled');
+      } else {
+        if (iframeEl) {
+          iframeEl.src = '';
+          iframeEl.classList.add('hidden');
+        }
+        if (emptyEl) emptyEl.classList.remove('hidden');
+        if (badgeEl) badgeEl.textContent = 'Menunggu Berkas';
+        if (subEl) subEl.textContent = 'Muhammad Fathur Rohman, S.Kom · Siap Bekerja & Kolaborasi';
+        if (btnDl) btnDl.setAttribute('disabled', 'true');
+      }
+    }
+
+    function downloadUploadedCvPdf() {
+      if (landingCvFileData && landingCvFileData.fileUrl) {
+        const a = document.createElement('a');
+        a.href = landingCvFileData.fileUrl;
+        a.download = landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } else {
+        // Fallback jika belum upload: arahkan hubungi WhatsApp langsung
+        window.open('https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20Anda%20dan%20ingin%20meminta%20salinan%20CV%20PDF%20resmi%20Anda.', '_blank');
+      }
     }
 
     function handleCvDownloadClick() {
@@ -5691,7 +5535,7 @@
     }
 
     function openCvPreviewModal() {
-      renderDynamicCvModal();
+      loadLandingCvFile();
       const modal = document.getElementById('cvPreviewModal');
       if (modal) {
         modal.classList.remove('hidden');
@@ -5707,11 +5551,9 @@
       }
     }
 
-    function printCvDocument() {
-      window.print();
-    }
-
     // Aliases for backward compatibility
+    function renderDynamicCvModal() { loadLandingCvFile(); }
+    function printCvDocument() { downloadUploadedCvPdf(); }
     function openCvRequestModal() { openCvPreviewModal(); }
     function closeCvRequestModal() { closeCvPreviewModal(); }
 
@@ -10237,6 +10079,13 @@
           }
           renderLandingCertRecap();
           renderCertificates('all');
+        } else if (msg.key === 'fathur_portfolio_cv_file') {
+          if (msg.data && (msg.data.fileUrl || msg.data.url)) {
+            landingCvFileData = msg.data;
+          } else {
+            landingCvFileData = null;
+          }
+          renderLandingCvModalDom();
         }
       };
     }
@@ -10264,6 +10113,13 @@
         } catch (err) {}
         renderLandingCertRecap();
         renderCertificates('all');
+      } else if (e.key === 'fathur_portfolio_cv_file') {
+        try {
+          landingCvFileData = e.newValue ? JSON.parse(e.newValue) : null;
+        } catch (err) {
+          landingCvFileData = null;
+        }
+        renderLandingCvModalDom();
       }
     });
 
@@ -10314,6 +10170,15 @@
               recapReq.onsuccess = function() {
                 if (recapReq.result) renderLandingCertRecap();
               };
+
+              // Sync CV PDF from IndexedDB
+              const cvReq = store.get('fathur_portfolio_cv_file');
+              cvReq.onsuccess = function() {
+                if (cvReq.result && (cvReq.result.fileUrl || cvReq.result.url)) {
+                  landingCvFileData = cvReq.result;
+                  renderLandingCvModalDom();
+                }
+              };
             }
           };
         } catch (eIdb) {}
@@ -10350,6 +10215,12 @@
           if (cloudRecap) {
             renderLandingCertRecap();
           }
+
+          const cloudCv = await PortfolioCloudDB.get('fathur_portfolio_cv_file');
+          if (cloudCv && (cloudCv.fileUrl || cloudCv.url)) {
+            landingCvFileData = cloudCv;
+            renderLandingCvModalDom();
+          }
         } catch (errCloud) {
           console.warn('Supabase fetch error in landing page:', errCloud);
         }
@@ -10359,6 +10230,7 @@
     syncLandingPageDataFromCloud();
     applyScrollBlurState(isScrollBlurEnabled, false);
 
+      loadLandingCvFile();
       renderHeroCategorizedTools();
       renderLandingCertRecap();
       updateDynamicWebsiteCounters();
