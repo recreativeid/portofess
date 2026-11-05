@@ -2398,7 +2398,7 @@
 
 
         <!-- Top Section Header -->
-        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
           <div class="inline-block glass-tag-pill px-5 py-2.5 rounded-2xl shadow-md -rotate-1">
             <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">04 / Design Portfolio &amp; Mockup Showcase</span>
           </div>
@@ -2407,16 +2407,24 @@
           <div class="flex items-center gap-2 glass-card smooth-blur-container px-4 py-2 rounded-2xl shadow-sm smooth-blur-reveal">
             <span class="text-xs font-mono font-bold text-stone-500 hidden sm:inline">Pilih Layar HP:</span>
             <div class="flex items-center gap-1.5 p-0.5 rounded-xl bg-stone-100 border border-stone-300">
-              <button onclick="setPhoneScreenToInstagram()" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50" title="Profil Instagram Akun">IG</button>
-              <button onclick="setPhoneScreenDesignIndex(0)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Karya 1">#1</button>
-              <button onclick="setPhoneScreenDesignIndex(1)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Karya 2">#2</button>
-              <button onclick="setPhoneScreenDesignIndex(2)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition" title="Karya 3">#3</button>
+              <button onclick="setPhoneScreenToInstagram()" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50 cursor-pointer" title="Profil Instagram Akun">IG</button>
+              <button onclick="setPhoneScreenDesignIndex(0)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition cursor-pointer" title="Karya 1">#1</button>
+              <button onclick="setPhoneScreenDesignIndex(1)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition cursor-pointer" title="Karya 2">#2</button>
+              <button onclick="setPhoneScreenDesignIndex(2)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition cursor-pointer" title="Karya 3">#3</button>
             </div>
           </div>
         </div>
 
-        <!-- Hidden container for JS account pills compatibility -->
-        <div id="medsosAccountPillsContainer" class="hidden"></div>
+        <!-- Account Selector Bar: Multi-Account Tabs (@masjid.mbm, @mgbookparty, @halteaindonesia, etc.) -->
+        <div class="mb-6 flex flex-wrap items-center gap-2.5 p-2 rounded-2xl bg-stone-100/80 border border-stone-200/90 shadow-inner">
+          <div class="flex items-center gap-1.5 px-3 py-1 text-xs font-mono font-extrabold text-stone-600 uppercase tracking-wider shrink-0">
+            <span>📱</span>
+            <span>Pilih Akun Medsos:</span>
+          </div>
+          <div id="medsosAccountPillsContainer" class="flex flex-wrap items-center gap-2">
+            <!-- Dynamically populated by renderMedsosSections() -->
+          </div>
+        </div>
 
         <!-- Section Subheader Requested by User: Muhammad Fathur Rohman - Design Portofolio & Instagram Handle -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 px-2">
@@ -4956,36 +4964,9 @@
     }
 
     /* =================================================================== */
-    /* MULTI-ACCOUNT SOCIAL MEDIA CMS (HALTEA, MASJID MBM, BOOK PARTY, DLL)*/
+    /* MULTI-ACCOUNT SOCIAL MEDIA CMS (MASJID MBM, BOOK PARTY, HALTEA, DLL)*/
     /* =================================================================== */
     const defaultMedsosAccounts = [
-      {
-        id: 'haltea',
-        name: 'Haltea Teh Halte Indonesia',
-        handle: 'halteaindonesia',
-        url: 'https://www.instagram.com/halteaindonesia',
-        role: 'Branding, Desain Feed & Video Reels',
-        badgeColor: '#C62828',
-        logoImg: 'assets/haltea/haltea-badge.png',
-        phoneScreenImg: 'assets/haltea/phone-screen-clean.png',
-        sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
-        designs: [
-          { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
-          { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
-          { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
-          { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
-          { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
-          { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
-        ],
-        videos: [
-          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
-          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
-          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
-          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
-          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
-        ]
-      },
       {
         id: 'masjid_mbm',
         name: 'Masjid MBM UNIMMA',
@@ -4993,6 +4974,7 @@
         url: 'https://www.instagram.com/masjid.mbm',
         role: 'Media Informasi, Konten Dakwah & Dokumentasi',
         badgeColor: '#0F766E',
+        badgeText: 'MBM',
         logoImg: '',
         phoneScreenImg: '',
         sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
@@ -5020,6 +5002,7 @@
         url: 'https://www.instagram.com/mgbookparty',
         role: 'Komunitas Literasi & Ruang Baca Publik',
         badgeColor: '#B45309',
+        badgeText: 'MBP',
         logoImg: '',
         phoneScreenImg: '',
         sectionTitle: 'Branding & Konten Literasi — Magelang Book Party',
@@ -5039,6 +5022,34 @@
           { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '' },
           { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '' }
         ]
+      },
+      {
+        id: 'haltea',
+        name: 'Haltea Teh Halte Indonesia',
+        handle: 'halteaindonesia',
+        url: 'https://www.instagram.com/halteaindonesia',
+        role: 'Branding, Desain Feed & Video Reels',
+        badgeColor: '#C62828',
+        badgeText: 'HLT',
+        logoImg: 'assets/haltea/haltea-badge.png',
+        phoneScreenImg: 'assets/haltea/phone-screen-clean.png',
+        sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
+        designs: [
+          { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
+          { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
+          { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
+          { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
+          { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
+          { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
+        ],
+        videos: [
+          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
+          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
+          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
+          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
+          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
+        ]
       }
     ];
 
@@ -5050,15 +5061,31 @@
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed && Array.isArray(parsed.accounts) && parsed.accounts.length > 0) {
-            // Safe initialization: Only fill default videos if account has no videos at all
-            parsed.accounts.forEach(acc => {
-              if (!acc.videos || acc.videos.length === 0) {
-                const def = defaultMedsosAccounts.find(d => d.id === acc.id);
-                if (def && def.videos) {
-                  acc.videos = JSON.parse(JSON.stringify(def.videos));
+            // Re-order accounts so masjid_mbm is first if existing
+            const orderMap = { masjid_mbm: 1, mgbookparty: 2, haltea: 3 };
+            parsed.accounts.sort((a, b) => (orderMap[a.id] || 99) - (orderMap[b.id] || 99));
+
+            // Ensure all default accounts exist
+            defaultMedsosAccounts.forEach(defAcc => {
+              const existing = parsed.accounts.find(a => a.id === defAcc.id);
+              if (!existing) {
+                parsed.accounts.push(JSON.parse(JSON.stringify(defAcc)));
+              } else {
+                // Ensure designs and videos exist
+                if (!existing.designs || existing.designs.length === 0) {
+                  existing.designs = JSON.parse(JSON.stringify(defAcc.designs));
                 }
+                if (!existing.videos || existing.videos.length === 0) {
+                  existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
+                }
+                if (!existing.role) existing.role = defAcc.role;
+                if (!existing.badgeText) existing.badgeText = defAcc.badgeText;
               }
             });
+
+            if (!parsed.activeAccountId || parsed.activeAccountId === 'haltea') {
+              parsed.activeAccountId = 'masjid_mbm';
+            }
             return parsed;
           }
         }
@@ -5066,7 +5093,7 @@
         console.warn('Gagal memuat CMS Data dari localStorage:', e);
       }
       return {
-        activeAccountId: 'haltea',
+        activeAccountId: 'masjid_mbm',
         accounts: JSON.parse(JSON.stringify(defaultMedsosAccounts))
       };
     }
@@ -5080,7 +5107,7 @@
     }
 
     function getActiveMedsosAccount() {
-      return cmsData.accounts.find(a => a.id === cmsData.activeAccountId) || cmsData.accounts[0];
+      return (cmsData.accounts || []).find(a => a.id === cmsData.activeAccountId) || cmsData.accounts[0] || defaultMedsosAccounts[0];
     }
 
     function selectMedsosAccount(accId) {
@@ -5090,15 +5117,532 @@
     }
 
     /* =================================================================== */
+    /* PHOTOREALISTIC SVG GENERATORS FOR INSTAGRAM SCREENS & DESIGNS       */
+    /* =================================================================== */
+    function generateInstagramPhoneScreenSvg(account) {
+      const safeHandle = escapeXml(account.handle || 'akun.resmi');
+      const safeName = escapeXml(account.name || 'Akun Resmi');
+      const safeRole = escapeXml(account.role || 'Kreator Konten & Media');
+      const badgeColor = account.badgeColor || '#0F766E';
+      
+      let bio1 = 'Media Informasi & Publikasi Kreatif Resmi';
+      let bio2 = 'Koleksi Portofolio Desain Grafis & Video Editing';
+      let bio3 = 'linktr.ee/' + (account.handle || 'portofolio');
+      let highlights = ['Sorotan 1', 'Sorotan 2', 'Sorotan 3', 'Sorotan 4', 'Sorotan 5'];
+      let hlIcons = ['✨', '🎨', '🎬', '📌', '⭐'];
+
+      if (account.id === 'masjid_mbm' || account.handle.includes('mbm')) {
+        bio1 = '🕌 Pusat Kegiatan Islam, Syiar & Dakwah UNIMMA';
+        bio2 = '📍 Kampus 2 UNIMMA, Magelang · Terbuka untuk Jamaah';
+        bio3 = '🔗 linktr.ee/masjidmbmunimma';
+        highlights = ['Kajian', 'Ramadhan', 'Jumat', 'Hadits', 'Posko'];
+        hlIcons = ['🕌', '🌙', '🤲', '📖', '🤝'];
+      } else if (account.id === 'mgbookparty' || account.handle.includes('book')) {
+        bio1 = '📚 Ruang Baca Terbuka & Gerakan Literasi Mingguan';
+        bio2 = '🌿 Piknik Baca, Diskusi Terbuka & Teman Literasi Baru';
+        bio3 = '🔗 instagram.com/mgbookparty';
+        highlights = ['Piknik', 'Bedah', 'Review', 'Donasi', 'Meetup'];
+        hlIcons = ['📚', '🎙️', '⭐', '🎁', '☕'];
+      } else if (account.id === 'haltea') {
+        bio1 = 'Teh Halte Indonesia · Kedai Es Teh & Kopi Favorit';
+        bio2 = 'Buka Setiap Hari 09.30 - 22.00 WIB · Magelang';
+        bio3 = 'lynkid.run/halteaindonesia';
+        highlights = ['Menu', 'Promo', 'Outlet', 'Review', 'Behind'];
+        hlIcons = ['🥤', '🏷️', '📍', '⭐', '🎬'];
+      }
+
+      const designs = account.designs || [];
+      const videos = account.videos || [];
+
+      // 9 Grid Feed Items
+      const feedItems = [];
+      for (let i = 0; i < 9; i++) {
+        const col = i % 3;
+        const row = Math.floor(i / 3);
+        const x = 12 + col * 174;
+        const y = 538 + row * 170;
+        const w = 168;
+        const h = 164;
+
+        if (i < 6 && designs[i]) {
+          const d = designs[i];
+          const dTitle = escapeXml(d.title || ('Karya #' + (i + 1)));
+          const dBg = d.bg || badgeColor;
+          feedItems.push(
+            '<g transform="translate(' + x + ', ' + y + ')">' +
+              '<rect width="' + w + '" height="' + h + '" rx="6" fill="' + dBg + '"/>' +
+              '<rect width="' + w + '" height="' + h + '" rx="6" fill="url(#feedShine)"/>' +
+              '<rect x="2" y="2" width="' + (w-4) + '" height="' + (h-4) + '" rx="5" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>' +
+              '<rect x="8" y="8" width="54" height="18" rx="4" fill="rgba(0,0,0,0.65)"/>' +
+              '<text x="35" y="21" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="800" text-anchor="middle">#0' + (i + 1) + '</text>' +
+              '<text x="12" y="96" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800">' +
+                (dTitle.length > 19 ? dTitle.substring(0, 17) + '...' : dTitle) +
+              '</text>' +
+              '<text x="12" y="112" fill="rgba(255,255,255,0.75)" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="600">' +
+                escapeXml(d.subtitle || 'Desain Grafis').substring(0, 22) +
+              '</text>' +
+              '<rect x="8" y="' + (h - 24) + '" width="72" height="16" rx="4" fill="rgba(255,255,255,0.22)"/>' +
+              '<text x="44" y="' + (h - 13) + '" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="8" font-weight="700" text-anchor="middle">🎨 DESAIN FEED</text>' +
+            '</g>'
+          );
+        } else {
+          const vIdx = i - 6;
+          const v = videos[vIdx] || { title: 'Video Reels #' + (vIdx + 1) };
+          const vTitle = escapeXml(v.title || 'Video Konten');
+          feedItems.push(
+            '<g transform="translate(' + x + ', ' + y + ')">' +
+              '<rect width="' + w + '" height="' + h + '" rx="6" fill="#18181b"/>' +
+              '<rect width="' + w + '" height="' + h + '" rx="6" fill="url(#reelGrad)"/>' +
+              '<rect x="2" y="2" width="' + (w-4) + '" height="' + (h-4) + '" rx="5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>' +
+              '<g transform="translate(' + (w - 24) + ', 8)">' +
+                '<rect width="16" height="16" rx="4" fill="rgba(0,0,0,0.6)"/>' +
+                '<polygon points="5,4 12,8 5,12" fill="#ffffff"/>' +
+              '</g>' +
+              '<circle cx="' + (w/2) + '" cy="' + (h/2 - 8) + '" r="18" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.5"/>' +
+              '<polygon points="' + (w/2 - 4) + ',' + (h/2 - 14) + ' ' + (w/2 + 6) + ',' + (h/2 - 8) + ' ' + (w/2 - 4) + ',' + (h/2 - 2) + '" fill="#ffffff"/>' +
+              '<text x="10" y="' + (h - 18) + '" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="700">' +
+                (vTitle.length > 20 ? vTitle.substring(0, 18) + '...' : vTitle) +
+              '</text>' +
+              '<text x="10" y="' + (h - 7) + '" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="8" font-weight="700">▶ REELS 9:16</text>' +
+            '</g>'
+          );
+        }
+      }
+
+      // Highlights SVGs
+      const hlElements = highlights.map((hName, idx) => {
+        const cx = 58 + idx * 105;
+        const icon = hlIcons[idx] || '⭐';
+        return (
+          '<g transform="translate(' + cx + ', 455)">' +
+            '<circle cx="0" cy="0" r="28" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>' +
+            '<circle cx="0" cy="0" r="24" fill="#27272a"/>' +
+            '<text x="0" y="6" font-size="16" text-anchor="middle">' + icon + '</text>' +
+            '<text x="0" y="42" fill="#d4d4d8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" text-anchor="middle">' + escapeXml(hName) + '</text>' +
+          '</g>'
+        );
+      }).join('');
+
+      const svg = 
+        '<svg xmlns="http://www.w3.org/2000/svg" width="540" height="1110" viewBox="0 0 540 1110">' +
+          '<defs>' +
+            '<linearGradient id="igStoryGrad" x1="0%" y1="0%" x2="100%" y2="100%">' +
+              '<stop offset="0%" stop-color="#f09433"/>' +
+              '<stop offset="25%" stop-color="#e6683c"/>' +
+              '<stop offset="50%" stop-color="#dc2743"/>' +
+              '<stop offset="75%" stop-color="#cc2366"/>' +
+              '<stop offset="100%" stop-color="#bc1888"/>' +
+            '</linearGradient>' +
+            '<linearGradient id="feedShine" x1="0%" y1="0%" x2="100%" y2="100%">' +
+              '<stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>' +
+              '<stop offset="60%" stop-color="transparent"/>' +
+              '<stop offset="100%" stop-color="rgba(0,0,0,0.3)"/>' +
+            '</linearGradient>' +
+            '<linearGradient id="reelGrad" x1="0%" y1="0%" x2="0%" y2="100%">' +
+              '<stop offset="0%" stop-color="rgba(24,24,27,0.7)"/>' +
+              '<stop offset="100%" stop-color="rgba(9,9,11,0.95)"/>' +
+            '</linearGradient>' +
+          '</defs>' +
+
+          '<rect width="540" height="1110" fill="#09090b"/>' +
+
+          '<!-- STATUS BAR iOS -->' +
+          '<g>' +
+            '<text x="44" y="42" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700">09:41</text>' +
+            '<rect x="210" y="20" width="120" height="28" rx="14" fill="#000000" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>' +
+            '<circle cx="232" cy="34" r="5" fill="#18181b"/>' +
+            '<circle cx="295" cy="34" r="4" fill="#09090b" stroke="#18181b" stroke-width="1.5"/>' +
+            '<g transform="translate(435, 27)">' +
+              '<rect x="0" y="10" width="3" height="4" fill="#ffffff" rx="0.5"/>' +
+              '<rect x="5" y="8" width="3" height="6" fill="#ffffff" rx="0.5"/>' +
+              '<rect x="10" y="5" width="3" height="9" fill="#ffffff" rx="0.5"/>' +
+              '<rect x="15" y="2" width="3" height="12" fill="#ffffff" rx="0.5"/>' +
+              '<path d="M 26 12 A 5 5 0 0 1 34 12 M 24 9 A 9 9 0 0 1 36 9 M 22 6 A 13 13 0 0 1 38 6" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+              '<circle cx="30" cy="14" r="1.2" fill="#ffffff"/>' +
+              '<rect x="44" y="3" width="22" height="11" rx="3" fill="none" stroke="#ffffff" stroke-width="1.8"/>' +
+              '<rect x="46" y="5" width="15" height="7" rx="1.5" fill="#ffffff"/>' +
+              '<rect x="67" y="6.5" width="2" height="4" rx="1" fill="#ffffff"/>' +
+            '</g>' +
+          '</g>' +
+
+          '<!-- INSTAGRAM TOP BAR -->' +
+          '<g transform="translate(0, 60)">' +
+            '<text x="32" y="34" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="800">@' + safeHandle + '</text>' +
+            '<g transform="translate(' + (32 + (safeHandle.length + 1) * 12.8) + ', 18)">' +
+              '<circle cx="8" cy="8" r="8" fill="#0ea5e9"/>' +
+              '<path d="M 4.5 8 L 7 10.5 L 11.5 5.5" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</g>' +
+            '<g transform="translate(440, 16)">' +
+              '<path d="M 10 3 C 7 3 5 5.5 5 9 C 5 12 3 13 3 14 L 17 14 C 17 13 15 12 15 9 C 15 5.5 13 3 10 3 Z M 8.5 15 C 8.5 16 9.2 16.8 10 16.8 C 10.8 16.8 11.5 16 11.5 15 Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>' +
+              '<line x1="34" y1="5" x2="54" y2="5" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
+              '<line x1="34" y1="11" x2="54" y2="11" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
+              '<line x1="34" y1="17" x2="54" y2="17" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
+            '</g>' +
+          '</g>' +
+
+          '<!-- PROFILE HEADER -->' +
+          '<g transform="translate(0, 115)">' +
+            '<circle cx="76" cy="55" r="45" fill="none" stroke="url(#igStoryGrad)" stroke-width="3"/>' +
+            '<circle cx="76" cy="55" r="41" fill="#09090b"/>' +
+            '<circle cx="76" cy="55" r="38" fill="' + badgeColor + '"/>' +
+            '<text x="76" y="62" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="900" text-anchor="middle">' +
+              safeName.substring(0, 3).toUpperCase() +
+            '</text>' +
+            '<g transform="translate(195, 42)">' +
+              '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" text-anchor="middle">' + (designs.length + videos.length) + '</text>' +
+              '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" text-anchor="middle">postingan</text>' +
+            '</g>' +
+            '<g transform="translate(315, 42)">' +
+              '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" text-anchor="middle">8.662</text>' +
+              '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" text-anchor="middle">pengikut</text>' +
+            '</g>' +
+            '<g transform="translate(435, 42)">' +
+              '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" text-anchor="middle">142</text>' +
+              '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" text-anchor="middle">mengikuti</text>' +
+            '</g>' +
+          '</g>' +
+
+          '<!-- BIO SECTION -->' +
+          '<g transform="translate(32, 230)">' +
+            '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="15" font-weight="800">' + safeName + '</text>' +
+            '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="600">' + safeRole + '</text>' +
+            '<text x="0" y="40" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12.5" font-weight="400">' + escapeXml(bio1) + '</text>' +
+            '<text x="0" y="58" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12.5" font-weight="400">' + escapeXml(bio2) + '</text>' +
+            '<text x="0" y="78" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12.5" font-weight="700">' + escapeXml(bio3) + '</text>' +
+            '<text x="0" y="98" fill="#71717a" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="500">Diikuti oleh recreative.id dan 142 lainnya</text>' +
+          '</g>' +
+
+          '<!-- ACTION BUTTONS -->' +
+          '<g transform="translate(32, 345)">' +
+            '<rect x="0" y="0" width="215" height="36" rx="9" fill="#27272a"/>' +
+            '<text x="107" y="22" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="700" text-anchor="middle">Mengikuti ⌄</text>' +
+            '<rect x="225" y="0" width="205" height="36" rx="9" fill="#27272a"/>' +
+            '<text x="327" y="22" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="700" text-anchor="middle">Kirim pesan</text>' +
+            '<rect x="440" y="0" width="38" height="36" rx="9" fill="#27272a"/>' +
+            '<g transform="translate(450, 10)">' +
+              '<circle cx="8" cy="5" r="4" fill="none" stroke="#ffffff" stroke-width="1.8"/>' +
+              '<path d="M 2 15 C 2 12 5 11 8 11 C 11 11 14 12 14 15" fill="none" stroke="#ffffff" stroke-width="1.8"/>' +
+            '</g>' +
+          '</g>' +
+
+          '<!-- HIGHLIGHT STORY CIRCLES -->' +
+          '<g>' + hlElements + '</g>' +
+
+          '<!-- FEED TABS -->' +
+          '<g transform="translate(0, 502)">' +
+            '<line x1="0" y1="0" x2="540" y2="0" stroke="#27272a" stroke-width="1"/>' +
+            '<g transform="translate(90, 8)">' +
+              '<rect x="0" y="0" width="6" height="6" fill="#ffffff"/><rect x="9" y="0" width="6" height="6" fill="#ffffff"/><rect x="18" y="0" width="6" height="6" fill="#ffffff"/>' +
+              '<rect x="0" y="9" width="6" height="6" fill="#ffffff"/><rect x="9" y="9" width="6" height="6" fill="#ffffff"/><rect x="18" y="9" width="6" height="6" fill="#ffffff"/>' +
+              '<rect x="0" y="18" width="6" height="6" fill="#ffffff"/><rect x="9" y="18" width="6" height="6" fill="#ffffff"/><rect x="18" y="18" width="6" height="6" fill="#ffffff"/>' +
+            '</g>' +
+            '<line x1="20" y1="36" x2="180" y2="36" stroke="#ffffff" stroke-width="2"/>' +
+            '<g transform="translate(260, 10)">' +
+              '<rect x="0" y="0" width="20" height="20" rx="4" fill="none" stroke="#71717a" stroke-width="1.8"/>' +
+              '<polygon points="8,6 14,10 8,14" fill="#71717a"/>' +
+            '</g>' +
+            '<g transform="translate(430, 8)">' +
+              '<rect x="0" y="0" width="22" height="22" rx="4" fill="none" stroke="#71717a" stroke-width="1.8"/>' +
+              '<circle cx="11" cy="8" r="3.5" fill="none" stroke="#71717a" stroke-width="1.5"/>' +
+              '<path d="M 5 18 C 5 15 8 14 11 14 C 14 14 17 15 17 18" fill="none" stroke="#71717a" stroke-width="1.5"/>' +
+            '</g>' +
+          '</g>' +
+
+          '<!-- 9 FEED TILES -->' +
+          '<g>' + feedItems.join('') + '</g>' +
+
+          '<!-- BOTTOM INSTAGRAM NAVIGATION BAR -->' +
+          '<g transform="translate(0, 1055)">' +
+            '<rect width="540" height="55" fill="#09090b"/>' +
+            '<line x1="0" y1="0" x2="540" y2="0" stroke="#27272a" stroke-width="1"/>' +
+            '<path d="M 44 26 L 54 16 L 64 26 L 64 34 L 58 34 L 58 28 L 50 28 L 50 34 L 44 34 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>' +
+            '<circle cx="160" cy="24" r="7" fill="none" stroke="#a1a1aa" stroke-width="2"/>' +
+            '<line x1="165" y1="29" x2="171" y2="35" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round"/>' +
+            '<rect x="257" y="14" width="26" height="26" rx="7" fill="none" stroke="#ffffff" stroke-width="2"/>' +
+            '<line x1="270" y1="20" x2="270" y2="34" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
+            '<line x1="263" y1="27" x2="277" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
+            '<rect x="367" y="16" width="22" height="22" rx="5" fill="none" stroke="#a1a1aa" stroke-width="2"/>' +
+            '<polygon points="375,22 383,27 375,32" fill="#a1a1aa"/>' +
+            '<circle cx="482" cy="27" r="12" fill="' + badgeColor + '" stroke="#ffffff" stroke-width="1.5"/>' +
+            '<text x="482" y="31" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="900" text-anchor="middle">' +
+              safeName.substring(0, 2).toUpperCase() +
+            '</text>' +
+            '<rect x="200" y="47" width="140" height="4" rx="2" fill="#ffffff" opacity="0.6"/>' +
+          '</g>' +
+        '</svg>';
+
+      return svg;
+    }
+
+    function generateDesignPosterSvg(design, account, index) {
+      const title = escapeXml(design.title || ('Karya #' + (index + 1)));
+      const subtitle = escapeXml(design.subtitle || 'Koleksi Desain Grafis');
+      const bg = design.bg || account.badgeColor || '#0F766E';
+      const handle = escapeXml(account.handle || 'portofess');
+      const accName = escapeXml(account.name || 'Portofolio');
+      const numStr = '#0' + (index + 1);
+
+      let themeBadge = 'KAJIAN & PUBLIKASI';
+      let themeEmoji = '🕌';
+      let tagline = 'Pusat Syiar & Media Informasi Digital';
+      let themeDetail = 'Masjid MBM UNIMMA · Kampus 2 Magelang';
+
+      if (account.id === 'masjid_mbm') {
+        if (index === 0) {
+          themeBadge = 'KAJIAN RUTIN';
+          themeEmoji = '🕌';
+          tagline = 'Spesial Pemuda Generasi Qurani';
+          themeDetail = 'Setiap Malam Ahad · Terbuka untuk Umum';
+        } else if (index === 1) {
+          themeBadge = 'SEMARAK RAMADHAN';
+          themeEmoji = '🌙';
+          tagline = 'Jadwal Imsakiyah & Buka Puasa';
+          themeDetail = 'Ramadhan Berkah 1446 H · Masjid MBM';
+        } else if (index === 2) {
+          themeBadge = 'JUMAT BERKAH';
+          themeEmoji = '🤲';
+          tagline = 'Sedekah Nasi & Santunan Dhuafa';
+          themeDetail = 'Ajakan Donasi Berkah Umat';
+        } else if (index === 3) {
+          themeBadge = 'HADITS & MOTIVASI';
+          themeEmoji = '📖';
+          tagline = 'Mutiara Sunnah & Pengingat Diri';
+          themeDetail = 'Edukasi Spiritual Pemuda Muslim';
+        } else if (index === 4) {
+          themeBadge = 'PERINGATAN PHBI';
+          themeEmoji = '⭐';
+          tagline = 'Materi Publikasi & Ucapan Resmi';
+          themeDetail = 'Syiar Hari Besar Islam UNIMMA';
+        } else if (index === 5) {
+          themeBadge = 'POSKO UMAT';
+          themeEmoji = '🤝';
+          tagline = 'Layanan Sosial & Peduli Bencana';
+          themeDetail = 'Ambulans Gratis & Bantuan Sosial';
+        }
+      } else if (account.id === 'mgbookparty') {
+        if (index === 0) {
+          themeBadge = 'PIKNIK BACA';
+          themeEmoji = '📚';
+          tagline = 'Ruang Baca Terbuka Mingguan';
+          themeDetail = 'Taman Kota Magelang · Minggu Pagi';
+        } else if (index === 1) {
+          themeBadge = 'BEDAH KARYA';
+          themeEmoji = '🎙️';
+          tagline = 'Diskusi Sastra & Ruang Temu Penulis';
+          themeDetail = 'Dialog Interaktif Pembaca Buku';
+        } else if (index === 2) {
+          themeBadge = 'WEEKEND READS';
+          themeEmoji = '⭐';
+          tagline = 'Rekomendasi Buku Akhir Pekan';
+          themeDetail = 'Curated Books & Rating Pembaca';
+        } else if (index === 3) {
+          themeBadge = 'DONASI LITERASI';
+          themeEmoji = '🎁';
+          tagline = 'Buku untuk Anak-Anak Pelosok';
+          themeDetail = 'Tebarkan Aksara & Semangat Belajar';
+        } else if (index === 4) {
+          themeBadge = 'MEETUP KREATIF';
+          themeEmoji = '☕';
+          tagline = 'Kolaborasi Seni & Sastra Nyeni';
+          themeDetail = 'Magelang Nyeni x Book Party';
+        } else if (index === 5) {
+          themeBadge = 'LITERARY QUOTE';
+          themeEmoji = '✒️';
+          tagline = 'Kutipan Inspiratif Penulis Dunia';
+          themeDetail = 'Kata Bijak & Refleksi Membaca';
+        }
+      }
+
+      const svg = 
+        '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">' +
+          '<defs>' +
+            '<linearGradient id="bgGrad_' + index + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+              '<stop offset="0%" stop-color="' + bg + '"/>' +
+              '<stop offset="60%" stop-color="#09090b"/>' +
+              '<stop offset="100%" stop-color="#000000"/>' +
+            '</linearGradient>' +
+            '<radialGradient id="spotlight_' + index + '" cx="50%" cy="30%" r="60%">' +
+              '<stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>' +
+              '<stop offset="100%" stop-color="transparent"/>' +
+            '</radialGradient>' +
+          '</defs>' +
+
+          '<rect width="640" height="800" fill="url(#bgGrad_' + index + ')"/>' +
+          '<rect width="640" height="800" fill="url(#spotlight_' + index + ')"/>' +
+
+          '<rect x="24" y="24" width="592" height="752" rx="20" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>' +
+          '<rect x="32" y="32" width="576" height="736" rx="16" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>' +
+
+          '<g transform="translate(48, 52)">' +
+            '<rect x="0" y="0" width="76" height="30" rx="8" fill="rgba(0,0,0,0.6)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>' +
+            '<text x="38" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="900" text-anchor="middle">' + numStr + '</text>' +
+            '<rect x="88" y="0" width="220" height="30" rx="8" fill="' + bg + '" opacity="0.95"/>' +
+            '<text x="198" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="1">' +
+              themeEmoji + ' ' + themeBadge +
+            '</text>' +
+            '<text x="544" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="11" font-weight="700" text-anchor="end">@' + handle + '</text>' +
+          '</g>' +
+
+          '<g transform="translate(48, 115)">' +
+            '<rect width="544" height="380" rx="16" fill="rgba(0,0,0,0.35)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>' +
+            '<circle cx="272" cy="170" r="85" fill="' + bg + '" opacity="0.45"/>' +
+            '<circle cx="272" cy="170" r="65" fill="rgba(255,255,255,0.08)"/>' +
+            '<text x="272" y="205" font-size="95" text-anchor="middle">' + themeEmoji + '</text>' +
+            '<rect x="72" y="300" width="400" height="34" rx="8" fill="rgba(255,255,255,0.15)"/>' +
+            '<text x="272" y="322" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="0.5">' +
+              escapeXml(tagline) +
+            '</text>' +
+          '</g>' +
+
+          '<g transform="translate(48, 535)">' +
+            '<text x="0" y="32" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="900">' +
+              title +
+            '</text>' +
+            '<text x="0" y="68" fill="rgba(255,255,255,0.85)" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="600">' +
+              subtitle +
+            '</text>' +
+            '<line x1="0" y1="92" x2="544" y2="92" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>' +
+            '<g transform="translate(0, 118)">' +
+              '<rect x="0" y="0" width="360" height="38" rx="8" fill="rgba(255,255,255,0.1)"/>' +
+              '<text x="16" y="24" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">' +
+                '📍 ' + escapeXml(themeDetail) +
+              '</text>' +
+              '<g transform="translate(375, 0)">' +
+                '<rect width="169" height="38" rx="8" fill="' + bg + '"/>' +
+                '<text x="84" y="24" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800" text-anchor="middle">' +
+                  accName.substring(0, 16) +
+                '</text>' +
+              '</g>' +
+            '</g>' +
+          '</g>' +
+
+          '<g transform="translate(48, 735)">' +
+            '<text x="0" y="15" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="10" font-weight="600">OFFICIAL INSTAGRAM FEED · PORTOFOLIO RESMI MUHAMMAD FATHUR ROHMAN</text>' +
+          '</g>' +
+        '</svg>';
+
+      return svg;
+    }
+
+    function generateVideoThumbnailSvg(video, account, index, isReel) {
+      const title = escapeXml(video.title || 'Video Konten');
+      const duration = escapeXml(video.duration || (isReel ? '0:45' : '1:30'));
+      const bg = account.badgeColor || '#155293';
+      const handle = escapeXml(account.handle || 'portofess');
+      const numStr = '#0' + (index + 1);
+
+      if (isReel) {
+        return (
+          '<svg xmlns="http://www.w3.org/2000/svg" width="450" height="800" viewBox="0 0 450 800">' +
+            '<defs>' +
+              '<linearGradient id="reelBg_' + index + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+                '<stop offset="0%" stop-color="#18181b"/>' +
+                '<stop offset="50%" stop-color="' + bg + '"/>' +
+                '<stop offset="100%" stop-color="#09090b"/>' +
+              '</linearGradient>' +
+              '<radialGradient id="playGlow_' + index + '" cx="50%" cy="50%" r="50%">' +
+                '<stop offset="0%" stop-color="#38bdf8"/>' +
+                '<stop offset="100%" stop-color="transparent"/>' +
+              '</radialGradient>' +
+            '</defs>' +
+            '<rect width="450" height="800" fill="url(#reelBg_' + index + ')"/>' +
+            '<rect x="18" y="18" width="414" height="764" rx="20" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>' +
+            '<g transform="translate(32, 40)">' +
+              '<rect width="95" height="28" rx="6" fill="#ef4444"/>' +
+              '<text x="47" y="19" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="900" text-anchor="middle">REELS ' + numStr + '</text>' +
+              '<rect x="105" y="0" width="70" height="28" rx="6" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>' +
+              '<text x="140" y="19" fill="#ffffff" font-family="monospace" font-size="11" font-weight="700" text-anchor="middle">9:16</text>' +
+              '<text x="386" y="19" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="11" font-weight="600" text-anchor="end">@' + handle + '</text>' +
+            '</g>' +
+            '<g transform="translate(225, 360)">' +
+              '<circle cx="0" cy="0" r="60" fill="url(#playGlow_' + index + ')" opacity="0.6"/>' +
+              '<circle cx="0" cy="0" r="42" fill="#0ea5e9" stroke="#ffffff" stroke-width="3"/>' +
+              '<polygon points="-8,-16 18,0 -8,16" fill="#ffffff"/>' +
+            '</g>' +
+            '<g transform="translate(32, 580)">' +
+              '<rect width="386" height="170" rx="16" fill="rgba(0,0,0,0.65)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>' +
+              '<g transform="translate(20, 20)">' +
+                '<rect width="110" height="24" rx="5" fill="' + bg + '"/>' +
+                '<text x="55" y="16" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="800" text-anchor="middle">VIDEO REELS</text>' +
+                '<rect x="118" y="0" width="60" height="24" rx="5" fill="rgba(255,255,255,0.15)"/>' +
+                '<text x="148" y="16" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700" text-anchor="middle">⏱ ' + duration + '</text>' +
+              '</g>' +
+              '<text x="20" y="80" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="17" font-weight="800">' +
+                (title.length > 38 ? title.substring(0, 36) + '...' : title) +
+              '</text>' +
+              '<text x="20" y="125" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">' +
+                '▶ Klik untuk Putar Video Penuh' +
+              '</text>' +
+            '</g>' +
+          '</svg>'
+        );
+      } else {
+        return (
+          '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">' +
+            '<defs>' +
+              '<linearGradient id="landBg_' + index + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+                '<stop offset="0%" stop-color="#18181b"/>' +
+                '<stop offset="50%" stop-color="' + bg + '"/>' +
+                '<stop offset="100%" stop-color="#09090b"/>' +
+              '</linearGradient>' +
+            '</defs>' +
+            '<rect width="640" height="360" fill="url(#landBg_' + index + ')"/>' +
+            '<rect x="16" y="16" width="608" height="328" rx="14" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>' +
+            '<g transform="translate(32, 38)">' +
+              '<rect width="110" height="26" rx="6" fill="#155293"/>' +
+              '<text x="55" y="17" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="900" text-anchor="middle">LANSKAP ' + numStr + '</text>' +
+              '<rect x="118" y="0" width="60" height="26" rx="6" fill="rgba(0,0,0,0.5)"/>' +
+              '<text x="148" y="17" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700" text-anchor="middle">16:9</text>' +
+              '<text x="576" y="17" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="11" font-weight="600" text-anchor="end">@' + handle + '</text>' +
+            '</g>' +
+            '<g transform="translate(320, 160)">' +
+              '<circle cx="0" cy="0" r="36" fill="#0ea5e9" stroke="#ffffff" stroke-width="2.5"/>' +
+              '<polygon points="-6,-13 14,0 -6,13" fill="#ffffff"/>' +
+            '</g>' +
+            '<g transform="translate(32, 260)">' +
+              '<rect width="576" height="64" rx="10" fill="rgba(0,0,0,0.7)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>' +
+              '<text x="20" y="30" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="800">' +
+                (title.length > 50 ? title.substring(0, 48) + '...' : title) +
+              '</text>' +
+              '<text x="20" y="48" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="600">' +
+                '⏱ Durasi: ' + duration + ' · Klik untuk Memutar' +
+              '</text>' +
+            '</g>' +
+          '</svg>'
+        );
+      }
+    }
+
+    function getInstagramPhoneScreenUrl(account) {
+      if (account.phoneScreenImg && !account.phoneScreenImg.startsWith('data:image/svg+xml;utf8,<svg') && account.phoneScreenImg !== 'assets/haltea/phone-screen-clean.png') {
+        return account.phoneScreenImg;
+      }
+      if (account.id === 'haltea' && account.phoneScreenImg === 'assets/haltea/phone-screen-clean.png') {
+        return 'assets/haltea/phone-screen-clean.png';
+      }
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(generateInstagramPhoneScreenSvg(account));
+    }
+
+    function getDesignPosterUrl(design, account, index) {
+      if (design.img && typeof design.img === 'string' && design.img.trim()) {
+        return design.img.trim();
+      }
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(generateDesignPosterSvg(design, account, index));
+    }
+
+    function getVideoPosterUrl(video, account, index, isReel) {
+      if (video.thumbnail && typeof video.thumbnail === 'string' && video.thumbnail.trim()) {
+        return video.thumbnail.trim();
+      }
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(generateVideoThumbnailSvg(video, account, index, isReel));
+    }
+
+    /* =================================================================== */
     /* REALISTIC STATIC SMARTPHONE SCREEN CONTROLLER                       */
     /* =================================================================== */
     function setPhoneScreen(imgUrl, title) {
       if (!imgUrl) return;
       const acc = getActiveMedsosAccount();
-      acc.phoneScreenImg = imgUrl;
-      acc.activeScreenTitle = title || '@' + acc.handle;
-      saveCmsData();
-
       const phoneImg = document.getElementById('phoneScreenImage');
       const label = document.getElementById('phoneScreenLabel');
 
@@ -5112,25 +5656,45 @@
         }, 120);
       }
       if (label) {
-        label.textContent = `Layar: ${acc.activeScreenTitle}`;
+        label.textContent = 'Layar: ' + (title || '@' + acc.handle);
       }
     }
 
     function setPhoneScreenToInstagram() {
       const acc = getActiveMedsosAccount();
-      const defaultImg = acc.id === 'haltea' ? 'assets/haltea/phone-screen-clean.png' : makeSvgBanner('@' + acc.handle, 'Instagram Feed & Bio', acc.badgeColor);
-      setPhoneScreen(defaultImg, '@' + acc.handle);
+      setPhoneScreen(getInstagramPhoneScreenUrl(acc), '@' + acc.handle);
     }
 
     function setPhoneScreenDesignIndex(index) {
       const acc = getActiveMedsosAccount();
       if (!acc.designs || !acc.designs[index]) return;
       const d = acc.designs[index];
-      const src = d.img || makeSvgBanner(d.title, d.subtitle, d.bg || acc.badgeColor || '#C62828');
+      const src = getDesignPosterUrl(d, acc, index);
       setPhoneScreen(src, d.title);
     }
 
-    /* 3D Magnetic Cursor Tilt Listener */
+    function setAllMedsosPhoneScreen(accountId, imgUrl, title) {
+      const phoneImg = document.getElementById('allMedsosPhoneImg_' + accountId);
+      const label = document.getElementById('allMedsosPhoneLabel_' + accountId);
+      if (phoneImg) {
+        phoneImg.style.opacity = '0.35';
+        setTimeout(() => {
+          phoneImg.src = imgUrl;
+          phoneImg.style.opacity = '1';
+        }, 120);
+      }
+      if (label) {
+        label.textContent = 'Layar: ' + (title || 'Karya Terpilih');
+      }
+    }
+
+    function resetAllMedsosPhoneScreen(accountId) {
+      const acc = (cmsData.accounts || []).find(a => a.id === accountId);
+      if (!acc) return;
+      setAllMedsosPhoneScreen(accountId, getInstagramPhoneScreenUrl(acc), '@' + acc.handle);
+    }
+
+        /* 3D Magnetic Cursor Tilt Listener */
     function attach3DCursorTilt(el) {
       if (!el || el.dataset.tiltAttached) return;
       el.dataset.tiltAttached = 'true';
@@ -5212,20 +5776,24 @@
     }
 
     /* Build Clean Instagram-Style Video Card (Matching Design Posts) */
-    function buildVideoCard(v, idx, isReel, accHandle) {
+    function buildVideoCard(v, idx, isReel, accHandle, accObj) {
       const aspectClass = isReel ? 'aspect-[9/16]' : 'aspect-[16/9]';
-      const badgeText = isReel ? `REELS #0${idx + 1}` : `LANSKAP #0${idx + 1}`;
+      const badgeText = isReel ? ('REELS #0' + (idx + 1)) : ('LANSKAP #0' + (idx + 1));
       const ratioLabel = isReel ? '9:16' : '16:9';
       const categoryLabel = isReel ? 'Video Reels (9:16)' : 'Video Lanskap (16:9)';
       const safeTitle = (v.title || 'Video Portofolio').replace(/'/g, "\\'");
       const safeUrl = (v.videoUrl || '').replace(/'/g, "\\'");
       const parsed = parseVideoSource(v.videoUrl);
+      const acc = accObj || { handle: accHandle, badgeColor: '#155293' };
+      const thumbnailSrc = (v.thumbnail && typeof v.thumbnail === 'string' && v.thumbnail.trim()) 
+        ? v.thumbnail.trim() 
+        : getVideoPosterUrl(v, acc, idx, isReel);
 
       return `
         <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm hover:shadow-md hover:border-stone-400 overflow-hidden flex flex-col justify-between group transition-all duration-300">
           <div class="${aspectClass} w-full bg-stone-900 relative overflow-hidden flex items-center justify-center cursor-pointer" onclick="openVideoModal('${safeTitle}', '${ratioLabel}', '${v.duration || '0:45'}', '${safeUrl}')">
-            ${v.thumbnail ? `
-              <img src="${v.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${v.title}" />
+            ${thumbnailSrc ? `
+              <img src="${thumbnailSrc}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${v.title}" />
               <div class="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition flex items-center justify-center">
                 <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.6)] transition duration-300 ring-2 sm:ring-4 ring-white/20">
                   <span class="text-sm ml-0.5">▶</span>
@@ -5268,341 +5836,6 @@
       `;
     }
 
-    function openVideoModal(title, ratio, duration, videoUrl) {
-      const modal = document.getElementById('videoModal');
-      if (!modal) return;
-      document.getElementById('videoModalTitle').textContent = title || 'Pratinjau Video';
-      document.getElementById('videoModalRatioBadge').textContent = ratio || '9:16';
-      document.getElementById('videoModalDuration').textContent = `Durasi: ${duration || '0:45'}`;
-      
-      const soundBtn = document.getElementById('videoModalSoundBtn');
-      if (soundBtn) soundBtn.classList.add('hidden');
-
-      const container = document.getElementById('videoModalPlayerContainer');
-      const dialog = document.getElementById('videoModalDialog');
-      const parsed = parseVideoSource(videoUrl);
-      const isReel = (ratio || '').includes('9/16') || ratio === '9:16';
-
-      // Dynamically adapt modal size to video aspect ratio (Slender vertical for 9:16, Widescreen for 16:9)
-      if (dialog) {
-        if (isReel) {
-          dialog.className = 'bg-stone-900 text-white rounded-3xl max-w-[400px] sm:max-w-[420px] w-full overflow-hidden shadow-2xl border border-stone-800 transition-all duration-300 flex flex-col max-h-[96vh]';
-        } else {
-          dialog.className = 'bg-stone-900 text-white rounded-3xl max-w-3xl sm:max-w-4xl w-full overflow-hidden shadow-2xl border border-stone-800 transition-all duration-300 flex flex-col max-h-[92vh]';
-        }
-      }
-
-      const aspectStyle = isReel ? 'aspect-[9/16] w-full max-h-[76vh]' : 'aspect-[16/9] w-full';
-
-      if (parsed.type === 'youtube') {
-        container.innerHTML = `
-          <div class="${aspectStyle} mx-auto relative bg-black overflow-hidden flex items-center justify-center">
-            <iframe src="https://www.youtube.com/embed/${parsed.id}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="w-full h-full border-none"></iframe>
-          </div>
-        `;
-      } else if (parsed.type === 'instagram') {
-        // Embed Instagram pure video: scale 1.48 centered with top & bottom edge shields to completely eliminate header, likes, comments & footer
-        container.innerHTML = `
-          <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
-            <iframe src="${parsed.embedUrl}" allowtransparency="true" frameborder="0" scrolling="no" class="border-none w-full h-full" style="width: 100%; height: 100%; transform: scale(1.48); transform-origin: center 46%; pointer-events: auto;"></iframe>
-            <div class="absolute top-0 inset-x-0 h-4 bg-black pointer-events-none z-20"></div>
-            <div class="absolute bottom-0 inset-x-0 h-8 bg-black pointer-events-none z-20"></div>
-          </div>
-        `;
-      } else if (parsed.type === 'tiktok') {
-        container.innerHTML = `
-          <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
-            <iframe src="${parsed.embedUrl}" allowfullscreen class="w-full h-full border-none"></iframe>
-          </div>
-        `;
-      } else if (parsed.type === 'gdrive') {
-        container.innerHTML = `
-          <div class="${aspectStyle} mx-auto relative overflow-hidden bg-black flex items-center justify-center">
-            <iframe src="${parsed.embedUrl}" allow="autoplay; encrypted-media" allowfullscreen class="w-full h-full border-none"></iframe>
-          </div>
-        `;
-      } else if (parsed.type === 'html5' && (parsed.src.startsWith('http') || parsed.src.startsWith('blob:') || parsed.src.startsWith('data:'))) {
-        if (soundBtn) soundBtn.classList.remove('hidden');
-        container.innerHTML = `
-          <div class="${aspectStyle} mx-auto relative bg-black flex items-center justify-center overflow-hidden group">
-            <video id="modalHtml5Video" src="${parsed.src}" autoplay muted playsinline controls class="w-full h-full object-cover sm:object-contain"></video>
-            <button id="modalUnmuteOverlayBtn" onclick="unmuteModalHtml5Video()" class="absolute bottom-14 sm:bottom-18 z-20 px-4 py-2 rounded-full bg-white/95 hover:bg-white text-stone-900 text-xs font-black shadow-2xl flex items-center gap-2 backdrop-blur-md cursor-pointer transition transform hover:scale-105 active:scale-95 border border-stone-200">
-              <span class="text-sm">🔊</span>
-              <span>Ketuk untuk Hidupkan Suara</span>
-            </button>
-          </div>
-        `;
-      } else {
-        const isLocalFile = parsed.type === 'local_missing';
-        container.innerHTML = `
-          <div class="text-center p-6 sm:p-8 max-w-md mx-auto bg-stone-900 rounded-2xl border border-stone-800 shadow-2xl text-white space-y-4 m-4">
-            <div class="w-16 h-16 rounded-full bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center justify-center mx-auto text-2xl shadow-[0_0_20px_rgba(14,165,233,0.3)]">
-              <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M10 11l5 3-5 3v-6z"></path></svg>
-            </div>
-            <div>
-              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-mono font-bold uppercase tracking-wider">
-                ${isLocalFile ? 'Berkas Lokal Perlu Cloud URL' : 'Tautan Video Belum Dimasukkan'}
-              </span>
-              <h5 class="text-sm font-bold text-white mt-2">${title || 'Video Portofolio'}</h5>
-              <p class="text-xs text-stone-400 mt-1.5 leading-relaxed">
-                ${isLocalFile 
-                  ? 'Berkas video <code>' + parsed.filename + '</code> berada di perangkat (HP / Komputer) Anda dan belum di-hosting di cloud publik. Supaya bisa diputar langsung dengan audio lengkap oleh publik di web, gunakan URL video dari <strong>Supabase Storage (.mp4)</strong>, <strong>Google Drive</strong>, <strong>YouTube Shorts</strong>, atau <strong>Instagram Reels</strong>.' 
-                  : 'Video ini belum ditautkan ke link streaming online. Anda dapat memasukkan link video dari <strong>Supabase Storage (.mp4)</strong>, <strong>Google Drive</strong>, <strong>YouTube Shorts</strong>, atau <strong>Instagram Reels</strong> melalui Admin Studio.'}
-              </p>
-            </div>
-            <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
-              <a href="admin/index.html" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-stone-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-lg">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span>Buka Admin &amp; Masukkan Link Video</span>
-              </a>
-            </div>
-          </div>
-        `;
-      }
-      modal.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function unmuteModalHtml5Video() {
-      const vid = document.getElementById('modalHtml5Video');
-      if (vid) {
-        vid.muted = false;
-        vid.play();
-      }
-      const btn = document.getElementById('modalUnmuteOverlayBtn');
-      if (btn) btn.classList.add('hidden');
-      const soundIcon = document.getElementById('videoModalSoundIcon');
-      const soundLabel = document.getElementById('videoModalSoundLabel');
-      if (soundIcon) soundIcon.textContent = '🔊';
-      if (soundLabel) soundLabel.textContent = 'Suara Nyala';
-    }
-
-    function toggleVideoModalSound() {
-      const vid = document.getElementById('modalHtml5Video');
-      const soundIcon = document.getElementById('videoModalSoundIcon');
-      const soundLabel = document.getElementById('videoModalSoundLabel');
-      const overlayBtn = document.getElementById('modalUnmuteOverlayBtn');
-      if (vid) {
-        vid.muted = !vid.muted;
-        if (vid.muted) {
-          if (soundIcon) soundIcon.textContent = '🔇';
-          if (soundLabel) soundLabel.textContent = 'Suara Mati';
-          if (overlayBtn) overlayBtn.classList.remove('hidden');
-        } else {
-          if (soundIcon) soundIcon.textContent = '🔊';
-          if (soundLabel) soundLabel.textContent = 'Suara Nyala';
-          if (overlayBtn) overlayBtn.classList.add('hidden');
-        }
-      }
-    }
-
-    function closeVideoModal() {
-      const modal = document.getElementById('videoModal');
-      if (!modal) return;
-      const container = document.getElementById('videoModalPlayerContainer');
-      if (container) {
-        const vid = container.querySelector('video');
-        if (vid) vid.pause();
-        container.innerHTML = '';
-      }
-      modal.classList.add('hidden');
-      document.body.style.overflow = '';
-    }
-
-    function getCvDynamicMetrics() {
-      // 1. Total Web Projects
-      let totalProjects = (typeof websiteProjects !== 'undefined' && Array.isArray(websiteProjects)) ? websiteProjects.length : 14;
-      // 2. Total Certificates & Achievements
-      let totalCertificates = (typeof certificatesData !== 'undefined' && Array.isArray(certificatesData)) ? certificatesData.length : 22;
-      // 3. Total Design Feeds
-      let totalFeeds = 0;
-      if (typeof cmsData !== 'undefined' && cmsData && cmsData.accounts) {
-        Object.values(cmsData.accounts).forEach(acc => {
-          if (acc && acc.feeds && Array.isArray(acc.feeds)) totalFeeds += acc.feeds.length;
-        });
-      }
-      if (totalFeeds === 0) totalFeeds = 40;
-      // 4. Total Videos / Reels
-      let totalVideos = 0;
-      if (typeof cmsData !== 'undefined' && cmsData && cmsData.accounts) {
-        Object.values(cmsData.accounts).forEach(acc => {
-          if (acc && acc.videos && Array.isArray(acc.videos)) totalVideos += acc.videos.length;
-        });
-      }
-      if (totalVideos === 0) totalVideos = 16;
-      // 5. Total Routes
-      let totalRoutes = (typeof worldMapRoutes !== 'undefined' && Array.isArray(worldMapRoutes)) ? worldMapRoutes.length : 10;
-      return { totalProjects, totalCertificates, totalFeeds, totalVideos, totalRoutes };
-    }
-
-    /* =================================================================== */
-    /* RESMI: CURRICULUM VITAE (PDF) FILE VIEWER & DIRECT DOWNLOAD (ROBUST)*/
-    /* =================================================================== */
-    let landingCvFileData = null;
-    let _landingCvActiveBlobUrl = null;
-
-    function getLandingCvSafeViewUrl(rawUrl) {
-      if (!rawUrl) return '';
-      if (rawUrl.startsWith('data:application/pdf;base64,') || rawUrl.startsWith('data:application/pdf;') || rawUrl.startsWith('data:application/octet-stream;base64,')) {
-        try {
-          const parts = rawUrl.split(';base64,');
-          const base64Data = parts[1] || parts[0];
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: 'application/pdf' });
-          if (_landingCvActiveBlobUrl) {
-            try { URL.revokeObjectURL(_landingCvActiveBlobUrl); } catch (eRev) {}
-          }
-          _landingCvActiveBlobUrl = URL.createObjectURL(blob);
-          return _landingCvActiveBlobUrl;
-        } catch (err) {
-          console.warn('Error converting base64 to blob URL on landing:', err);
-          return rawUrl;
-        }
-      }
-      return rawUrl;
-    }
-
-    function loadLandingCvFile() {
-      // 1. Check from localStorage
-      try {
-        const raw = localStorage.getItem('fathur_portfolio_cv_file');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed && (parsed.fileUrl || parsed.url)) {
-            landingCvFileData = {
-              fileUrl: parsed.fileUrl || parsed.url,
-              fileName: parsed.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
-              fileSize: parsed.fileSize || 'PDF Dokumen',
-              uploadedAt: parsed.uploadedAt || new Date().toISOString()
-            };
-          }
-        }
-      } catch (e) {}
-
-      // 2. Check from IndexedDB FathurPortfolioDB (portfolio_kv)
-      if (!landingCvFileData || !landingCvFileData.fileUrl) {
-        if (window.indexedDB) {
-          try {
-            const req = window.indexedDB.open('FathurPortfolioDB', 1);
-            req.onsuccess = function(e) {
-              const db = e.target.result;
-              if (db.objectStoreNames.contains('portfolio_kv')) {
-                const tx = db.transaction('portfolio_kv', 'readonly');
-                const getReq = tx.objectStore('portfolio_kv').get('fathur_portfolio_cv_file');
-                getReq.onsuccess = function() {
-                  if (getReq.result && (getReq.result.fileUrl || getReq.result.url)) {
-                    landingCvFileData = {
-                      fileUrl: getReq.result.fileUrl || getReq.result.url,
-                      fileName: getReq.result.fileName || 'CV-Muhammad-Fathur-Rohman.pdf',
-                      fileSize: getReq.result.fileSize || 'PDF Dokumen',
-                      uploadedAt: getReq.result.uploadedAt || new Date().toISOString()
-                    };
-                    renderLandingCvModalDom();
-                  }
-                };
-              }
-            };
-          } catch (eIdb) {}
-        }
-      }
-
-      renderLandingCvModalDom();
-    }
-
-    function renderLandingCvModalDom() {
-      const iframeEl = document.getElementById('cvModalPdfFrame');
-      const emptyEl = document.getElementById('cvModalEmptyPlaceholder');
-      const badgeEl = document.getElementById('cvModalFileBadge');
-      const subEl = document.getElementById('cvModalSubTitle');
-      const btnDl = document.getElementById('btnCvModalDownloadPdf');
-      const btnOpen = document.getElementById('btnCvModalOpenTab');
-
-      if (landingCvFileData && landingCvFileData.fileUrl) {
-        const viewableUrl = getLandingCvSafeViewUrl(landingCvFileData.fileUrl);
-        if (iframeEl) {
-          if (iframeEl.src !== viewableUrl) {
-            iframeEl.src = viewableUrl;
-          }
-          iframeEl.classList.remove('hidden');
-        }
-        if (emptyEl) emptyEl.classList.add('hidden');
-        if (badgeEl) {
-          badgeEl.textContent = 'PDF Terverifikasi · ' + (landingCvFileData.fileSize || 'Resmi');
-        }
-        if (subEl) {
-          subEl.textContent = (landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf') + ' · Siap Bekerja & Kolaborasi';
-        }
-        if (btnDl) btnDl.removeAttribute('disabled');
-        if (btnOpen) btnOpen.removeAttribute('disabled');
-      } else {
-        if (iframeEl) {
-          iframeEl.src = '';
-          iframeEl.classList.add('hidden');
-        }
-        if (emptyEl) emptyEl.classList.remove('hidden');
-        if (badgeEl) badgeEl.textContent = 'Menunggu Berkas';
-        if (subEl) subEl.textContent = 'Muhammad Fathur Rohman, S.Kom · Siap Bekerja & Kolaborasi';
-        if (btnDl) btnDl.setAttribute('disabled', 'true');
-        if (btnOpen) btnOpen.setAttribute('disabled', 'true');
-      }
-    }
-
-    function openLandingCvInNewTab() {
-      if (landingCvFileData && landingCvFileData.fileUrl) {
-        const viewableUrl = getLandingCvSafeViewUrl(landingCvFileData.fileUrl);
-        window.open(viewableUrl, '_blank');
-      } else {
-        window.open('https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20Anda%20dan%20ingin%20meminta%20salinan%20CV%20PDF%20resmi%20Anda.', '_blank');
-      }
-    }
-
-    function downloadUploadedCvPdf() {
-      if (landingCvFileData && landingCvFileData.fileUrl) {
-        const viewableUrl = getLandingCvSafeViewUrl(landingCvFileData.fileUrl);
-        const a = document.createElement('a');
-        a.href = viewableUrl;
-        a.download = landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } else {
-        window.open('https://wa.me/62895393181822?text=Halo%20Fathur,%20saya%20tertarik%20dengan%20profil%20Anda%20dan%20ingin%20meminta%20salinan%20CV%20PDF%20resmi%20Anda.', '_blank');
-      }
-    }
-
-    function handleCvDownloadClick() {
-      openCvPreviewModal();
-    }
-
-    function openCvPreviewModal() {
-      loadLandingCvFile();
-      const modal = document.getElementById('cvPreviewModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function closeCvPreviewModal() {
-      const modal = document.getElementById('cvPreviewModal');
-      if (modal) {
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-      }
-    }
-
-    // Aliases for backward compatibility
-    function renderDynamicCvModal() { loadLandingCvFile(); }
-    function printCvDocument() { downloadUploadedCvPdf(); }
-    function openCvRequestModal() { openCvPreviewModal(); }
-    function closeCvRequestModal() { closeCvPreviewModal(); }
-
-    
     /* =================================================================== */
     /* CONTENT RENDERING: MULTI-ACCOUNT SOSMED SHOWCASE                    */
     /* =================================================================== */
@@ -5617,11 +5850,12 @@
           return `
             <button onclick="selectMedsosAccount('${a.id}')" class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
               isActive
-                ? 'bg-slate-900 text-white shadow-sm -translate-y-0.5'
-                : 'bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-slate-900 hover:text-slate-900'
+                ? 'bg-slate-900 text-white shadow-md border-transparent -translate-y-0.5 ring-2 ring-slate-900/20'
+                : 'bg-white border border-stone-300 text-stone-700 hover:border-slate-900 hover:text-slate-900 shadow-2xs'
             }">
-              <span class="${isActive ? 'text-emerald-400' : 'text-stone-400'}">●</span>
+              <span class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-stone-400'}"></span>
               <span>@${a.handle}</span>
+              ${isActive ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-white/20 text-emerald-300 font-sans">Aktif</span>' : ''}
             </button>
           `;
         }).join('');
@@ -5629,19 +5863,21 @@
 
       // 2. Update Section 04 Subheader & Phone Screen for Active Account
       const titleEl = document.getElementById('section04TitleDisplay');
-      if (titleEl) titleEl.textContent = acc.sectionTitle || `${acc.name} — Portofolio`;
+      if (titleEl) {
+        titleEl.textContent = acc.sectionTitle || (acc.name + ' — Portofolio Desain & Video');
+      }
 
       const handleEl = document.getElementById('section04HandleDisplay');
       if (handleEl) handleEl.textContent = 'Instagram: @' + acc.handle;
 
       const handleLink = document.getElementById('section04HandleLink');
-      if (handleLink) handleLink.href = acc.url || `https://www.instagram.com/${acc.handle}`;
+      if (handleLink) handleLink.href = acc.url || ('https://www.instagram.com/' + acc.handle);
 
       // Update Top-Left Circular Badge
       const badgeImg = document.getElementById('accountBadgeImg');
       const badgeCont = document.getElementById('accountBadgeContainer');
       if (badgeCont) {
-        badgeCont.style.backgroundColor = acc.badgeColor || '#C62828';
+        badgeCont.style.backgroundColor = acc.badgeColor || '#0F766E';
         badgeCont.title = acc.name;
       }
       if (badgeImg) {
@@ -5649,20 +5885,19 @@
           badgeImg.src = acc.logoImg;
           badgeImg.style.display = 'block';
         } else {
-          badgeImg.src = makeSvgBanner(acc.badgeText || acc.handle.substring(0, 3).toUpperCase(), '', acc.badgeColor || '#155293');
+          badgeImg.src = makeSvgBanner(acc.badgeText || acc.handle.substring(0, 3).toUpperCase(), '', acc.badgeColor || '#0F766E');
         }
       }
 
-      // Update Phone Screen Image
+      // Update Phone Screen Image (Real Mockup / Photorealistic Feed)
       const phoneImg = document.getElementById('phoneScreenImage');
       if (phoneImg) {
-        const screenSrc = acc.phoneScreenImg || (acc.id === 'haltea' ? 'assets/haltea/phone-screen-clean.png' : makeSvgBanner('@' + acc.handle, 'Instagram Feed', acc.badgeColor));
-        phoneImg.src = screenSrc;
+        phoneImg.src = getInstagramPhoneScreenUrl(acc);
       }
 
       const screenLabel = document.getElementById('phoneScreenLabel');
       if (screenLabel) {
-        screenLabel.textContent = `Layar: @${acc.handle}`;
+        screenLabel.textContent = 'Layar: @' + acc.handle;
       }
 
       // 3. Render 6 Desain Grafis Cards on Left Column
@@ -5670,19 +5905,20 @@
       if (featuredDesignGrid) {
         const top6Designs = (acc.designs || []).slice(0, 6);
         featuredDesignGrid.innerHTML = top6Designs.map((d, idx) => {
-          const src = d.img || makeSvgBanner(d.title, d.subtitle, d.bg || acc.badgeColor || '#C62828');
+          const src = getDesignPosterUrl(d, acc, idx);
+          const numStr = '#0' + (idx + 1);
           return `
-            <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${d.title}', 'Desain Grafis (@${acc.handle})', '${d.subtitle}', '${src}')">
+            <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${d.title.replace(/'/g, "\\'")}', 'Desain Grafis (@${acc.handle})', '${(d.subtitle || '').replace(/'/g, "\\'")}', '${src}')">
               <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
                 <img src="${src}" alt="${d.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">KARYA #0${idx + 1}</span>
+                <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">KARYA ${numStr}</span>
               </div>
               <div class="p-3 bg-white">
                 <span class="text-[10px] font-mono uppercase text-crimson font-extrabold block">🎨 Desain Grafis</span>
                 <h4 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${d.title}">${d.title}</h4>
                 <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
                 <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
-                  <button onclick="event.stopPropagation(); setPhoneScreenDesignIndex(${idx})" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
+                  <button onclick="event.stopPropagation(); setPhoneScreen('${src}', '${d.title.replace(/'/g, "\\'")}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
                     <span>📲 Ke Layar HP</span>
                   </button>
                   <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
@@ -5704,7 +5940,6 @@
       const reelsList = allVideos.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
       const landscapeList = allVideos.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9');
 
-      // Fallback: if fewer than 3, borrow or synthesize from remaining
       const top3Reels = reelsList.slice(0, 3);
       while (top3Reels.length < 3 && allVideos[top3Reels.length]) {
         top3Reels.push(allVideos[top3Reels.length]);
@@ -5715,89 +5950,171 @@
       }
 
       if (reelsGrid) {
-        reelsGrid.innerHTML = top3Reels.map((v, idx) => buildVideoCard(v, idx, true, acc.handle)).join('');
+        reelsGrid.innerHTML = top3Reels.map((v, idx) => buildVideoCard(v, idx, true, acc.handle, acc)).join('');
         reelsGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
       }
 
       if (landscapeGrid) {
-        landscapeGrid.innerHTML = top3Landscape.map((v, idx) => buildVideoCard(v, idx, false, acc.handle)).join('');
+        landscapeGrid.innerHTML = top3Landscape.map((v, idx) => buildVideoCard(v, idx, false, acc.handle, acc)).join('');
         landscapeGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
       }
 
-      // 5. Render All Managed Accounts in Full View 04 (#allMedsosListContainer)
+      // 5. Render All Managed Accounts in Full View 04 (#allMedsosListContainer) - UNIFIED LAYOUT MATCHING USER IMAGE!
       const allMedsosContainer = document.getElementById('allMedsosListContainer');
       if (allMedsosContainer) {
         allMedsosContainer.innerHTML = cmsData.accounts.map((account) => {
           const accVids = account.videos || [];
           const accReels = accVids.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
           const accLandscape = accVids.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9');
+          const phoneSrc = getInstagramPhoneScreenUrl(account);
 
           return `
-            <div class="bg-white p-6 sm:p-9 rounded-3xl border-2 border-stone-200/90 shadow-md space-y-6">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200">
-                <div class="flex items-center gap-3">
-                  <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-extrabold text-sm shadow-md" style="background-color: ${account.badgeColor || '#155293'};">
+            <div class="bg-white p-6 sm:p-9 rounded-[32px] sm:rounded-[40px] border-2 border-stone-200/90 shadow-xl space-y-8 overflow-hidden">
+              
+              <!-- TOP ACCOUNT HEADER -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-extrabold text-base shadow-md shrink-0" style="background-color: ${account.badgeColor || '#0F766E'};">
                     ${account.badgeText || account.handle.substring(0, 3).toUpperCase()}
                   </div>
                   <div>
-                    <span class="text-[10px] font-mono uppercase tracking-wider text-crimson font-bold block">@${account.handle}</span>
-                    <h3 class="font-display font-extrabold text-xl text-ink">${account.name}</h3>
-                    <p class="text-xs text-stone-500">${account.role}</p>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-mono uppercase tracking-wider text-crimson font-extrabold">@${account.handle}</span>
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      <span class="text-[11px] font-mono text-stone-500">Official Managed Account</span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-2xl text-ink tracking-tight">${account.name}</h3>
+                    <p class="text-xs font-semibold text-stone-600 mt-0.5">${account.role || 'Media Informasi & Publikasi Kreatif'}</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-2">
-                  <button onclick="selectMedsosAccount('${account.id}'); switchPageView('mainLandingView'); window.location.hash='#kelola-medsos';" class="px-4 py-2 rounded-xl bg-ink text-white hover:bg-crimson text-xs font-bold transition shadow-sm">
-                    Tampilkan di Landing Page ↗
+                <div class="flex items-center gap-2.5 flex-wrap">
+                  <button onclick="selectMedsosAccount('${account.id}'); switchPageView('mainLandingView'); window.location.hash='#kelola-medsos';" class="px-4 py-2.5 rounded-xl bg-ink text-white hover:bg-crimson text-xs font-extrabold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
+                    <span>Tampilkan di Landing Page</span>
+                    <span>↗</span>
                   </button>
-                  <a href="${account.url || 'https://www.instagram.com/' + account.handle}" target="_blank" class="px-4 py-2 rounded-xl border border-stone-300 hover:border-ink text-xs font-bold text-stone-700 transition">
-                    Buka Instagram ↗
+                  <a href="${account.url || ('https://www.instagram.com/' + account.handle)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl border border-stone-300 hover:border-ink hover:text-ink text-xs font-bold text-stone-700 transition flex items-center gap-1.5">
+                    <span>Buka Instagram</span>
+                    <span>↗</span>
                   </a>
                 </div>
               </div>
 
-              <!-- Desain Grafis Grid -->
-              <div>
-                <h4 class="font-display font-bold text-sm uppercase tracking-wider text-stone-700 mb-3 flex items-center gap-2">
-                  <span>🎨</span> <span>Koleksi Desain Grafis (${(account.designs || []).length} Karya)</span>
-                </h4>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-                  ${(account.designs || []).map((d, i) => {
-                    const s = d.img || makeSvgBanner(d.title, d.subtitle, d.bg || account.badgeColor || '#C62828');
-                    return `
-                      <div class="container-tilt-3d bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${d.title}', 'Desain Grafis (@${account.handle})', '${d.subtitle}', '${s}')">
-                        <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
-                          <img src="${s}" alt="${d.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                          <span class="absolute top-1.5 right-1.5 px-1 py-0.2 rounded bg-black/75 text-white font-mono text-[9px] font-bold">#0${i + 1}</span>
+              <!-- MAIN SHOWCASE CONTAINER (MATCHING REFERENCE IMAGE): KIRI DESAIN, KANAN HP MOCKUP 3D -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+                
+                <!-- SISI KIRI (lg:col-span-8): GRID 6 KARYA DESAIN GRAFIS -->
+                <div class="lg:col-span-8 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <h4 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-800 flex items-center gap-2">
+                      <span>🎨</span> <span>Koleksi Desain Grafis (${(account.designs || []).length} Karya)</span>
+                    </h4>
+                    <span class="text-[11px] font-mono text-stone-500 font-bold">Grid Feed &amp; Poster</span>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
+                    ${(account.designs || []).slice(0, 6).map((d, i) => {
+                      const s = getDesignPosterUrl(d, account, i);
+                      const numStr = '#0' + (i + 1);
+                      return `
+                        <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${d.title.replace(/'/g, "\\'")}', 'Desain Grafis (@${account.handle})', '${(d.subtitle || '').replace(/'/g, "\\'")}', '${s}')">
+                          <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
+                            <img src="${s}" alt="${d.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                            <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">${numStr}</span>
+                          </div>
+                          <div class="p-3 bg-white">
+                            <span class="text-[10px] font-mono uppercase text-crimson font-extrabold block">🎨 Desain Feed</span>
+                            <h5 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${d.title}">${d.title}</h5>
+                            <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
+                            <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
+                              <button onclick="event.stopPropagation(); setAllMedsosPhoneScreen('${account.id}', '${s}', '${d.title.replace(/'/g, "\\'")}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
+                                <span>📲 Ke Layar HP</span>
+                              </button>
+                              <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
+                            </div>
+                          </div>
                         </div>
-                        <div class="p-2.5">
-                          <h5 class="font-display font-bold text-[11px] text-ink truncate">${d.title}</h5>
-                          <p class="text-[10px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
-                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+
+                <!-- SISI KANAN (lg:col-span-4): PHOTOREALISTIC 3D SMARTPHONE MOCKUP -->
+                <div class="lg:col-span-4 flex flex-col items-center justify-center">
+                  <div class="relative w-full max-w-[280px] sm:max-w-[300px] mx-auto">
+                    
+                    <!-- Hardware Frame -->
+                    <div class="relative rounded-[44px] bg-gradient-to-b from-stone-900 via-stone-950 to-black p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12),inset_0_1px_2px_rgba(255,255,255,0.3)] border border-stone-800">
+                      
+                      <!-- Side Buttons -->
+                      <div class="absolute -left-[3px] top-24 w-[3px] h-9 bg-stone-700 rounded-l-sm"></div>
+                      <div class="absolute -left-[3px] top-36 w-[3px] h-9 bg-stone-700 rounded-l-sm"></div>
+                      <div class="absolute -right-[3px] top-28 w-[3px] h-14 bg-stone-700 rounded-r-sm"></div>
+
+                      <!-- Top Dynamic Island -->
+                      <div class="w-20 h-4 bg-black rounded-full mx-auto mb-2 flex items-center justify-center border border-white/5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-[#0a1128] border border-white/10 mr-1.5"></div>
+                        <div class="w-1.5 h-1.5 rounded-full bg-[#1e293b]"></div>
                       </div>
-                    `;
-                  }).join('')}
+
+                      <!-- Display Screen -->
+                      <div class="relative w-full aspect-[9/18.5] bg-black rounded-[32px] overflow-hidden shadow-inner flex flex-col justify-start">
+                        <img id="allMedsosPhoneImg_${account.id}" src="${phoneSrc}" alt="Layar Instagram @${account.handle}" class="w-full h-full object-cover object-top select-none transition-all duration-300" />
+                        <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12]"></div>
+                      </div>
+
+                      <!-- Home Indicator -->
+                      <div class="w-28 h-1 bg-white/40 rounded-full mx-auto mt-2"></div>
+                    </div>
+
+                    <!-- Screen Controls & Label -->
+                    <div class="mt-3 flex items-center justify-between px-2 text-xs">
+                      <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                        <span id="allMedsosPhoneLabel_${account.id}" class="font-mono text-[11px] font-bold text-stone-600 truncate">Layar: @${account.handle}</span>
+                      </div>
+                      <button onclick="resetAllMedsosPhoneScreen('${account.id}')" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-stone-100 hover:bg-stone-200 text-stone-700 transition cursor-pointer" title="Kembali ke Tampilan Instagram Profil">
+                        Reset IG
+                      </button>
+                    </div>
+
+                  </div>
                 </div>
+
               </div>
 
-              <!-- Video Reels Grid (9:16) -->
-              <div class="pt-2">
-                <h4 class="font-display font-bold text-sm uppercase tracking-wider text-stone-700 mb-3 flex items-center gap-2">
-                  <span>🎬</span> <span>Video Reels Instagram 9:16 (${accReels.length} Video)</span>
-                </h4>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  ${accReels.map((v, i) => buildVideoCard(v, i, true, account.handle)).join('')}
+              <!-- BAGIAN BAWAH: KONTEN VIDEO EDITING (REELS 9:16 & LANSKAP 16:9) -->
+              <div class="pt-6 border-t border-stone-200 space-y-6">
+                <!-- Baris 1: Video Reels (9:16) -->
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="px-2.5 py-1 rounded-lg bg-crimson text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● REELS (9:16)</span>
+                      <span class="text-xs font-bold text-stone-800">Video Reels Instagram 9:16 (${accReels.length} Video)</span>
+                    </div>
+                    <span class="text-[11px] font-mono text-stone-500">Vertikal 9:16</span>
+                  </div>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-3.5 items-stretch">
+                    ${accReels.map((v, i) => buildVideoCard(v, i, true, account.handle, account)).join('')}
+                  </div>
                 </div>
+
+                <!-- Baris 2: Video Landscape (16:9) (jika ada) -->
+                ${accLandscape.length > 0 ? `
+                <div class="pt-4 border-t border-stone-100 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="px-2.5 py-1 rounded-lg bg-[#155293] text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● LANSKAP (16:9)</span>
+                      <span class="text-xs font-bold text-stone-800">Video Dokumentasi / Lanskap 16:9 (${accLandscape.length} Video)</span>
+                    </div>
+                    <span class="text-[11px] font-mono text-stone-500">Lanskap 16:9</span>
+                  </div>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-3.5 items-stretch">
+                    ${accLandscape.map((v, i) => buildVideoCard(v, i, false, account.handle, account)).join('')}
+                  </div>
+                </div>
+                ` : ''}
               </div>
 
-              <!-- Video Landscape Grid (16:9) -->
-              <div class="pt-2">
-                <h4 class="font-display font-bold text-sm uppercase tracking-wider text-stone-700 mb-3 flex items-center gap-2">
-                  <span>🎥</span> <span>Video Dokumentasi / Lanskap 16:9 (${accLandscape.length} Video)</span>
-                </h4>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  ${accLandscape.map((v, i) => buildVideoCard(v, i, false, account.handle)).join('')}
-                </div>
-              </div>
             </div>
           `;
         }).join('');
@@ -5809,14 +6126,14 @@
       const countBadge = document.getElementById('medsosCountBadge');
       if (countBadge) {
         const total = (acc.designs || []).length + (acc.videos || []).length;
-        countBadge.textContent = `${total} Karya`;
+        countBadge.textContent = total + ' Karya';
       }
 
       // 7. Refresh Admin Medsos Tab Selects
       renderAdminMedsosTab();
     }
 
-    /* =================================================================== */
+        /* =================================================================== */
     /* 22 SERTIFIKAT & PENGHARGAAN RESMI (SEMUA ASLI DARI ASSETS)         */
     /* =================================================================== */
     const defaultCertificatesData = [

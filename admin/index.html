@@ -3494,37 +3494,13 @@ create policy "Public Access" on portfolio_store for all using (true) with check
     ];
     const DEFAULT_MEDSOS_ACCOUNTS = [
       {
-        id: 'haltea',
-        name: 'Haltea Teh Halte Indonesia',
-        handle: 'halteaindonesia',
-        url: 'https://www.instagram.com/halteaindonesia',
-        role: 'Branding, Desain Feed & Video Reels',
-        badgeColor: '#C62828',
-        sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
-        designs: [
-          { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
-          { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
-          { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
-          { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
-          { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
-          { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
-        ],
-        videos: [
-          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
-          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
-          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
-          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
-          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
-        ]
-      },
-      {
         id: 'masjid_mbm',
         name: 'Masjid MBM UNIMMA',
         handle: 'masjid.mbm',
         url: 'https://www.instagram.com/masjid.mbm',
         role: 'Media Informasi, Konten Dakwah & Dokumentasi',
         badgeColor: '#0F766E',
+        badgeText: 'MBM',
         sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
         designs: [
           { id: 'mbm_d1', title: 'Kajian Rutin Spesial Pemuda', subtitle: 'Flyer Digital & Feed Instagram', bg: '#0F766E', img: '' },
@@ -3550,6 +3526,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         url: 'https://www.instagram.com/mgbookparty',
         role: 'Komunitas Literasi & Ruang Baca Publik',
         badgeColor: '#B45309',
+        badgeText: 'MBP',
         sectionTitle: 'Branding & Konten Literasi — Magelang Book Party',
         designs: [
           { id: 'mbp_d1', title: 'Piknik Baca Buku Mingguan di Taman', subtitle: 'Poster Utama Kegiatan Komunitas', bg: '#B45309', img: '' },
@@ -3566,6 +3543,33 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           { id: 'mbp_v4', title: 'Aftermovie 1st Anniversary Magelang Book Party', ratio: '16/9', duration: '1:15', videoUrl: '' },
           { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '' },
           { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '' }
+        ]
+      },
+      {
+        id: 'haltea',
+        name: 'Haltea Teh Halte Indonesia',
+        handle: 'halteaindonesia',
+        url: 'https://www.instagram.com/halteaindonesia',
+        role: 'Branding, Desain Feed & Video Reels',
+        badgeColor: '#C62828',
+        badgeText: 'HLT',
+        phoneScreenImg: 'assets/haltea/phone-screen-clean.png',
+        sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
+        designs: [
+          { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
+          { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
+          { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
+          { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
+          { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
+          { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
+        ],
+        videos: [
+          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
+          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
+          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
+          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
+          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
         ]
       }
     ];
@@ -3847,8 +3851,8 @@ create policy "Public Access" on portfolio_store for all using (true) with check
     let currentMedsosData = { activeAccountId: 'haltea', accounts: [] };
     let currentCerts = [];
     let currentRoutes = [];
-    let activeAdminAccountId = 'haltea';
-    let activeVideoAccountId = 'haltea';
+    let activeAdminAccountId = 'masjid_mbm';
+    let activeVideoAccountId = 'masjid_mbm';
 
     // Filters state
     let activeAdminCertCat = 'all';
@@ -4002,7 +4006,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       if (!currentMedsosData.accounts || currentMedsosData.accounts.length === 0) {
         currentMedsosData = { activeAccountId: 'haltea', accounts: JSON.parse(JSON.stringify(DEFAULT_MEDSOS_ACCOUNTS)) };
       }
-      activeAdminAccountId = currentMedsosData.activeAccountId || 'haltea';
+      activeAdminAccountId = currentMedsosData.activeAccountId || 'masjid_mbm';
       activeVideoAccountId = activeAdminAccountId;
 
       // Auto-compress any legacy huge thumbnails from past sessions to permanently safeguard localStorage
