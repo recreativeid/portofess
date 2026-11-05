@@ -1338,12 +1338,15 @@
                   <p class="text-xs text-slate-500 mt-1 line-clamp-2">Screenshot profil IG asli ini tampil langsung di dalam mockup smartphone Section 04 dan halaman katalog seluruh koleksi portofolio.</p>
                 </div>
               </div>
+              <!-- Hidden file input for Medsos Tab direct phone upload -->
+              <input id="medsosTabPhoneFileInput" type="file" accept="image/*" class="hidden" onchange="handleMedsosTabPhoneFileInput(this)" />
+
               <div class="flex items-center gap-2 shrink-0 flex-wrap">
-                <button type="button" onclick="triggerMedsosQuickPhoneUpload()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                <button type="button" onclick="triggerMedsosTabPhoneUpload()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
                   <svg class="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                   <span>Unggah Screenshot HP</span>
                 </button>
-                <button type="button" onclick="switchAdminTab('phonescreen')" class="px-3.5 py-2 rounded-xl border border-sky-300 bg-white hover:bg-sky-100/60 text-[#155293] text-xs font-bold transition shadow-xs flex items-center gap-1 cursor-pointer">
+                <button type="button" onclick="switchAdminTab('phonescreen')" class="px-3.5 py-2.5 rounded-xl border border-sky-300 bg-white hover:bg-sky-100/60 text-[#155293] text-xs font-bold transition shadow-xs flex items-center gap-1 cursor-pointer">
                   <span>Buka Editor Mockup Lengkap</span>
                   <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
@@ -5181,30 +5184,95 @@ create policy "Public Access" on portfolio_store for all using (true) with check
     function persistMedsosData() {
       try {
         localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
-        return true;
       } catch (err) {
         console.warn('Storage quota warning on persistMedsosData:', err);
         try {
-          // Safeguard: Prune legacy oversized raw base64 thumbnails if quota is hit
           if (currentMedsosData && Array.isArray(currentMedsosData.accounts)) {
             currentMedsosData.accounts.forEach(function(acc) {
               if (Array.isArray(acc.videos)) {
                 acc.videos.forEach(function(v) {
                   if (v.thumbnail && v.thumbnail.startsWith('data:image') && v.thumbnail.length > 150000) {
-                    v.thumbnail = ''; // Reset only oversized corrupted ones to restore health
+                    v.thumbnail = '';
                   }
                 });
               }
             });
             localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(currentMedsosData));
-            return true;
           }
         } catch (e2) {
           console.error('Fatal storage quota exceeded:', e2);
           notifyDataSaved('Memori browser lokal penuh. Gunakan URL gambar untuk file besar.', 'error');
-          return false;
         }
       }
+
+      // Synchronize to IndexedDB so landing page always reads the latest data
+      if (typeof portfolioIdbSet === 'function') {
+        portfolioIdbSet('fathur_portfolio_cms_data_multi', currentMedsosData).catch(function(e) {
+          console.warn('IDB persist warning:', e);
+        });
+      }
+
+      // Realtime BroadcastChannel sync to landing page
+      if (typeof portfolioSyncChannel !== 'undefined' && portfolioSyncChannel) {
+        try {
+          portfolioSyncChannel.postMessage({
+            type: 'PORTFOLIO_FULL_SYNC',
+            key: 'fathur_portfolio_cms_data_multi',
+            data: currentMedsosData,
+            timestamp: Date.now()
+          });
+        } catch (eBc) {}
+      }
+
+      // Sync to Supabase Cloud if configured
+      if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.isConfigured) {
+        PortfolioCloudDB.set('fathur_portfolio_cms_data_multi', currentMedsosData).catch(function(e) {
+          console.warn('Supabase persist warning:', e);
+        });
+      }
+
+      return true;
+    }
+
+    function triggerMedsosTabPhoneUpload() {
+      const inp = document.getElementById('medsosTabPhoneFileInput');
+      if (inp) inp.click();
+    }
+
+    function handleMedsosTabPhoneFileInput(input) {
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+
+      if (!file.type.startsWith('image/')) {
+        notifyDataSaved('Berkas harus berupa gambar (.png, .jpg, .webp, atau .svg)!', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const rawData = ev.target.result;
+        if (file.type === 'image/svg+xml') {
+          acc.phoneScreenImg = rawData;
+          persistMedsosData();
+          updateActiveAccountDisplay();
+          notifyDataSaved('✓ Screenshot profil IG @' + acc.handle + ' berhasil diunggah & tersimpan!');
+          return;
+        }
+
+        downscaleImage(rawData, 720, 0.85, function(optimizedDataUrl) {
+          acc.phoneScreenImg = optimizedDataUrl;
+          persistMedsosData();
+          updateActiveAccountDisplay();
+          notifyDataSaved('✓ Screenshot profil IG @' + acc.handle + ' berhasil diunggah & tersimpan!');
+        });
+      };
+      reader.onerror = function() {
+        notifyDataSaved('Gagal membaca berkas gambar.', 'error');
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
     }
 
     /* =================================================================== */

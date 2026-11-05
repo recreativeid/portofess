@@ -2407,6 +2407,9 @@
         <!-- Hidden container for JS account pills compatibility -->
         <div id="medsosAccountPillsContainer" class="hidden"></div>
 
+        <!-- Account Switcher Bar (Pilih Akun Medsos Langsung di Landing Page) -->
+        <div id="section04AccountSwitcher" class="flex items-center gap-2 mb-4 px-2 flex-wrap"></div>
+
         <!-- Section Subheader Requested by User: Muhammad Fathur Rohman - Design Portofolio & Instagram Handle -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 px-2">
           <h3 id="section04TitleDisplay" class="font-display font-extrabold text-xl sm:text-2xl text-ink tracking-tight">
@@ -5040,11 +5043,11 @@
               if (!existing) {
                 parsed.accounts.push(JSON.parse(JSON.stringify(defAcc)));
               } else {
-                // Ensure designs are properly loaded (except masjid_mbm which is explicitly empty)
-                if (existing.id === 'masjid_mbm') {
-                  existing.designs = [];
-                } else if (!Array.isArray(existing.designs) || existing.designs.length === 0 || !existing.designs[0].img) {
-                  existing.designs = JSON.parse(JSON.stringify(defAcc.designs));
+                // Ensure designs are preserved properly for all accounts (do NOT wipe masjid_mbm if user added designs)
+                if (!Array.isArray(existing.designs)) {
+                  existing.designs = (existing.id === 'masjid_mbm') ? [] : JSON.parse(JSON.stringify(defAcc.designs || []));
+                } else if (existing.designs.length === 0 && existing.id !== 'masjid_mbm') {
+                  existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
                 }
                 // Ensure videos are properly loaded
                 if (!existing.videos || existing.videos.length === 0) {
@@ -5057,7 +5060,7 @@
             });
 
             if (!parsed.activeAccountId) {
-              parsed.activeAccountId = 'haltea';
+              parsed.activeAccountId = 'masjid_mbm';
             }
             return parsed;
           }
@@ -5066,7 +5069,7 @@
         console.warn('Gagal memuat CMS Data dari localStorage:', e);
       }
       return {
-        activeAccountId: 'haltea',
+        activeAccountId: 'masjid_mbm',
         accounts: JSON.parse(JSON.stringify(defaultMedsosAccounts))
       };
     }
@@ -5314,6 +5317,31 @@
       const acc = getActiveMedsosAccount();
       const defaultAcc = defaultMedsosAccounts.find(a => a.id === acc.id) || defaultMedsosAccounts[0];
 
+      // 0. Render Account Switcher Pills in Section 04 Header
+      const switcherEl = document.getElementById('section04AccountSwitcher');
+      if (switcherEl) {
+        const orderPriority = { masjid_mbm: 1, mgbookparty: 2, haltea: 3 };
+        const rawAccounts = (cmsData.accounts && cmsData.accounts.length > 0) ? cmsData.accounts : defaultMedsosAccounts;
+        const sortedAccounts = [...rawAccounts].sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
+
+        switcherEl.innerHTML = `
+          <span class="text-[11px] font-mono uppercase tracking-wider text-stone-500 font-bold mr-1">Pilih Portofolio Medsos:</span>
+          ${sortedAccounts.map(a => {
+            const isActive = a.id === acc.id;
+            const bg = isActive ? (a.badgeColor || '#155293') : '#ffffff';
+            const text = isActive ? '#ffffff' : '#1e293b';
+            const border = isActive ? (a.badgeColor || '#155293') : '#cbd5e1';
+            return `
+              <button onclick="selectMedsosAccount('${a.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer hover:opacity-90 ${isActive ? 'ring-2 ring-offset-1 ring-slate-900/20' : ''}" style="background-color: ${bg}; color: ${text}; border: 1.5px solid ${border};">
+                <span class="w-2 h-2 rounded-full ${isActive ? 'bg-white' : ''}" style="${!isActive ? 'background-color:' + (a.badgeColor || '#155293') : ''}"></span>
+                <span>${a.name}</span>
+                <span class="font-mono text-[10px] opacity-80">@${a.handle}</span>
+              </button>
+            `;
+          }).join('')}
+        `;
+      }
+
       // 1. Update Section 04 Subheader & Phone Screen for Active Account
       const titleEl = document.getElementById('section04TitleDisplay');
       if (titleEl) {
@@ -5356,8 +5384,8 @@
       // 2. Render Desain Grafis on Left Column
       const featuredDesignGrid = document.getElementById('featuredDesignGrid');
       if (featuredDesignGrid) {
-        // If acc is masjid_mbm, it's explicitly empty as requested by user
-        const rawDesigns = (acc.id === 'masjid_mbm') ? [] : ((acc.designs && acc.designs.length > 0) ? acc.designs : (defaultAcc.designs || []));
+        // Display user uploaded designs if available; fallback to default only if not empty by design
+        const rawDesigns = (acc.designs && acc.designs.length > 0) ? acc.designs : (acc.id === 'masjid_mbm' ? [] : (defaultAcc.designs || []));
         const top6Designs = rawDesigns.slice(0, 6);
 
         if (top6Designs.length === 0) {
@@ -5451,8 +5479,8 @@
 
         allMedsosContainer.innerHTML = sortedAccounts.map((account) => {
           const defAccount = defaultMedsosAccounts.find(a => a.id === account.id) || account;
-          // For masjid_mbm, strictly empty designs as requested
-          const accDesigns = (account.id === 'masjid_mbm') ? [] : ((account.designs && account.designs.length > 0) ? account.designs : (defAccount.designs || []));
+          // Display user uploaded designs if available; fallback to default only if not empty by design
+          const accDesigns = (account.designs && account.designs.length > 0) ? account.designs : (account.id === 'masjid_mbm' ? [] : (defAccount.designs || []));
           const accVids = (account.videos && account.videos.length > 0) ? account.videos : (defAccount.videos || []);
 
           // Strictly separate reels and landscape
