@@ -4963,17 +4963,17 @@
         phoneScreenImg: 'assets/haltea/phone-screen-clean.png',
         sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
         designs: [
-          { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
-          { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
-          { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
-          { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
-          { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
-          { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
+          { id: 'd1', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
+          { id: 'd2', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
+          { id: 'd3', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
+          { id: 'd4', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' },
+          { id: 'd5', title: 'Matcha Latte', subtitle: 'Feed & Poster Produk Haltea', bg: '#15803D', img: 'assets/haltea/poster-matcha-latte.png' },
+          { id: 'd6', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' }
         ],
         videos: [
-          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '', thumbnail: '' },
-          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '', thumbnail: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '', thumbnail: '' },
+          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '', thumbnail: 'assets/haltea/reel-grand-opening.png' },
+          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '', thumbnail: 'assets/haltea/reel-testimoni-pelanggan.png' },
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '', thumbnail: 'assets/haltea/reel-apa-kata-pelanggan.png' },
           { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '', thumbnail: '' },
           { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '', thumbnail: '' },
           { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '', thumbnail: '' }
@@ -5043,25 +5043,59 @@
               if (!existing) {
                 parsed.accounts.push(JSON.parse(JSON.stringify(defAcc)));
               } else {
-                // Ensure designs are preserved properly for all accounts (do NOT wipe masjid_mbm if user added designs)
-                if (!Array.isArray(existing.designs)) {
-                  existing.designs = (existing.id === 'masjid_mbm') ? [] : JSON.parse(JSON.stringify(defAcc.designs || []));
-                } else if (existing.designs.length === 0 && existing.id !== 'masjid_mbm') {
-                  existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
+                if (existing.id === 'haltea') {
+                  // Restore Haltea real poster images if missing, empty, or SVG fallback
+                  if (!Array.isArray(existing.designs) || existing.designs.length === 0) {
+                    existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
+                  } else {
+                    existing.designs.forEach((d, idx) => {
+                      if (!d.img || !d.img.trim() || d.img.startsWith('data:image/svg')) {
+                        const defD = (defAcc.designs && defAcc.designs[idx]) ? defAcc.designs[idx] : null;
+                        if (defD && defD.img) d.img = defD.img;
+                      }
+                    });
+                  }
+                  // Restore Haltea real reel thumbnails if missing, empty, or SVG fallback
+                  if (!Array.isArray(existing.videos) || existing.videos.length === 0) {
+                    existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
+                  } else {
+                    existing.videos.forEach((v, idx) => {
+                      if (!v.thumbnail || !v.thumbnail.trim() || v.thumbnail.startsWith('data:image/svg')) {
+                        const defV = (defAcc.videos && defAcc.videos[idx]) ? defAcc.videos[idx] : null;
+                        if (defV && defV.thumbnail) v.thumbnail = defV.thumbnail;
+                      }
+                    });
+                  }
+                  if (!existing.phoneScreenImg || existing.phoneScreenImg.startsWith('data:image/svg')) {
+                    existing.phoneScreenImg = defAcc.phoneScreenImg;
+                  }
+                } else if (existing.id === 'masjid_mbm') {
+                  // KEEP USER'S MBM DATA 100% AS UPLOADED - NEVER OVERWRITE OR WIPE!
+                  if (!Array.isArray(existing.designs)) existing.designs = [];
+                  if (!Array.isArray(existing.videos) || existing.videos.length === 0) {
+                    existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
+                  }
+                } else {
+                  if (!Array.isArray(existing.designs) || existing.designs.length === 0) {
+                    existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
+                  }
+                  if (!existing.videos || existing.videos.length === 0) {
+                    existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
+                  }
+                  if (!existing.phoneScreenImg) existing.phoneScreenImg = defAcc.phoneScreenImg;
                 }
-                // Ensure videos are properly loaded
-                if (!existing.videos || existing.videos.length === 0) {
-                  existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
-                }
-                if (!existing.phoneScreenImg) existing.phoneScreenImg = defAcc.phoneScreenImg;
                 if (!existing.role) existing.role = defAcc.role;
                 if (!existing.badgeText) existing.badgeText = defAcc.badgeText;
               }
             });
 
-            if (!parsed.activeAccountId) {
-              parsed.activeAccountId = 'masjid_mbm';
-            }
+            // Set Haltea as initial active cover as specifically requested by user
+            parsed.activeAccountId = 'haltea';
+
+            try {
+              localStorage.setItem('fathur_portfolio_cms_data_multi', JSON.stringify(parsed));
+            } catch (eSave) {}
+
             return parsed;
           }
         }
@@ -5069,7 +5103,7 @@
         console.warn('Gagal memuat CMS Data dari localStorage:', e);
       }
       return {
-        activeAccountId: 'masjid_mbm',
+        activeAccountId: 'haltea',
         accounts: JSON.parse(JSON.stringify(defaultMedsosAccounts))
       };
     }
@@ -5093,14 +5127,18 @@
     }
 
     function getDesignPosterUrl(design, account, index) {
-      if (design.img && typeof design.img === 'string' && design.img.trim()) {
+      if (design.img && typeof design.img === 'string' && design.img.trim() && !design.img.startsWith('data:image/svg')) {
         return design.img.trim();
+      }
+      const defAcc = defaultMedsosAccounts.find(a => a.id === account.id);
+      if (defAcc && defAcc.designs && defAcc.designs[index] && defAcc.designs[index].img) {
+        return defAcc.designs[index].img;
       }
       return makeSvgBanner(design.title || ('Karya #' + (index + 1)), design.subtitle || 'Desain Grafis', design.bg || account.badgeColor || '#155293');
     }
 
     function getVideoPosterUrl(video, account, index, isReel) {
-      if (video.thumbnail && typeof video.thumbnail === 'string' && video.thumbnail.trim()) {
+      if (video.thumbnail && typeof video.thumbnail === 'string' && video.thumbnail.trim() && !video.thumbnail.startsWith('data:image/svg')) {
         return video.thumbnail.trim();
       }
       // Auto-extract official cover from video URL (YouTube & Instagram)
@@ -5114,6 +5152,11 @@
         if (igMatch && igMatch[1]) {
           return 'https://www.instagram.com/reel/' + igMatch[1] + '/media/?size=l';
         }
+      }
+      // Fallback to default account thumbnail if available
+      const defAcc = defaultMedsosAccounts.find(a => a.id === account.id);
+      if (defAcc && defAcc.videos && defAcc.videos[index] && defAcc.videos[index].thumbnail) {
+        return defAcc.videos[index].thumbnail;
       }
       return makeSvgBanner(video.title || 'Video Konten', (isReel ? 'Reels 9:16 · ' : 'Lanskap 16:9 · ') + (video.duration || '0:45'), account.badgeColor || '#155293');
     }
@@ -5332,7 +5375,7 @@
       // 0. Render Account Switcher Pills in Section 04 Header
       const switcherEl = document.getElementById('section04AccountSwitcher');
       if (switcherEl) {
-        const orderPriority = { masjid_mbm: 1, mgbookparty: 2, haltea: 3 };
+        const orderPriority = { haltea: 1, masjid_mbm: 2, mgbookparty: 3 };
         const rawAccounts = (cmsData.accounts && cmsData.accounts.length > 0) ? cmsData.accounts : defaultMedsosAccounts;
         const sortedAccounts = [...rawAccounts].sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
 

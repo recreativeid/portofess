@@ -3752,17 +3752,17 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         phoneScreenImg: 'assets/haltea/phone-screen-clean.png',
         sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
         designs: [
-          { id: 'd1', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' },
-          { id: 'd2', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
-          { id: 'd3', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
-          { id: 'd4', title: 'Selamat Hari Raya Idul Adha', subtitle: 'Poster Ucapan & Branding Haltea', bg: '#B91C1C', img: 'assets/haltea/poster-idul-adha.png' },
-          { id: 'd5', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
-          { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
+          { id: 'd1', title: 'Americano Haltea Cafe Series only 8k', subtitle: 'Feed & Poster Produk Haltea', bg: '#991B1B', img: 'assets/haltea/poster-americano.png' },
+          { id: 'd2', title: 'Promo Bundling 20k', subtitle: 'Desain Kampanye Promo Haltea', bg: '#7F1D1D', img: 'assets/haltea/poster-promo-bundling.png' },
+          { id: 'd3', title: 'Orange Squash 10k', subtitle: 'Poster Menu Baru Haltea', bg: '#D97706', img: 'assets/haltea/poster-orange-squash.png' },
+          { id: 'd4', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' },
+          { id: 'd5', title: 'Matcha Latte', subtitle: 'Feed & Poster Produk Haltea', bg: '#15803D', img: 'assets/haltea/poster-matcha-latte.png' },
+          { id: 'd6', title: 'Creamy Tiramitsu 10k', subtitle: 'Feed & Poster Produk Haltea', bg: '#1D4ED8', img: 'assets/haltea/poster-creamy-tiramitsu.png' }
         ],
         videos: [
-          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '', thumbnail: '' },
-          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '', thumbnail: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '', thumbnail: '' },
+          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '', thumbnail: 'assets/haltea/reel-grand-opening.png' },
+          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '', thumbnail: 'assets/haltea/reel-testimoni-pelanggan.png' },
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '', thumbnail: 'assets/haltea/reel-apa-kata-pelanggan.png' },
           { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '', thumbnail: '' },
           { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '', thumbnail: '' },
           { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '', thumbnail: '' }
@@ -4251,7 +4251,43 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       if (!currentMedsosData.accounts || currentMedsosData.accounts.length === 0) {
         currentMedsosData = { activeAccountId: 'haltea', accounts: JSON.parse(JSON.stringify(DEFAULT_MEDSOS_ACCOUNTS)) };
       }
-      activeAdminAccountId = currentMedsosData.activeAccountId || 'masjid_mbm';
+
+      // Reconcile and heal Haltea assets if missing, while preserving user-uploaded MBM data
+      if (currentMedsosData && Array.isArray(currentMedsosData.accounts)) {
+        DEFAULT_MEDSOS_ACCOUNTS.forEach(function(defAcc) {
+          const existing = currentMedsosData.accounts.find(function(a) { return a.id === defAcc.id; });
+          if (!existing) {
+            currentMedsosData.accounts.push(JSON.parse(JSON.stringify(defAcc)));
+          } else if (existing.id === 'haltea') {
+            if (!Array.isArray(existing.designs) || existing.designs.length === 0) {
+              existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
+            } else {
+              existing.designs.forEach(function(d, idx) {
+                if (!d.img || !d.img.trim() || d.img.startsWith('data:image/svg')) {
+                  const defD = (defAcc.designs && defAcc.designs[idx]) ? defAcc.designs[idx] : null;
+                  if (defD && defD.img) d.img = defD.img;
+                }
+              });
+            }
+            if (!Array.isArray(existing.videos) || existing.videos.length === 0) {
+              existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
+            } else {
+              existing.videos.forEach(function(v, idx) {
+                if (!v.thumbnail || !v.thumbnail.trim() || v.thumbnail.startsWith('data:image/svg')) {
+                  const defV = (defAcc.videos && defAcc.videos[idx]) ? defAcc.videos[idx] : null;
+                  if (defV && defV.thumbnail) v.thumbnail = defV.thumbnail;
+                }
+              });
+            }
+            if (!existing.phoneScreenImg || existing.phoneScreenImg.startsWith('data:image/svg')) {
+              existing.phoneScreenImg = defAcc.phoneScreenImg;
+            }
+          }
+        });
+        persistMedsosData();
+      }
+
+      activeAdminAccountId = currentMedsosData.activeAccountId || 'haltea';
       activeVideoAccountId = activeAdminAccountId;
 
       // Auto-compress any legacy huge thumbnails from past sessions to permanently safeguard localStorage
@@ -4499,8 +4535,15 @@ create policy "Public Access" on portfolio_store for all using (true) with check
 
       container.innerHTML = designs.map(function(d, i) {
         const bg = d.bg || '#1D4ED8';
-        const imgDisplay = d.img
-          ? '<img src="' + d.img + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + d.title + '" />'
+        let effectiveImg = d.img;
+        if (!effectiveImg || effectiveImg.startsWith('data:image/svg')) {
+          const defAcc = DEFAULT_MEDSOS_ACCOUNTS.find(function(a) { return a.id === acc.id; });
+          if (defAcc && defAcc.designs && defAcc.designs[i] && defAcc.designs[i].img) {
+            effectiveImg = defAcc.designs[i].img;
+          }
+        }
+        const imgDisplay = effectiveImg
+          ? '<img src="' + effectiveImg + '" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="' + d.title + '" />'
           : '<div class="w-full h-full flex flex-col items-center justify-center p-3 text-center text-white font-bold text-xs" style="background-color: ' + bg + ';">' +
               '<span class="text-[10px] font-mono opacity-80 uppercase">Desain #' + (i+1) + '</span>' +
               '<span class="line-clamp-2 mt-1">' + d.title + '</span>' +
@@ -5596,6 +5639,12 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           if (ytM && ytM[1]) effectiveThumb = 'https://img.youtube.com/vi/' + ytM[1] + '/hqdefault.jpg';
           const igM = v.videoUrl.match(/(?:instagram\.com\/(?:reel|p)\/)([\w-]+)/i);
           if (igM && igM[1]) effectiveThumb = 'https://www.instagram.com/reel/' + igM[1] + '/media/?size=l';
+        }
+        if (!effectiveThumb) {
+          const defAcc = DEFAULT_MEDSOS_ACCOUNTS.find(function(a) { return a.id === acc.id; });
+          if (defAcc && defAcc.videos && defAcc.videos[idx] && defAcc.videos[idx].thumbnail) {
+            effectiveThumb = defAcc.videos[idx].thumbnail;
+          }
         }
 
         const thumbDisplay = effectiveThumb
