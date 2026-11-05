@@ -10126,6 +10126,10 @@
             landingCvFileData = null;
           }
           renderLandingCvModalDom();
+        } else if (msg.key === 'fathur_portfolio_cms_data_multi' || msg.type === 'PORTFOLIO_FULL_SYNC') {
+          cmsData = loadCmsData();
+          renderMedsosSections();
+          if (typeof renderAllMedsosView === 'function') renderAllMedsosView();
         }
       };
     }
@@ -10160,6 +10164,10 @@
           landingCvFileData = null;
         }
         renderLandingCvModalDom();
+      } else if (e.key === 'fathur_portfolio_cms_data_multi') {
+        cmsData = loadCmsData();
+        renderMedsosSections();
+        if (typeof renderAllMedsosView === 'function') renderAllMedsosView();
       }
     });
 
@@ -10219,6 +10227,16 @@
                   renderLandingCvModalDom();
                 }
               };
+
+              // Sync CMS Medsos (including phoneScreenImg) from IndexedDB
+              const cmsReq = store.get('fathur_portfolio_cms_data_multi');
+              cmsReq.onsuccess = function() {
+                if (cmsReq.result && Array.isArray(cmsReq.result.accounts)) {
+                  cmsData = cmsReq.result;
+                  renderMedsosSections();
+                  if (typeof renderAllMedsosView === 'function') renderAllMedsosView();
+                }
+              };
             }
           };
         } catch (eIdb) {}
@@ -10260,6 +10278,13 @@
           if (cloudCv && (cloudCv.fileUrl || cloudCv.url)) {
             landingCvFileData = cloudCv;
             renderLandingCvModalDom();
+          }
+
+          const cloudCms = await PortfolioCloudDB.get('fathur_portfolio_cms_data_multi');
+          if (cloudCms && Array.isArray(cloudCms.accounts)) {
+            cmsData = cloudCms;
+            renderMedsosSections();
+            if (typeof renderAllMedsosView === 'function') renderAllMedsosView();
           }
         } catch (errCloud) {
           console.warn('Supabase fetch error in landing page:', errCloud);

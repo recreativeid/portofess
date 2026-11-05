@@ -184,6 +184,10 @@
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
           <span>Medsos &amp; Canva</span>
         </button>
+        <button onclick="switchAdminTab('phonescreen')" data-tab="phonescreen" class="admin-nav-item shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+          <svg class="w-3.5 h-3.5 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <span>Layar IG HP</span>
+        </button>
         <button onclick="switchAdminTab('video')" data-tab="video" class="admin-nav-item shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
           <span>Video &amp; Reels</span>
@@ -263,6 +267,13 @@
               <span>Medsos &amp; Canva</span>
             </div>
             <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800">Feed</span>
+          </button>
+          <button onclick="switchAdminTab('phonescreen')" data-tab="phonescreen" id="navBtn-phonescreen" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              <span class="font-bold">Screenshot IG HP</span>
+            </div>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800">Mockup</span>
           </button>
 
           <button onclick="switchAdminTab('video')" data-tab="video" id="navBtn-video" class="admin-nav-item w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-between text-left text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
@@ -1311,6 +1322,33 @@
                 </button>
               </div>
             </div>
+            <!-- Kartu Pratinjau & Upload Screenshot Profil IG HP -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-sky-50/80 via-blue-50/50 to-indigo-50/40 border border-sky-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+              <div class="flex items-center gap-4 min-w-0">
+                <div class="w-14 h-24 bg-slate-900 rounded-xl border-2 border-slate-700 overflow-hidden shrink-0 shadow-sm relative group cursor-pointer" onclick="switchAdminTab('phonescreen')">
+                  <img id="medsosTabPhoneMiniImg" src="assets/haltea/phone-screen-clean.png" class="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105" alt="Layar HP" />
+                  <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-white/20"></div>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-700 block">MOCKUP SMARTPHONE PROFIL INSTAGRAM</span>
+                    <span class="px-2 py-0.2 rounded-full bg-sky-100 text-[#155293] font-mono text-[9px] font-bold">Rasio 9:18.5</span>
+                  </div>
+                  <h4 class="font-display font-extrabold text-sm text-slate-900 mt-0.5">Tampilan Layar HP Akun Terpilih</h4>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2">Screenshot profil IG asli ini tampil langsung di dalam mockup smartphone Section 04 dan halaman katalog seluruh koleksi portofolio.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                <button type="button" onclick="triggerMedsosQuickPhoneUpload()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-[#155293] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  <span>Unggah Screenshot HP</span>
+                </button>
+                <button type="button" onclick="switchAdminTab('phonescreen')" class="px-3.5 py-2 rounded-xl border border-sky-300 bg-white hover:bg-sky-100/60 text-[#155293] text-xs font-bold transition shadow-xs flex items-center gap-1 cursor-pointer">
+                  <span>Buka Editor Mockup Lengkap</span>
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
 
             <!-- Section: Postingan Feeds & Desain Grafis (Full CRUD) -->
             <div class="space-y-4 pt-2">
@@ -1389,6 +1427,167 @@
               <div id="medsosFeedsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3.5">
                 <!-- Dynamically rendered -->
               </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- TAB: UPLOAD SCREENSHOT PROFIL INSTAGRAM (MOCKUP SMARTPHONE HP) -->
+        <!-- ============================================================== -->
+        <div id="tabContent-phonescreen" class="admin-tab-pane hidden space-y-6">
+          <div class="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
+            
+            <!-- Top Header Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-sky-500 animate-pulse"></span>
+                  <h3 class="font-display font-extrabold text-xl text-slate-900">Unggah Screenshot Profil Instagram (Layar Mockup HP)</h3>
+                </div>
+                <p class="text-xs text-slate-500 mt-1 max-w-2xl">
+                  Unggah tangkapan layar (screenshot) profil Instagram Anda untuk ditampilkan langsung di dalam bingkai smartphone interaktif (rasio 9:18.5) pada Section 04 dan halaman seluruh koleksi portofolio.
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <a href="../index.html#medsos" target="_blank" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs flex items-center gap-2 cursor-pointer">
+                  <svg class="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  <span>Buka di Landing Page ↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Account Selector Banner -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <div>
+                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold block">PILIH AKUN MEDIA SOSIAL UNTUK DIGANTI LAYAR HP:</span>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <h4 id="phoneScreenActiveAccHeader" class="font-display font-extrabold text-base text-slate-900">Haltea Teh Halte Indonesia</h4>
+                  <span id="phoneScreenActiveAccHandle" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-[#155293]">@halteaindonesia</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <select id="selectPhoneScreenAccountDropdown" onchange="changeAdminPhoneScreenAccount(this.value)" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white text-slate-900 shadow-xs outline-none">
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Two-Column Main Workspace -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              <!-- LEFT COLUMN: CONTROLS & UPLOAD (7 COLS) -->
+              <div class="lg:col-span-7 space-y-5">
+                
+                <!-- Drag & Drop Zone -->
+                <div id="adminPhoneScreenDropZone" onclick="triggerAdminPhoneScreenPicker()" ondragover="handleAdminPhoneScreenDragOver(event)" ondragleave="handleAdminPhoneScreenDragLeave(event)" ondrop="handleAdminPhoneScreenDrop(event)" class="border-2 border-dashed border-slate-300 hover:border-[#155293] bg-slate-50 hover:bg-sky-50/40 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition group">
+                  <div class="w-16 h-16 rounded-2xl bg-sky-100 text-[#155293] flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-xs">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                  </div>
+                  <h4 class="font-display font-extrabold text-sm text-slate-800">Klik atau Tarik Screenshot Layar HP ke Sini</h4>
+                  <p class="text-xs text-slate-500 mt-1">Mendukung format gambar .PNG, .JPG, .JPEG, .WEBP, atau .SVG</p>
+                  <div class="flex items-center justify-center gap-2 mt-3 flex-wrap">
+                    <span class="px-3 py-1 rounded-full bg-white border border-slate-200 text-[10px] font-mono font-bold text-slate-600 group-hover:border-[#155293] group-hover:text-[#155293] transition">
+                      Rasio Rekomendasi 9:18.5 s/d 9:20 (Portrait)
+                    </span>
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-mono font-bold text-emerald-700">
+                      Auto-Compress &amp; Fast Storage
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Hidden File Input for Phone Screen -->
+                <input id="adminPhoneScreenFileInput" type="file" accept="image/*" class="hidden" onchange="handleAdminPhoneScreenFileInput(this)" />
+
+                <!-- Alternative: URL / File Path Input -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <label class="text-[11px] font-bold text-slate-700 block">
+                    Atau Masukkan Tautan Gambar / Path File Aset:
+                  </label>
+                  <div class="flex items-center gap-2">
+                    <input id="adminPhoneScreenUrlInput" type="text" placeholder="mis. assets/mbm/phone-screen-mbm.svg atau https://..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono bg-white outline-none focus:border-[#155293]" />
+                    <button type="button" onclick="applyAdminPhoneScreenUrl()" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white hover:bg-[#155293] text-xs font-bold transition shadow-xs cursor-pointer">
+                      Terapkan Tautan
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-slate-400">
+                    Gunakan jika file screenshot Anda sudah ditaruh di folder <code class="bg-slate-200 px-1 py-0.5 rounded text-slate-700">assets/...</code> atau di-host di Cloud Storage / Supabase Storage.
+                  </p>
+                </div>
+
+                <!-- Action Controls: Save & Reset -->
+                <div class="flex items-center justify-between gap-3 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex-wrap">
+                  <button type="button" onclick="resetAdminPhoneScreenToDefault()" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition cursor-pointer">
+                    ↺ Kembalikan Default Mockup
+                  </button>
+                  <button type="button" id="savePhoneScreenBtn" onclick="saveAdminPhoneScreen(false)" class="px-6 py-2.5 rounded-xl bg-[#155293] hover:bg-blue-800 text-white text-xs font-bold transition shadow-md flex items-center gap-2 cursor-pointer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    <span>Simpan Layar HP ke Database &amp; Cloud</span>
+                  </button>
+                </div>
+
+                <!-- Info Box -->
+                <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-900 space-y-1.5">
+                  <div class="flex items-center gap-2 font-bold text-blue-950">
+                    <svg class="w-4 h-4 text-blue-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Tips Screenshot Profil Instagram:</span>
+                  </div>
+                  <p class="text-[11px] leading-relaxed text-blue-800">
+                    Ambil screenshot profil Instagram dari smartphone Anda (tampilan foto profil, bio, sorotan cerita, dan grid postingan). Gambar akan otomatis disesuaikan secara proporsional ke dalam bingkai smartphone di portofolio dengan efek specular glass glare 3D.
+                  </p>
+                </div>
+
+              </div>
+
+              <!-- RIGHT COLUMN: REALISTIC SMARTPHONE MOCKUP LIVE STAGE (5 COLS) -->
+              <div class="lg:col-span-5 flex flex-col items-center">
+                <div class="text-center mb-3">
+                  <span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold block">LIVE PRATINJAU REALTIME</span>
+                  <h5 class="text-xs font-extrabold text-slate-800">Mockup Layar Smartphone (Section 04)</h5>
+                </div>
+
+                <!-- Realistic Smartphone Mockup Frame -->
+                <div class="w-full max-w-[280px] sm:max-w-[300px] bg-[#111625] p-3 sm:p-3.5 rounded-[42px] sm:rounded-[46px] shadow-2xl border-4 border-[#242b3d] relative transition-transform duration-300 hover:scale-[1.01]">
+                  
+                  <!-- Top Dynamic Island & Speaker Slit -->
+                  <div class="w-20 h-4 bg-black rounded-full mx-auto mb-2 flex items-center justify-center relative z-20 border border-white/5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#0a1128] border border-white/10 mr-1.5"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-[#1e293b]"></div>
+                  </div>
+
+                  <!-- Realistic Inner Display Screen -->
+                  <div class="relative w-full aspect-[9/18.5] bg-black rounded-[30px] sm:rounded-[34px] overflow-hidden shadow-inner flex flex-col justify-start">
+                    <!-- Screen Media -->
+                    <img id="adminPhoneScreenPreviewImg" src="assets/haltea/phone-screen-clean.png" alt="Pratinjau Layar Instagram" class="w-full h-full object-cover object-top select-none transition-all duration-300" />
+                    
+                    <!-- Glossy Specular Glass Glare Overlay -->
+                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12]"></div>
+                    
+                    <!-- Subtle loading spinner if reading file -->
+                    <div id="adminPhoneScreenLoadingOverlay" class="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center text-white hidden">
+                      <span class="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin mb-2"></span>
+                      <span class="text-xs font-bold">Mengoptimasi Gambar...</span>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Home Indicator Bar -->
+                  <div class="w-28 h-1 bg-white/40 rounded-full mx-auto mt-2"></div>
+                </div>
+
+                <!-- Info footer under phone -->
+                <div class="mt-3 text-center">
+                  <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="adminPhoneScreenLabel" class="font-mono text-[11px] font-bold text-slate-700">Layar: @halteaindonesia</span>
+                  </div>
+                  <span id="adminPhoneScreenStatusText" class="block text-[10px] text-slate-400 mt-1 font-mono">Tersinkron dengan Database Portofolio</span>
+                </div>
+
+              </div>
+
             </div>
 
           </div>
@@ -4105,6 +4304,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
 
       loadSupabaseConfigForm();
       initAdminCvManager();
+      if (typeof initAdminPhoneScreenManager === 'function') initAdminPhoneScreenManager();
       setupFormAutoSaveListeners();
     }
 
@@ -4119,6 +4319,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       renderCertsCards();
       renderAdminCertRecap();
       renderRoutesTable();
+      if (typeof initAdminPhoneScreenManager === 'function') initAdminPhoneScreenManager();
     }
 
     function switchAdminTab(tabKey) {
@@ -4167,6 +4368,8 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         loadSupabaseConfigForm();
       } else if (tabKey === 'cv') {
         initAdminCvManager();
+      } else if (tabKey === 'phonescreen') {
+        initAdminPhoneScreenManager();
       }
     }
 
@@ -4227,6 +4430,11 @@ create policy "Public Access" on portfolio_store for all using (true) with check
       document.getElementById('activeAccountNameHeader').textContent = acc.name + ' (@' + acc.handle + ')';
       document.getElementById('activeAccTitleInp').value = acc.sectionTitle || (acc.name + ' — Portofolio');
       document.getElementById('activeAccHandleInp').value = acc.handle || '';
+      const miniPhone = document.getElementById('medsosTabPhoneMiniImg');
+      if (miniPhone) miniPhone.src = acc.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
+      if (typeof updateAdminPhoneScreenDisplay === 'function') {
+        updateAdminPhoneScreenDisplay();
+      }
     }
 
     function getActiveAdminAccount() {
@@ -4996,6 +5204,232 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           notifyDataSaved('Memori browser lokal penuh. Gunakan URL gambar untuk file besar.', 'error');
           return false;
         }
+      }
+    }
+
+    /* =================================================================== */
+    /* ADMIN INSTAGRAM SMARTPHONE SCREENSHOT (PHONE SCREEN MOCKUP) MANAGER */
+    /* =================================================================== */
+    let tempPhoneScreenData = '';
+
+    function initAdminPhoneScreenManager() {
+      const sel = document.getElementById('selectPhoneScreenAccountDropdown');
+      if (sel) {
+        sel.innerHTML = (currentMedsosData.accounts || []).map(function(a) {
+          return '<option value="' + a.id + '" ' + (a.id === activeAdminAccountId ? 'selected' : '') + '>' + a.name + ' (@' + a.handle + ')</option>';
+        }).join('');
+      }
+      updateAdminPhoneScreenDisplay();
+    }
+
+    function changeAdminPhoneScreenAccount(accId) {
+      activeAdminAccountId = accId;
+      activeVideoAccountId = accId;
+      currentMedsosData.activeAccountId = accId;
+      persistMedsosData();
+      renderMedsosAccountsDropdown();
+      renderVideoAccountsDropdown();
+      updateAdminPhoneScreenDisplay();
+    }
+
+    function updateAdminPhoneScreenDisplay() {
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+
+      const headerName = document.getElementById('phoneScreenActiveAccHeader');
+      if (headerName) headerName.textContent = acc.name;
+
+      const headerHandle = document.getElementById('phoneScreenActiveAccHandle');
+      if (headerHandle) headerHandle.textContent = '@' + acc.handle;
+
+      const phoneLabel = document.getElementById('adminPhoneScreenLabel');
+      if (phoneLabel) phoneLabel.textContent = 'Layar: @' + acc.handle;
+
+      const previewImg = document.getElementById('adminPhoneScreenPreviewImg');
+      const defaultImg = 'assets/haltea/phone-screen-clean.png';
+      const currentSrc = tempPhoneScreenData || acc.phoneScreenImg || defaultImg;
+      if (previewImg) previewImg.src = currentSrc;
+
+      const miniImg = document.getElementById('medsosTabPhoneMiniImg');
+      if (miniImg) miniImg.src = currentSrc;
+
+      const urlInput = document.getElementById('adminPhoneScreenUrlInput');
+      if (urlInput) {
+        urlInput.value = (acc.phoneScreenImg && !acc.phoneScreenImg.startsWith('data:')) ? acc.phoneScreenImg : '';
+      }
+
+      const sel = document.getElementById('selectPhoneScreenAccountDropdown');
+      if (sel && sel.value !== acc.id) sel.value = acc.id;
+
+      const statusText = document.getElementById('adminPhoneScreenStatusText');
+      if (statusText) {
+        if (tempPhoneScreenData) {
+          statusText.textContent = 'Perubahan belum disimpan. Klik "Simpan Layar HP" di bawah.';
+          statusText.className = 'block text-[10px] text-amber-600 mt-1 font-mono font-bold animate-pulse';
+        } else {
+          statusText.textContent = 'Tersinkron dengan Database Portofolio';
+          statusText.className = 'block text-[10px] text-slate-400 mt-1 font-mono';
+        }
+      }
+    }
+
+    function triggerAdminPhoneScreenPicker() {
+      const inp = document.getElementById('adminPhoneScreenFileInput');
+      if (inp) inp.click();
+    }
+
+    function triggerMedsosQuickPhoneUpload() {
+      switchAdminTab('phonescreen');
+      setTimeout(function() {
+        triggerAdminPhoneScreenPicker();
+      }, 150);
+    }
+
+    function handleAdminPhoneScreenFileInput(input) {
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      processPhoneScreenImageFile(file);
+      input.value = '';
+    }
+
+    function handleAdminPhoneScreenDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dropZone = document.getElementById('adminPhoneScreenDropZone');
+      if (dropZone) dropZone.classList.add('border-[#155293]', 'bg-sky-50');
+    }
+
+    function handleAdminPhoneScreenDragLeave(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dropZone = document.getElementById('adminPhoneScreenDropZone');
+      if (dropZone) dropZone.classList.remove('border-[#155293]', 'bg-sky-50');
+    }
+
+    function handleAdminPhoneScreenDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dropZone = document.getElementById('adminPhoneScreenDropZone');
+      if (dropZone) dropZone.classList.remove('border-[#155293]', 'bg-sky-50');
+
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+        processPhoneScreenImageFile(e.dataTransfer.files[0]);
+      }
+    }
+
+    function processPhoneScreenImageFile(file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Berkas harus berupa gambar (.png, .jpg, .webp, atau .svg)!');
+        return;
+      }
+
+      const overlay = document.getElementById('adminPhoneScreenLoadingOverlay');
+      if (overlay) overlay.classList.remove('hidden');
+
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const rawData = ev.target.result;
+        // If SVG, keep raw dataURL to preserve vector crispness
+        if (file.type === 'image/svg+xml') {
+          tempPhoneScreenData = rawData;
+          if (overlay) overlay.classList.add('hidden');
+          updateAdminPhoneScreenDisplay();
+          saveAdminPhoneScreen(false);
+          return;
+        }
+
+        // For PNG / JPEG / WEBP, optimize with downscaleImage to max 720px width
+        downscaleImage(rawData, 720, 0.85, function(optimizedDataUrl) {
+          tempPhoneScreenData = optimizedDataUrl;
+          if (overlay) overlay.classList.add('hidden');
+          updateAdminPhoneScreenDisplay();
+          saveAdminPhoneScreen(false);
+        });
+      };
+      reader.onerror = function() {
+        if (overlay) overlay.classList.add('hidden');
+        alert('Gagal membaca berkas gambar.');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function applyAdminPhoneScreenUrl() {
+      const urlInput = document.getElementById('adminPhoneScreenUrlInput');
+      if (!urlInput) return;
+      const url = urlInput.value.trim();
+      if (!url) {
+        alert('Silakan masukkan tautan URL gambar atau path file terlebih dahulu!');
+        return;
+      }
+      tempPhoneScreenData = url;
+      updateAdminPhoneScreenDisplay();
+      saveAdminPhoneScreen(false);
+    }
+
+    async function saveAdminPhoneScreen(isSilent) {
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+
+      if (tempPhoneScreenData) {
+        acc.phoneScreenImg = tempPhoneScreenData;
+        tempPhoneScreenData = '';
+      } else {
+        const urlInput = document.getElementById('adminPhoneScreenUrlInput');
+        if (urlInput && urlInput.value.trim()) {
+          acc.phoneScreenImg = urlInput.value.trim();
+        }
+      }
+
+      // 1. Persist to localStorage
+      persistMedsosData();
+
+      // 2. Persist to IndexedDB
+      if (window.portfolioIdbSet) {
+        try {
+          await portfolioIdbSet('fathur_portfolio_cms_data_multi', currentMedsosData);
+        } catch (eIdb) {
+          console.warn('IDB Save warning:', eIdb);
+        }
+      }
+
+      // 3. Sync via BroadcastChannel
+      if (typeof portfolioSyncChannel !== 'undefined' && portfolioSyncChannel) {
+        portfolioSyncChannel.postMessage({
+          type: 'PORTFOLIO_FULL_SYNC',
+          key: 'fathur_portfolio_cms_data_multi',
+          data: currentMedsosData,
+          timestamp: Date.now()
+        });
+      }
+
+      // 4. Sync to Supabase Cloud if configured
+      if (typeof PortfolioCloudDB !== 'undefined' && PortfolioCloudDB.isConfigured) {
+        PortfolioCloudDB.set('fathur_portfolio_cms_data_multi', currentMedsosData).catch(function(e) {
+          console.warn('Supabase sync warning:', e);
+        });
+      }
+
+      updateAdminPhoneScreenDisplay();
+
+      if (!isSilent) {
+        notifyDataSaved('Screenshot profil IG untuk @' + acc.handle + ' berhasil disimpan & tersinkron!');
+      }
+    }
+
+    function resetAdminPhoneScreenToDefault() {
+      const acc = getActiveAdminAccount();
+      if (!acc) return;
+
+      const defAcc = DEFAULT_MEDSOS_ACCOUNTS.find(function(a) { return a.id === acc.id; });
+      if (!defAcc || !defAcc.phoneScreenImg) {
+        alert('Tidak ditemukan screenshot default untuk akun ini.');
+        return;
+      }
+
+      if (confirm('Kembalikan screenshot profil smartphone ke default bawaan akun @' + acc.handle + '?')) {
+        tempPhoneScreenData = defAcc.phoneScreenImg;
+        saveAdminPhoneScreen(false);
       }
     }
 
