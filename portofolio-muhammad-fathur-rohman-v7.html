@@ -2397,34 +2397,15 @@
 
 
 
-        <!-- Top Section Header -->
-        <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <!-- Top Section Header (Clean, Professional - No IG #1 #2 #3 buttons) -->
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div class="inline-block glass-tag-pill px-5 py-2.5 rounded-2xl shadow-md -rotate-1">
             <span class="font-display font-extrabold text-2xl sm:text-3xl text-[#155293]">04 / Design Portfolio &amp; Mockup Showcase</span>
           </div>
-
-          <!-- Quick Screen Presets & Discreet Admin Trigger -->
-          <div class="flex items-center gap-2 glass-card smooth-blur-container px-4 py-2 rounded-2xl shadow-sm smooth-blur-reveal">
-            <span class="text-xs font-mono font-bold text-stone-500 hidden sm:inline">Pilih Layar HP:</span>
-            <div class="flex items-center gap-1.5 p-0.5 rounded-xl bg-stone-100 border border-stone-300">
-              <button onclick="setPhoneScreenToInstagram()" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white text-ink shadow-sm transition hover:bg-stone-50 cursor-pointer" title="Profil Instagram Akun">IG</button>
-              <button onclick="setPhoneScreenDesignIndex(0)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition cursor-pointer" title="Karya 1">#1</button>
-              <button onclick="setPhoneScreenDesignIndex(1)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition cursor-pointer" title="Karya 2">#2</button>
-              <button onclick="setPhoneScreenDesignIndex(2)" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold text-stone-600 hover:text-ink transition cursor-pointer" title="Karya 3">#3</button>
-            </div>
-          </div>
         </div>
 
-        <!-- Account Selector Bar: Multi-Account Tabs (@masjid.mbm, @mgbookparty, @halteaindonesia, etc.) -->
-        <div class="mb-6 flex flex-wrap items-center gap-2.5 p-2 rounded-2xl bg-stone-100/80 border border-stone-200/90 shadow-inner">
-          <div class="flex items-center gap-1.5 px-3 py-1 text-xs font-mono font-extrabold text-stone-600 uppercase tracking-wider shrink-0">
-            <span>📱</span>
-            <span>Pilih Akun Medsos:</span>
-          </div>
-          <div id="medsosAccountPillsContainer" class="flex flex-wrap items-center gap-2">
-            <!-- Dynamically populated by renderMedsosSections() -->
-          </div>
-        </div>
+        <!-- Hidden container for JS account pills compatibility -->
+        <div id="medsosAccountPillsContainer" class="hidden"></div>
 
         <!-- Section Subheader Requested by User: Muhammad Fathur Rohman - Design Portofolio & Instagram Handle -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 px-2">
@@ -4964,65 +4945,9 @@
     }
 
     /* =================================================================== */
-    /* MULTI-ACCOUNT SOCIAL MEDIA CMS (MASJID MBM, BOOK PARTY, HALTEA, DLL)*/
+    /* MULTI-ACCOUNT SOCIAL MEDIA CMS (HALTEA, MASJID MBM, BOOK PARTY, DLL)*/
     /* =================================================================== */
     const defaultMedsosAccounts = [
-      {
-        id: 'masjid_mbm',
-        name: 'Masjid MBM UNIMMA',
-        handle: 'masjid.mbm',
-        url: 'https://www.instagram.com/masjid.mbm',
-        role: 'Media Informasi, Konten Dakwah & Dokumentasi',
-        badgeColor: '#0F766E',
-        badgeText: 'MBM',
-        logoImg: '',
-        phoneScreenImg: '',
-        sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
-        designs: [
-          { id: 'mbm_d1', title: 'Kajian Rutin Spesial Pemuda', subtitle: 'Flyer Digital & Feed Instagram', bg: '#0F766E', img: '' },
-          { id: 'mbm_d2', title: 'Semarak Ramadhan Berkah', subtitle: 'Poster Agenda & Jadwal Imsakiyah', bg: '#1E3A8A', img: '' },
-          { id: 'mbm_d3', title: 'Jumat Berkah Berbagi', subtitle: 'Dokumentasi & Ajakan Donasi', bg: '#047857', img: '' },
-          { id: 'mbm_d4', title: 'Kutipan Motivasi & Hadits', subtitle: 'Konten Edukasi Spiritual MBM', bg: '#B45309', img: '' },
-          { id: 'mbm_d5', title: 'Peringatan Hari Besar Islam', subtitle: 'Materi Publikasi & Ucapan Resmi', bg: '#155293', img: '' },
-          { id: 'mbm_d6', title: 'Layanan Sosial & Posko Umat', subtitle: 'Infografis Program Masjid', bg: '#4338CA', img: '' }
-        ],
-        videos: [
-          { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '' },
-          { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '' },
-          { id: 'mbm_v3', title: 'Reels Ajakan Sholat Berjamaah & Bersih Masjid', ratio: '9/16', duration: '0:30', videoUrl: '' },
-          { id: 'mbm_v4', title: 'Dokumentasi Kegiatan Sosial & Buka Bersama Akbar', ratio: '16/9', duration: '1:30', videoUrl: '' },
-          { id: 'mbm_v5', title: 'Kajian Tematik Ramadhan Bersama Ustadz Tamu', ratio: '16/9', duration: '2:45', videoUrl: '' },
-          { id: 'mbm_v6', title: 'Profil Masjid MBM UNIMMA & Layanan Umat Digital', ratio: '16/9', duration: '1:50', videoUrl: '' }
-        ]
-      },
-      {
-        id: 'mgbookparty',
-        name: 'Magelang Book Party',
-        handle: 'mgbookparty',
-        url: 'https://www.instagram.com/mgbookparty',
-        role: 'Komunitas Literasi & Ruang Baca Publik',
-        badgeColor: '#B45309',
-        badgeText: 'MBP',
-        logoImg: '',
-        phoneScreenImg: '',
-        sectionTitle: 'Branding & Konten Literasi — Magelang Book Party',
-        designs: [
-          { id: 'mbp_d1', title: 'Piknik Baca Buku Mingguan di Taman', subtitle: 'Poster Utama Kegiatan Komunitas', bg: '#B45309', img: '' },
-          { id: 'mbp_d2', title: 'Bedah Karya & Diskusi Terbuka', subtitle: 'Feed Publikasi Sesi Diskusi', bg: '#0F766E', img: '' },
-          { id: 'mbp_d3', title: 'Rekomendasi Buku Akhir Pekan', subtitle: 'Carousel Ulasan & Rating Buku', bg: '#1E3A8A', img: '' },
-          { id: 'mbp_d4', title: 'Open Donasi Buku Literasi Anak', subtitle: 'Kampanye Sosial Pengumpulan Buku', bg: '#C62828', img: '' },
-          { id: 'mbp_d5', title: 'Meetup Literasi Magelang Nyeni', subtitle: 'Poster Kolaborasi Kreatif', bg: '#4338CA', img: '' },
-          { id: 'mbp_d6', title: 'Quote Inspiratif Literasi & Penulis', subtitle: 'Micro-Content Visual Instagram', bg: '#1F2937', img: '' }
-        ],
-        videos: [
-          { id: 'mbp_v1', title: 'Reels Suasana Piknik Baca Bareng di Taman Kota', ratio: '9/16', duration: '0:38', videoUrl: '' },
-          { id: 'mbp_v2', title: 'Review Singkat Buku Favorit Member Komunitas', ratio: '9/16', duration: '0:50', videoUrl: '' },
-          { id: 'mbp_v3', title: 'Vlog Seru Meetup Komunitas & Tukar Buku Literasi', ratio: '9/16', duration: '0:45', videoUrl: '' },
-          { id: 'mbp_v4', title: 'Aftermovie 1st Anniversary Magelang Book Party', ratio: '16/9', duration: '1:15', videoUrl: '' },
-          { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '' },
-          { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '' }
-        ]
-      },
       {
         id: 'haltea',
         name: 'Haltea Teh Halte Indonesia',
@@ -5043,12 +4968,68 @@
           { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
         ],
         videos: [
-          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
-          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
-          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
-          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
-          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
+          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '', thumbnail: '' },
+          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '', thumbnail: '' },
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '', thumbnail: '' },
+          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '', thumbnail: '' },
+          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '', thumbnail: '' },
+          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '', thumbnail: '' }
+        ]
+      },
+      {
+        id: 'masjid_mbm',
+        name: 'Masjid MBM UNIMMA',
+        handle: 'masjid.mbm',
+        url: 'https://www.instagram.com/masjid.mbm',
+        role: 'Media Informasi, Konten Dakwah & Dokumentasi',
+        badgeColor: '#0F766E',
+        badgeText: 'MBM',
+        logoImg: '',
+        phoneScreenImg: 'assets/mbm/phone-screen-mbm.svg',
+        sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
+        designs: [
+          { id: 'mbm_d1', title: 'Kajian Rutin Spesial Pemuda', subtitle: 'Flyer Digital & Feed Instagram', bg: '#0F766E', img: 'assets/mbm/poster-kajian-rutin.svg' },
+          { id: 'mbm_d2', title: 'Semarak Ramadhan Berkah', subtitle: 'Poster Agenda & Jadwal Imsakiyah', bg: '#1E3A8A', img: 'assets/mbm/poster-semarak-ramadhan.svg' },
+          { id: 'mbm_d3', title: 'Jumat Berkah Berbagi', subtitle: 'Dokumentasi & Ajakan Donasi', bg: '#047857', img: 'assets/mbm/poster-jumat-berkah.svg' },
+          { id: 'mbm_d4', title: 'Kutipan Motivasi & Hadits', subtitle: 'Konten Edukasi Spiritual MBM', bg: '#B45309', img: 'assets/mbm/poster-hadits-motivasi.svg' },
+          { id: 'mbm_d5', title: 'Peringatan Hari Besar Islam', subtitle: 'Materi Publikasi & Ucapan Resmi', bg: '#155293', img: 'assets/mbm/poster-peringatan-phbi.svg' },
+          { id: 'mbm_d6', title: 'Layanan Sosial & Posko Umat', subtitle: 'Infografis Program Masjid', bg: '#4338CA', img: 'assets/mbm/poster-posko-umat.svg' }
+        ],
+        videos: [
+          { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '', thumbnail: 'assets/mbm/reel-aftermovie-pengajian.svg' },
+          { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v3', title: 'Reels Ajakan Sholat Berjamaah & Bersih Masjid', ratio: '9/16', duration: '0:30', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v4', title: 'Dokumentasi Kegiatan Sosial & Buka Bersama Akbar', ratio: '16/9', duration: '1:30', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v5', title: 'Kajian Tematik Ramadhan Bersama Ustadz Tamu', ratio: '16/9', duration: '2:45', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v6', title: 'Profil Masjid MBM UNIMMA & Layanan Umat Digital', ratio: '16/9', duration: '1:50', videoUrl: '', thumbnail: '' }
+        ]
+      },
+      {
+        id: 'mgbookparty',
+        name: 'Magelang Book Party',
+        handle: 'mgbookparty',
+        url: 'https://www.instagram.com/mgbookparty',
+        role: 'Komunitas Literasi & Ruang Baca Publik',
+        badgeColor: '#B45309',
+        badgeText: 'MBP',
+        logoImg: '',
+        phoneScreenImg: 'assets/bookparty/phone-screen-bookparty.svg',
+        sectionTitle: 'Branding & Konten Literasi — Magelang Book Party',
+        designs: [
+          { id: 'mbp_d1', title: 'Piknik Baca Buku Mingguan di Taman', subtitle: 'Poster Utama Kegiatan Komunitas', bg: '#B45309', img: 'assets/bookparty/poster-piknik-baca.svg' },
+          { id: 'mbp_d2', title: 'Bedah Karya & Diskusi Terbuka', subtitle: 'Feed Publikasi Sesi Diskusi', bg: '#0F766E', img: 'assets/bookparty/poster-bedah-karya.svg' },
+          { id: 'mbp_d3', title: 'Rekomendasi Buku Akhir Pekan', subtitle: 'Carousel Ulasan & Rating Buku', bg: '#1E3A8A', img: 'assets/bookparty/poster-rekomendasi-buku.svg' },
+          { id: 'mbp_d4', title: 'Open Donasi Buku Literasi Anak', subtitle: 'Kampanye Sosial Pengumpulan Buku', bg: '#C62828', img: 'assets/bookparty/poster-donasi-literasi.svg' },
+          { id: 'mbp_d5', title: 'Meetup Literasi Magelang Nyeni', subtitle: 'Poster Kolaborasi Kreatif', bg: '#4338CA', img: 'assets/bookparty/poster-meetup-kreatif.svg' },
+          { id: 'mbp_d6', title: 'Quote Inspiratif Literasi & Penulis', subtitle: 'Micro-Content Visual Instagram', bg: '#1F2937', img: 'assets/bookparty/poster-quote-penulis.svg' }
+        ],
+        videos: [
+          { id: 'mbp_v1', title: 'Reels Suasana Piknik Baca Bareng di Taman Kota', ratio: '9/16', duration: '0:38', videoUrl: '', thumbnail: 'assets/bookparty/reel-piknik-baca.svg' },
+          { id: 'mbp_v2', title: 'Review Singkat Buku Favorit Member Komunitas', ratio: '9/16', duration: '0:50', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v3', title: 'Vlog Seru Meetup Komunitas & Tukar Buku Literasi', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v4', title: 'Aftermovie 1st Anniversary Magelang Book Party', ratio: '16/9', duration: '1:15', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '', thumbnail: '' }
         ]
       }
     ];
@@ -5061,30 +5042,27 @@
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed && Array.isArray(parsed.accounts) && parsed.accounts.length > 0) {
-            // Re-order accounts so masjid_mbm is first if existing
-            const orderMap = { masjid_mbm: 1, mgbookparty: 2, haltea: 3 };
-            parsed.accounts.sort((a, b) => (orderMap[a.id] || 99) - (orderMap[b.id] || 99));
-
-            // Ensure all default accounts exist
             defaultMedsosAccounts.forEach(defAcc => {
               const existing = parsed.accounts.find(a => a.id === defAcc.id);
               if (!existing) {
                 parsed.accounts.push(JSON.parse(JSON.stringify(defAcc)));
               } else {
-                // Ensure designs and videos exist
-                if (!existing.designs || existing.designs.length === 0) {
+                // Ensure designs are properly loaded
+                if (!existing.designs || existing.designs.length === 0 || !existing.designs[0].img) {
                   existing.designs = JSON.parse(JSON.stringify(defAcc.designs));
                 }
+                // Ensure videos are properly loaded
                 if (!existing.videos || existing.videos.length === 0) {
                   existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
                 }
+                if (!existing.phoneScreenImg) existing.phoneScreenImg = defAcc.phoneScreenImg;
                 if (!existing.role) existing.role = defAcc.role;
                 if (!existing.badgeText) existing.badgeText = defAcc.badgeText;
               }
             });
 
-            if (!parsed.activeAccountId || parsed.activeAccountId === 'haltea') {
-              parsed.activeAccountId = 'masjid_mbm';
+            if (!parsed.activeAccountId) {
+              parsed.activeAccountId = 'haltea';
             }
             return parsed;
           }
@@ -5093,7 +5071,7 @@
         console.warn('Gagal memuat CMS Data dari localStorage:', e);
       }
       return {
-        activeAccountId: 'masjid_mbm',
+        activeAccountId: 'haltea',
         accounts: JSON.parse(JSON.stringify(defaultMedsosAccounts))
       };
     }
@@ -5116,530 +5094,20 @@
       renderMedsosSections();
     }
 
-    /* =================================================================== */
-    /* PHOTOREALISTIC SVG GENERATORS FOR INSTAGRAM SCREENS & DESIGNS       */
-    /* =================================================================== */
-    function generateInstagramPhoneScreenSvg(account) {
-      const safeHandle = escapeXml(account.handle || 'akun.resmi');
-      const safeName = escapeXml(account.name || 'Akun Resmi');
-      const safeRole = escapeXml(account.role || 'Kreator Konten & Media');
-      const badgeColor = account.badgeColor || '#0F766E';
-      
-      let bio1 = 'Media Informasi & Publikasi Kreatif Resmi';
-      let bio2 = 'Koleksi Portofolio Desain Grafis & Video Editing';
-      let bio3 = 'linktr.ee/' + (account.handle || 'portofolio');
-      let highlights = ['Sorotan 1', 'Sorotan 2', 'Sorotan 3', 'Sorotan 4', 'Sorotan 5'];
-      let hlIcons = ['✨', '🎨', '🎬', '📌', '⭐'];
-
-      if (account.id === 'masjid_mbm' || account.handle.includes('mbm')) {
-        bio1 = '🕌 Pusat Kegiatan Islam, Syiar & Dakwah UNIMMA';
-        bio2 = '📍 Kampus 2 UNIMMA, Magelang · Terbuka untuk Jamaah';
-        bio3 = '🔗 linktr.ee/masjidmbmunimma';
-        highlights = ['Kajian', 'Ramadhan', 'Jumat', 'Hadits', 'Posko'];
-        hlIcons = ['🕌', '🌙', '🤲', '📖', '🤝'];
-      } else if (account.id === 'mgbookparty' || account.handle.includes('book')) {
-        bio1 = '📚 Ruang Baca Terbuka & Gerakan Literasi Mingguan';
-        bio2 = '🌿 Piknik Baca, Diskusi Terbuka & Teman Literasi Baru';
-        bio3 = '🔗 instagram.com/mgbookparty';
-        highlights = ['Piknik', 'Bedah', 'Review', 'Donasi', 'Meetup'];
-        hlIcons = ['📚', '🎙️', '⭐', '🎁', '☕'];
-      } else if (account.id === 'haltea') {
-        bio1 = 'Teh Halte Indonesia · Kedai Es Teh & Kopi Favorit';
-        bio2 = 'Buka Setiap Hari 09.30 - 22.00 WIB · Magelang';
-        bio3 = 'lynkid.run/halteaindonesia';
-        highlights = ['Menu', 'Promo', 'Outlet', 'Review', 'Behind'];
-        hlIcons = ['🥤', '🏷️', '📍', '⭐', '🎬'];
-      }
-
-      const designs = account.designs || [];
-      const videos = account.videos || [];
-
-      // 9 Grid Feed Items
-      const feedItems = [];
-      for (let i = 0; i < 9; i++) {
-        const col = i % 3;
-        const row = Math.floor(i / 3);
-        const x = 12 + col * 174;
-        const y = 538 + row * 170;
-        const w = 168;
-        const h = 164;
-
-        if (i < 6 && designs[i]) {
-          const d = designs[i];
-          const dTitle = escapeXml(d.title || ('Karya #' + (i + 1)));
-          const dBg = d.bg || badgeColor;
-          feedItems.push(
-            '<g transform="translate(' + x + ', ' + y + ')">' +
-              '<rect width="' + w + '" height="' + h + '" rx="6" fill="' + dBg + '"/>' +
-              '<rect width="' + w + '" height="' + h + '" rx="6" fill="url(#feedShine)"/>' +
-              '<rect x="2" y="2" width="' + (w-4) + '" height="' + (h-4) + '" rx="5" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>' +
-              '<rect x="8" y="8" width="54" height="18" rx="4" fill="rgba(0,0,0,0.65)"/>' +
-              '<text x="35" y="21" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="800" text-anchor="middle">#0' + (i + 1) + '</text>' +
-              '<text x="12" y="96" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800">' +
-                (dTitle.length > 19 ? dTitle.substring(0, 17) + '...' : dTitle) +
-              '</text>' +
-              '<text x="12" y="112" fill="rgba(255,255,255,0.75)" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="600">' +
-                escapeXml(d.subtitle || 'Desain Grafis').substring(0, 22) +
-              '</text>' +
-              '<rect x="8" y="' + (h - 24) + '" width="72" height="16" rx="4" fill="rgba(255,255,255,0.22)"/>' +
-              '<text x="44" y="' + (h - 13) + '" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="8" font-weight="700" text-anchor="middle">🎨 DESAIN FEED</text>' +
-            '</g>'
-          );
-        } else {
-          const vIdx = i - 6;
-          const v = videos[vIdx] || { title: 'Video Reels #' + (vIdx + 1) };
-          const vTitle = escapeXml(v.title || 'Video Konten');
-          feedItems.push(
-            '<g transform="translate(' + x + ', ' + y + ')">' +
-              '<rect width="' + w + '" height="' + h + '" rx="6" fill="#18181b"/>' +
-              '<rect width="' + w + '" height="' + h + '" rx="6" fill="url(#reelGrad)"/>' +
-              '<rect x="2" y="2" width="' + (w-4) + '" height="' + (h-4) + '" rx="5" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>' +
-              '<g transform="translate(' + (w - 24) + ', 8)">' +
-                '<rect width="16" height="16" rx="4" fill="rgba(0,0,0,0.6)"/>' +
-                '<polygon points="5,4 12,8 5,12" fill="#ffffff"/>' +
-              '</g>' +
-              '<circle cx="' + (w/2) + '" cy="' + (h/2 - 8) + '" r="18" fill="rgba(255,255,255,0.2)" stroke="#ffffff" stroke-width="1.5"/>' +
-              '<polygon points="' + (w/2 - 4) + ',' + (h/2 - 14) + ' ' + (w/2 + 6) + ',' + (h/2 - 8) + ' ' + (w/2 - 4) + ',' + (h/2 - 2) + '" fill="#ffffff"/>' +
-              '<text x="10" y="' + (h - 18) + '" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="700">' +
-                (vTitle.length > 20 ? vTitle.substring(0, 18) + '...' : vTitle) +
-              '</text>' +
-              '<text x="10" y="' + (h - 7) + '" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="8" font-weight="700">▶ REELS 9:16</text>' +
-            '</g>'
-          );
-        }
-      }
-
-      // Highlights SVGs
-      const hlElements = highlights.map((hName, idx) => {
-        const cx = 58 + idx * 105;
-        const icon = hlIcons[idx] || '⭐';
-        return (
-          '<g transform="translate(' + cx + ', 455)">' +
-            '<circle cx="0" cy="0" r="28" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>' +
-            '<circle cx="0" cy="0" r="24" fill="#27272a"/>' +
-            '<text x="0" y="6" font-size="16" text-anchor="middle">' + icon + '</text>' +
-            '<text x="0" y="42" fill="#d4d4d8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" text-anchor="middle">' + escapeXml(hName) + '</text>' +
-          '</g>'
-        );
-      }).join('');
-
-      const svg = 
-        '<svg xmlns="http://www.w3.org/2000/svg" width="540" height="1110" viewBox="0 0 540 1110">' +
-          '<defs>' +
-            '<linearGradient id="igStoryGrad" x1="0%" y1="0%" x2="100%" y2="100%">' +
-              '<stop offset="0%" stop-color="#f09433"/>' +
-              '<stop offset="25%" stop-color="#e6683c"/>' +
-              '<stop offset="50%" stop-color="#dc2743"/>' +
-              '<stop offset="75%" stop-color="#cc2366"/>' +
-              '<stop offset="100%" stop-color="#bc1888"/>' +
-            '</linearGradient>' +
-            '<linearGradient id="feedShine" x1="0%" y1="0%" x2="100%" y2="100%">' +
-              '<stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>' +
-              '<stop offset="60%" stop-color="transparent"/>' +
-              '<stop offset="100%" stop-color="rgba(0,0,0,0.3)"/>' +
-            '</linearGradient>' +
-            '<linearGradient id="reelGrad" x1="0%" y1="0%" x2="0%" y2="100%">' +
-              '<stop offset="0%" stop-color="rgba(24,24,27,0.7)"/>' +
-              '<stop offset="100%" stop-color="rgba(9,9,11,0.95)"/>' +
-            '</linearGradient>' +
-          '</defs>' +
-
-          '<rect width="540" height="1110" fill="#09090b"/>' +
-
-          '<!-- STATUS BAR iOS -->' +
-          '<g>' +
-            '<text x="44" y="42" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700">09:41</text>' +
-            '<rect x="210" y="20" width="120" height="28" rx="14" fill="#000000" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>' +
-            '<circle cx="232" cy="34" r="5" fill="#18181b"/>' +
-            '<circle cx="295" cy="34" r="4" fill="#09090b" stroke="#18181b" stroke-width="1.5"/>' +
-            '<g transform="translate(435, 27)">' +
-              '<rect x="0" y="10" width="3" height="4" fill="#ffffff" rx="0.5"/>' +
-              '<rect x="5" y="8" width="3" height="6" fill="#ffffff" rx="0.5"/>' +
-              '<rect x="10" y="5" width="3" height="9" fill="#ffffff" rx="0.5"/>' +
-              '<rect x="15" y="2" width="3" height="12" fill="#ffffff" rx="0.5"/>' +
-              '<path d="M 26 12 A 5 5 0 0 1 34 12 M 24 9 A 9 9 0 0 1 36 9 M 22 6 A 13 13 0 0 1 38 6" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
-              '<circle cx="30" cy="14" r="1.2" fill="#ffffff"/>' +
-              '<rect x="44" y="3" width="22" height="11" rx="3" fill="none" stroke="#ffffff" stroke-width="1.8"/>' +
-              '<rect x="46" y="5" width="15" height="7" rx="1.5" fill="#ffffff"/>' +
-              '<rect x="67" y="6.5" width="2" height="4" rx="1" fill="#ffffff"/>' +
-            '</g>' +
-          '</g>' +
-
-          '<!-- INSTAGRAM TOP BAR -->' +
-          '<g transform="translate(0, 60)">' +
-            '<text x="32" y="34" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="21" font-weight="800">@' + safeHandle + '</text>' +
-            '<g transform="translate(' + (32 + (safeHandle.length + 1) * 12.8) + ', 18)">' +
-              '<circle cx="8" cy="8" r="8" fill="#0ea5e9"/>' +
-              '<path d="M 4.5 8 L 7 10.5 L 11.5 5.5" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
-            '</g>' +
-            '<g transform="translate(440, 16)">' +
-              '<path d="M 10 3 C 7 3 5 5.5 5 9 C 5 12 3 13 3 14 L 17 14 C 17 13 15 12 15 9 C 15 5.5 13 3 10 3 Z M 8.5 15 C 8.5 16 9.2 16.8 10 16.8 C 10.8 16.8 11.5 16 11.5 15 Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/>' +
-              '<line x1="34" y1="5" x2="54" y2="5" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
-              '<line x1="34" y1="11" x2="54" y2="11" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
-              '<line x1="34" y1="17" x2="54" y2="17" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
-            '</g>' +
-          '</g>' +
-
-          '<!-- PROFILE HEADER -->' +
-          '<g transform="translate(0, 115)">' +
-            '<circle cx="76" cy="55" r="45" fill="none" stroke="url(#igStoryGrad)" stroke-width="3"/>' +
-            '<circle cx="76" cy="55" r="41" fill="#09090b"/>' +
-            '<circle cx="76" cy="55" r="38" fill="' + badgeColor + '"/>' +
-            '<text x="76" y="62" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="900" text-anchor="middle">' +
-              safeName.substring(0, 3).toUpperCase() +
-            '</text>' +
-            '<g transform="translate(195, 42)">' +
-              '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" text-anchor="middle">' + (designs.length + videos.length) + '</text>' +
-              '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" text-anchor="middle">postingan</text>' +
-            '</g>' +
-            '<g transform="translate(315, 42)">' +
-              '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" text-anchor="middle">8.662</text>' +
-              '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" text-anchor="middle">pengikut</text>' +
-            '</g>' +
-            '<g transform="translate(435, 42)">' +
-              '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="800" text-anchor="middle">142</text>' +
-              '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="500" text-anchor="middle">mengikuti</text>' +
-            '</g>' +
-          '</g>' +
-
-          '<!-- BIO SECTION -->' +
-          '<g transform="translate(32, 230)">' +
-            '<text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="15" font-weight="800">' + safeName + '</text>' +
-            '<text x="0" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="600">' + safeRole + '</text>' +
-            '<text x="0" y="40" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12.5" font-weight="400">' + escapeXml(bio1) + '</text>' +
-            '<text x="0" y="58" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12.5" font-weight="400">' + escapeXml(bio2) + '</text>' +
-            '<text x="0" y="78" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12.5" font-weight="700">' + escapeXml(bio3) + '</text>' +
-            '<text x="0" y="98" fill="#71717a" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="500">Diikuti oleh recreative.id dan 142 lainnya</text>' +
-          '</g>' +
-
-          '<!-- ACTION BUTTONS -->' +
-          '<g transform="translate(32, 345)">' +
-            '<rect x="0" y="0" width="215" height="36" rx="9" fill="#27272a"/>' +
-            '<text x="107" y="22" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="700" text-anchor="middle">Mengikuti ⌄</text>' +
-            '<rect x="225" y="0" width="205" height="36" rx="9" fill="#27272a"/>' +
-            '<text x="327" y="22" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="700" text-anchor="middle">Kirim pesan</text>' +
-            '<rect x="440" y="0" width="38" height="36" rx="9" fill="#27272a"/>' +
-            '<g transform="translate(450, 10)">' +
-              '<circle cx="8" cy="5" r="4" fill="none" stroke="#ffffff" stroke-width="1.8"/>' +
-              '<path d="M 2 15 C 2 12 5 11 8 11 C 11 11 14 12 14 15" fill="none" stroke="#ffffff" stroke-width="1.8"/>' +
-            '</g>' +
-          '</g>' +
-
-          '<!-- HIGHLIGHT STORY CIRCLES -->' +
-          '<g>' + hlElements + '</g>' +
-
-          '<!-- FEED TABS -->' +
-          '<g transform="translate(0, 502)">' +
-            '<line x1="0" y1="0" x2="540" y2="0" stroke="#27272a" stroke-width="1"/>' +
-            '<g transform="translate(90, 8)">' +
-              '<rect x="0" y="0" width="6" height="6" fill="#ffffff"/><rect x="9" y="0" width="6" height="6" fill="#ffffff"/><rect x="18" y="0" width="6" height="6" fill="#ffffff"/>' +
-              '<rect x="0" y="9" width="6" height="6" fill="#ffffff"/><rect x="9" y="9" width="6" height="6" fill="#ffffff"/><rect x="18" y="9" width="6" height="6" fill="#ffffff"/>' +
-              '<rect x="0" y="18" width="6" height="6" fill="#ffffff"/><rect x="9" y="18" width="6" height="6" fill="#ffffff"/><rect x="18" y="18" width="6" height="6" fill="#ffffff"/>' +
-            '</g>' +
-            '<line x1="20" y1="36" x2="180" y2="36" stroke="#ffffff" stroke-width="2"/>' +
-            '<g transform="translate(260, 10)">' +
-              '<rect x="0" y="0" width="20" height="20" rx="4" fill="none" stroke="#71717a" stroke-width="1.8"/>' +
-              '<polygon points="8,6 14,10 8,14" fill="#71717a"/>' +
-            '</g>' +
-            '<g transform="translate(430, 8)">' +
-              '<rect x="0" y="0" width="22" height="22" rx="4" fill="none" stroke="#71717a" stroke-width="1.8"/>' +
-              '<circle cx="11" cy="8" r="3.5" fill="none" stroke="#71717a" stroke-width="1.5"/>' +
-              '<path d="M 5 18 C 5 15 8 14 11 14 C 14 14 17 15 17 18" fill="none" stroke="#71717a" stroke-width="1.5"/>' +
-            '</g>' +
-          '</g>' +
-
-          '<!-- 9 FEED TILES -->' +
-          '<g>' + feedItems.join('') + '</g>' +
-
-          '<!-- BOTTOM INSTAGRAM NAVIGATION BAR -->' +
-          '<g transform="translate(0, 1055)">' +
-            '<rect width="540" height="55" fill="#09090b"/>' +
-            '<line x1="0" y1="0" x2="540" y2="0" stroke="#27272a" stroke-width="1"/>' +
-            '<path d="M 44 26 L 54 16 L 64 26 L 64 34 L 58 34 L 58 28 L 50 28 L 50 34 L 44 34 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>' +
-            '<circle cx="160" cy="24" r="7" fill="none" stroke="#a1a1aa" stroke-width="2"/>' +
-            '<line x1="165" y1="29" x2="171" y2="35" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round"/>' +
-            '<rect x="257" y="14" width="26" height="26" rx="7" fill="none" stroke="#ffffff" stroke-width="2"/>' +
-            '<line x1="270" y1="20" x2="270" y2="34" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
-            '<line x1="263" y1="27" x2="277" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>' +
-            '<rect x="367" y="16" width="22" height="22" rx="5" fill="none" stroke="#a1a1aa" stroke-width="2"/>' +
-            '<polygon points="375,22 383,27 375,32" fill="#a1a1aa"/>' +
-            '<circle cx="482" cy="27" r="12" fill="' + badgeColor + '" stroke="#ffffff" stroke-width="1.5"/>' +
-            '<text x="482" y="31" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="900" text-anchor="middle">' +
-              safeName.substring(0, 2).toUpperCase() +
-            '</text>' +
-            '<rect x="200" y="47" width="140" height="4" rx="2" fill="#ffffff" opacity="0.6"/>' +
-          '</g>' +
-        '</svg>';
-
-      return svg;
-    }
-
-    function generateDesignPosterSvg(design, account, index) {
-      const title = escapeXml(design.title || ('Karya #' + (index + 1)));
-      const subtitle = escapeXml(design.subtitle || 'Koleksi Desain Grafis');
-      const bg = design.bg || account.badgeColor || '#0F766E';
-      const handle = escapeXml(account.handle || 'portofess');
-      const accName = escapeXml(account.name || 'Portofolio');
-      const numStr = '#0' + (index + 1);
-
-      let themeBadge = 'KAJIAN & PUBLIKASI';
-      let themeEmoji = '🕌';
-      let tagline = 'Pusat Syiar & Media Informasi Digital';
-      let themeDetail = 'Masjid MBM UNIMMA · Kampus 2 Magelang';
-
-      if (account.id === 'masjid_mbm') {
-        if (index === 0) {
-          themeBadge = 'KAJIAN RUTIN';
-          themeEmoji = '🕌';
-          tagline = 'Spesial Pemuda Generasi Qurani';
-          themeDetail = 'Setiap Malam Ahad · Terbuka untuk Umum';
-        } else if (index === 1) {
-          themeBadge = 'SEMARAK RAMADHAN';
-          themeEmoji = '🌙';
-          tagline = 'Jadwal Imsakiyah & Buka Puasa';
-          themeDetail = 'Ramadhan Berkah 1446 H · Masjid MBM';
-        } else if (index === 2) {
-          themeBadge = 'JUMAT BERKAH';
-          themeEmoji = '🤲';
-          tagline = 'Sedekah Nasi & Santunan Dhuafa';
-          themeDetail = 'Ajakan Donasi Berkah Umat';
-        } else if (index === 3) {
-          themeBadge = 'HADITS & MOTIVASI';
-          themeEmoji = '📖';
-          tagline = 'Mutiara Sunnah & Pengingat Diri';
-          themeDetail = 'Edukasi Spiritual Pemuda Muslim';
-        } else if (index === 4) {
-          themeBadge = 'PERINGATAN PHBI';
-          themeEmoji = '⭐';
-          tagline = 'Materi Publikasi & Ucapan Resmi';
-          themeDetail = 'Syiar Hari Besar Islam UNIMMA';
-        } else if (index === 5) {
-          themeBadge = 'POSKO UMAT';
-          themeEmoji = '🤝';
-          tagline = 'Layanan Sosial & Peduli Bencana';
-          themeDetail = 'Ambulans Gratis & Bantuan Sosial';
-        }
-      } else if (account.id === 'mgbookparty') {
-        if (index === 0) {
-          themeBadge = 'PIKNIK BACA';
-          themeEmoji = '📚';
-          tagline = 'Ruang Baca Terbuka Mingguan';
-          themeDetail = 'Taman Kota Magelang · Minggu Pagi';
-        } else if (index === 1) {
-          themeBadge = 'BEDAH KARYA';
-          themeEmoji = '🎙️';
-          tagline = 'Diskusi Sastra & Ruang Temu Penulis';
-          themeDetail = 'Dialog Interaktif Pembaca Buku';
-        } else if (index === 2) {
-          themeBadge = 'WEEKEND READS';
-          themeEmoji = '⭐';
-          tagline = 'Rekomendasi Buku Akhir Pekan';
-          themeDetail = 'Curated Books & Rating Pembaca';
-        } else if (index === 3) {
-          themeBadge = 'DONASI LITERASI';
-          themeEmoji = '🎁';
-          tagline = 'Buku untuk Anak-Anak Pelosok';
-          themeDetail = 'Tebarkan Aksara & Semangat Belajar';
-        } else if (index === 4) {
-          themeBadge = 'MEETUP KREATIF';
-          themeEmoji = '☕';
-          tagline = 'Kolaborasi Seni & Sastra Nyeni';
-          themeDetail = 'Magelang Nyeni x Book Party';
-        } else if (index === 5) {
-          themeBadge = 'LITERARY QUOTE';
-          themeEmoji = '✒️';
-          tagline = 'Kutipan Inspiratif Penulis Dunia';
-          themeDetail = 'Kata Bijak & Refleksi Membaca';
-        }
-      }
-
-      const svg = 
-        '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">' +
-          '<defs>' +
-            '<linearGradient id="bgGrad_' + index + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
-              '<stop offset="0%" stop-color="' + bg + '"/>' +
-              '<stop offset="60%" stop-color="#09090b"/>' +
-              '<stop offset="100%" stop-color="#000000"/>' +
-            '</linearGradient>' +
-            '<radialGradient id="spotlight_' + index + '" cx="50%" cy="30%" r="60%">' +
-              '<stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>' +
-              '<stop offset="100%" stop-color="transparent"/>' +
-            '</radialGradient>' +
-          '</defs>' +
-
-          '<rect width="640" height="800" fill="url(#bgGrad_' + index + ')"/>' +
-          '<rect width="640" height="800" fill="url(#spotlight_' + index + ')"/>' +
-
-          '<rect x="24" y="24" width="592" height="752" rx="20" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>' +
-          '<rect x="32" y="32" width="576" height="736" rx="16" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>' +
-
-          '<g transform="translate(48, 52)">' +
-            '<rect x="0" y="0" width="76" height="30" rx="8" fill="rgba(0,0,0,0.6)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>' +
-            '<text x="38" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="900" text-anchor="middle">' + numStr + '</text>' +
-            '<rect x="88" y="0" width="220" height="30" rx="8" fill="' + bg + '" opacity="0.95"/>' +
-            '<text x="198" y="20" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800" text-anchor="middle" letter-spacing="1">' +
-              themeEmoji + ' ' + themeBadge +
-            '</text>' +
-            '<text x="544" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="11" font-weight="700" text-anchor="end">@' + handle + '</text>' +
-          '</g>' +
-
-          '<g transform="translate(48, 115)">' +
-            '<rect width="544" height="380" rx="16" fill="rgba(0,0,0,0.35)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>' +
-            '<circle cx="272" cy="170" r="85" fill="' + bg + '" opacity="0.45"/>' +
-            '<circle cx="272" cy="170" r="65" fill="rgba(255,255,255,0.08)"/>' +
-            '<text x="272" y="205" font-size="95" text-anchor="middle">' + themeEmoji + '</text>' +
-            '<rect x="72" y="300" width="400" height="34" rx="8" fill="rgba(255,255,255,0.15)"/>' +
-            '<text x="272" y="322" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="0.5">' +
-              escapeXml(tagline) +
-            '</text>' +
-          '</g>' +
-
-          '<g transform="translate(48, 535)">' +
-            '<text x="0" y="32" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="900">' +
-              title +
-            '</text>' +
-            '<text x="0" y="68" fill="rgba(255,255,255,0.85)" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="600">' +
-              subtitle +
-            '</text>' +
-            '<line x1="0" y1="92" x2="544" y2="92" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>' +
-            '<g transform="translate(0, 118)">' +
-              '<rect x="0" y="0" width="360" height="38" rx="8" fill="rgba(255,255,255,0.1)"/>' +
-              '<text x="16" y="24" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">' +
-                '📍 ' + escapeXml(themeDetail) +
-              '</text>' +
-              '<g transform="translate(375, 0)">' +
-                '<rect width="169" height="38" rx="8" fill="' + bg + '"/>' +
-                '<text x="84" y="24" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="800" text-anchor="middle">' +
-                  accName.substring(0, 16) +
-                '</text>' +
-              '</g>' +
-            '</g>' +
-          '</g>' +
-
-          '<g transform="translate(48, 735)">' +
-            '<text x="0" y="15" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="10" font-weight="600">OFFICIAL INSTAGRAM FEED · PORTOFOLIO RESMI MUHAMMAD FATHUR ROHMAN</text>' +
-          '</g>' +
-        '</svg>';
-
-      return svg;
-    }
-
-    function generateVideoThumbnailSvg(video, account, index, isReel) {
-      const title = escapeXml(video.title || 'Video Konten');
-      const duration = escapeXml(video.duration || (isReel ? '0:45' : '1:30'));
-      const bg = account.badgeColor || '#155293';
-      const handle = escapeXml(account.handle || 'portofess');
-      const numStr = '#0' + (index + 1);
-
-      if (isReel) {
-        return (
-          '<svg xmlns="http://www.w3.org/2000/svg" width="450" height="800" viewBox="0 0 450 800">' +
-            '<defs>' +
-              '<linearGradient id="reelBg_' + index + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
-                '<stop offset="0%" stop-color="#18181b"/>' +
-                '<stop offset="50%" stop-color="' + bg + '"/>' +
-                '<stop offset="100%" stop-color="#09090b"/>' +
-              '</linearGradient>' +
-              '<radialGradient id="playGlow_' + index + '" cx="50%" cy="50%" r="50%">' +
-                '<stop offset="0%" stop-color="#38bdf8"/>' +
-                '<stop offset="100%" stop-color="transparent"/>' +
-              '</radialGradient>' +
-            '</defs>' +
-            '<rect width="450" height="800" fill="url(#reelBg_' + index + ')"/>' +
-            '<rect x="18" y="18" width="414" height="764" rx="20" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>' +
-            '<g transform="translate(32, 40)">' +
-              '<rect width="95" height="28" rx="6" fill="#ef4444"/>' +
-              '<text x="47" y="19" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="900" text-anchor="middle">REELS ' + numStr + '</text>' +
-              '<rect x="105" y="0" width="70" height="28" rx="6" fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>' +
-              '<text x="140" y="19" fill="#ffffff" font-family="monospace" font-size="11" font-weight="700" text-anchor="middle">9:16</text>' +
-              '<text x="386" y="19" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="11" font-weight="600" text-anchor="end">@' + handle + '</text>' +
-            '</g>' +
-            '<g transform="translate(225, 360)">' +
-              '<circle cx="0" cy="0" r="60" fill="url(#playGlow_' + index + ')" opacity="0.6"/>' +
-              '<circle cx="0" cy="0" r="42" fill="#0ea5e9" stroke="#ffffff" stroke-width="3"/>' +
-              '<polygon points="-8,-16 18,0 -8,16" fill="#ffffff"/>' +
-            '</g>' +
-            '<g transform="translate(32, 580)">' +
-              '<rect width="386" height="170" rx="16" fill="rgba(0,0,0,0.65)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>' +
-              '<g transform="translate(20, 20)">' +
-                '<rect width="110" height="24" rx="5" fill="' + bg + '"/>' +
-                '<text x="55" y="16" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="800" text-anchor="middle">VIDEO REELS</text>' +
-                '<rect x="118" y="0" width="60" height="24" rx="5" fill="rgba(255,255,255,0.15)"/>' +
-                '<text x="148" y="16" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700" text-anchor="middle">⏱ ' + duration + '</text>' +
-              '</g>' +
-              '<text x="20" y="80" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="17" font-weight="800">' +
-                (title.length > 38 ? title.substring(0, 36) + '...' : title) +
-              '</text>' +
-              '<text x="20" y="125" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="700">' +
-                '▶ Klik untuk Putar Video Penuh' +
-              '</text>' +
-            '</g>' +
-          '</svg>'
-        );
-      } else {
-        return (
-          '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">' +
-            '<defs>' +
-              '<linearGradient id="landBg_' + index + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
-                '<stop offset="0%" stop-color="#18181b"/>' +
-                '<stop offset="50%" stop-color="' + bg + '"/>' +
-                '<stop offset="100%" stop-color="#09090b"/>' +
-              '</linearGradient>' +
-            '</defs>' +
-            '<rect width="640" height="360" fill="url(#landBg_' + index + ')"/>' +
-            '<rect x="16" y="16" width="608" height="328" rx="14" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>' +
-            '<g transform="translate(32, 38)">' +
-              '<rect width="110" height="26" rx="6" fill="#155293"/>' +
-              '<text x="55" y="17" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="900" text-anchor="middle">LANSKAP ' + numStr + '</text>' +
-              '<rect x="118" y="0" width="60" height="26" rx="6" fill="rgba(0,0,0,0.5)"/>' +
-              '<text x="148" y="17" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700" text-anchor="middle">16:9</text>' +
-              '<text x="576" y="17" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="11" font-weight="600" text-anchor="end">@' + handle + '</text>' +
-            '</g>' +
-            '<g transform="translate(320, 160)">' +
-              '<circle cx="0" cy="0" r="36" fill="#0ea5e9" stroke="#ffffff" stroke-width="2.5"/>' +
-              '<polygon points="-6,-13 14,0 -6,13" fill="#ffffff"/>' +
-            '</g>' +
-            '<g transform="translate(32, 260)">' +
-              '<rect width="576" height="64" rx="10" fill="rgba(0,0,0,0.7)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>' +
-              '<text x="20" y="30" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="800">' +
-                (title.length > 50 ? title.substring(0, 48) + '...' : title) +
-              '</text>' +
-              '<text x="20" y="48" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="600">' +
-                '⏱ Durasi: ' + duration + ' · Klik untuk Memutar' +
-              '</text>' +
-            '</g>' +
-          '</svg>'
-        );
-      }
-    }
-
-    function getInstagramPhoneScreenUrl(account) {
-      if (account.phoneScreenImg && !account.phoneScreenImg.startsWith('data:image/svg+xml;utf8,<svg') && account.phoneScreenImg !== 'assets/haltea/phone-screen-clean.png') {
-        return account.phoneScreenImg;
-      }
-      if (account.id === 'haltea' && account.phoneScreenImg === 'assets/haltea/phone-screen-clean.png') {
-        return 'assets/haltea/phone-screen-clean.png';
-      }
-      return 'data:image/svg+xml;utf8,' + encodeURIComponent(generateInstagramPhoneScreenSvg(account));
-    }
-
     function getDesignPosterUrl(design, account, index) {
       if (design.img && typeof design.img === 'string' && design.img.trim()) {
         return design.img.trim();
       }
-      return 'data:image/svg+xml;utf8,' + encodeURIComponent(generateDesignPosterSvg(design, account, index));
+      return makeSvgBanner(design.title || ('Karya #' + (index + 1)), design.subtitle || 'Desain Grafis', design.bg || account.badgeColor || '#155293');
     }
 
     function getVideoPosterUrl(video, account, index, isReel) {
       if (video.thumbnail && typeof video.thumbnail === 'string' && video.thumbnail.trim()) {
         return video.thumbnail.trim();
       }
-      return 'data:image/svg+xml;utf8,' + encodeURIComponent(generateVideoThumbnailSvg(video, account, index, isReel));
+      return makeSvgBanner(video.title || 'Video Konten', (isReel ? 'Reels 9:16 · ' : 'Lanskap 16:9 · ') + (video.duration || '0:45'), account.badgeColor || '#155293');
     }
 
-    /* =================================================================== */
-    /* REALISTIC STATIC SMARTPHONE SCREEN CONTROLLER                       */
-    /* =================================================================== */
     function setPhoneScreen(imgUrl, title) {
       if (!imgUrl) return;
       const acc = getActiveMedsosAccount();
@@ -5662,7 +5130,7 @@
 
     function setPhoneScreenToInstagram() {
       const acc = getActiveMedsosAccount();
-      setPhoneScreen(getInstagramPhoneScreenUrl(acc), '@' + acc.handle);
+      setPhoneScreen(acc.phoneScreenImg || 'assets/haltea/phone-screen-clean.png', '@' + acc.handle);
     }
 
     function setPhoneScreenDesignIndex(index) {
@@ -5691,10 +5159,10 @@
     function resetAllMedsosPhoneScreen(accountId) {
       const acc = (cmsData.accounts || []).find(a => a.id === accountId);
       if (!acc) return;
-      setAllMedsosPhoneScreen(accountId, getInstagramPhoneScreenUrl(acc), '@' + acc.handle);
+      setAllMedsosPhoneScreen(accountId, acc.phoneScreenImg || 'assets/haltea/phone-screen-clean.png', '@' + acc.handle);
     }
 
-        /* 3D Magnetic Cursor Tilt Listener */
+    /* 3D Magnetic Cursor Tilt Listener */
     function attach3DCursorTilt(el) {
       if (!el || el.dataset.tiltAttached) return;
       el.dataset.tiltAttached = 'true';
@@ -5703,76 +5171,12 @@
         const rect = el.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-        const rotX = -y * 14;
-        const rotY = x * 14;
-        el.style.transform = `perspective(850px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px) scale3d(1.02, 1.02, 1.02)`;
+        el.style.transform = 'perspective(1000px) rotateY(' + (x * 12) + 'deg) rotateX(' + (-y * 12) + 'deg) scale3d(1.02, 1.02, 1.02)';
       });
 
       el.addEventListener('mouseleave', () => {
-        el.style.transform = 'perspective(850px) rotateX(0deg) rotateY(0deg) translateY(0) scale3d(1, 1, 1)';
+        el.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
       });
-    }
-
-    /* =================================================================== */
-    /* ENHANCED VIDEO PLAYER & STREAMING PARSER (YOUTUBE / SUPABASE / MP4) */
-    /* =================================================================== */
-    function parseVideoSource(url) {
-      if (!url || typeof url !== 'string') return { type: 'empty', src: '' };
-      url = url.trim();
-
-      // 1. YouTube detection (youtube.com/watch, youtu.be, shorts, embed, live)
-      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/|live\/))([\w-]{11})/i);
-      if (ytMatch && ytMatch[1]) {
-        return {
-          type: 'youtube',
-          id: ytMatch[1],
-          embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0&playsinline=1`
-        };
-      }
-
-      // 2. Instagram Reels & Posts (instagram.com/reel/CODE, instagram.com/p/CODE)
-      const igMatch = url.match(/(?:instagram\.com\/(?:reel|p)\/)([\w-]+)/i);
-      if (igMatch && igMatch[1]) {
-        return {
-          type: 'instagram',
-          id: igMatch[1],
-          embedUrl: `https://www.instagram.com/reel/${igMatch[1]}/embed/`
-        };
-      }
-
-      // 3. TikTok Videos (tiktok.com/@user/video/ID)
-      const ttMatch = url.match(/(?:tiktok\.com\/@[^/]+\/video\/)(\d+)/i);
-      if (ttMatch && ttMatch[1]) {
-        return {
-          type: 'tiktok',
-          id: ttMatch[1],
-          embedUrl: `https://www.tiktok.com/embed/v2/${ttMatch[1]}`
-        };
-      }
-
-      // 4. Google Drive Video (drive.google.com/file/d/ID/view, open?id=ID, uc?id=ID)
-      const gdMatch = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)|docs\.google\.com\/file\/d\/)([a-zA-Z0-9_-]+)/i);
-      if (gdMatch && gdMatch[1]) {
-        return {
-          type: 'gdrive',
-          id: gdMatch[1],
-          embedUrl: `https://drive.google.com/file/d/${gdMatch[1]}/preview`
-        };
-      }
-
-      // 5. Cloud / Direct Web Video (.mp4, .webm, Supabase Storage, Cloudinary, Firebase, S3, CDN)
-      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:')) {
-        return {
-          type: 'html5',
-          src: url
-        };
-      }
-
-      // 6. Local filename without hosting (e.g. video.mp4 uploaded from PC but not on GitHub)
-      return {
-        type: 'local_missing',
-        filename: url
-      };
     }
 
     /* Build Clean Instagram-Style Video Card (Matching Design Posts) */
@@ -5842,29 +5246,10 @@
     function renderMedsosSections() {
       const acc = getActiveMedsosAccount();
 
-      // 1. Render Account Selector Pills on Landing Page Banner
-      const pillsContainer = document.getElementById('medsosAccountPillsContainer');
-      if (pillsContainer) {
-        pillsContainer.innerHTML = cmsData.accounts.map(a => {
-          const isActive = a.id === cmsData.activeAccountId;
-          return `
-            <button onclick="selectMedsosAccount('${a.id}')" class="px-4 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-2 cursor-pointer ${
-              isActive
-                ? 'bg-slate-900 text-white shadow-md border-transparent -translate-y-0.5 ring-2 ring-slate-900/20'
-                : 'bg-white border border-stone-300 text-stone-700 hover:border-slate-900 hover:text-slate-900 shadow-2xs'
-            }">
-              <span class="w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-stone-400'}"></span>
-              <span>@${a.handle}</span>
-              ${isActive ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-white/20 text-emerald-300 font-sans">Aktif</span>' : ''}
-            </button>
-          `;
-        }).join('');
-      }
-
-      // 2. Update Section 04 Subheader & Phone Screen for Active Account
+      // 1. Update Section 04 Subheader & Phone Screen for Active Account
       const titleEl = document.getElementById('section04TitleDisplay');
       if (titleEl) {
-        titleEl.textContent = acc.sectionTitle || (acc.name + ' — Portofolio Desain & Video');
+        titleEl.textContent = acc.sectionTitle || (acc.name + ' - Portofolio');
       }
 
       const handleEl = document.getElementById('section04HandleDisplay');
@@ -5877,7 +5262,7 @@
       const badgeImg = document.getElementById('accountBadgeImg');
       const badgeCont = document.getElementById('accountBadgeContainer');
       if (badgeCont) {
-        badgeCont.style.backgroundColor = acc.badgeColor || '#0F766E';
+        badgeCont.style.backgroundColor = acc.badgeColor || '#C62828';
         badgeCont.title = acc.name;
       }
       if (badgeImg) {
@@ -5885,14 +5270,14 @@
           badgeImg.src = acc.logoImg;
           badgeImg.style.display = 'block';
         } else {
-          badgeImg.src = makeSvgBanner(acc.badgeText || acc.handle.substring(0, 3).toUpperCase(), '', acc.badgeColor || '#0F766E');
+          badgeImg.src = makeSvgBanner(acc.badgeText || acc.handle.substring(0, 3).toUpperCase(), '', acc.badgeColor || '#C62828');
         }
       }
 
-      // Update Phone Screen Image (Real Mockup / Photorealistic Feed)
+      // Update Phone Screen Image
       const phoneImg = document.getElementById('phoneScreenImage');
       if (phoneImg) {
-        phoneImg.src = getInstagramPhoneScreenUrl(acc);
+        phoneImg.src = acc.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
       }
 
       const screenLabel = document.getElementById('phoneScreenLabel');
@@ -5900,7 +5285,7 @@
         screenLabel.textContent = 'Layar: @' + acc.handle;
       }
 
-      // 3. Render 6 Desain Grafis Cards on Left Column
+      // 2. Render 6 Desain Grafis Cards on Left Column
       const featuredDesignGrid = document.getElementById('featuredDesignGrid');
       if (featuredDesignGrid) {
         const top6Designs = (acc.designs || []).slice(0, 6);
@@ -5931,7 +5316,7 @@
         featuredDesignGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
       }
 
-      // 4. Render 3 Video Reels (9:16) & 3 Video Lanskap (16:9) on Landing Section
+      // 3. Render 3 Video Reels (9:16) & 3 Video Lanskap (16:9) on Landing Section
       const reelsGrid = document.getElementById('featuredReelsGrid');
       const landscapeGrid = document.getElementById('featuredLandscapeGrid');
       const allVideos = acc.videos || [];
@@ -5959,14 +5344,18 @@
         landscapeGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
       }
 
-      // 5. Render All Managed Accounts in Full View 04 (#allMedsosListContainer) - UNIFIED LAYOUT MATCHING USER IMAGE!
+      // 4. Render All Managed Accounts in Full View 04 (#allMedsosListContainer) - UNIFIED LAYOUT MATCHING USER IMAGE!
+      // Order strictly requested: MBM first, then Book Party, then Haltea
       const allMedsosContainer = document.getElementById('allMedsosListContainer');
       if (allMedsosContainer) {
-        allMedsosContainer.innerHTML = cmsData.accounts.map((account) => {
+        const orderPriority = { masjid_mbm: 1, mgbookparty: 2, haltea: 3 };
+        const sortedAccounts = [...cmsData.accounts].sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
+
+        allMedsosContainer.innerHTML = sortedAccounts.map((account) => {
           const accVids = account.videos || [];
           const accReels = accVids.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
           const accLandscape = accVids.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9');
-          const phoneSrc = getInstagramPhoneScreenUrl(account);
+          const phoneSrc = account.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
 
           return `
             <div class="bg-white p-6 sm:p-9 rounded-[32px] sm:rounded-[40px] border-2 border-stone-200/90 shadow-xl space-y-8 overflow-hidden">
@@ -6122,14 +5511,14 @@
         allMedsosContainer.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
       }
 
-      // 6. Update Total Badges
+      // 5. Update Total Badges
       const countBadge = document.getElementById('medsosCountBadge');
       if (countBadge) {
         const total = (acc.designs || []).length + (acc.videos || []).length;
         countBadge.textContent = total + ' Karya';
       }
 
-      // 7. Refresh Admin Medsos Tab Selects
+      // 6. Refresh Admin Medsos Tab Selects
       renderAdminMedsosTab();
     }
 
@@ -7234,6 +6623,142 @@
     function closeLightbox() {
       document.getElementById('lightboxModal').classList.add('hidden');
     }
+    /* =================================================================== */
+    /* INTERACTIVE CV / RESUME (PDF) MODAL & VIEWER ENGINE                */
+    /* =================================================================== */
+    let landingCvFileData = null;
+    let _landingCvActiveBlobUrl = null;
+
+    try {
+      const rawCvInit = localStorage.getItem('fathur_portfolio_cv_file');
+      if (rawCvInit) {
+        landingCvFileData = JSON.parse(rawCvInit);
+      }
+    } catch (eCvInit) {}
+
+    function getSafeLandingCvViewUrl(rawUrl) {
+      if (!rawUrl) return '';
+      if (rawUrl.startsWith('data:application/pdf') || rawUrl.startsWith('data:application/octet-stream')) {
+        try {
+          const parts = rawUrl.split(';base64,');
+          const base64 = parts[1] || parts[0];
+          const binaryStr = atob(base64);
+          const len = binaryStr.length;
+          const bytes = new Uint8Array(len);
+          for (let i = 0; i < len; i++) {
+            bytes[i] = binaryStr.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: 'application/pdf' });
+          if (_landingCvActiveBlobUrl) {
+            try { URL.revokeObjectURL(_landingCvActiveBlobUrl); } catch (e) {}
+          }
+          _landingCvActiveBlobUrl = URL.createObjectURL(blob);
+          return _landingCvActiveBlobUrl;
+        } catch (e) {
+          console.warn('Blob conversion fallback to rawUrl in landing page:', e);
+          return rawUrl;
+        }
+      }
+      return rawUrl;
+    }
+
+    function renderLandingCvModalDom() {
+      const modal = document.getElementById('cvPreviewModal');
+      const badge = document.getElementById('cvModalFileBadge');
+      const subTitle = document.getElementById('cvModalSubTitle');
+      const emptyEl = document.getElementById('cvModalEmptyPlaceholder');
+      const iframeEl = document.getElementById('cvModalPdfFrame');
+      const btnOpen = document.getElementById('btnCvModalOpenTab');
+      const btnDownload = document.getElementById('btnCvModalDownloadPdf');
+
+      const hasFile = !!(landingCvFileData && (landingCvFileData.fileUrl || landingCvFileData.url));
+
+      if (hasFile) {
+        const fileUrl = landingCvFileData.fileUrl || landingCvFileData.url;
+        const fileName = landingCvFileData.fileName || 'CV-Muhammad-Fathur-Rohman.pdf';
+
+        if (badge) {
+          badge.textContent = 'PDF Terverifikasi';
+          badge.className = 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold';
+        }
+        if (subTitle) {
+          subTitle.textContent = fileName + ' · Muhammad Fathur Rohman, S.Kom';
+        }
+
+        if (iframeEl) {
+          const viewableUrl = getSafeLandingCvViewUrl(fileUrl);
+          if (iframeEl.src !== viewableUrl) {
+            iframeEl.src = viewableUrl;
+          }
+          iframeEl.classList.remove('hidden');
+        }
+        if (emptyEl) emptyEl.classList.add('hidden');
+
+        if (btnOpen) btnOpen.classList.remove('opacity-50', 'pointer-events-none');
+        if (btnDownload) btnDownload.classList.remove('opacity-50', 'pointer-events-none');
+      } else {
+        if (badge) {
+          badge.textContent = 'Menunggu Berkas';
+          badge.className = 'px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold';
+        }
+        if (subTitle) {
+          subTitle.textContent = 'Muhammad Fathur Rohman, S.Kom · Siap Bekerja & Kolaborasi Bisnis';
+        }
+
+        if (iframeEl) {
+          iframeEl.src = '';
+          iframeEl.classList.add('hidden');
+        }
+        if (emptyEl) emptyEl.classList.remove('hidden');
+      }
+    }
+
+    function openCvPreviewModal() {
+      const modal = document.getElementById('cvPreviewModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      renderLandingCvModalDom();
+    }
+
+    function handleCvDownloadClick() {
+      openCvPreviewModal();
+    }
+
+    function closeCvPreviewModal() {
+      const modal = document.getElementById('cvPreviewModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function openLandingCvInNewTab() {
+      const fileUrl = landingCvFileData && (landingCvFileData.fileUrl || landingCvFileData.url);
+      if (!fileUrl) {
+        alert('Berkas PDF belum tersedia.');
+        return;
+      }
+      const safeUrl = getSafeLandingCvViewUrl(fileUrl);
+      window.open(safeUrl, '_blank');
+    }
+
+    function downloadUploadedCvPdf() {
+      const fileUrl = landingCvFileData && (landingCvFileData.fileUrl || landingCvFileData.url);
+      if (!fileUrl) {
+        alert('Berkas PDF belum tersedia untuk diunduh.');
+        return;
+      }
+      const safeUrl = getSafeLandingCvViewUrl(fileUrl);
+      const a = document.createElement('a');
+      a.href = safeUrl;
+      a.download = (landingCvFileData && landingCvFileData.fileName) || 'CV-Muhammad-Fathur-Rohman.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
 
     /* =================================================================== */
     /* HIDDEN ADMIN CMS STUDIO & FULL CRUD OPERATIONS                      */
