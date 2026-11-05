@@ -3501,58 +3501,6 @@ create policy "Public Access" on portfolio_store for all using (true) with check
     ];
     const DEFAULT_MEDSOS_ACCOUNTS = [
       {
-        id: 'masjid_mbm',
-        name: 'Masjid MBM UNIMMA',
-        handle: 'masjid.mbm',
-        url: 'https://www.instagram.com/masjid.mbm',
-        role: 'Media Informasi, Konten Dakwah & Dokumentasi',
-        badgeColor: '#0F766E',
-        badgeText: 'MBM',
-        sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
-        designs: [
-          { id: 'mbm_d1', title: 'Kajian Rutin Spesial Pemuda', subtitle: 'Flyer Digital & Feed Instagram', bg: '#0F766E', img: '' },
-          { id: 'mbm_d2', title: 'Semarak Ramadhan Berkah', subtitle: 'Poster Agenda & Jadwal Imsakiyah', bg: '#1E3A8A', img: '' },
-          { id: 'mbm_d3', title: 'Jumat Berkah Berbagi', subtitle: 'Dokumentasi & Ajakan Donasi', bg: '#047857', img: '' },
-          { id: 'mbm_d4', title: 'Kutipan Motivasi & Hadits', subtitle: 'Konten Edukasi Spiritual MBM', bg: '#B45309', img: '' },
-          { id: 'mbm_d5', title: 'Peringatan Hari Besar Islam', subtitle: 'Materi Publikasi & Ucapan Resmi', bg: '#155293', img: '' },
-          { id: 'mbm_d6', title: 'Layanan Sosial & Posko Umat', subtitle: 'Infografis Program Masjid', bg: '#4338CA', img: '' }
-        ],
-        videos: [
-          { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '' },
-          { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '' },
-          { id: 'mbm_v3', title: 'Reels Ajakan Sholat Berjamaah & Bersih Masjid', ratio: '9/16', duration: '0:30', videoUrl: '' },
-          { id: 'mbm_v4', title: 'Dokumentasi Kegiatan Sosial & Buka Bersama Akbar', ratio: '16/9', duration: '1:30', videoUrl: '' },
-          { id: 'mbm_v5', title: 'Kajian Tematik Ramadhan Bersama Ustadz Tamu', ratio: '16/9', duration: '2:45', videoUrl: '' },
-          { id: 'mbm_v6', title: 'Profil Masjid MBM UNIMMA & Layanan Umat Digital', ratio: '16/9', duration: '1:50', videoUrl: '' }
-        ]
-      },
-      {
-        id: 'mgbookparty',
-        name: 'Magelang Book Party',
-        handle: 'mgbookparty',
-        url: 'https://www.instagram.com/mgbookparty',
-        role: 'Komunitas Literasi & Ruang Baca Publik',
-        badgeColor: '#B45309',
-        badgeText: 'MBP',
-        sectionTitle: 'Branding & Konten Literasi — Magelang Book Party',
-        designs: [
-          { id: 'mbp_d1', title: 'Piknik Baca Buku Mingguan di Taman', subtitle: 'Poster Utama Kegiatan Komunitas', bg: '#B45309', img: '' },
-          { id: 'mbp_d2', title: 'Bedah Karya & Diskusi Terbuka', subtitle: 'Feed Publikasi Sesi Diskusi', bg: '#0F766E', img: '' },
-          { id: 'mbp_d3', title: 'Rekomendasi Buku Akhir Pekan', subtitle: 'Carousel Ulasan & Rating Buku', bg: '#1E3A8A', img: '' },
-          { id: 'mbp_d4', title: 'Open Donasi Buku Literasi Anak', subtitle: 'Kampanye Sosial Pengumpulan Buku', bg: '#C62828', img: '' },
-          { id: 'mbp_d5', title: 'Meetup Literasi Magelang Nyeni', subtitle: 'Poster Kolaborasi Kreatif', bg: '#4338CA', img: '' },
-          { id: 'mbp_d6', title: 'Quote Inspiratif Literasi & Penulis', subtitle: 'Micro-Content Visual Instagram', bg: '#1F2937', img: '' }
-        ],
-        videos: [
-          { id: 'mbp_v1', title: 'Reels Suasana Piknik Baca Bareng di Taman Kota', ratio: '9/16', duration: '0:38', videoUrl: '' },
-          { id: 'mbp_v2', title: 'Review Singkat Buku Favorit Member Komunitas', ratio: '9/16', duration: '0:50', videoUrl: '' },
-          { id: 'mbp_v3', title: 'Vlog Seru Meetup Komunitas & Tukar Buku Literasi', ratio: '9/16', duration: '0:45', videoUrl: '' },
-          { id: 'mbp_v4', title: 'Aftermovie 1st Anniversary Magelang Book Party', ratio: '16/9', duration: '1:15', videoUrl: '' },
-          { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '' },
-          { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '' }
-        ]
-      },
-      {
         id: 'haltea',
         name: 'Haltea Teh Halte Indonesia',
         handle: 'halteaindonesia',
@@ -3560,6 +3508,7 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         role: 'Branding, Desain Feed & Video Reels',
         badgeColor: '#C62828',
         badgeText: 'HLT',
+        logoImg: 'assets/haltea/haltea-badge.png',
         phoneScreenImg: 'assets/haltea/phone-screen-clean.png',
         sectionTitle: 'Muhammad Fathur Rohman - Design Portofolio',
         designs: [
@@ -3571,12 +3520,68 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           { id: 'd6', title: 'Coffee Latte Haltea', subtitle: 'Poster Kopi Susu Haltea', bg: '#451A03', img: 'assets/haltea/poster-coffee-latte.png' }
         ],
         videos: [
-          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '' },
-          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '' },
-          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '' },
-          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '' },
-          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '' },
-          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '' }
+          { id: 'v1', title: 'Haltea Telah Hadir di Magelang - Grand Opening Reel', ratio: '9/16', duration: '0:42', videoUrl: '', thumbnail: '' },
+          { id: 'v2', title: 'Sensasi Rasa Baru - Creamy Tiramisu 10k', ratio: '9/16', duration: '0:35', videoUrl: '', thumbnail: '' },
+          { id: 'v3', title: 'Behind The Scenes Racikan Kopi & Tea Series Haltea', ratio: '9/16', duration: '0:48', videoUrl: '', thumbnail: '' },
+          { id: 'v4', title: 'Profil Bisnis & Suasana Kedai Haltea Magelang', ratio: '16/9', duration: '1:30', videoUrl: '', thumbnail: '' },
+          { id: 'v5', title: 'Apa Kata Pelanggan: Liputan Kepuasan Pengunjung Kedai', ratio: '16/9', duration: '1:15', videoUrl: '', thumbnail: '' },
+          { id: 'v6', title: 'Dokumentasi Promo Seru Bundling 20k Haltea', ratio: '16/9', duration: '1:45', videoUrl: '', thumbnail: '' }
+        ]
+      },
+      {
+        id: 'masjid_mbm',
+        name: 'Masjid MBM UNIMMA',
+        handle: 'masjid.mbm',
+        url: 'https://www.instagram.com/masjid.mbm',
+        role: 'Media Informasi, Konten Dakwah & Dokumentasi',
+        badgeColor: '#0F766E',
+        badgeText: 'MBM',
+        logoImg: '',
+        phoneScreenImg: 'assets/mbm/phone-screen-mbm.svg',
+        sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
+        designs: [
+          { id: 'mbm_d1', title: 'Kajian Rutin Spesial Pemuda', subtitle: 'Flyer Digital & Feed Instagram', bg: '#0F766E', img: 'assets/mbm/poster-kajian-rutin.svg' },
+          { id: 'mbm_d2', title: 'Semarak Ramadhan Berkah', subtitle: 'Poster Agenda & Jadwal Imsakiyah', bg: '#1E3A8A', img: 'assets/mbm/poster-semarak-ramadhan.svg' },
+          { id: 'mbm_d3', title: 'Jumat Berkah Berbagi', subtitle: 'Dokumentasi & Ajakan Donasi', bg: '#047857', img: 'assets/mbm/poster-jumat-berkah.svg' },
+          { id: 'mbm_d4', title: 'Kutipan Motivasi & Hadits', subtitle: 'Konten Edukasi Spiritual MBM', bg: '#B45309', img: 'assets/mbm/poster-hadits-motivasi.svg' },
+          { id: 'mbm_d5', title: 'Peringatan Hari Besar Islam', subtitle: 'Materi Publikasi & Ucapan Resmi', bg: '#155293', img: 'assets/mbm/poster-peringatan-phbi.svg' },
+          { id: 'mbm_d6', title: 'Layanan Sosial & Posko Umat', subtitle: 'Infografis Program Masjid', bg: '#4338CA', img: 'assets/mbm/poster-posko-umat.svg' }
+        ],
+        videos: [
+          { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '', thumbnail: 'assets/mbm/reel-aftermovie-pengajian.svg' },
+          { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v3', title: 'Reels Ajakan Sholat Berjamaah & Bersih Masjid', ratio: '9/16', duration: '0:30', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v4', title: 'Dokumentasi Kegiatan Sosial & Buka Bersama Akbar', ratio: '16/9', duration: '1:30', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v5', title: 'Kajian Tematik Ramadhan Bersama Ustadz Tamu', ratio: '16/9', duration: '2:45', videoUrl: '', thumbnail: '' },
+          { id: 'mbm_v6', title: 'Profil Masjid MBM UNIMMA & Layanan Umat Digital', ratio: '16/9', duration: '1:50', videoUrl: '', thumbnail: '' }
+        ]
+      },
+      {
+        id: 'mgbookparty',
+        name: 'Magelang Book Party',
+        handle: 'mgbookparty',
+        url: 'https://www.instagram.com/mgbookparty',
+        role: 'Komunitas Literasi & Ruang Baca Publik',
+        badgeColor: '#B45309',
+        badgeText: 'MBP',
+        logoImg: '',
+        phoneScreenImg: 'assets/bookparty/phone-screen-bookparty.svg',
+        sectionTitle: 'Branding & Konten Literasi — Magelang Book Party',
+        designs: [
+          { id: 'mbp_d1', title: 'Piknik Baca Buku Mingguan di Taman', subtitle: 'Poster Utama Kegiatan Komunitas', bg: '#B45309', img: 'assets/bookparty/poster-piknik-baca.svg' },
+          { id: 'mbp_d2', title: 'Bedah Karya & Diskusi Terbuka', subtitle: 'Feed Publikasi Sesi Diskusi', bg: '#0F766E', img: 'assets/bookparty/poster-bedah-karya.svg' },
+          { id: 'mbp_d3', title: 'Rekomendasi Buku Akhir Pekan', subtitle: 'Carousel Ulasan & Rating Buku', bg: '#1E3A8A', img: 'assets/bookparty/poster-rekomendasi-buku.svg' },
+          { id: 'mbp_d4', title: 'Open Donasi Buku Literasi Anak', subtitle: 'Kampanye Sosial Pengumpulan Buku', bg: '#C62828', img: 'assets/bookparty/poster-donasi-literasi.svg' },
+          { id: 'mbp_d5', title: 'Meetup Literasi Magelang Nyeni', subtitle: 'Poster Kolaborasi Kreatif', bg: '#4338CA', img: 'assets/bookparty/poster-meetup-kreatif.svg' },
+          { id: 'mbp_d6', title: 'Quote Inspiratif Literasi & Penulis', subtitle: 'Micro-Content Visual Instagram', bg: '#1F2937', img: 'assets/bookparty/poster-quote-penulis.svg' }
+        ],
+        videos: [
+          { id: 'mbp_v1', title: 'Reels Suasana Piknik Baca Bareng di Taman Kota', ratio: '9/16', duration: '0:38', videoUrl: '', thumbnail: 'assets/bookparty/reel-piknik-baca.svg' },
+          { id: 'mbp_v2', title: 'Review Singkat Buku Favorit Member Komunitas', ratio: '9/16', duration: '0:50', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v3', title: 'Vlog Seru Meetup Komunitas & Tukar Buku Literasi', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v4', title: 'Aftermovie 1st Anniversary Magelang Book Party', ratio: '16/9', duration: '1:15', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v5', title: 'Dokumentasi Diskusi Literasi & Bedah Karya Penulis', ratio: '16/9', duration: '2:10', videoUrl: '', thumbnail: '' },
+          { id: 'mbp_v6', title: 'Liputan Khusus: Membangun Budaya Literasi Anak Muda', ratio: '16/9', duration: '1:40', videoUrl: '', thumbnail: '' }
         ]
       }
     ];

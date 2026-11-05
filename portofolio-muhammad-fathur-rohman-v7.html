@@ -5179,6 +5179,28 @@
       });
     }
 
+    /* Video Source Parser (YouTube & Direct HTML5 / CDN / Storage) */
+    function parseVideoSource(url) {
+      if (!url || typeof url !== 'string') return { type: 'empty', src: '' };
+      url = url.trim();
+
+      // YouTube detection (youtube.com/watch, youtu.be, shorts, embed)
+      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/|live\/))([\w-]{11})/i);
+      if (ytMatch && ytMatch[1]) {
+        return {
+          type: 'youtube',
+          id: ytMatch[1],
+          embedUrl: 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1&rel=0'
+        };
+      }
+
+      // Direct video file (Supabase Storage .mp4, CDN, Blob, Data URL)
+      return {
+        type: 'html5',
+        src: url
+      };
+    }
+
     /* Build Clean Instagram-Style Video Card (Matching Design Posts) */
     function buildVideoCard(v, idx, isReel, accHandle, accObj) {
       const aspectClass = isReel ? 'aspect-[9/16]' : 'aspect-[16/9]';
@@ -5240,11 +5262,62 @@
       `;
     }
 
+    function openVideoModal(title, ratio, duration, videoUrl) {
+      const modal = document.getElementById('videoModal');
+      if (!modal) return;
+      const titleEl = document.getElementById('videoModalTitle');
+      const ratioEl = document.getElementById('videoModalRatioBadge');
+      const durEl = document.getElementById('videoModalDuration');
+      if (titleEl) titleEl.textContent = title || 'Pratinjau Video';
+      if (ratioEl) ratioEl.textContent = ratio || '9:16';
+      if (durEl) durEl.textContent = 'Durasi: ' + (duration || '0:45');
+      
+      const container = document.getElementById('videoModalPlayerContainer');
+      const parsed = parseVideoSource(videoUrl);
+      const isReel = (ratio || '').includes('9/16') || ratio === '9:16';
+      const aspectStyle = isReel ? 'aspect-[9/16] max-h-[75vh] w-auto' : 'aspect-[16/9] w-full max-w-2xl';
+
+      if (container) {
+        if (parsed.type === 'youtube') {
+          container.innerHTML = '<div class="' + aspectStyle + ' mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800">' +
+            '<iframe src="' + parsed.embedUrl + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full border-none"></iframe>' +
+          '</div>';
+        } else if (parsed.type === 'html5' && parsed.src) {
+          container.innerHTML = '<div class="' + aspectStyle + ' mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black border border-stone-800 flex items-center justify-center">' +
+            '<video src="' + parsed.src + '" controls autoplay playsinline class="w-full h-full object-contain"></video>' +
+          '</div>';
+        } else {
+          container.innerHTML = '<div class="text-center p-8 max-w-md">' +
+            '<div class="w-16 h-16 rounded-full bg-sky-500 text-white flex items-center justify-center mx-auto mb-3 text-xl shadow-[0_0_25px_rgba(14,165,233,0.6)] ring-6 ring-white/10 animate-pulse">▶</div>' +
+            '<h5 class="text-base font-bold text-white mb-1.5">' + (title || 'Video Portofolio') + '</h5>' +
+            '<p class="text-xs text-stone-400 mb-3">Format Rasio: ' + (ratio || '9:16') + ' · Durasi: ' + (duration || '0:45') + '</p>' +
+            '<span class="inline-block px-3 py-1 rounded-full bg-white/10 text-stone-300 font-mono text-[11px]">Video dokumentasi & reels produksi portofolio</span>' +
+          '</div>';
+        }
+      }
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById('videoModal');
+      if (!modal) return;
+      const container = document.getElementById('videoModalPlayerContainer');
+      if (container) {
+        const vid = container.querySelector('video');
+        if (vid) vid.pause();
+        container.innerHTML = '';
+      }
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
     /* =================================================================== */
     /* CONTENT RENDERING: MULTI-ACCOUNT SOSMED SHOWCASE                    */
     /* =================================================================== */
     function renderMedsosSections() {
       const acc = getActiveMedsosAccount();
+      const defaultAcc = defaultMedsosAccounts.find(a => a.id === acc.id) || defaultMedsosAccounts[0];
 
       // 1. Update Section 04 Subheader & Phone Screen for Active Account
       const titleEl = document.getElementById('section04TitleDisplay');
@@ -5277,7 +5350,7 @@
       // Update Phone Screen Image
       const phoneImg = document.getElementById('phoneScreenImage');
       if (phoneImg) {
-        phoneImg.src = acc.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
+        phoneImg.src = acc.phoneScreenImg || defaultAcc.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
       }
 
       const screenLabel = document.getElementById('phoneScreenLabel');
@@ -5285,25 +5358,30 @@
         screenLabel.textContent = 'Layar: @' + acc.handle;
       }
 
-      // 2. Render 6 Desain Grafis Cards on Left Column
+      // 2. Render 6 Desain Grafis Cards on Left Column (Guaranteed Fallback to Default)
       const featuredDesignGrid = document.getElementById('featuredDesignGrid');
       if (featuredDesignGrid) {
-        const top6Designs = (acc.designs || []).slice(0, 6);
+        const rawDesigns = (acc.designs && acc.designs.length > 0) ? acc.designs : defaultAcc.designs;
+        const top6Designs = rawDesigns.slice(0, 6);
+
         featuredDesignGrid.innerHTML = top6Designs.map((d, idx) => {
           const src = getDesignPosterUrl(d, acc, idx);
           const numStr = '#0' + (idx + 1);
+          const safeTitle = (d.title || ('Karya ' + numStr)).replace(/'/g, "\\'");
+          const safeSubtitle = (d.subtitle || 'Desain Grafis').replace(/'/g, "\\'");
+
           return `
-            <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${d.title.replace(/'/g, "\\'")}', 'Desain Grafis (@${acc.handle})', '${(d.subtitle || '').replace(/'/g, "\\'")}', '${src}')">
+            <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${safeTitle}', 'Desain Grafis (@${acc.handle})', '${safeSubtitle}', '${src}')">
               <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
-                <img src="${src}" alt="${d.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                <img src="${src}" alt="${safeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                 <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">KARYA ${numStr}</span>
               </div>
               <div class="p-3 bg-white">
                 <span class="text-[10px] font-mono uppercase text-crimson font-extrabold block">🎨 Desain Grafis</span>
-                <h4 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${d.title}">${d.title}</h4>
-                <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
+                <h4 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${safeTitle}">${d.title || ('Karya ' + numStr)}</h4>
+                <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle || 'Desain Grafis'}</p>
                 <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
-                  <button onclick="event.stopPropagation(); setPhoneScreen('${src}', '${d.title.replace(/'/g, "\\'")}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
+                  <button onclick="event.stopPropagation(); setPhoneScreen('${src}', '${safeTitle}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
                     <span>📲 Ke Layar HP</span>
                   </button>
                   <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
@@ -5316,10 +5394,10 @@
         featuredDesignGrid.querySelectorAll('.container-tilt-3d').forEach(attach3DCursorTilt);
       }
 
-      // 3. Render 3 Video Reels (9:16) & 3 Video Lanskap (16:9) on Landing Section
+      // 3. Render 3 Video Reels (9:16) & 3 Video Lanskap (16:9) on Landing Section (Guaranteed Fallback)
       const reelsGrid = document.getElementById('featuredReelsGrid');
       const landscapeGrid = document.getElementById('featuredLandscapeGrid');
-      const allVideos = acc.videos || [];
+      const allVideos = (acc.videos && acc.videos.length > 0) ? acc.videos : defaultAcc.videos;
 
       // Filter 9:16 (reels) and 16:9 (landscape)
       const reelsList = allVideos.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
@@ -5349,74 +5427,77 @@
       const allMedsosContainer = document.getElementById('allMedsosListContainer');
       if (allMedsosContainer) {
         const orderPriority = { masjid_mbm: 1, mgbookparty: 2, haltea: 3 };
-        const sortedAccounts = [...cmsData.accounts].sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
+        const rawAccounts = (cmsData.accounts && cmsData.accounts.length > 0) ? cmsData.accounts : defaultMedsosAccounts;
+        const sortedAccounts = [...rawAccounts].sort((a, b) => (orderPriority[a.id] || 99) - (orderPriority[b.id] || 99));
 
         allMedsosContainer.innerHTML = sortedAccounts.map((account) => {
-          const accVids = account.videos || [];
-          const accReels = accVids.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16');
-          const accLandscape = accVids.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9');
-          const phoneSrc = account.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
+          const defAccount = defaultMedsosAccounts.find(a => a.id === account.id) || account;
+          const accDesigns = (account.designs && account.designs.length > 0) ? account.designs : defAccount.designs;
+          const accVids = (account.videos && account.videos.length > 0) ? account.videos : defAccount.videos;
+
+          const accReels = accVids.filter(v => (v.ratio || '9/16').includes('9/16') || v.ratio === '9:16').slice(0, 3);
+          const accLandscape = accVids.filter(v => (v.ratio || '').includes('16/9') || v.ratio === '16:9').slice(0, 3);
+
+          const phoneSrc = account.phoneScreenImg || defAccount.phoneScreenImg || 'assets/haltea/phone-screen-clean.png';
 
           return `
-            <div class="bg-white p-6 sm:p-9 rounded-[32px] sm:rounded-[40px] border-2 border-stone-200/90 shadow-xl space-y-8 overflow-hidden">
-              
-              <!-- TOP ACCOUNT HEADER -->
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-extrabold text-base shadow-md shrink-0" style="background-color: ${account.badgeColor || '#0F766E'};">
-                    ${account.badgeText || account.handle.substring(0, 3).toUpperCase()}
+            <div class="bg-white rounded-3xl border-2 border-stone-200 shadow-xl overflow-hidden p-6 sm:p-8 space-y-8">
+              <!-- Account Header Banner -->
+              <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-stone-200">
+                <div class="flex items-center gap-4">
+                  <div class="w-14 h-14 rounded-2xl flex items-center justify-center font-display font-black text-white text-xl shadow-md border-2 border-white overflow-hidden shrink-0" style="background-color: ${account.badgeColor || '#155293'}">
+                    ${account.logoImg ? `<img src="${account.logoImg}" alt="${account.name}" class="w-full h-full object-cover" />` : (account.badgeText || account.handle.substring(0, 3).toUpperCase())}
                   </div>
                   <div>
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs font-mono uppercase tracking-wider text-crimson font-extrabold">@${account.handle}</span>
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                      <span class="text-[11px] font-mono text-stone-500">Official Managed Account</span>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <h3 class="font-display font-extrabold text-xl sm:text-2xl text-ink">${account.name}</h3>
+                      <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold text-white shadow-xs" style="background-color: ${account.badgeColor || '#155293'}">
+                        @${account.handle}
+                      </span>
                     </div>
-                    <h3 class="font-display font-extrabold text-2xl text-ink tracking-tight">${account.name}</h3>
-                    <p class="text-xs font-semibold text-stone-600 mt-0.5">${account.role || 'Media Informasi & Publikasi Kreatif'}</p>
+                    <p class="text-xs sm:text-sm text-stone-500 mt-1 font-medium">${account.role || 'Manajemen Media Sosial & Konten'}</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-2.5 flex-wrap">
-                  <button onclick="selectMedsosAccount('${account.id}'); switchPageView('mainLandingView'); window.location.hash='#kelola-medsos';" class="px-4 py-2.5 rounded-xl bg-ink text-white hover:bg-crimson text-xs font-extrabold transition shadow-sm flex items-center gap-1.5 cursor-pointer">
-                    <span>Tampilkan di Landing Page</span>
-                    <span>↗</span>
-                  </button>
-                  <a href="${account.url || ('https://www.instagram.com/' + account.handle)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl border border-stone-300 hover:border-ink hover:text-ink text-xs font-bold text-stone-700 transition flex items-center gap-1.5">
-                    <span>Buka Instagram</span>
-                    <span>↗</span>
+
+                <div class="flex items-center gap-3">
+                  <a href="${account.url || ('https://www.instagram.com/' + account.handle)}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 hover:opacity-95 text-white font-bold text-xs shadow-sm hover:shadow flex items-center gap-1.5 transition">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <span>Buka Instagram ↗</span>
                   </a>
                 </div>
               </div>
 
-              <!-- MAIN SHOWCASE CONTAINER (MATCHING REFERENCE IMAGE): KIRI DESAIN, KANAN HP MOCKUP 3D -->
-              <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+              <!-- Top Row: Left 6 Design Posters & Right Vertical Phone Mockup (Matching User Reference) -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
                 
-                <!-- SISI KIRI (lg:col-span-8): GRID 6 KARYA DESAIN GRAFIS -->
-                <div class="lg:col-span-8 space-y-3">
+                <!-- Left 8 Cols: 6 Graphic Design Grid -->
+                <div class="lg:col-span-8 space-y-4">
                   <div class="flex items-center justify-between">
-                    <h4 class="font-display font-extrabold text-sm uppercase tracking-wider text-stone-800 flex items-center gap-2">
-                      <span>🎨</span> <span>Koleksi Desain Grafis (${(account.designs || []).length} Karya)</span>
-                    </h4>
-                    <span class="text-[11px] font-mono text-stone-500 font-bold">Grid Feed &amp; Poster</span>
+                    <div class="flex items-center gap-2">
+                      <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${account.badgeColor || '#155293'}"></span>
+                      <h4 class="font-display font-extrabold text-sm sm:text-base text-ink">🎨 Koleksi Desain Grafis (${accDesigns.length} Karya)</h4>
+                    </div>
+                    <span class="text-[11px] font-mono text-stone-500">Klik untuk Pratinjau / Ke HP</span>
                   </div>
-                  
-                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
-                    ${(account.designs || []).slice(0, 6).map((d, i) => {
-                      const s = getDesignPosterUrl(d, account, i);
-                      const numStr = '#0' + (i + 1);
+
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                    ${accDesigns.slice(0, 6).map((d, dIdx) => {
+                      const s = getDesignPosterUrl(d, account, dIdx);
+                      const safeDTitle = (d.title || ('Karya #' + (dIdx + 1))).replace(/'/g, "\\'");
+                      const safeDSubtitle = (d.subtitle || 'Desain Grafis').replace(/'/g, "\\'");
+
                       return `
-                        <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${d.title.replace(/'/g, "\\'")}', 'Desain Grafis (@${account.handle})', '${(d.subtitle || '').replace(/'/g, "\\'")}', '${s}')">
+                        <div class="container-tilt-3d bg-white rounded-2xl border-2 border-stone-200 shadow-sm overflow-hidden flex flex-col justify-between group cursor-pointer" onclick="openLightbox('${safeDTitle}', 'Desain Grafis (@${account.handle})', '${safeDSubtitle}', '${s}')">
                           <div class="aspect-[4/5] w-full bg-stone-900 overflow-hidden relative">
-                            <img src="${s}" alt="${d.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                            <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">${numStr}</span>
+                            <img src="${s}" alt="${safeDTitle}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                            <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9px] font-bold">#0${dIdx + 1}</span>
                           </div>
                           <div class="p-3 bg-white">
-                            <span class="text-[10px] font-mono uppercase text-crimson font-extrabold block">🎨 Desain Feed</span>
-                            <h5 class="font-display font-extrabold text-xs text-ink truncate mt-0.5" title="${d.title}">${d.title}</h5>
+                            <h5 class="font-display font-extrabold text-xs text-ink truncate" title="${safeDTitle}">${d.title}</h5>
                             <p class="text-[11px] text-stone-500 truncate mt-0.5">${d.subtitle}</p>
-                            <div class="mt-2.5 pt-2 border-t border-stone-100 flex items-center justify-between">
-                              <button onclick="event.stopPropagation(); setAllMedsosPhoneScreen('${account.id}', '${s}', '${d.title.replace(/'/g, "\\'")}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
-                                <span>📲 Ke Layar HP</span>
+                            <div class="mt-2 pt-2 border-t border-stone-100 flex items-center justify-between">
+                              <button onclick="event.stopPropagation(); setAllMedsosPhoneScreen('${account.id}', '${s}', '${safeDTitle}')" class="text-[10px] font-mono font-bold text-[#155293] hover:text-crimson flex items-center gap-1 cursor-pointer" title="Tampilkan pada Layar Smartphone">
+                                <span>📲 Layar HP</span>
                               </button>
                               <span class="text-[10px] text-stone-400 font-mono">Zoom ↗</span>
                             </div>
@@ -5427,37 +5508,38 @@
                   </div>
                 </div>
 
-                <!-- SISI KANAN (lg:col-span-4): PHOTOREALISTIC 3D SMARTPHONE MOCKUP -->
+                <!-- Right 4 Cols: 3D Smartphone Realistic Mockup for this Account -->
                 <div class="lg:col-span-4 flex flex-col items-center justify-center">
-                  <div class="relative w-full max-w-[280px] sm:max-w-[300px] mx-auto">
-                    
-                    <!-- Hardware Frame -->
-                    <div class="relative rounded-[44px] bg-gradient-to-b from-stone-900 via-stone-950 to-black p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12),inset_0_1px_2px_rgba(255,255,255,0.3)] border border-stone-800">
-                      
-                      <!-- Side Buttons -->
+                  <div class="relative w-full max-w-[280px] sm:max-w-[310px] mx-auto">
+                    <div class="relative rounded-[44px] sm:rounded-[48px] bg-gradient-to-b from-stone-900 via-stone-950 to-black p-3 sm:p-3.5 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12),inset_0_1px_2px_rgba(255,255,255,0.3)] border border-stone-800">
+                      <!-- Hardware Side Buttons -->
                       <div class="absolute -left-[3px] top-24 w-[3px] h-9 bg-stone-700 rounded-l-sm"></div>
                       <div class="absolute -left-[3px] top-36 w-[3px] h-9 bg-stone-700 rounded-l-sm"></div>
-                      <div class="absolute -right-[3px] top-28 w-[3px] h-14 bg-stone-700 rounded-r-sm"></div>
+                      <div class="absolute -right-[3px] top-28 w-[3px] h-12 bg-stone-700 rounded-r-sm"></div>
 
-                      <!-- Top Dynamic Island -->
-                      <div class="w-20 h-4 bg-black rounded-full mx-auto mb-2 flex items-center justify-center border border-white/5">
-                        <div class="w-2.5 h-2.5 rounded-full bg-[#0a1128] border border-white/10 mr-1.5"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-[#1e293b]"></div>
+                      <!-- Outer Screen Bezel -->
+                      <div class="relative rounded-[36px] sm:rounded-[40px] overflow-hidden bg-black aspect-[9/19.5] w-full border-[3px] border-stone-950 shadow-inner">
+                        <!-- Dynamic Island Pill -->
+                        <div class="absolute top-2.5 left-1/2 -translate-x-1/2 z-30 w-24 h-5 bg-black rounded-full flex items-center justify-end pr-2.5 gap-1.5 shadow-sm border border-stone-850">
+                          <span class="w-2.5 h-2.5 rounded-full bg-stone-900 border border-stone-800 flex items-center justify-center">
+                            <span class="w-1 h-1 rounded-full bg-blue-950/80"></span>
+                          </span>
+                        </div>
+
+                        <!-- Phone Content Image -->
+                        <div class="w-full h-full relative overflow-hidden bg-stone-950 flex items-start justify-start">
+                          <img id="allMedsosPhoneImg_${account.id}" src="${phoneSrc}" alt="Layar Instagram @${account.handle}" class="w-full h-full object-cover object-top select-none transition-all duration-300" />
+                          <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-40"></div>
+                        </div>
+
+                        <!-- Bottom Home Indicator Bar -->
+                        <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 z-30 w-28 h-1 bg-white/70 rounded-full pointer-events-none"></div>
                       </div>
-
-                      <!-- Display Screen -->
-                      <div class="relative w-full aspect-[9/18.5] bg-black rounded-[32px] overflow-hidden shadow-inner flex flex-col justify-start">
-                        <img id="allMedsosPhoneImg_${account.id}" src="${phoneSrc}" alt="Layar Instagram @${account.handle}" class="w-full h-full object-cover object-top select-none transition-all duration-300" />
-                        <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12]"></div>
-                      </div>
-
-                      <!-- Home Indicator -->
-                      <div class="w-28 h-1 bg-white/40 rounded-full mx-auto mt-2"></div>
                     </div>
 
-                    <!-- Screen Controls & Label -->
-                    <div class="mt-3 flex items-center justify-between px-2 text-xs">
-                      <div class="flex items-center gap-1.5 min-w-0">
+                    <!-- Screen Status Pill & Reset Button -->
+                    <div class="mt-3 flex items-center justify-between gap-2 px-1">
+                      <div class="flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
                         <span id="allMedsosPhoneLabel_${account.id}" class="font-mono text-[11px] font-bold text-stone-600 truncate">Layar: @${account.handle}</span>
                       </div>
@@ -5465,42 +5547,45 @@
                         Reset IG
                       </button>
                     </div>
-
                   </div>
                 </div>
 
               </div>
 
-              <!-- BAGIAN BAWAH: KONTEN VIDEO EDITING (REELS 9:16 & LANSKAP 16:9) -->
+              <!-- Bottom Row: Video Content (Reels 9:16 & Lanskap 16:9) -->
               <div class="pt-6 border-t border-stone-200 space-y-6">
-                <!-- Baris 1: Video Reels (9:16) -->
+                <!-- Sub-row: Reels 9:16 -->
                 <div class="space-y-3">
                   <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                      <span class="px-2.5 py-1 rounded-lg bg-crimson text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● REELS (9:16)</span>
-                      <span class="text-xs font-bold text-stone-800">Video Reels Instagram 9:16 (${accReels.length} Video)</span>
+                      <span class="px-2 py-0.5 rounded bg-rose-600 text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                        🎬 Video Reels Instagram 9:16 (${accReels.length} Video)
+                      </span>
                     </div>
-                    <span class="text-[11px] font-mono text-stone-500">Vertikal 9:16</span>
+                    <span class="text-[11px] font-mono text-stone-500">Rasio 9:16</span>
                   </div>
-                  <div class="grid grid-cols-2 md:grid-cols-3 gap-3.5 items-stretch">
-                    ${accReels.map((v, i) => buildVideoCard(v, i, true, account.handle, account)).join('')}
+
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                    ${accReels.map((v, vIdx) => buildVideoCard(v, vIdx, true, account.handle, account)).join('')}
                   </div>
                 </div>
 
-                <!-- Baris 2: Video Landscape (16:9) (jika ada) -->
+                <!-- Sub-row: Lanskap 16:9 -->
                 ${accLandscape.length > 0 ? `
-                <div class="pt-4 border-t border-stone-100 space-y-3">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <span class="px-2.5 py-1 rounded-lg bg-[#155293] text-white font-mono text-[10px] font-extrabold uppercase tracking-wider">● LANSKAP (16:9)</span>
-                      <span class="text-xs font-bold text-stone-800">Video Dokumentasi / Lanskap 16:9 (${accLandscape.length} Video)</span>
+                  <div class="space-y-3 pt-4 border-t border-stone-100">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-blue-700 text-white font-mono text-[10px] font-black uppercase tracking-wider">
+                          📹 Video Dokumentasi / Lanskap 16:9 (${accLandscape.length} Video)
+                        </span>
+                      </div>
+                      <span class="text-[11px] font-mono text-stone-500">Rasio 16:9</span>
                     </div>
-                    <span class="text-[11px] font-mono text-stone-500">Lanskap 16:9</span>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4.5">
+                      ${accLandscape.map((v, vIdx) => buildVideoCard(v, vIdx, false, account.handle, account)).join('')}
+                    </div>
                   </div>
-                  <div class="grid grid-cols-2 md:grid-cols-3 gap-3.5 items-stretch">
-                    ${accLandscape.map((v, i) => buildVideoCard(v, i, false, account.handle, account)).join('')}
-                  </div>
-                </div>
                 ` : ''}
               </div>
 
@@ -5515,14 +5600,11 @@
       const countBadge = document.getElementById('medsosCountBadge');
       if (countBadge) {
         const total = (acc.designs || []).length + (acc.videos || []).length;
-        countBadge.textContent = total + ' Karya';
+        countBadge.textContent = total + ' Karya Terpilih';
       }
-
-      // 6. Refresh Admin Medsos Tab Selects
-      renderAdminMedsosTab();
     }
 
-        /* =================================================================== */
+    /* =================================================================== */
     /* 22 SERTIFIKAT & PENGHARGAAN RESMI (SEMUA ASLI DARI ASSETS)         */
     /* =================================================================== */
     const defaultCertificatesData = [
@@ -6625,6 +6707,42 @@
     }
     /* =================================================================== */
     /* INTERACTIVE CV / RESUME (PDF) MODAL & VIEWER ENGINE                */
+    /* =================================================================== */
+    function loadLandingCvFile() {
+      // 1. Try localStorage
+      try {
+        const raw = localStorage.getItem('fathur_portfolio_cv_file');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && (parsed.fileUrl || parsed.url)) {
+            landingCvFileData = parsed;
+          }
+        }
+      } catch (e) {}
+
+      // 2. Try IndexedDB
+      if (window.indexedDB) {
+        try {
+          const req = window.indexedDB.open('FathurPortfolioDB', 1);
+          req.onsuccess = function(e) {
+            const db = e.target.result;
+            if (db && db.objectStoreNames.contains('portfolio_kv')) {
+              const tx = db.transaction('portfolio_kv', 'readonly');
+              const getReq = tx.objectStore('portfolio_kv').get('fathur_portfolio_cv_file');
+              getReq.onsuccess = function() {
+                if (getReq.result && (getReq.result.fileUrl || getReq.result.url)) {
+                  landingCvFileData = getReq.result;
+                  renderLandingCvModalDom();
+                }
+              };
+            }
+          };
+        } catch (eIdb) {}
+      }
+
+      renderLandingCvModalDom();
+    }
+
     /* =================================================================== */
     let landingCvFileData = null;
     let _landingCvActiveBlobUrl = null;
