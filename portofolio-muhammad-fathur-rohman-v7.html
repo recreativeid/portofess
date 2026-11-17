@@ -4,12 +4,23 @@
   <meta charset="UTF-8" />
   <meta id="portfolioViewportMeta" name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    /* PRE-RENDER VIEWPORT FOR MOBILE & MODERN SMARTPHONES */
+    /* PRE-RENDER VIEWPORT SCALING FOR MOBILE (ALWAYS PC DESKTOP VIEW 1:1) */
     (function() {
       try {
-        var meta = document.getElementById('portfolioViewportMeta');
-        if (meta) {
-          meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
+        localStorage.setItem('fathur_portfolio_view_mode', 'desktop');
+        var sw = window.screen.width;
+        var sh = window.screen.height;
+        var isMobile = (Math.min(sw, sh) < 1200) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        if (isMobile) {
+          var targetW = 1280;
+          var curW = (Math.abs(window.orientation || 0) === 90) ? Math.max(sw, sh) : Math.min(sw, sh);
+          if (!curW || curW > targetW || curW <= 0) curW = sw || 390;
+          var scale = Math.min(1, curW / targetW).toFixed(4);
+          var meta = document.getElementById('portfolioViewportMeta');
+          if (meta) {
+            meta.setAttribute('content', 'width=' + targetW + ', initial-scale=' + scale + ', minimum-scale=0.1, maximum-scale=3.0, user-scalable=yes');
+          }
+          document.documentElement.classList.add('mode-miniatur-pc');
         }
       } catch(e) {}
     })();
@@ -60,8 +71,9 @@
     body.miniatur-pc-active {
       min-width: 1280px !important;
       width: 1280px !important;
+      max-width: 1280px !important;
       margin: 0 auto !important;
-      overflow-x: auto !important;
+      overflow-x: hidden !important;
       -webkit-text-size-adjust: 100% !important;
       text-size-adjust: 100% !important;
     }
@@ -7124,18 +7136,31 @@
     }
 
     /* =================================================================== */
-    /* RESPONSIVE VIEWPORT ENGINE (CLEAN NATIVE MOBILE & DESKTOP)          */
+    /* DESKTOP 1:1 SCALING ENGINE FOR ALL SCREENS (INCLUDING MOBILE)       */
     /* =================================================================== */
-    let currentPortfolioViewMode = 'responsive';
+    let currentPortfolioViewMode = 'desktop';
 
     function applyPortfolioDesktopView() {
       const meta = document.getElementById('portfolioViewportMeta') || document.querySelector('meta[name="viewport"]');
       if (!meta) return;
       if (!meta.id) meta.id = 'portfolioViewportMeta';
 
-      document.documentElement.classList.remove('mode-miniatur-pc');
-      document.body.classList.remove('miniatur-pc-active');
-      meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
+      const targetW = 1280;
+      const sw = window.screen.width;
+      const sh = window.screen.height;
+      const isMobile = (Math.min(sw, sh) < 1200) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+      document.documentElement.classList.add('mode-miniatur-pc');
+      document.body.classList.add('miniatur-pc-active');
+
+      if (isMobile) {
+        let curW = (Math.abs(window.orientation || 0) === 90) ? Math.max(sw, sh) : Math.min(sw, sh);
+        if (!curW || curW > targetW || curW <= 0) curW = sw || 390;
+        const scale = Math.min(1, curW / targetW).toFixed(4);
+        meta.setAttribute('content', `width=${targetW}, initial-scale=${scale}, minimum-scale=0.1, maximum-scale=3.0, user-scalable=yes`);
+      } else {
+        meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
+      }
     }
 
     // Auto update scale on resize / orientation flip
