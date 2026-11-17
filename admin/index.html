@@ -3779,7 +3779,11 @@ create policy "Public Access" on portfolio_store for all using (true) with check
         logoImg: '',
         phoneScreenImg: 'assets/mbm/phone-screen-mbm.svg',
         sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
-        designs: [],
+        designs: [
+          { id: 'mbm_d1', title: 'Satu Doa Agar Tidak Salah Langkah', subtitle: 'Design flyer kajian', bg: '#451A03', img: 'assets/mbm/feed-satu-doa.png' },
+          { id: 'mbm_d2', title: 'Tak Merasa Aman dari siksaan', subtitle: 'Design flyer kajian', bg: '#1F2937', img: 'assets/mbm/feed-tak-merasa-aman.png' },
+          { id: 'mbm_d3', title: 'Terjadinya Kemaksiatan Pada Diri Seorang Hamba', subtitle: 'Design flyer kajian', bg: '#B45309', img: 'assets/mbm/feed-terjadinya-kemaksiatan.png' }
+        ],
         videos: [
           { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '', thumbnail: 'assets/mbm/reel-aftermovie-pengajian.svg' },
           { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
@@ -4258,6 +4262,10 @@ create policy "Public Access" on portfolio_store for all using (true) with check
           const existing = currentMedsosData.accounts.find(function(a) { return a.id === defAcc.id; });
           if (!existing) {
             currentMedsosData.accounts.push(JSON.parse(JSON.stringify(defAcc)));
+          } else if (existing.id === 'masjid_mbm') {
+            if (!Array.isArray(existing.designs) || existing.designs.length === 0) {
+              existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
+            }
           } else if (existing.id === 'haltea') {
             if (!Array.isArray(existing.designs) || existing.designs.length === 0) {
               existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));

@@ -4,23 +4,12 @@
   <meta charset="UTF-8" />
   <meta id="portfolioViewportMeta" name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    /* PRE-RENDER VIEWPORT SCALING FOR MOBILE (ALWAYS PC DESKTOP VIEW) */
+    /* PRE-RENDER VIEWPORT FOR MOBILE & MODERN SMARTPHONES */
     (function() {
       try {
-        localStorage.setItem('fathur_portfolio_view_mode', 'desktop');
-        var sw = window.screen.width;
-        var sh = window.screen.height;
-        var isMobile = (Math.min(sw, sh) < 1200) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-        if (isMobile) {
-          var targetW = 1280;
-          var curW = (Math.abs(window.orientation || 0) === 90) ? Math.max(sw, sh) : Math.min(sw, sh);
-          if (!curW || curW > targetW || curW <= 0) curW = sw || 390;
-          var scale = Math.min(1, curW / targetW).toFixed(4);
-          var meta = document.getElementById('portfolioViewportMeta');
-          if (meta) {
-            meta.setAttribute('content', 'width=' + targetW + ', initial-scale=' + scale + ', minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes');
-          }
-          document.documentElement.classList.add('mode-miniatur-pc');
+        var meta = document.getElementById('portfolioViewportMeta');
+        if (meta) {
+          meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
         }
       } catch(e) {}
     })();
@@ -33,6 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -387,6 +377,9 @@
     }
 
     /* Section 04 Dark Shell Header: All typography remains pure white */
+    #tabletDeviceCard {
+      background-color: #FFFFFF !important;
+    }
     body.blueprint-mode #tabletDeviceCard {
       background-color: #0F325E !important;
       border-color: rgba(255, 255, 255, 0.28) !important;
@@ -1538,7 +1531,7 @@
     
     <!-- Cinematic Fullscreen HD Backdrop Matching Gambar 2 Exactly (Zero Double Text) -->
     <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none flex items-center justify-center">
-      <img src="assets/portofolio-opening-curtain-hd.jpg" alt="Cinematic Portofolio Opening" class="w-full h-full object-cover cinematic-bg-motion cinematic-center-focus" />
+      <img src="assets/portofolio-opening-curtain-hd.jpg" alt="Cinematic Portofolio Opening" class="w-full h-full object-contain sm:object-cover cinematic-bg-motion cinematic-center-focus" />
       <div class="absolute inset-0 bg-radial-vignette pointer-events-none"></div>
       <div class="cinematic-shimmer"></div>
     </div>
@@ -2389,7 +2382,7 @@
     <div id="tabletScrollContainer" class="tablet-scroll-wrapper relative z-20 w-full overflow-visible pb-16 px-2 sm:px-6 lg:px-8 -mt-2 sm:-mt-4" style="perspective: 1200px;">
       
       <!-- Pure White Card with Surrounding Deep Drop Shadow (No Black Bezel) -->
-      <div id="tabletDeviceCard" class="tablet-device-card max-w-7xl mx-auto rounded-[28px] sm:rounded-[44px] bg-white dark:bg-stone-900 border-2 border-stone-200/90 dark:border-stone-800 transition-transform duration-100 ease-out pt-12 sm:pt-20 md:pt-28 px-4 sm:px-8 md:px-10 pb-8 sm:pb-14 relative overflow-hidden"
+      <div id="tabletDeviceCard" class="tablet-device-card max-w-7xl mx-auto rounded-[28px] sm:rounded-[44px] bg-white border-2 border-stone-200/90 transition-transform duration-100 ease-out pt-12 sm:pt-20 md:pt-28 px-4 sm:px-8 md:px-10 pb-8 sm:pb-14 relative overflow-hidden"
            style="transform-style: preserve-3d; transform-origin: center top; box-shadow: 0 -12px 35px -8px rgba(0, 0, 0, 0.10), 0 25px 60px -15px rgba(0, 0, 0, 0.14), 0 0 0 1px rgba(0, 0, 0, 0.03); will-change: transform;">
         
         <section id="kelola-medsos" class="relative">
@@ -4990,7 +4983,11 @@
         logoImg: '',
         phoneScreenImg: 'assets/mbm/phone-screen-mbm.svg',
         sectionTitle: 'Media & Publikasi Digital — Masjid MBM UNIMMA',
-        designs: [],
+        designs: [
+          { id: 'mbm_d1', title: 'Satu Doa Agar Tidak Salah Langkah', subtitle: 'Design flyer kajian', bg: '#451A03', img: 'assets/mbm/feed-satu-doa.png' },
+          { id: 'mbm_d2', title: 'Tak Merasa Aman dari siksaan', subtitle: 'Design flyer kajian', bg: '#1F2937', img: 'assets/mbm/feed-tak-merasa-aman.png' },
+          { id: 'mbm_d3', title: 'Terjadinya Kemaksiatan Pada Diri Seorang Hamba', subtitle: 'Design flyer kajian', bg: '#B45309', img: 'assets/mbm/feed-terjadinya-kemaksiatan.png' }
+        ],
         videos: [
           { id: 'mbm_v1', title: 'Aftermovie Semarak Pengajian Akbar MBM', ratio: '9/16', duration: '0:58', videoUrl: '', thumbnail: 'assets/mbm/reel-aftermovie-pengajian.svg' },
           { id: 'mbm_v2', title: 'Cuplikan Tausiyah Jumat Menyejukkan Hati', ratio: '9/16', duration: '0:45', videoUrl: '', thumbnail: '' },
@@ -5070,8 +5067,10 @@
                     existing.phoneScreenImg = defAcc.phoneScreenImg;
                   }
                 } else if (existing.id === 'masjid_mbm') {
-                  // KEEP USER'S MBM DATA 100% AS UPLOADED - NEVER OVERWRITE OR WIPE!
-                  if (!Array.isArray(existing.designs)) existing.designs = [];
+                  // KEEP USER'S MBM DATA 100% AS UPLOADED - RESTORE DEFAULT 3 FLYERS IF EMPTY!
+                  if (!Array.isArray(existing.designs) || existing.designs.length === 0) {
+                    existing.designs = JSON.parse(JSON.stringify(defAcc.designs || []));
+                  }
                   if (!Array.isArray(existing.videos) || existing.videos.length === 0) {
                     existing.videos = JSON.parse(JSON.stringify(defAcc.videos));
                   }
@@ -5440,7 +5439,7 @@
       const featuredDesignGrid = document.getElementById('featuredDesignGrid');
       if (featuredDesignGrid) {
         // Display user uploaded designs if available; fallback to default only if not empty by design
-        const rawDesigns = (acc.designs && acc.designs.length > 0) ? acc.designs : (acc.id === 'masjid_mbm' ? [] : (defaultAcc.designs || []));
+        const rawDesigns = (acc.designs && acc.designs.length > 0) ? acc.designs : (defaultAcc.designs || []);
         const top6Designs = rawDesigns.slice(0, 6);
 
         if (top6Designs.length === 0) {
@@ -5535,7 +5534,7 @@
         allMedsosContainer.innerHTML = sortedAccounts.map((account) => {
           const defAccount = defaultMedsosAccounts.find(a => a.id === account.id) || account;
           // Display user uploaded designs if available; fallback to default only if not empty by design
-          const accDesigns = (account.designs && account.designs.length > 0) ? account.designs : (account.id === 'masjid_mbm' ? [] : (defAccount.designs || []));
+          const accDesigns = (account.designs && account.designs.length > 0) ? account.designs : (defAccount.designs || []);
           const accVids = (account.videos && account.videos.length > 0) ? account.videos : (defAccount.videos || []);
 
           // Strictly separate reels and landscape
@@ -5715,7 +5714,7 @@
       // 5. Update Total Badges
       const countBadge = document.getElementById('medsosCountBadge');
       if (countBadge) {
-        const rawDesignsCount = (acc.id === 'masjid_mbm') ? 0 : ((acc.designs || []).length);
+        const rawDesignsCount = (acc.designs && acc.designs.length > 0) ? acc.designs.length : ((defaultAcc.designs || []).length);
         const total = rawDesignsCount + (acc.videos || []).length;
         countBadge.textContent = total + ' Karya Terpilih';
       }
@@ -7125,34 +7124,18 @@
     }
 
     /* =================================================================== */
-    /* MODE MINIATUR PC & RESPONSIVE VIEWPORT ENGINE                       */
+    /* RESPONSIVE VIEWPORT ENGINE (CLEAN NATIVE MOBILE & DESKTOP)          */
     /* =================================================================== */
-    let currentPortfolioViewMode = 'desktop';
+    let currentPortfolioViewMode = 'responsive';
 
-    /* =================================================================== */
-    /* TAMPILAN PERSIS DESKTOP / PC UNTUK SEMUA LAYAR (TERMASUK HP)        */
-    /* =================================================================== */
     function applyPortfolioDesktopView() {
       const meta = document.getElementById('portfolioViewportMeta') || document.querySelector('meta[name="viewport"]');
       if (!meta) return;
       if (!meta.id) meta.id = 'portfolioViewportMeta';
 
-      const targetW = 1280;
-      const sw = window.screen.width;
-      const sh = window.screen.height;
-      const isMobile = (Math.min(sw, sh) < 1200) || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-
-      document.documentElement.classList.add('mode-miniatur-pc');
-      document.body.classList.add('miniatur-pc-active');
-
-      if (isMobile) {
-        let curW = (Math.abs(window.orientation || 0) === 90) ? Math.max(sw, sh) : Math.min(sw, sh);
-        if (!curW || curW > targetW || curW <= 0) curW = sw || 390;
-        const scale = Math.min(1, curW / targetW).toFixed(4);
-        meta.setAttribute('content', `width=${targetW}, initial-scale=${scale}, minimum-scale=0.2, maximum-scale=3.0, user-scalable=yes`);
-      } else {
-        meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
-      }
+      document.documentElement.classList.remove('mode-miniatur-pc');
+      document.body.classList.remove('miniatur-pc-active');
+      meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes');
     }
 
     // Auto update scale on resize / orientation flip
@@ -7260,8 +7243,8 @@
         // Lift & Overlap:
         // As you scroll down, translateY moves UP from +35px to -95px (-65px mobile),
         // smoothly sliding OVER the sticky "Design Grafis & Video Editor" title!
-        const initialY = isMobile ? 20 : 35;
-        const targetLift = isMobile ? -65 : -95;
+        const initialY = isMobile ? 10 : 35;
+        const targetLift = isMobile ? -30 : -95;
         const translateY = initialY + (targetLift - initialY) * progress;
 
         card.style.transform = `rotateX(${rotateX.toFixed(2)}deg) scale(${scale.toFixed(3)}) translateY(${translateY.toFixed(1)}px)`;
